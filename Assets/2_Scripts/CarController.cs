@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CarController : MonoBehaviour
 {
-    [SerializeField] List<Transform> tireTransforms;
+    [SerializeField] Transform[] tireTransforms;
     
     [Header("Suspension Parameters")]
     public float groundHeight = 0.2f;
