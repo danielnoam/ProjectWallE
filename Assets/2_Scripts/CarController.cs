@@ -81,7 +81,7 @@ public class CarController : MonoBehaviour
             
             Vector3 tireVel = _carRb.GetPointVelocity(t.position);
             
-            float steeringVel = Vector3.Dot(t.right, tireVel);
+            float steeringVel = Vector3.Dot(tireVel, t.right);
             
             float desiredVelChange = -steeringVel * tireGripFactor;
             
