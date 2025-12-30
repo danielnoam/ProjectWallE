@@ -18,6 +18,8 @@ public class Base : Structure
         obelisk.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
         float sine = Mathf.Sin(Time.time * 2f) * moveSpeed;
         obelisk.localPosition = new Vector3(0f, sine, 0f);
+        
+        stateInfo = $"Health: {currentHealth}/{startHealth}";
     }
 
 

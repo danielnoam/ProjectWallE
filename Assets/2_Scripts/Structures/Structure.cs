@@ -27,7 +27,7 @@ public abstract class Structure : MonoBehaviour, IDamageable
     [SerializeField, ReadOnly] protected int currentUpgradeLevel;
     
 
-    
+    protected string stateInfo;
     private AudioSource _audioSource;
     public Vector3 BottomPoint => bottomPoint;
     public int BuildCost => buildCost;
@@ -131,16 +131,31 @@ public abstract class Structure : MonoBehaviour, IDamageable
     {
         return transform;
     }
-    
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Handles.Label(
+            transform.position + Vector3.up * 2.5f,
+            $"{stateInfo}",
+            new GUIStyle()
+            {
+                normal = new GUIStyleState() { textColor = Color.white },
+                fontSize = 10,
+                fontStyle = FontStyle.Bold,
+                alignment = TextAnchor.MiddleCenter
+            });
+
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position + bottomPoint, 0.05f);
         Gizmos.DrawLine(transform.position, transform.position + bottomPoint);
-
-#if UNITY_EDITOR
         Handles.Label(transform.position + bottomPoint, "Bottom Point");
-#endif
     }
+    
+#endif
 
 }

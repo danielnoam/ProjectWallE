@@ -16,6 +16,11 @@ public class Generator : Structure
     private Sequence _pumpAnimation;
 
 
+    private void Update()
+    {
+        stateInfo = $"Health: {currentHealth}/{startHealth}";
+    }
+
     [Button]
     private void StartPumping()
     {
