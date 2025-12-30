@@ -4,13 +4,14 @@ using DNExtensions.Button;
 using PrimeTween;
 using UnityEngine;
 
+[RequireComponent(typeof(ResourceGenerator))]
 public class Generator : Structure
 {
 
     [Header("Generator Settings")]
     [SerializeField] private ShakeSettings pumpAnimationSettings;
     [SerializeField] private Transform[] pumpArray = Array.Empty<Transform>();
-
+    [SerializeField] private ResourceGenerator resourceGenerator;
 
     private Sequence _pumpAnimation;
 
@@ -34,6 +35,7 @@ public class Generator : Structure
     protected override void OnBuild()
     {
         StartPumping();
+        resourceGenerator.StartGenerating();
     }
 
     protected override void OnUpgrade()
@@ -44,6 +46,7 @@ public class Generator : Structure
     protected override void OnBreak()
     {
         _pumpAnimation.Stop();
+        resourceGenerator.StopGenerating();
         Destroy(gameObject);
     }
 }

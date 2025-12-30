@@ -1,13 +1,14 @@
-using System;
 using UnityEngine;
 
+[RequireComponent(typeof(ResourceGenerator))]
 public class Base : Structure
 {
 
     [Header("Base Settings")]
     [SerializeField] private float rotationSpeed = 10f;
-    [SerializeField] private float moveSpeed = 1f;
+    [SerializeField] private float moveSpeed = 0.3f;
     [SerializeField] private Transform obelisk;
+    [SerializeField] private ResourceGenerator resourceGenerator;
 
 
     
@@ -22,7 +23,7 @@ public class Base : Structure
 
     protected override void OnBuild()
     {
-
+        resourceGenerator.StartGenerating();
     }
 
     protected override void OnUpgrade()
@@ -32,6 +33,8 @@ public class Base : Structure
 
     protected override void OnBreak()
     {
+        resourceGenerator.StopGenerating();
+        LevelManager.Instance?.FailLevel();
         Debug.Log("Game Lost");
     }
 }

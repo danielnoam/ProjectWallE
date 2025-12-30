@@ -143,11 +143,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6504f5922710f004cb0c93e6ca4fe618, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BuildingTurret
-  startHealth: 100
+  buildCost: 100
+  label: Turret
+  description: A basic structure.
+  icon: {fileID: 0}
   maxUpgradeLevel: 1
+  startHealth: 100
   bottomPoint: {x: 0, y: -0.55, z: 0}
-  gfx: {fileID: 6756884417540177175}
   buildSfx: {fileID: 0}
+  gfx: {fileID: 6756884417540177175}
   currentHealth: 0
   currentUpgradeLevel: 0
   rotationSpeed: 35

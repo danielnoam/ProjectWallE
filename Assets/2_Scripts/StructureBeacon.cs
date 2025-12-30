@@ -23,13 +23,13 @@ public class StructureBeacon : MonoBehaviour
     private void OnCollisionEnter(Collision other)
     {
         if (((1 << other.gameObject.layer) & layerMask) == 0) return;
-    
+        
         if (_structure)
         {
             Vector3 impactPoint = other.contacts[0].point;
             Vector3 surfaceNormal = other.contacts[0].normal;
             
-            StructureBuilder.Instance.CallStructurePod(_structure, impactPoint, surfaceNormal);
+            StructureDispatcher.Instance.DeployPod(_structure, impactPoint, surfaceNormal);
         }
     
         Destroy(gameObject);

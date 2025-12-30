@@ -8,10 +8,14 @@ using UnityEngine;
 public class StructurePod : MonoBehaviour
 {
     [Header("Pod Settings")]
-    [SerializeField] private float arcHeight = 100f;
-    [SerializeField] private float travelDuration = 2f;
-    [SerializeField] private AudioSource audioSource;
     [SerializeField] private LayerMask collisionMask;
+    [SerializeField] private float arcHeight = 125f;
+    [SerializeField] private float travelDuration = 3f;
+    [SerializeField] private float rotationSpeed = 15f;
+    [SerializeField] private AudioClip collisionSfx;
+    
+    [Header("References")]
+    [SerializeField] private AudioSource audioSource;
     
     private Vector3 _startPosition;
     private Structure _structure;
@@ -67,7 +71,10 @@ public class StructurePod : MonoBehaviour
             {
                 Quaternion directionRotation = Quaternion.LookRotation(movementDirection);
                 Quaternion offset = Quaternion.Euler(new Vector3(90,0,0));
-                transform.rotation = directionRotation * offset;
+                float yRotation = elapsed * rotationSpeed * 360f;
+                Quaternion spinRotation = Quaternion.Euler(0, yRotation, 0);
+            
+                transform.rotation = directionRotation * offset * spinRotation;
             }
         
             transform.position = position;
@@ -89,7 +96,12 @@ public class StructurePod : MonoBehaviour
     }
     
     private void SpawnStructure(Vector3 impactPoint, Vector3 surfaceNormal)
-    {
+    {   
+        if (collisionSfx)
+        {
+            audioSource.PlayOneShot(collisionSfx);
+        }
+        
         Quaternion surfaceRotation = Quaternion.FromToRotation(Vector3.up, surfaceNormal);
         Vector3 rotatedBottom = surfaceRotation * _structure.BottomPoint;
         Vector3 structureSpawnPoint = impactPoint - rotatedBottom;

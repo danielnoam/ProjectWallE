@@ -23,6 +23,7 @@ public class Turret : Structure
     [Button(ButtonPlayMode.OnlyWhenPlaying)]
     private void Idle()
     {
+ 
         state = TurretState.Idle;
         if (_scanCoroutine != null)
         {
@@ -66,7 +67,7 @@ public class Turret : Structure
             currentAngleIndex = (currentAngleIndex + 1) % scanAngles.Length;
         }
     }
-    
+
     
 
     protected override void OnBuild()
@@ -84,4 +85,6 @@ public class Turret : Structure
     {
         Idle();
     }
+
+
 }

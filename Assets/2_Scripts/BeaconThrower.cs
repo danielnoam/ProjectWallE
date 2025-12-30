@@ -1,10 +1,9 @@
 using System;
-using TMPro;
 using UnityEngine;
 
-public class StructureBuilder : MonoBehaviour
+public class BeaconThrower : MonoBehaviour
 {
-    public static StructureBuilder Instance { get; private set; }
+
     
     [Header("Throw Settings")]
     [SerializeField] private float throwForce = 15f;
@@ -15,13 +14,16 @@ public class StructureBuilder : MonoBehaviour
     
     [Header("References")]
     [SerializeField] private Camera mainCamera;
-    [SerializeField] private TextMeshProUGUI structureNameText;
     [SerializeField] private StructureBeacon beaconPrefab;
-    [SerializeField] private StructurePod podPrefab;
-    [SerializeField] private Transform podSpawnPosition;
     [SerializeField] private Structure[] structuresArray;
     
     private int _selectedStructureIndex;
+    private Structure _currentStructure;
+    
+    public event Action<Structure> OnStructureChanged;
+    public Structure CurrentStructure => _currentStructure;
+    
+    
 
     private void OnValidate()
     {
@@ -29,17 +31,6 @@ public class StructureBuilder : MonoBehaviour
     }
 
     private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        
-        Instance = this;
-    }
-
-    private void Start()
     {
         SetCurrentStructure(0);
     }
@@ -64,7 +55,7 @@ public class StructureBuilder : MonoBehaviour
     
     private void CycleStructure(int direction)
     {
-        if (structuresArray.Length == 0) { return; }
+        if (structuresArray.Length == 0) return;
         
         var newIndex = (int)Mathf.Repeat(_selectedStructureIndex + direction, structuresArray.Length);
         SetCurrentStructure(newIndex);
@@ -72,26 +63,27 @@ public class StructureBuilder : MonoBehaviour
     
     private void SetCurrentStructure(int index)
     {
-        if (structuresArray.Length == 0) { return; }
+        if (structuresArray.Length == 0) return;
 
         _selectedStructureIndex = index;
-        structureNameText.text = $"Current Structure: {structuresArray[_selectedStructureIndex].GetType().Name}";
+        _currentStructure = structuresArray[_selectedStructureIndex];
+        OnStructureChanged?.Invoke(_currentStructure);
     }
 
     private void ThrowBeacon()
     {
-        if (structuresArray.Length == 0) { return; }
-
+        if (structuresArray.Length == 0) return;
+        
+        if (!ResourceManager.Instance.TrySpendResources(_currentStructure.BuildCost))
+        {
+            Debug.Log("Not enough resources to throw beacon for " + _currentStructure.Label);
+            return;
+        }
+        
         StructureBeacon beacon = Instantiate(beaconPrefab, mainCamera.transform.position, Quaternion.identity);
-        beacon.SetStructure(structuresArray[_selectedStructureIndex]);
+        beacon.SetStructure(_currentStructure);
         
         Vector3 throwDirection = mainCamera.transform.forward + Vector3.up * upwardForce;
         beacon.Rigidbody.AddForce(throwDirection.normalized * throwForce, ForceMode.Impulse);
-    }
-    
-    public void CallStructurePod(Structure structure, Vector3 impactPoint, Vector3 surfaceNormal)
-    {
-        StructurePod pod = Instantiate(podPrefab, podSpawnPosition.position, Quaternion.LookRotation(podSpawnPosition.forward));
-        pod.Initialize(structure, impactPoint, surfaceNormal);
     }
 }

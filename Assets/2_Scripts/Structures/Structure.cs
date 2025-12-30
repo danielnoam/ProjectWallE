@@ -11,24 +11,29 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 [DisallowMultipleComponent]
 [SelectionBase]
-public abstract class Structure : MonoBehaviour
+public abstract class Structure : MonoBehaviour, IDamageable
 {
-
     [Header("Structure Settings")]
-    [SerializeField, Range(1f,100f)] protected float startHealth = 100f;
+    [SerializeField] private int buildCost = 100;
+    [SerializeField] private string label = "Structure";
+    [SerializeField] private string description = "A basic structure.";
+    [SerializeField] private Sprite icon;
     [SerializeField, Range(1,3)] protected int maxUpgradeLevel = 1;
+    [SerializeField, Range(1f,100f)] protected float startHealth = 100f;
     [SerializeField] protected Vector3 bottomPoint = Vector3.down;
-    [SerializeField] protected Transform gfx;
     [SerializeField] protected AudioClip buildSfx;
+    [SerializeField] protected Transform gfx;
     [SerializeField, ReadOnly] protected float currentHealth;
     [SerializeField, ReadOnly] protected int currentUpgradeLevel;
     
 
     
-
-    
     private AudioSource _audioSource;
     public Vector3 BottomPoint => bottomPoint;
+    public int BuildCost => buildCost;
+    public  string Label => label;
+    public string Description => description;
+    public Sprite Icon => icon;
 
     
     public event Action OnBuilt;
@@ -78,16 +83,7 @@ public abstract class Structure : MonoBehaviour
 
     }
     
-    public void TakeDamage(float damage)
-    {
-        currentHealth -= damage;
-        if (currentHealth <= 0)
-        {
-            Break();
-        }
-    }
-    
-    
+
     public void Build()
     {
         ResetStats();
@@ -95,6 +91,7 @@ public abstract class Structure : MonoBehaviour
         OnBuild();
         OnBuilt?.Invoke();
     }
+    
     
 
     [Button(ButtonPlayMode.OnlyWhenPlaying)]
@@ -117,6 +114,22 @@ public abstract class Structure : MonoBehaviour
         if (buildSfx) _audioSource?.PlayOneShot(buildSfx);
         OnUpgrade();
         OnUpgraded?.Invoke();
+    }
+    
+    public void TakeDamage(float damage, IDamageable attacker = null)
+    {
+        if (currentHealth <= 0 || damage <= 0) return;
+        
+        currentHealth -= damage;
+        if (currentHealth <= 0)
+        {
+            Break();
+        }
+    }
+    
+    public Transform Transform()
+    {
+        return transform;
     }
     
     private void OnDrawGizmosSelected()
