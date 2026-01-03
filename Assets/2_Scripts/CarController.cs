@@ -28,7 +28,6 @@ public class CarController : MonoBehaviour
     private List<Transform> _tireTransforms;
     
     private float _currentSteering;
-    private float _currentGripFactor;
     private float _tireGripFactor = 0.5f;
 
     
@@ -98,15 +97,12 @@ public class CarController : MonoBehaviour
             
             float steeringVel = Vector3.Dot(tire.right, tireVel);
             
-            float desiredGripFactor = Input.GetKey(KeyCode.Space) ? handBreakGripFactor : CalcCurrenTireGripFactor(tire, frictionCurve);
+            float gripFactor = Input.GetKey(KeyCode.Space) ? handBreakGripFactor : CalcCurrenTireGripFactor(tire, frictionCurve);
+            Debug.Log($"{tire.gameObject.name}" + gripFactor);
             
-            _currentGripFactor = Mathf.Lerp(_currentGripFactor, desiredGripFactor, Time.fixedDeltaTime);
-            Debug.Log(_currentGripFactor);
-            
-            float desiredVelChange = -steeringVel * _currentGripFactor;
+            float desiredVelChange = -steeringVel * gripFactor;
             
             float desiredAccel = desiredVelChange / Time.fixedDeltaTime;
-            Debug.Log(desiredAccel);
             
             _carRb.AddForceAtPosition(tire.right * _carRb.mass/_tireTransforms.Count * desiredAccel, tire.position);
         }
