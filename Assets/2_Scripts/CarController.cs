@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class CarController : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class CarController : MonoBehaviour
     [Header("Steering Parameters")]
     [SerializeField] private float steeringAngle;
     [SerializeField] private float steeringStrength;
+    [SerializeField] private float topSpeedSteeringFactor;
     [SerializeField] private AnimationCurve steeringTiresFrictionCurve;
     [SerializeField] private AnimationCurve staticTiresFrictionCurve;
     [SerializeField] private float handBreakGripFactor;
@@ -21,14 +23,24 @@ public class CarController : MonoBehaviour
     [Header("Acceleration Parameters")]
     [SerializeField] private float accelerationStrength;
     [SerializeField] private AnimationCurve accelerationCurve;
+    [SerializeField] private float topForwardSpeed;
+    [SerializeField] private float topBackwardSpeed;
+    
+    [Header("Breaking Parameters")]
     [SerializeField] private float brakeStrength;
-    [SerializeField] private float topSpeed;
+    [SerializeField] private float engineBrakeStrength;
+    
+    [Header("Air Control Parameters")]
+    [SerializeField] private float airAlignmentStrength;
+    [SerializeField] private float airAlignmentDamping;
+    [SerializeField] private float airSteeringStrength;
+    [SerializeField] private float maxAirSteeringVelocity;
     
     private Rigidbody _carRb;
     private List<Transform> _tireTransforms;
     
     private float _currentSteering;
-    private float _tireGripFactor = 0.5f;
+    private float _tireGripFactor;
 
     
     void Awake()
@@ -38,11 +50,14 @@ public class CarController : MonoBehaviour
     }
     void FixedUpdate()
     {
-        ApplyAcceleration();
+        ApplyLongitudinalMovement();
         ApplySuspension();
         ApplyTireRotation();
-        ApplyTireFriction();
+        ApplyTireFriction(); 
+        ApplyAirControl();
     }
+
+    #region Suspension
 
     private void ApplySuspension()
     {
@@ -65,9 +80,16 @@ public class CarController : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Steering
+
     private void ApplyTireRotation()
     {
-        float target = Input.GetAxis("Horizontal") * steeringAngle;
+        float desiredsteeringAngle = Mathf.Lerp(steeringAngle, topSpeedSteeringFactor * steeringAngle, Mathf.Abs(Vector3.Dot(transform.forward, _carRb.linearVelocity)) / topForwardSpeed);
+        Debug.Log(desiredsteeringAngle);
+        
+        float target = Input.GetAxis("Horizontal") * desiredsteeringAngle;
 
         _currentSteering = Mathf.Lerp(
             _currentSteering,
@@ -107,44 +129,141 @@ public class CarController : MonoBehaviour
             _carRb.AddForceAtPosition(tire.right * _carRb.mass/_tireTransforms.Count * desiredAccel, tire.position);
         }
     }
+    
+    private float CalcCurrenTireGripFactor(Transform tire, AnimationCurve frictionCurve)
+    {
+        
+        Vector3 tireVel = _carRb.GetPointVelocity(tire.position);
+        tireVel.y = 0;
+        
+        float slippingAmount = Mathf.Clamp(Vector3.Dot(tire.right, tireVel.normalized), -1.0f, 1.0f);
+        
+        return frictionCurve.Evaluate(Mathf.Abs(slippingAmount));
+    }
 
-    void ApplyAcceleration()
+    #endregion
+
+    #region longitudinal Movement
+
+    void ApplyLongitudinalMovement()
     {
         float carSpeed = Vector3.Dot(transform.forward, _carRb.linearVelocity);
-        if(carSpeed > topSpeed) return;
+
+        if(Input.GetKey(KeyCode.W)) ApplyForwardAcceleration(carSpeed);
+        else if(Input.GetKey(KeyCode.S)) ApplyBackwardsAcceleration(carSpeed);
+        else ApplyEngineBreaking(carSpeed);
+    }
+    void ApplyForwardAcceleration(float carSpeed)
+    {
+        if(carSpeed > topForwardSpeed) return;
         
-        if (Input.GetKey(KeyCode.W))
+        foreach (var tire in _tireTransforms)
         {
-            foreach (var tire in _tireTransforms)
-            {
-                bool isGrounded = Physics.Raycast(tire.position, -tire.up, out _, groundHeight);
-                if (!isGrounded) continue;
+            bool isGrounded = Physics.Raycast(tire.position, -tire.up, out _, groundHeight);
+            if (!isGrounded) continue;
                 
-                float normalizedSpeed = Mathf.Clamp01(Mathf.Abs(carSpeed) / topSpeed);
+            float normalizedSpeed = Mathf.Clamp01(Mathf.Abs(carSpeed) / topForwardSpeed);
                 
-                float availableAcceleration = accelerationCurve.Evaluate(normalizedSpeed) * accelerationStrength;
+            float availableAcceleration = carSpeed >= 0 ? 
+                                          accelerationCurve.Evaluate(normalizedSpeed) * accelerationStrength :
+                                          brakeStrength;
                 
-                _carRb.AddForceAtPosition(tire.forward * availableAcceleration, tire.position);
-            }
+            _carRb.AddForceAtPosition(tire.forward * availableAcceleration / _tireTransforms.Count, tire.position);
         }
         
-        if (Input.GetKey(KeyCode.S))
+    }
+
+    private void ApplyBackwardsAcceleration(float carSpeed)
+    {
+        if(carSpeed < -topBackwardSpeed) return;
+        
+        foreach (var tire in _tireTransforms)
         {
-            foreach (var tire in _tireTransforms)
-            {
-                bool isGrounded = Physics.Raycast(tire.position, -tire.up, out _, groundHeight);
-                if (!isGrounded) continue;
+            bool isGrounded = Physics.Raycast(tire.position, -tire.up, out _, groundHeight);
+            if (!isGrounded) continue;
                 
-                float normalizedSpeed = Mathf.Clamp01(Mathf.Abs(carSpeed) / topSpeed);
+            float normalizedSpeed = Mathf.Clamp01(Mathf.Abs(carSpeed) / topBackwardSpeed);
                 
-                float availableAcceleration = accelerationCurve.Evaluate(normalizedSpeed) * accelerationStrength;
-                
-                _carRb.AddForceAtPosition(-tire.forward * availableAcceleration, tire.position);
-            }
+            float availableAcceleration = carSpeed <= 0 ? 
+                                          accelerationCurve.Evaluate(normalizedSpeed) * accelerationStrength :
+                                          brakeStrength;  
+            
+            _carRb.AddForceAtPosition(-tire.forward * availableAcceleration / _tireTransforms.Count, tire.position);
         }
     }
 
+    private void ApplyEngineBreaking(float carSpeed)
+    {
+        foreach (var tire in _tireTransforms)
+        {
+            bool isGrounded = Physics.Raycast(tire.position, -tire.up, out _, groundHeight);
+            if (!isGrounded) continue;
+            
+            _carRb.AddForceAtPosition(tire.forward * (-Mathf.Sign(carSpeed) * engineBrakeStrength / _tireTransforms.Count), tire.position);
+        }
+        
+    }
 
+    #endregion
+    
+    #region Air Control
+
+    private void ApplyAirControl()
+    {
+        if (IsGrounded()) return; 
+        
+        
+        AirAlignAngularVelocity();
+    }
+
+    private void AirSteering()
+    {
+        
+    }
+    void AirAlignAngularVelocity()
+    {
+        // rotation that would align current up to world up
+        Quaternion toUpright = Quaternion.FromToRotation(transform.up, Vector3.up);
+
+        // convert that rotation error to axis-angle
+        toUpright.ToAngleAxis(out float angleDeg, out Vector3 axisWorld);
+        if (angleDeg > 180f) angleDeg -= 360f;
+
+        // error as angular vector (world space), radians
+        Vector3 errorWorld = axisWorld * (angleDeg * Mathf.Deg2Rad);
+
+        // convert to local so we can kill yaw (local Y)
+        Vector3 errorLocal = transform.InverseTransformDirection(errorWorld);
+        errorLocal.y = 0f; // don't touch yaw
+
+        // current angular velocity in local space (so we can damp only X/Z)
+        Vector3 angVelLocal = transform.InverseTransformDirection(_carRb.angularVelocity);
+        Vector3 angVelLocalNoYaw = new Vector3(angVelLocal.x, 0f, angVelLocal.z);
+
+        // PD: target angular velocity is proportional to error, minus damping
+        Vector3 correctiveLocal = (errorLocal * airAlignmentStrength) - (angVelLocalNoYaw * airAlignmentDamping);
+
+        // add it back to angular velocity (local -> world)
+        Vector3 correctiveWorld = transform.TransformDirection(correctiveLocal);
+        _carRb.angularVelocity += correctiveWorld;
+    }
+
+    
+    #endregion
+
+    #region Helpers
+
+    private bool IsGrounded()
+    {
+        foreach (Transform tire in _tireTransforms)
+        {
+            bool isGrounded = Physics.Raycast(tire.position, -tire.up, out _, groundHeight);
+            if (!isGrounded) continue;
+
+            return true;
+        }
+        return false;
+    }
     private List<Transform> GetAllTiresTransforms()
     {
         List<Transform> tires = new List<Transform>();
@@ -162,16 +281,11 @@ public class CarController : MonoBehaviour
         return tires;
     }
 
-    private float CalcCurrenTireGripFactor(Transform tire, AnimationCurve frictionCurve)
-    {
-        
-        Vector3 tireVel = _carRb.GetPointVelocity(tire.position);
-        tireVel.y = 0;
-        
-        float slippingAmount = Mathf.Clamp(Vector3.Dot(tire.right, tireVel.normalized), -1.0f, 1.0f);
-        
-        return frictionCurve.Evaluate(Mathf.Abs(slippingAmount));
-    }
+    #endregion
+
+    
+
+    
     
         
 }
