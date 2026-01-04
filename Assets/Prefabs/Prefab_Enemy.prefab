@@ -621,7 +621,7 @@ GameObject:
   - component: {fileID: 8465321043889094397}
   - component: {fileID: 7549385364738694963}
   - component: {fileID: 8909220601765990049}
-  - component: {fileID: 457793700210850756}
+  - component: {fileID: 622395889724703068}
   m_Layer: 0
   m_Name: Prefab_Enemy
   m_TagString: Untagged
@@ -814,7 +814,7 @@ NavMeshAgent:
   m_BaseOffset: 1.18
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &457793700210850756
+--- !u!114 &622395889724703068
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -823,18 +823,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 6471506668328617800}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d3989b23fcf6134dbfb8f2825320ba1, type: 3}
+  m_Script: {fileID: 11500000, guid: 581df25d31c3471eb2dfb2996c0c6195, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  m_EditorClassIdentifier: Assembly-CSharp::GroundEnemy
   maxHealth: 100
+  attackDamage: 10
+  attackCooldown: 1
   damagedSfx: {fileID: 0}
   deathSfx: {fileID: 0}
-  currentState: 1
-  targetRange: 25
-  attackDamage: 5
-  attackCooldown: 2
   audioSource: {fileID: 8465321043889094397}
-  rigidBody: {fileID: 2448601663206975914}
+  targetRange: 5
   navMeshAgent: {fileID: 8909220601765990049}
   projectilePrefab: {fileID: 0}
 --- !u!1 &6719073531406608010

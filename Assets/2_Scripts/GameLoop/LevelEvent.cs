@@ -27,11 +27,11 @@ public class LevelEvent
         switch (eventType)
         {
             case EventType.SpawnEnemyWave:
-                LevelManager.Instance.SpawnEnemyWave(enemyCount);
+                EnemyManager.Instance.SpawnEnemyWave(enemyCount);
                 break;
             
             case EventType.SpawnStructure:
-                if (structurePrefab != null)
+                if (structurePrefab)
                 {
                     StructureDispatcher.Instance.DeployPod(
                         structurePrefab,

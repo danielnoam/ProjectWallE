@@ -2,17 +2,21 @@ using System;
 using System.Collections;
 using DNExtensions;
 using DNExtensions.Button;
+using PrimeTween;
 using UnityEngine;
 
 public class Turret : Structure
 {
 
     [Header("Turret Settings")]
-    [SerializeField] private float rotationSpeed = 35f;
-    [SerializeField] private float waitDuration = 1.5f;
+    [SerializeField] private float scanRotationSpeed = 35f;
+    [SerializeField] private float scanWaitDuration = 1.5f;
+    [SerializeField] private float attackRotationSpeed = 100f;
     [SerializeField] private float attackDamage = 20f;
     [SerializeField] private float attackCooldown = 1f;
+    [SerializeField] private ShakeSettings attackAnimationSettings;
     [SerializeField] private Transform headTransform;
+    [SerializeField] private SphereCollider detectionCollider;
     [SerializeField, ReadOnly] private TurretState currentState = TurretState.Idle;
     
     
@@ -20,6 +24,7 @@ public class Turret : Structure
     private IDamageable _currentTarget;
     private Coroutine _scanCoroutine;
     private enum TurretState { Scanning, Idle, Attacking, Broken }
+    private Sequence _attackSequence;
 
 
     private void Update()
@@ -34,11 +39,13 @@ public class Turret : Structure
                 headTransform.rotation = Quaternion.RotateTowards(
                     headTransform.rotation,
                     targetRotation,
-                    rotationSpeed * Time.deltaTime
+                    attackRotationSpeed * Time.deltaTime
                 );
             
                 if (_attackTimer >= attackCooldown)
                 {
+                    _attackSequence = Sequence.Create();
+                    _attackSequence.Group(Tween.PunchScale(headTransform, attackAnimationSettings));
                     _currentTarget?.TakeDamage(attackDamage, this);
                     _attackTimer = 0f;
                 }
@@ -54,7 +61,6 @@ public class Turret : Structure
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.gameObject.name);
         if (currentState != TurretState.Scanning || _currentTarget != null) return;
         
         
@@ -87,6 +93,17 @@ public class Turret : Structure
         {
             StopCoroutine(_scanCoroutine);
         }
+        
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionCollider.radius);
+        foreach (var hitCollider in hitColliders)
+        {
+            if (hitCollider.TryGetComponent<Enemy>(out var enemy))
+            {
+                StartAttackingTarget(enemy);
+                return;
+            }
+        }
+        
         _scanCoroutine = StartCoroutine(ScanningRoutine());
     }
 
@@ -104,11 +121,11 @@ public class Turret : Structure
                 headTransform.localRotation = Quaternion.RotateTowards(
                     headTransform.localRotation, 
                     targetRotation, 
-                    rotationSpeed * Time.deltaTime
+                    scanRotationSpeed * Time.deltaTime
                 );
                 yield return null;
             }
-            yield return new WaitForSeconds(waitDuration);
+            yield return new WaitForSeconds(scanWaitDuration);
             
             currentAngleIndex = (currentAngleIndex + 1) % scanAngles.Length;
         }
@@ -118,8 +135,24 @@ public class Turret : Structure
     {
         if (target == null) return;
         
+        if (_currentTarget != null)
+        {
+            _currentTarget.OnDeath -= HandleTargetDeath;
+        }
+        
         currentState = TurretState.Attacking;
         _currentTarget = target;
+        _currentTarget.OnDeath += HandleTargetDeath;
+    }
+
+    private void HandleTargetDeath(IDamageable deadTarget)
+    {
+        if (deadTarget == _currentTarget)
+        {
+            deadTarget.OnDeath -= HandleTargetDeath;
+            _currentTarget = null;
+            StartScanning();
+        }
     }
     
 
@@ -137,7 +170,13 @@ public class Turret : Structure
     protected override void OnBreak()
     {
         currentState = TurretState.Broken;
-        _currentTarget = null;
+        
+        if (_currentTarget != null)
+        {
+            _currentTarget.OnDeath -= HandleTargetDeath;
+            _currentTarget = null;
+        }
+        
         if (_scanCoroutine != null)
         {
             StopCoroutine(_scanCoroutine);
@@ -145,5 +184,13 @@ public class Turret : Structure
         }
     }
 
-
+    private void OnDestroy()
+    {
+        if (_attackSequence.isAlive) _attackSequence.Stop();
+        
+        if (_currentTarget != null)
+        {
+            _currentTarget.OnDeath -= HandleTargetDeath;
+        }
+    }
 }

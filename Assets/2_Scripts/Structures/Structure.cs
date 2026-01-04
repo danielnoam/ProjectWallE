@@ -39,6 +39,7 @@ public abstract class Structure : MonoBehaviour, IDamageable
     public event Action OnBuilt;
     public event Action OnUpgraded;
     public event Action OnBroken;
+    public event Action<IDamageable> OnDeath;
     
     
 
@@ -97,6 +98,7 @@ public abstract class Structure : MonoBehaviour, IDamageable
     [Button(ButtonPlayMode.OnlyWhenPlaying)]
     public void Break()
     {
+        OnDeath?.Invoke(this);
         OnBroken?.Invoke();
         OnBreak();
     }

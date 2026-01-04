@@ -21,7 +21,6 @@ public class LevelManager : MonoBehaviour
     
     private float _timeRemaining;
     private bool _levelActive;
-    private readonly ChanceList<EnemySpawnPoint> _enemySpawnPoints = new ChanceList<EnemySpawnPoint>();
 
     public float TimeRemaining => _timeRemaining;
     public bool LevelActive => _levelActive;
@@ -89,20 +88,6 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    public void SpawnEnemyWave(int enemiesToSpawn)
-    {
-        var spawnPoint = _enemySpawnPoints.GetRandomItem();
-        
-        for (int i = 0; i < enemiesToSpawn; i++)
-        {
-            var enemy = spawnPoint.AvailableEnemies.GetRandomItem();
-            Vector3 spawnOffset = Random.insideUnitSphere * spawnPoint.SpawnPointRange;
-            spawnOffset.y = 0;
-            Vector3 spawnPosition = spawnPoint.transform.position + spawnOffset;
-            
-            Instantiate(enemy, spawnPosition, Quaternion.identity);
-        }
-    }
 
     private IEnumerator StartLevel()
     {
@@ -110,21 +95,15 @@ public class LevelManager : MonoBehaviour
         {
             evt.hasTriggered = false;
         }
-        var enemySpawnPoints = FindObjectsByType<EnemySpawnPoint>(FindObjectsInactive.Exclude, FindObjectsSortMode.None).ToList();
-        foreach (EnemySpawnPoint spawnPoint in enemySpawnPoints)
-        {
-            _enemySpawnPoints.AddItem(spawnPoint);
-        }
-        _enemySpawnPoints.NormalizeChances();
         
         SpawnStartingStructures();
+        
+        yield return new WaitForSeconds(3f);
         
         _timeRemaining = duration;
         _levelActive = true;
         
         OnLevelStarted?.Invoke();
-        
-        yield break;
     }
 
     private void CompleteLevel()
