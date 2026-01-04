@@ -19,7 +19,7 @@ public abstract class Structure : MonoBehaviour, IDamageable
     [SerializeField] private string description = "A basic structure.";
     [SerializeField] private Sprite icon;
     [SerializeField, Range(1,3)] protected int maxUpgradeLevel = 1;
-    [SerializeField, Range(1f,100f)] protected float startHealth = 100f;
+    [SerializeField] protected float startHealth = 100f;
     [SerializeField] protected Vector3 bottomPoint = Vector3.down;
     [SerializeField] protected AudioClip buildSfx;
     [SerializeField] protected Transform gfx;
@@ -27,7 +27,7 @@ public abstract class Structure : MonoBehaviour, IDamageable
     [SerializeField, ReadOnly] protected int currentUpgradeLevel;
     
 
-    protected string stateInfo;
+    protected string StateInfo;
     private AudioSource _audioSource;
     public Vector3 BottomPoint => bottomPoint;
     public int BuildCost => buildCost;
@@ -139,7 +139,7 @@ public abstract class Structure : MonoBehaviour, IDamageable
     {
         Handles.Label(
             transform.position + Vector3.up * 2.5f,
-            $"{stateInfo}",
+            $"{StateInfo}",
             new GUIStyle()
             {
                 normal = new GUIStyleState() { textColor = Color.white },

@@ -56,7 +56,7 @@ public class Turret : Structure
             }
         }
         
-        stateInfo = $"State: {currentState} \nHealth: {currentHealth}/{startHealth}";
+        StateInfo = $"State: {currentState} \nHealth: {currentHealth}/{startHealth}";
     }
 
     private void OnTriggerEnter(Collider other)

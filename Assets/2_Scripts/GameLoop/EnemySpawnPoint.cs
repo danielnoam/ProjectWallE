@@ -1,33 +1,83 @@
+using System;
 using DNExtensions;
 using UnityEngine;
 
 public class EnemySpawnPoint : MonoBehaviour
 {
     [Header("SpawnPoint Settings")]
-    [SerializeField] private ChanceList<Enemy> availableEnemies;
+    [SerializeField] private bool isActive = true;
     [SerializeField] private float spawnPointRange = 10f;
-    [SerializeField] private Color gizmoColor = Color.darkRed;
     
-    public ChanceList<Enemy> AvailableEnemies => availableEnemies;
     public float SpawnPointRange => spawnPointRange;
+    public bool IsActive => isActive;
+
+    private void Start()
+    {
+        LevelManager.OnLevelStarted += OnLevelStarted;
+        LevelManager.OnLevelCompleted += OnLevelFinished;
+        LevelManager.OnLevelFailed += OnLevelFinished;
+    }
+
+    private void OnDestroy()
+    {
+        LevelManager.OnLevelStarted -= OnLevelStarted;
+        LevelManager.OnLevelCompleted -= OnLevelFinished;
+        LevelManager.OnLevelFailed -= OnLevelFinished;
+    }
+
+    private void OnLevelStarted()
+    {
+        if (isActive)
+        {
+            EnemyManager.Instance.RegisterSpawnPoint(this);
+        }
+    }
+    
+    private void OnLevelFinished()
+    {
+        EnemyManager.Instance.UnregisterSpawnPoint(this);
+    }
+    
+    public void SetActiveState(bool state)
+    {
+        isActive = state;
+        
+        if (isActive)
+        {
+            EnemyManager.Instance.RegisterSpawnPoint(this);
+        }
+        else
+        {
+            EnemyManager.Instance.UnregisterSpawnPoint(this);
+        }
+    }
+
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = gizmoColor;
-        Gizmos.DrawWireSphere(transform.position, spawnPointRange);
-        
+        if (isActive)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, spawnPointRange);
+
+        }
+        else
+        {
+            Gizmos.color = Color.gray;
+            Gizmos.DrawWireSphere(transform.position, spawnPointRange);
+        }
         
         
 #if UNITY_EDITOR
-        var  enemyString = availableEnemies is { Count: > 0 } ? $"Spawn Point: {availableEnemies.Count} enemies" : $"Spawn Point: No enemies assigned";
+        var  enemyString = $"Enemy Spawn Point: {isActive} \nRange: {spawnPointRange}";
         
         UnityEditor.Handles.Label(
-            transform.position + Vector3.up * (spawnPointRange + 0.5f),
+            transform.position + Vector3.up * (spawnPointRange + 1f),
             enemyString,
             new GUIStyle()
             {
-                normal = new GUIStyleState() { textColor = gizmoColor },
-                fontSize = 12,
+                normal = new GUIStyleState() { textColor = Color.red },
+                fontSize = 14,
                 fontStyle = FontStyle.Bold,
                 alignment = TextAnchor.MiddleCenter
             }

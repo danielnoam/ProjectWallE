@@ -65,12 +65,6 @@ public class GroundEnemy : Enemy
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        if (CurrentTarget != null && _state == EnemyState.Moving)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(transform.position, CurrentTarget.Transform().position);
-        }
-
         UnityEditor.Handles.Label(
             transform.position + Vector3.up * 2.5f,
             $"Health: {CurrentHealth}/{maxHealth}\nState: {_state}\nTarget: {CurrentTarget?.Transform().name}",

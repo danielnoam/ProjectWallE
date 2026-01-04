@@ -1,15 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using DNExtensions;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance { get; private set; }
     
+    public static event Action OnLevelInitializing;
     public static event Action OnLevelStarted;
     public static event Action OnLevelCompleted;
     public static event Action OnLevelFailed;
@@ -17,7 +15,7 @@ public class LevelManager : MonoBehaviour
     
     [Header("Level Settings")]
     [SerializeField] private float duration = 300f;
-    [SerializeField] private List<LevelEvent> events = new List<LevelEvent>();
+    [SerializeReference] private List<LevelEvent> events = new List<LevelEvent>();
     
     private float _timeRemaining;
     private bool _levelActive;
@@ -72,21 +70,6 @@ public class LevelManager : MonoBehaviour
         }
     }
     
-    private void SpawnStartingStructures()
-    {
-        StructureSpawnPoint[] spawnPoints = FindObjectsByType<StructureSpawnPoint>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
-        
-        foreach (StructureSpawnPoint spawnPoint in spawnPoints)
-        {
-            if (!spawnPoint.StructurePrefab) continue;
-            
-            StructureDispatcher.Instance.DeployPod(
-                spawnPoint.StructurePrefab, 
-                spawnPoint.transform.position, 
-                spawnPoint.transform.up
-            );
-        }
-    }
 
 
     private IEnumerator StartLevel()
@@ -96,7 +79,7 @@ public class LevelManager : MonoBehaviour
             evt.hasTriggered = false;
         }
         
-        SpawnStartingStructures();
+        OnLevelInitializing?.Invoke();
         
         yield return new WaitForSeconds(3f);
         
@@ -125,4 +108,6 @@ public class LevelManager : MonoBehaviour
         events.Add(evt);
         events.Sort((a, b) => a.triggerTime.CompareTo(b.triggerTime));
     }
+    
+    
 }

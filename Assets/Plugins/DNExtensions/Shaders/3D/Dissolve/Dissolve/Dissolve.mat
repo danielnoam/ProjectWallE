@@ -11,7 +11,8 @@ Material:
   m_Shader: {fileID: -6465566751694194690, guid: 1ac476ccd3378bd44a505cfebeae397c, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _DIRECTION_Y
   m_InvalidKeywords:
   - KEEPBELOW_ON
   m_LightmapFlags: 4
@@ -26,6 +27,10 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Base_Texture:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -83,9 +88,10 @@ Material:
     - _BumpScale: 1
     - _Cull: 2
     - _Cutoff: 0.5
-    - _CutoffHeight: 5
+    - _CutoffHeight: 0.19
+    - _DIRECTION: 1
     - _DstBlend: 0
-    - _EdgeWidth: 0.07
+    - _EdgeWidth: 0.03
     - _EnvironmentReflections: 1
     - _Flip_Effect: 0
     - _GlossMapScale: 0
@@ -93,8 +99,8 @@ Material:
     - _GlossyReflections: 0
     - _Metallic: 0
     - _Metalllic: 0
-    - _NoiseScale: 35
-    - _NoiseStrength: 0.14
+    - _NoiseScale: 33.61
+    - _NoiseStrength: 0.1
     - _OcclusionStrength: 1
     - _QueueControl: 0
     - _QueueOffset: 0
@@ -111,6 +117,7 @@ Material:
     - _BaseColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _Direction: {r: 0, g: 0.1, b: 0, a: 0}
+    - _Dissolve_Direction: {r: 0, g: 0, b: 0, a: 0}
     - _Dissolve_From_Position: {r: 0, g: 0, b: 0, a: 0}
     - _EdgeColor: {r: 14.943392, g: 5.437423, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}

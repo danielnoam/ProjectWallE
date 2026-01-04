@@ -623,7 +623,7 @@ GameObject:
   - component: {fileID: 8909220601765990049}
   - component: {fileID: 622395889724703068}
   m_Layer: 0
-  m_Name: Prefab_Enemy
+  m_Name: Prefab_GroundEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -832,9 +832,8 @@ MonoBehaviour:
   damagedSfx: {fileID: 0}
   deathSfx: {fileID: 0}
   audioSource: {fileID: 8465321043889094397}
-  targetRange: 5
+  targetRange: 40
   navMeshAgent: {fileID: 8909220601765990049}
-  projectilePrefab: {fileID: 0}
 --- !u!1 &6719073531406608010
 GameObject:
   m_ObjectHideFlags: 0

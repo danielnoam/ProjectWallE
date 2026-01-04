@@ -1,16 +1,22 @@
 using System.Collections.Generic;
-using System.Linq;
 using DNExtensions;
 using UnityEngine;
-using Random = Unity.Mathematics.Random;
+
+
+
 
 public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager Instance { get; private set; }
     
-    private readonly ChanceList<EnemySpawnPoint> _enemySpawnPoints = new ChanceList<EnemySpawnPoint>();
-    private List<Base> _mainTargets = new List<Base>();
-    private readonly List<Enemy> _activeEnemies = new List<Enemy>();
+    
+    [Header("Enemy Manager Settings")]
+    [SerializeField] private ChanceList<Enemy> basicEnemies = new ChanceList<Enemy>();
+    
+    [Header("Readonly Fields")]
+    [SerializeField] private ChanceList<EnemySpawnPoint> enemySpawnPoints = new ChanceList<EnemySpawnPoint>();
+    [SerializeField] private List<Enemy> activeEnemies = new List<Enemy>();
+    [SerializeField] private List<Base> bases = new List<Base>();
 
     
     private void Awake()
@@ -18,47 +24,17 @@ public class EnemyManager : MonoBehaviour
         if (Instance) Destroy(gameObject);
         Instance = this;
     }
-
-    private void Start()
-    {
-        LevelManager.OnLevelStarted += OnLevelStarted;
-        LevelManager.OnLevelCompleted += OnLevelEnded;
-        LevelManager.OnLevelFailed += OnLevelEnded;
-    }
-
-    private void OnDisable()
-    {
-        LevelManager.OnLevelStarted -= OnLevelStarted;
-        LevelManager.OnLevelCompleted -= OnLevelEnded;
-        LevelManager.OnLevelFailed -= OnLevelEnded;
-    }
-
-    private void OnLevelStarted()
-    {
-        _mainTargets = FindObjectsByType<Base>(FindObjectsInactive.Exclude, FindObjectsSortMode.None).ToList();
-        
-        var enemySpawnPoints = FindObjectsByType<EnemySpawnPoint>(FindObjectsInactive.Exclude, FindObjectsSortMode.None).ToList();
-        foreach (EnemySpawnPoint spawnPoint in enemySpawnPoints)
-        {
-            _enemySpawnPoints.AddItem(spawnPoint);
-        }
-        _enemySpawnPoints.NormalizeChances();
-    }
     
-    private void OnLevelEnded()
-    {
-        _mainTargets.Clear();
-    }
-    
+
     
     public void SpawnEnemyWave(int enemiesToSpawn)
     {
-        var spawnPoint = _enemySpawnPoints.GetRandomItem();
+        var spawnPoint = enemySpawnPoints.GetRandomItem();
         
         for (int i = 0; i < enemiesToSpawn; i++)
         {
-            var enemy = spawnPoint.AvailableEnemies.GetRandomItem();
-            Vector3 spawnOffset = UnityEngine.Random.insideUnitSphere * spawnPoint.SpawnPointRange;
+            var enemy = basicEnemies.GetRandomItem();
+            Vector3 spawnOffset = Random.insideUnitSphere * spawnPoint.SpawnPointRange;
             spawnOffset.y = 0;
             Vector3 spawnPosition = spawnPoint.transform.position + spawnOffset;
             
@@ -68,12 +44,33 @@ public class EnemyManager : MonoBehaviour
 
     public void RegisterEnemy(Enemy enemy)
     {
-        _activeEnemies.Add(enemy);
-        enemy.SetMainTarget(_mainTargets[0]);
+        if (activeEnemies.Contains(enemy)) return;
+        
+        activeEnemies.Add(enemy);
+        enemy.SetMainTarget(bases[0]);
     }
 
     public void UnregisterEnemy(Enemy enemy)
     {
-        _activeEnemies.Remove(enemy);
+        if (!activeEnemies.Contains(enemy)) return;
+        
+        activeEnemies.Remove(enemy);
+    }
+    
+    public void RegisterSpawnPoint(EnemySpawnPoint spawnPoint)
+    {
+        if (enemySpawnPoints.Contains(spawnPoint)) return;
+        
+        enemySpawnPoints.AddItem(spawnPoint);
+        enemySpawnPoints.NormalizeChances();
+    }
+    
+    public void UnregisterSpawnPoint(EnemySpawnPoint spawnPoint)
+    {
+        if (!enemySpawnPoints.Contains(spawnPoint)) return;
+        
+        var index = enemySpawnPoints.IndexOf(spawnPoint);
+        enemySpawnPoints.RemoveAt(index);
+        enemySpawnPoints.NormalizeChances();
     }
 }

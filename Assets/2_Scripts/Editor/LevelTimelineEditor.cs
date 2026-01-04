@@ -61,7 +61,8 @@ public class LevelTimelineEditor : EditorWindow
     
         _serializedLevel.Update();
         
-        if (_selectedEventIndex >= _targetLevel.GetEvents().Count)
+        var events = _targetLevel.GetEvents();
+        if (_selectedEventIndex >= (events != null ? events.Count : 0))
         {
             _selectedEventIndex = -1;
         }
@@ -87,7 +88,8 @@ public class LevelTimelineEditor : EditorWindow
     {
         if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Delete)
         {
-            if (_selectedEventIndex >= 0 && _selectedEventIndex < _targetLevel.GetEvents().Count)
+            var events = _targetLevel.GetEvents();
+            if (_selectedEventIndex >= 0 && events != null && _selectedEventIndex < events.Count)
             {
                 DeleteEvent(_selectedEventIndex);
                 Event.current.Use();
@@ -99,7 +101,8 @@ public class LevelTimelineEditor : EditorWindow
     {
         EditorGUILayout.LabelField("Level Details", EditorStyles.boldLabel);
         EditorGUILayout.LabelField($"Duration: {_targetLevel.Duration}s");
-        EditorGUILayout.LabelField($"Events: {_targetLevel.GetEvents().Count}");
+        var events = _targetLevel.GetEvents();
+        EditorGUILayout.LabelField($"Events: {(events != null ? events.Count : 0)}");
     }
 
     private void DrawZoomControls()
@@ -135,6 +138,7 @@ public class LevelTimelineEditor : EditorWindow
     private void DrawTimeline()
     {
         float duration = _targetLevel.Duration;
+        var events = _targetLevel.GetEvents();
     
         EditorGUILayout.LabelField("Timeline", EditorStyles.boldLabel);
         
@@ -159,7 +163,11 @@ public class LevelTimelineEditor : EditorWindow
         EditorGUI.DrawRect(_timelineRect, new Color(0.3f, 0.3f, 0.3f));
         
         DrawTimelineGrid(_timelineRect, duration);
-        DrawEvents(_timelineRect, duration);
+        
+        if (events != null)
+        {
+            DrawEvents(_timelineRect, duration);
+        }
         
         if (_timelineRect.Contains(Event.current.mousePosition) && Event.current.type == EventType.ScrollWheel)
         {
@@ -190,7 +198,7 @@ public class LevelTimelineEditor : EditorWindow
             _selectedEventIndex = -1;
             Repaint();
         }
-        if (GUILayout.Button("Delete Event"))
+        if (GUILayout.Button("Delete Event") && _selectedEventIndex >= 0)
         {
             DeleteEvent(_selectedEventIndex);
         }
@@ -207,15 +215,27 @@ public class LevelTimelineEditor : EditorWindow
         
         GUIStyle timeStyle = new GUIStyle(EditorStyles.miniLabel)
         {
+            alignment = TextAnchor.UpperCenter,
+            normal = { textColor = new Color(0.7f, 0.7f, 0.7f) }
+        };
+        
+        GUIStyle timeStyleStart = new GUIStyle(EditorStyles.miniLabel)
+        {
             alignment = TextAnchor.UpperLeft,
             normal = { textColor = new Color(0.7f, 0.7f, 0.7f) }
         };
         
-        // Draw time labels
-        for (int i = 0; i <= markerCount; i++)
+        GUIStyle timeStyleEnd = new GUIStyle(EditorStyles.miniLabel)
+        {
+            alignment = TextAnchor.UpperRight,
+            normal = { textColor = new Color(0.7f, 0.7f, 0.7f) }
+        };
+        
+        // Draw time labels (skip first and last as they're drawn separately)
+        for (int i = 1; i < markerCount; i++)
         {
             float time = i * markerInterval;
-            if (time > duration) break;
+            if (time >= duration) break;
             
             float normalizedPos = time / duration;
             float xPos = rect.x + rect.width * normalizedPos;
@@ -227,6 +247,15 @@ public class LevelTimelineEditor : EditorWindow
             
             GUI.Label(new Rect(xPos + 2, rect.y, 50, rect.height), timeLabel, timeStyle);
         }
+        
+        // Always draw start time
+        GUI.Label(new Rect(rect.x + 2, rect.y, 50, rect.height), "0:00", timeStyleStart);
+        
+        // Always draw end time
+        int endMinutes = Mathf.FloorToInt(duration / 60f);
+        int endSeconds = Mathf.FloorToInt(duration % 60f);
+        string endTimeLabel = $"{endMinutes}:{endSeconds:D2}";
+        GUI.Label(new Rect(rect.xMax - 52, rect.y, 50, rect.height), endTimeLabel, timeStyleEnd);
     }
 
     private void DrawTimelineGrid(Rect rect, float duration)
@@ -266,6 +295,7 @@ public class LevelTimelineEditor : EditorWindow
     private void DrawEvents(Rect rect, float duration)
     {
         var events = _targetLevel.GetEvents();
+        if (events == null) return;
         
         for (int i = 0; i < events.Count; i++)
         {
@@ -288,7 +318,13 @@ public class LevelTimelineEditor : EditorWindow
                 fontStyle = FontStyle.Bold
             };
             
-            string label = string.IsNullOrEmpty(evt.description) ? $"Event {i}" : evt.description;
+            string label = evt.GetType().Name;
+            // Remove "Event" suffix if present
+            if (label.EndsWith("Event"))
+            {
+                label = label.Substring(0, label.Length - 5);
+            }
+            
             float labelHalfWidth = EventLabelWidth * 0.5f;
             GUI.Label(new Rect(xPos - labelHalfWidth, rect.y + 2, EventLabelWidth, EventLabelHeight), label, labelStyle);
             
@@ -329,16 +365,19 @@ public class LevelTimelineEditor : EditorWindow
         {
             bool clickedOnMarker = false;
             var events2 = _targetLevel.GetEvents();
-            for (int i = 0; i < events2.Count; i++)
+            if (events2 != null)
             {
-                float normalizedPos = events2[i].triggerTime / duration;
-                float xPos = rect.x + rect.width * normalizedPos;
-                float markerHalfWidth = MarkerWidth * 0.5f;
-                Rect markerRect = new Rect(xPos - markerHalfWidth, rect.y + MarkerPadding, MarkerWidth, rect.height - MarkerPadding * 2);
-                if (markerRect.Contains(Event.current.mousePosition))
+                for (int i = 0; i < events2.Count; i++)
                 {
-                    clickedOnMarker = true;
-                    break;
+                    float normalizedPos = events2[i].triggerTime / duration;
+                    float xPos = rect.x + rect.width * normalizedPos;
+                    float markerHalfWidth = MarkerWidth * 0.5f;
+                    Rect markerRect = new Rect(xPos - markerHalfWidth, rect.y + MarkerPadding, MarkerWidth, rect.height - MarkerPadding * 2);
+                    if (markerRect.Contains(Event.current.mousePosition))
+                    {
+                        clickedOnMarker = true;
+                        break;
+                    }
                 }
             }
             
@@ -357,6 +396,7 @@ public class LevelTimelineEditor : EditorWindow
         if (_serializedLevel == null) return;
 
         var events = _targetLevel.GetEvents();
+        if (events == null) return;
         
         if (_selectedEventIndex < 0 || _selectedEventIndex >= events.Count)
         {
@@ -377,52 +417,34 @@ public class LevelTimelineEditor : EditorWindow
 
         var eventProperty = eventsProperty.GetArrayElementAtIndex(_selectedEventIndex);
 
-        EditorGUILayout.PropertyField(eventProperty.FindPropertyRelative("triggerTime"));
-        EditorGUILayout.PropertyField(eventProperty.FindPropertyRelative("description"));
-        EditorGUILayout.PropertyField(eventProperty.FindPropertyRelative("eventType"));
-        
-        var eventTypeProperty = eventProperty.FindPropertyRelative("eventType");
-        LevelEvent.EventType eventType = (LevelEvent.EventType)eventTypeProperty.enumValueIndex;
-        
-        switch (eventType)
-        {
-            case LevelEvent.EventType.SpawnEnemyWave:
-                EditorGUILayout.PropertyField(eventProperty.FindPropertyRelative("enemyCount"), new GUIContent("Enemy Count"));
-                break;
-            
-            case LevelEvent.EventType.SpawnStructure:
-                EditorGUILayout.PropertyField(eventProperty.FindPropertyRelative("structurePrefab"), new GUIContent("Structure Prefab"));
-                EditorGUILayout.PropertyField(eventProperty.FindPropertyRelative("spawnPosition"), new GUIContent("Spawn Position"));
-                break;
-            
-            case LevelEvent.EventType.Custom:
-                EditorGUILayout.PropertyField(eventProperty.FindPropertyRelative("onTrigger"), new GUIContent("On Trigger"));
-                break;
-        }
+        // Draw all properties using default drawer - works with SerializeReference
+        EditorGUILayout.PropertyField(eventProperty, true);
     }
 
     private void AddEventAtTime(float time)
     {
         Undo.RecordObject(_targetLevel, "Add Timeline Event");
     
-        var newEvent = new LevelEvent
+        var newEvent = new CustomEvent
         {
             triggerTime = Mathf.Clamp(time, 0, _targetLevel.Duration),
             description = "New Event",
-            eventType = LevelEvent.EventType.Custom,
-            enemyCount = 5,
             onTrigger = new UnityEvent()
         };
     
         _targetLevel.AddEvent(newEvent);
-        _selectedEventIndex = _targetLevel.GetEvents().Count - 1;
+        
+        var updatedEvents = _targetLevel.GetEvents();
+        _selectedEventIndex = updatedEvents != null ? updatedEvents.Count - 1 : -1;
         EditorUtility.SetDirty(_targetLevel);
+        _serializedLevel.Update();
         Repaint();
     }
 
     private void DeleteEvent(int index)
     {
-        if (index < 0 || index >= _targetLevel.GetEvents().Count) return;
+        var events = _targetLevel.GetEvents();
+        if (events == null || index < 0 || index >= events.Count) return;
         
         Undo.RecordObject(_targetLevel, "Delete Timeline Event");
         
@@ -442,9 +464,10 @@ public class LevelTimelineEditor : EditorWindow
         EditorUtility.SetDirty(_targetLevel);
         Repaint();
         
-        if (_selectedEventIndex == -1 && _targetLevel.GetEvents().Count > 0)
+        var eventsAfterDelete = _targetLevel.GetEvents();
+        if (_selectedEventIndex == -1 && eventsAfterDelete != null && eventsAfterDelete.Count > 0)
         {
-            _selectedEventIndex = Mathf.Clamp(index - 1, 0, _targetLevel.GetEvents().Count - 1);
+            _selectedEventIndex = Mathf.Clamp(index - 1, 0, eventsAfterDelete.Count - 1);
         }
     }
 }

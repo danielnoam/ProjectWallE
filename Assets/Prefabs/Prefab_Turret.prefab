@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2457870460926333871}
   - component: {fileID: 7975855849258831279}
   - component: {fileID: 7053805491111974174}
+  - component: {fileID: 5741606394912925368}
   m_Layer: 6
   m_Name: Prefab_Turret
   m_TagString: Untagged
@@ -170,7 +171,7 @@ MonoBehaviour:
   description: A basic structure.
   icon: {fileID: 0}
   maxUpgradeLevel: 1
-  startHealth: 100
+  startHealth: 250
   bottomPoint: {x: 0, y: -0.55, z: 0}
   buildSfx: {fileID: 0}
   gfx: {fileID: 6756884417540177175}
@@ -204,6 +205,22 @@ MonoBehaviour:
   headTransform: {fileID: 3118065064727651805}
   detectionCollider: {fileID: 7975855849258831279}
   currentState: 1
+--- !u!208 &5741606394912925368
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3381716777060979311}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 2.47, y: 1, z: 2.47}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &6337476285769835628
 GameObject:
   m_ObjectHideFlags: 0

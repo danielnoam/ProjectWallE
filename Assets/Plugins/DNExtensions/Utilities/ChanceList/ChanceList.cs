@@ -327,6 +327,38 @@ namespace DNExtensions
             }
             return items;
         }
+        
+        
+        /// <summary>
+        /// Finds the index of the specified item in the chance list
+        /// </summary>
+        /// <param name="item">The item to locate in the collection</param>
+        /// <returns>
+        /// The zero-based index of the item if found; otherwise, -1
+        /// </returns>
+        public int IndexOf(T item)
+        {
+            for (int i = 0; i < internalItems.Length; i++)
+            {
+                if (EqualityComparer<T>.Default.Equals(internalItems[i].item, item))
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+        
+        /// <summary>
+        /// Determines whether the chance list contains the specified item
+        /// </summary>
+        /// <param name="item">The item to locate in the collection</param>
+        /// <returns>
+        /// True if the item is found; otherwise, false
+        /// </returns>
+        public bool Contains(T item)
+        {
+            return IndexOf(item) != -1;
+        }
 
         #endregion Public API
 

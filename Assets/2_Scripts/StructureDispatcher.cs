@@ -1,3 +1,4 @@
+using DNExtensions;
 using UnityEngine;
 
 
@@ -10,9 +11,10 @@ public class StructureDispatcher : MonoBehaviour
     [SerializeField] private AudioClip deploySfx;
     
     [Header("References")]
-    [SerializeField] private StructurePod podPrefab;
-    [SerializeField] private Transform podSpawnPosition;
     [SerializeField] private AudioSource audioSource;
+    [SerializeField] private StructurePod podPrefab;
+    [SerializeField] private ChanceList<Transform> podSpawnPositions = new ChanceList<Transform>();
+
 
     private void Awake()
     {
@@ -32,7 +34,8 @@ public class StructureDispatcher : MonoBehaviour
         {
             audioSource.PlayOneShot(deploySfx);
         }
-        StructurePod pod = Instantiate(podPrefab, podSpawnPosition.position, Quaternion.LookRotation(podSpawnPosition.forward));
+        var spawnPosition = podSpawnPositions.GetRandomItem();
+        StructurePod pod = Instantiate(podPrefab, spawnPosition.position, Quaternion.LookRotation(spawnPosition.forward));
         pod.Initialize(structure, targetPosition, surfaceNormal);
     }
 }

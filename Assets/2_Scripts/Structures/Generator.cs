@@ -18,7 +18,7 @@ public class Generator : Structure
 
     private void Update()
     {
-        stateInfo = $"Health: {currentHealth}/{startHealth}";
+        StateInfo = $"Health: {currentHealth}/{startHealth}";
     }
 
     [Button]
