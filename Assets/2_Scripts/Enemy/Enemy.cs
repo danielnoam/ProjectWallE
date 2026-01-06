@@ -1,5 +1,3 @@
-
-
 using System;
 using UnityEngine;
 
@@ -20,14 +18,10 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     protected IDamageable CurrentTarget => SecondaryTarget ?? MainTarget;
     
     public event Action<IDamageable> OnDeath;
-
-    
     
     protected abstract void UpdateBehavior();
     protected abstract void PerformAttack();
     protected abstract void MoveToTarget();
-    
-    
     
     protected virtual void Awake()
     {
@@ -39,8 +33,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     {
         UpdateBehavior();
     }
-
-    
 
     public void SetMainTarget(IDamageable target)
     {
@@ -80,13 +72,13 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     public virtual void TakeDamage(float damage, IDamageable attacker = null)
     {
         CurrentHealth -= damage;
-        UpdateSecondaryTarget(attacker);
-        
         if (CurrentHealth <= 0)
         {
             Die();
             return;
         }
+        
+        UpdateSecondaryTarget(attacker);
         
         if (damagedSfx)
         {
@@ -103,10 +95,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable
             audioSource?.PlayOneShot(deathSfx);
         }
         
-        Destroy(gameObject, deathSfx ? deathSfx.length : 0f);
+        Destroy(gameObject);
     }
-
-    public Transform Transform() => transform;
 
     protected virtual void OnDestroy()
     {

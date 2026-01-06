@@ -9,7 +9,13 @@ public class EnemySpawnPoint : MonoBehaviour
     [SerializeField] private float spawnPointRange = 10f;
     
     public float SpawnPointRange => spawnPointRange;
-    public bool IsActive => isActive;
+    
+    private void OnValidate()
+    {
+        if (Application.isPlaying || gameObject.scene.name == null) return;
+        
+        gameObject.name = $"EnemySpawnPoint(IsActive:{isActive})";
+    }
 
     private void Start()
     {

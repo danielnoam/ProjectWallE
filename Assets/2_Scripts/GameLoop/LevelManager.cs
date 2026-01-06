@@ -87,12 +87,14 @@ public class LevelManager : MonoBehaviour
         _levelActive = true;
         
         OnLevelStarted?.Invoke();
+        Debug.Log("Level Started");
     }
 
     private void CompleteLevel()
     {
         _levelActive = false;
         OnLevelCompleted?.Invoke();
+        Debug.Log("Game Won");
     }
 
     public void FailLevel()
@@ -101,6 +103,7 @@ public class LevelManager : MonoBehaviour
         
         _levelActive = false;
         OnLevelFailed?.Invoke();
+        Debug.Log("Game Lost");
     }
     
     public void AddEvent(LevelEvent evt)

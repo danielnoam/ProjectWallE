@@ -11,7 +11,15 @@ public class Base : Structure
     [SerializeField] private ResourceGenerator resourceGenerator;
 
 
-    
+    private void Start()
+    {
+        EnemyManager.Instance?.RegisterBase(this);
+    }
+
+    private void OnDestroy()
+    {
+        EnemyManager.Instance?.UnregisterBase(this);
+    }
     
     private void Update()
     {
@@ -37,6 +45,5 @@ public class Base : Structure
     {
         resourceGenerator.StopGenerating();
         LevelManager.Instance?.FailLevel();
-        Debug.Log("Game Lost");
     }
 }

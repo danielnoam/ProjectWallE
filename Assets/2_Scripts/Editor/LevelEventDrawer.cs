@@ -6,17 +6,17 @@ using System.Linq;
 [CustomPropertyDrawer(typeof(LevelEvent), true)]
 public class LevelEventDrawer : PropertyDrawer
 {
-    private static readonly Type[] eventTypes;
-    private static readonly string[] eventNames;
+    private static readonly Type[] EventTypes;
+    private static readonly string[] EventNames;
 
     static LevelEventDrawer()
     {
-        eventTypes = AppDomain.CurrentDomain.GetAssemblies()
+        EventTypes = AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(assembly => assembly.GetTypes())
             .Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(LevelEvent)))
             .ToArray();
 
-        eventNames = eventTypes.Select(t => FormatName(t.Name)).ToArray();
+        EventNames = EventTypes.Select(t => FormatName(t.Name)).ToArray();
     }
     
     private static string FormatName(string name)
@@ -51,18 +51,18 @@ public class LevelEventDrawer : PropertyDrawer
         int selectedIndex = -1;
         if (!string.IsNullOrEmpty(typeName))
         {
-            selectedIndex = Array.FindIndex(eventTypes, t => typeName.Contains(t.Name));
+            selectedIndex = Array.FindIndex(EventTypes, t => typeName.Contains(t.Name));
         }
 
         // Draw dropdown with label
         Rect dropdownRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
         
         EditorGUI.BeginChangeCheck();
-        int newIndex = EditorGUI.Popup(dropdownRect, "Event Type", selectedIndex, eventNames);
+        int newIndex = EditorGUI.Popup(dropdownRect, "Event Type", selectedIndex, EventNames);
         
         if (EditorGUI.EndChangeCheck() && newIndex >= 0)
         {
-            var newEvent = (LevelEvent)Activator.CreateInstance(eventTypes[newIndex]);
+            var newEvent = (LevelEvent)Activator.CreateInstance(EventTypes[newIndex]);
             
             // Preserve common fields if possible
             if (property.managedReferenceValue != null)

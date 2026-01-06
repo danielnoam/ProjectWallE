@@ -1,8 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-
-
 [RequireComponent(typeof(NavMeshAgent))]
 public class GroundEnemy : Enemy
 {
@@ -12,13 +10,12 @@ public class GroundEnemy : Enemy
     
     private EnemyState _state = EnemyState.Moving;
     private enum EnemyState { Attacking, Moving }
-    
 
     protected override void UpdateBehavior()
     {
-        if (CurrentTarget == null) return;
+        if (!(CurrentTarget is Component target) || !target) return;
 
-        float distance = Vector3.Distance(transform.position, CurrentTarget.Transform().position);
+        float distance = Vector3.Distance(transform.position, target.transform.position);
 
         switch (_state)
         {
@@ -51,23 +48,25 @@ public class GroundEnemy : Enemy
 
     protected override void PerformAttack()
     {
-        CurrentTarget.TakeDamage(attackDamage, this);
+        CurrentTarget?.TakeDamage(attackDamage, this);
     }
 
     protected override void MoveToTarget()
     {
-        if (CurrentTarget != null)
+        if (CurrentTarget is Component target && target)
         {
-            navMeshAgent.SetDestination(CurrentTarget.Transform().position);
+            navMeshAgent.SetDestination(target.transform.position);
         }
     }
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
+        string targetName = (CurrentTarget is Component target && target) ? target.name : "None";
+        
         UnityEditor.Handles.Label(
             transform.position + Vector3.up * 2.5f,
-            $"Health: {CurrentHealth}/{maxHealth}\nState: {_state}\nTarget: {CurrentTarget?.Transform().name}",
+            $"Health: {CurrentHealth}/{maxHealth}\nState: {_state}\nTarget: {targetName}",
             new GUIStyle()
             {
                 normal = new GUIStyleState() { textColor = Color.red },

@@ -15,11 +15,11 @@ public abstract class LevelEvent
 [Serializable]
 public class SpawnEnemyWaveEvent : LevelEvent
 {
-    public int enemyCount = 5;
+    [Min(1)] public int enemyCount = 5;
     
     public override void Execute()
     {
-        EnemyManager.Instance.SpawnEnemyWave(enemyCount);
+        EnemyManager.Instance?.SpawnEnemyWave(enemyCount);
     }
 }
 
@@ -33,20 +33,31 @@ public class SpawnStructureEvent : LevelEvent
     {
         if (structurePrefab)
         {
-            StructureDispatcher.Instance.DeployPod(structurePrefab, spawnPosition, Vector3.up);
+            StructureDispatcher.Instance?.DeployPod(structurePrefab, spawnPosition, Vector3.up);
         }
     }
 }
 
 [Serializable]
-public class ToggleSpawnPointEvent : LevelEvent
+public class ToggleEnemySpawnPointEvent : LevelEvent
 {
     public EnemySpawnPoint enemySpawnPoint;
     public bool spawnPointState = true;
     
     public override void Execute()
     {
-        enemySpawnPoint.SetActiveState(spawnPointState);
+        enemySpawnPoint?.SetActiveState(spawnPointState);
+    }
+}
+
+[Serializable]
+public class UseStructureSpawnPointEvent : LevelEvent
+{
+    public StructureSpawnPoint structureSpawnPoint;
+    
+    public override void Execute()
+    {
+        structureSpawnPoint?.SpawnStructure();
     }
 }
 

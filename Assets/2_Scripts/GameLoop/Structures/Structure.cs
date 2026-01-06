@@ -54,7 +54,7 @@ public abstract class Structure : MonoBehaviour, IDamageable
     }
 
 
-    protected void Start()
+    protected void Awake()
     {
         ResetStats();
     }

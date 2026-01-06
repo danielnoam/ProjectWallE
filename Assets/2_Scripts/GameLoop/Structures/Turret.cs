@@ -7,7 +7,6 @@ using UnityEngine;
 
 public class Turret : Structure
 {
-
     [Header("Turret Settings")]
     [SerializeField] private float scanRotationSpeed = 35f;
     [SerializeField] private float scanWaitDuration = 1.5f;
@@ -19,22 +18,21 @@ public class Turret : Structure
     [SerializeField] private SphereCollider detectionCollider;
     [SerializeField, ReadOnly] private TurretState currentState = TurretState.Idle;
     
-    
     private float _attackTimer;
     private IDamageable _currentTarget;
     private Coroutine _scanCoroutine;
     private enum TurretState { Scanning, Idle, Attacking, Broken }
     private Sequence _attackSequence;
 
-
     private void Update()
     {
         if (currentState == TurretState.Attacking)
         {
-            if (_currentTarget != null)
+            // Cast to Component and check if destroyed
+            if (_currentTarget is Component targetComponent && targetComponent)
             {
                 _attackTimer += Time.deltaTime;
-                Vector3 directionToTarget = (_currentTarget.Transform().position - headTransform.position).normalized;
+                Vector3 directionToTarget = (targetComponent.transform.position - headTransform.position).normalized;
                 Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
                 headTransform.rotation = Quaternion.RotateTowards(
                     headTransform.rotation,
@@ -52,10 +50,11 @@ public class Turret : Structure
             }
             else
             {
+                _currentTarget = null;
                 StartScanning();
             }
         }
-        
+    
         StateInfo = $"State: {currentState} \nHealth: {currentHealth}/{startHealth}";
     }
 
@@ -63,19 +62,15 @@ public class Turret : Structure
     {
         if (currentState != TurretState.Scanning || _currentTarget != null) return;
         
-        
         if (other.TryGetComponent<Enemy>(out var enemy))
         {
             StartAttackingTarget(enemy);
         }
     }
-    
-    
 
     [Button(ButtonPlayMode.OnlyWhenPlaying)]
     private void Idle()
     {
- 
         currentState = TurretState.Idle;
         if (_scanCoroutine != null)
         {
@@ -83,7 +78,6 @@ public class Turret : Structure
             _scanCoroutine = null;
         }
     }
-    
 
     [Button(ButtonPlayMode.OnlyWhenPlaying)]
     private void StartScanning()
@@ -154,17 +148,14 @@ public class Turret : Structure
             StartScanning();
         }
     }
-    
 
     protected override void OnBuild()
     {
         StartScanning();
     }
-    
 
     protected override void OnUpgrade()
     {
-
     }
 
     protected override void OnBreak()

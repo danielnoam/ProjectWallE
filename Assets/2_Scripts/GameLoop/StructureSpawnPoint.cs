@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class StructureSpawnPoint : MonoBehaviour
 {
@@ -9,9 +10,13 @@ public class StructureSpawnPoint : MonoBehaviour
     [SerializeField] private Structure structurePrefab;
     
     private bool _hasSpawned;
-    
-    public Structure StructurePrefab => structurePrefab;
 
+    private void OnValidate()
+    {
+        if (Application.isPlaying || gameObject.scene.name == null || !structurePrefab) return;
+        
+        gameObject.name = $"StructureSpawnPoint({structurePrefab.Label},AtStart:{spawnAtStart})";
+    }
 
     private void Start()
     {
@@ -20,7 +25,7 @@ public class StructureSpawnPoint : MonoBehaviour
 
     private void OnDestroy()
     {
-        LevelManager.OnLevelStarted -= OnLevelInitializing;
+        LevelManager.OnLevelInitializing -= OnLevelInitializing;
     }
 
     private void OnLevelInitializing()

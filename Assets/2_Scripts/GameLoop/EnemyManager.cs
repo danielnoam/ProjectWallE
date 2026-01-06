@@ -48,6 +48,11 @@ public class EnemyManager : MonoBehaviour
         
         activeEnemies.Add(enemy);
         enemy.SetMainTarget(bases[0]);
+        
+        if (bases.Count > 0)
+        {
+            enemy.SetMainTarget(bases[0]);
+        }
     }
 
     public void UnregisterEnemy(Enemy enemy)
@@ -72,5 +77,17 @@ public class EnemyManager : MonoBehaviour
         var index = enemySpawnPoints.IndexOf(spawnPoint);
         enemySpawnPoints.RemoveAt(index);
         enemySpawnPoints.NormalizeChances();
+    }
+    
+    public void RegisterBase(Base baseStructure)
+    {
+        if (bases.Contains(baseStructure)) return;
+        bases.Add(baseStructure);
+    }
+
+    public void UnregisterBase(Base baseStructure)
+    {
+        if (!bases.Contains(baseStructure)) return;
+        bases.Remove(baseStructure);
     }
 }
