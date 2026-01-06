@@ -13,6 +13,7 @@ public class Turret : Structure
     [SerializeField] private float attackRotationSpeed = 100f;
     [SerializeField] private float attackDamage = 20f;
     [SerializeField] private float attackCooldown = 1f;
+    [SerializeField] private Vector3 brokenRotation;
     [SerializeField] private ShakeSettings attackAnimationSettings;
     [SerializeField] private Transform headTransform;
     [SerializeField] private SphereCollider detectionCollider;
@@ -173,6 +174,8 @@ public class Turret : Structure
             StopCoroutine(_scanCoroutine);
             _scanCoroutine = null;
         }
+        
+        Tween.LocalRotation(headTransform, Quaternion.Euler(brokenRotation), duration: 0.5f);
     }
 
     private void OnDestroy()

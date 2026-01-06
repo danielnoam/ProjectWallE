@@ -1,5 +1,25 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-4254251670421829634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b00045f12942b46c698459096c89274e, type: 3}
+  m_Name: Outline Ultimate
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.FullScreenPassRendererFeature
+  m_Active: 0
+  injectionPoint: 600
+  fetchColorBuffer: 1
+  requirements: 7
+  passMaterial: {fileID: 2100000, guid: 2fd362cb456092543b5507b3ba9e51b3, type: 2}
+  passIndex: 0
+  bindDepthStencilAttachment: 0
+  m_Version: 1
 --- !u!114 &-1983433968388261668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46,11 +66,12 @@ MonoBehaviour:
     probeVolumeBlendStatesCS: {fileID: 7200000, guid: b9a23f869c4fd45f19c5ada54dd82176, type: 3}
   m_RendererFeatures:
   - {fileID: 7833122117494664109}
-  - {fileID: 9053551594666534145}
-  - {fileID: 4126539813256152135}
   - {fileID: -1983433968388261668}
+  - {fileID: 4126539813256152135}
+  - {fileID: 9053551594666534145}
   - {fileID: 4296741069671190061}
-  m_RendererFeatureMap: ad6b866f10d7b46c0125c52335ada47d47c4a3c8186a4439dc38c67e506d79e42d4e95dd3c17a13b
+  - {fileID: -4254251670421829634}
+  m_RendererFeatureMap: ad6b866f10d7b46cdc38c67e506d79e447c4a3c8186a44390125c52335ada47d2d4e95dd3c17a13bfe07654fa5dcf5c4
   m_UseNativeRenderPass: 1
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
@@ -114,8 +135,8 @@ MonoBehaviour:
   m_Active: 0
   injectionPoint: 600
   fetchColorBuffer: 1
-  requirements: 0
-  passMaterial: {fileID: 2100000, guid: 1eafd96a05491bf43a6bc491931189c5, type: 2}
+  requirements: 7
+  passMaterial: {fileID: 2100000, guid: 5ac26a9e42a16ac439f068b54bd9dac2, type: 2}
   passIndex: 0
   bindDepthStencilAttachment: 0
   m_Version: 1

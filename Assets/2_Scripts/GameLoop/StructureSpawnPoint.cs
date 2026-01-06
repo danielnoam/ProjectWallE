@@ -48,6 +48,8 @@ public class StructureSpawnPoint : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        if (spawnOnlyOnce && _hasSpawned) return;
+        
         if (spawnAtStart)
         {
             Gizmos.color = Color.cyan;
@@ -64,7 +66,7 @@ public class StructureSpawnPoint : MonoBehaviour
 #if UNITY_EDITOR
         UnityEditor.Handles.Label(
             transform.position + Vector3.up * (2 + 0.5f),
-            structurePrefab ? $"Spawn Point: {structurePrefab.Label} \nHas Spawned: {_hasSpawned}" :  $"Spawn Point: No Structure Assigned",
+            structurePrefab ? $"Spawn Point: {structurePrefab.Label}" :  $"Spawn Point: No Structure Assigned",
             new GUIStyle()
             {
                 normal = new GUIStyleState() { textColor = Color.cyan },

@@ -34,6 +34,14 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         UpdateBehavior();
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.TryGetComponent(out StructurePod pod))
+        {
+            Die();
+        }
+    }
+
     public void SetMainTarget(IDamageable target)
     {
         MainTarget = target;

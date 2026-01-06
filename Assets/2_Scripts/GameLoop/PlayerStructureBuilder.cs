@@ -20,7 +20,7 @@ public class PlayerStructureBuilder : MonoBehaviour
     private void Awake()
     {
         radialMenu.SetupMenu(structuresArray, ConfigureStructureElement);
-        radialMenu.OnItemSelected += OnStructureSelected;
+        radialMenu.OnItemSelected += TryBuildStructure;
     }
 
     private void Update()
@@ -40,37 +40,29 @@ public class PlayerStructureBuilder : MonoBehaviour
         element.text.text = $"{structure.Label}\n Cost: {structure.BuildCost}";
         element.iconImage.sprite = structure.Icon;
     }
+    
 
-    private void OnStructureSelected(Structure structure)
+    private void TryBuildStructure(Structure structure)
     {
-        if (!TryBuildStructure(structure))
+        Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+
+        if (!Physics.Raycast(ray, out RaycastHit hit, buildRange, buildableLayerMask))
         {
-            Debug.Log($"Cannot build {structure.Label}");
+            Debug.Log("No valid build surface found");
+            return;
         }
-    }
-
-    private bool TryBuildStructure(Structure structure)
-    {
+        
         if (!ResourceManager.Instance.TrySpendResources(structure.BuildCost))
         {
             Debug.Log($"Not enough resources to build {structure.Label}");
-            return false;
+            return;
         }
-        
-        Ray ray = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-        
-        if (Physics.Raycast(ray, out RaycastHit hit, buildRange, buildableLayerMask))
-        {
-            StructureDispatcher.Instance.DeployPod(structure, hit.point, hit.normal);
-            return true;
-        }
-        
-        Debug.Log("No valid build surface found");
-        return false;
+
+        StructureDispatcher.Instance.DeployPod(structure, hit.point, hit.normal);
     }
 
     private void OnDestroy()
     {
-        radialMenu.OnItemSelected -= OnStructureSelected;
+        radialMenu.OnItemSelected -= TryBuildStructure;
     }
 }
