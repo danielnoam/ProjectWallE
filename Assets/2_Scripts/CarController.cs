@@ -6,6 +6,7 @@ public class CarController : MonoBehaviour
 {
     [SerializeField] Transform[] steeringTiresTransforms;
     [SerializeField] Transform[] staticTiresTransforms;
+    [SerializeField] LayerMask groundLayer;
     
     [Header("Suspension Parameters")]
     [SerializeField] private float groundHeight = 0.2f;
@@ -16,9 +17,17 @@ public class CarController : MonoBehaviour
     [SerializeField] private float steeringAngle;
     [SerializeField] private float steeringStrength;
     [SerializeField] private float topSpeedSteeringFactor;
+    
+    [Header("Tire Friction Parameters")]
     [SerializeField] private AnimationCurve steeringTiresFrictionCurve;
     [SerializeField] private AnimationCurve staticTiresFrictionCurve;
     [SerializeField] private float handBreakGripFactor;
+    [Tooltip("the max lateral speed of each tire where the grip is 100% (so the car wont slip on slopes for no reason)")]
+    [SerializeField] private float staticLateralSpeed;
+    
+    [Header("Takeoff / partial-ground tuning")]
+    [SerializeField] float minGripWhenPartialGround = 0.15f; // 0..1
+    [SerializeField] float partialGroundGripPower = 1.0f;     // curve feel
     
     [Header("Acceleration Parameters")]
     [SerializeField] private float accelerationStrength;
@@ -41,6 +50,7 @@ public class CarController : MonoBehaviour
     
     private float _currentSteering;
     private float _tireGripFactor;
+    private float _groundedRatio;
 
     
     void Awake()
@@ -50,11 +60,11 @@ public class CarController : MonoBehaviour
     }
     void FixedUpdate()
     {
-        ApplyLongitudinalMovement();
         ApplySuspension();
         ApplyTireRotation();
         ApplyTireFriction(); 
         ApplyAirControl();
+        ApplyLongitudinalMovement();
     }
 
     #region Suspension
@@ -69,10 +79,9 @@ public class CarController : MonoBehaviour
     {
         foreach (var tire in tires)
         {
-            bool isGrounded = Physics.Raycast(tire.position, -tire.up, out RaycastHit tireHit, groundHeight);
-            if (!isGrounded) continue;
+            if (!IsTireGrounded(tire, out var hit )) continue;
             
-            float offset = tireHit.distance - groundHeight;
+            float offset = hit.distance - groundHeight;
             
             float suspensionForce = (-offset * suspensionStrength) - (_carRb.GetPointVelocity(tire.position).y * suspensionDamping);
             
@@ -86,10 +95,9 @@ public class CarController : MonoBehaviour
 
     private void ApplyTireRotation()
     {
-        float desiredsteeringAngle = Mathf.Lerp(steeringAngle, topSpeedSteeringFactor * steeringAngle, Mathf.Abs(Vector3.Dot(transform.forward, _carRb.linearVelocity)) / topForwardSpeed);
-        Debug.Log(desiredsteeringAngle);
+        float desiredSteeringAngle = Mathf.Lerp(steeringAngle, topSpeedSteeringFactor * steeringAngle, Mathf.Abs(Vector3.Dot(transform.forward, _carRb.linearVelocity)) / topForwardSpeed);
         
-        float target = Input.GetAxis("Horizontal") * desiredsteeringAngle;
+        float target = Input.GetAxis("Horizontal") * desiredSteeringAngle;
 
         _currentSteering = Mathf.Lerp(
             _currentSteering,
@@ -104,6 +112,7 @@ public class CarController : MonoBehaviour
 
     private void ApplyTireFriction()
     {
+        _groundedRatio = GetGroundedRatio(out _);
         ApplyFrictionPerTiresType(steeringTiresTransforms, steeringTiresFrictionCurve);
         ApplyFrictionPerTiresType(staticTiresTransforms, staticTiresFrictionCurve);
     }
@@ -112,8 +121,7 @@ public class CarController : MonoBehaviour
     {
         foreach (Transform tire in tires)
         {
-            bool isGrounded = Physics.Raycast(tire.position, -tire.up, out RaycastHit tireHit, groundHeight);
-            if (!isGrounded) continue;
+            if (!IsTireGrounded(tire, out var hit )) continue;
             
             Vector3 tireVel = _carRb.GetPointVelocity(tire.position);
             
@@ -121,6 +129,10 @@ public class CarController : MonoBehaviour
             
             float gripFactor = Input.GetKey(KeyCode.Space) ? handBreakGripFactor : CalcCurrenTireGripFactor(tire, frictionCurve);
             Debug.Log($"{tire.gameObject.name}" + gripFactor);
+            
+            float planted = Mathf.Pow(_groundedRatio, partialGroundGripPower);
+            float airborneBlend = Mathf.Lerp(minGripWhenPartialGround, 1f, planted);
+            gripFactor *= airborneBlend;
             
             float desiredVelChange = -steeringVel * gripFactor;
             
@@ -134,11 +146,14 @@ public class CarController : MonoBehaviour
     {
         
         Vector3 tireVel = _carRb.GetPointVelocity(tire.position);
+        float steeringVel = Vector3.Dot(tire.right, tireVel);
         tireVel.y = 0;
         
         float slippingAmount = Mathf.Clamp(Vector3.Dot(tire.right, tireVel.normalized), -1.0f, 1.0f);
-        
-        return frictionCurve.Evaluate(Mathf.Abs(slippingAmount));
+
+        float gripFactor = Mathf.Abs(steeringVel) < staticLateralSpeed ? 1f : frictionCurve.Evaluate(Mathf.Abs(slippingAmount));
+
+        return gripFactor;
     }
 
     #endregion
@@ -159,8 +174,7 @@ public class CarController : MonoBehaviour
         
         foreach (var tire in _tireTransforms)
         {
-            bool isGrounded = Physics.Raycast(tire.position, -tire.up, out _, groundHeight);
-            if (!isGrounded) continue;
+            if (!IsTireGrounded(tire, out var hit )) continue;
                 
             float normalizedSpeed = Mathf.Clamp01(Mathf.Abs(carSpeed) / topForwardSpeed);
                 
@@ -179,8 +193,7 @@ public class CarController : MonoBehaviour
         
         foreach (var tire in _tireTransforms)
         {
-            bool isGrounded = Physics.Raycast(tire.position, -tire.up, out _, groundHeight);
-            if (!isGrounded) continue;
+            if (!IsTireGrounded(tire, out var hit )) continue;
                 
             float normalizedSpeed = Mathf.Clamp01(Mathf.Abs(carSpeed) / topBackwardSpeed);
                 
@@ -196,9 +209,8 @@ public class CarController : MonoBehaviour
     {
         foreach (var tire in _tireTransforms)
         {
-            bool isGrounded = Physics.Raycast(tire.position, -tire.up, out _, groundHeight);
-            if (!isGrounded) continue;
-            
+            if (!IsTireGrounded(tire, out var hit )) continue;
+
             _carRb.AddForceAtPosition(tire.forward * (-Mathf.Sign(carSpeed) * engineBrakeStrength / _tireTransforms.Count), tire.position);
         }
         
@@ -210,42 +222,65 @@ public class CarController : MonoBehaviour
 
     private void ApplyAirControl()
     {
-        if (IsGrounded()) return; 
+        if (IsCarGrounded()) return; 
         
-        
-        AirAlignAngularVelocity();
+        AirAlignTorque();
+        AirSteeringTorque();
     }
 
-    private void AirSteering()
+    private void AirSteeringTorque()
     {
-        
+        // old input manager: A = -1, D = +1
+        float input =
+            (Input.GetKey(KeyCode.D) ? 1f : 0f) -
+            (Input.GetKey(KeyCode.A) ? 1f : 0f);
+
+        if (Mathf.Abs(input) < 0.001f) return;
+
+        // target yaw rate (rad/s)
+        float targetYawRate = input * maxAirSteeringVelocity;
+
+        // current yaw rate (rad/s) measured around car up
+        float currentYawRate = Vector3.Dot(_carRb.angularVelocity, transform.up);
+
+        // PD-ish: drive yaw rate error with torque-as-angular-acceleration
+        float yawRateError = targetYawRate - currentYawRate;
+
+        // turn that into an angular acceleration command
+        float yawAccelCmd = yawRateError * airSteeringStrength;
+
+        // apply around car up
+        _carRb.AddTorque(transform.up * yawAccelCmd, ForceMode.Acceleration);
     }
-    void AirAlignAngularVelocity()
+    void AirAlignTorque()
     {
         // rotation that would align current up to world up
         Quaternion toUpright = Quaternion.FromToRotation(transform.up, Vector3.up);
 
-        // convert that rotation error to axis-angle
+        // convert rotation error to axis-angle
         toUpright.ToAngleAxis(out float angleDeg, out Vector3 axisWorld);
         if (angleDeg > 180f) angleDeg -= 360f;
 
-        // error as angular vector (world space), radians
+        // error vector in world space (radians)
         Vector3 errorWorld = axisWorld * (angleDeg * Mathf.Deg2Rad);
 
-        // convert to local so we can kill yaw (local Y)
+        // convert to local so we can ignore yaw (local Y)
         Vector3 errorLocal = transform.InverseTransformDirection(errorWorld);
-        errorLocal.y = 0f; // don't touch yaw
+        errorLocal.y = 0f;
 
-        // current angular velocity in local space (so we can damp only X/Z)
+        // angular velocity in local space, ignore yaw
         Vector3 angVelLocal = transform.InverseTransformDirection(_carRb.angularVelocity);
-        Vector3 angVelLocalNoYaw = new Vector3(angVelLocal.x, 0f, angVelLocal.z);
+        angVelLocal.y = 0f;
 
-        // PD: target angular velocity is proportional to error, minus damping
-        Vector3 correctiveLocal = (errorLocal * airAlignmentStrength) - (angVelLocalNoYaw * airAlignmentDamping);
+        // PD control in local space (outputs "angular acceleration" if using ForceMode.Acceleration)
+        Vector3 torqueLocal =
+            (errorLocal * airAlignmentStrength) -
+            (angVelLocal * airAlignmentDamping);
 
-        // add it back to angular velocity (local -> world)
-        Vector3 correctiveWorld = transform.TransformDirection(correctiveLocal);
-        _carRb.angularVelocity += correctiveWorld;
+        // back to world and apply
+        Vector3 torqueWorld = transform.TransformDirection(torqueLocal);
+
+        _carRb.AddTorque(torqueWorld, ForceMode.Acceleration);
     }
 
     
@@ -253,16 +288,22 @@ public class CarController : MonoBehaviour
 
     #region Helpers
 
-    private bool IsGrounded()
+    private bool IsCarGrounded()
     {
         foreach (Transform tire in _tireTransforms)
         {
-            bool isGrounded = Physics.Raycast(tire.position, -tire.up, out _, groundHeight);
-            if (!isGrounded) continue;
-
+            if (!IsTireGrounded(tire, out var hit )) continue;
             return true;
         }
         return false;
+    }
+
+    private bool IsTireGrounded(Transform tire, out RaycastHit tireHit )
+    {
+        bool isGrounded = Physics.Raycast(tire.position, -tire.up, out RaycastHit hit,  0.1f + groundHeight, groundLayer);
+        tireHit = hit;
+        
+        return isGrounded;
     }
     private List<Transform> GetAllTiresTransforms()
     {
@@ -280,6 +321,19 @@ public class CarController : MonoBehaviour
         
         return tires;
     }
+    
+    float GetGroundedRatio(out int groundedCount)
+    {
+        groundedCount = 0;
+        for (int i = 0; i < _tireTransforms.Count; i++)
+        {
+            var t = _tireTransforms[i];
+            if (Physics.Raycast(t.position, -t.up, out _, groundHeight))
+                groundedCount++;
+        }
+        return (float)groundedCount / _tireTransforms.Count;
+    }
+
 
     #endregion
 
