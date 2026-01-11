@@ -27,7 +27,7 @@ Material:
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
@@ -65,6 +65,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: a6c9130d10bf47d489af87b27e279487, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Main_Tex:
+        m_Texture: {fileID: 2800000, guid: a6c9130d10bf47d489af87b27e279487, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -79,6 +83,22 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TerrainTexture:
+        m_Texture: {fileID: 8400000, guid: dbbd785327d1d174493091bddd26df80, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Terrain_Texture:
+        m_Texture: {fileID: 8400000, guid: dbbd785327d1d174493091bddd26df80, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2DAsset_62849cfba4ac4edda8bfb0c664439045_Out_0_Texture2D:
+        m_Texture: {fileID: 8400000, guid: dbbd785327d1d174493091bddd26df80, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Wind_Noise_Texture:
+        m_Texture: {fileID: 2800000, guid: e0f4386ce0e6f11438069791cf2fdd41, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -100,6 +120,7 @@ Material:
     - _AlphaToMask: 0
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
+    - _Blend_Height: 0
     - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
@@ -113,6 +134,7 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
+    - _Height_Blend: 0.12
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
@@ -125,13 +147,26 @@ Material:
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
+    - _Sway_Speed: 0.5
+    - _Sway_Strength: 0.16
+    - _TerrainSize: 100
+    - _Terrain_Size: 100
+    - _Wave_Speed: 0.1
+    - _Wave_Strength: 0.01
+    - _Wind_Height: 1
+    - _Wind_Noise_Scale: 67.19
+    - _Wind_Noise_Speed: 0.62
     - _WorkflowMode: 1
     - _XRMotionVectorsPass: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.10028409, g: 0.44025147, b: 0, a: 1}
+    - _BaseColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Base_Color: {r: 0, g: 0, b: 0, a: 1}
+    - _Botton_Color: {r: 0, g: 0.37106913, b: 0.024784276, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+    - _Terrain_Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _Wind_Noise_Constrast: {r: 0.1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
