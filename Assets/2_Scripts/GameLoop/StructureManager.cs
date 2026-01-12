@@ -2,20 +2,15 @@ using System.Collections.Generic;
 using DNExtensions;
 using UnityEngine;
 
-[RequireComponent(typeof(AudioSource))]
 public class StructureManager : MonoBehaviour
 {
     public static StructureManager Instance { get; private set; }
     
     [Header("Deployment Settings")]
-    [SerializeField] private AudioClip deploySfx;
     [SerializeField] private StructurePod podPrefab;
     [SerializeField] private ChanceList<Transform> podSpawnPositions = new ChanceList<Transform>();
     
-    [Header("References")]
-    [SerializeField] private AudioSource audioSource;
-    
-    [Header("Tracked Structures")]
+    [Header("Registered")]
     [SerializeField] private List<Structure> allStructures = new List<Structure>();
     [SerializeField] private List<Generator> generators = new List<Generator>();
     [SerializeField] private List<Turret> turrets = new List<Turret>();
@@ -37,16 +32,11 @@ public class StructureManager : MonoBehaviour
     
     #region Deployment 
     
-    public void DeployPod(Structure structure, Vector3 targetPosition, Vector3 surfaceNormal)
+    public void DeployPod(Structure structure, Vector3 targetPosition, Vector3 surfaceNormal, Vector3 forward)
     {
-        if (deploySfx)
-        {
-            audioSource?.PlayOneShot(deploySfx);
-        }
-        
         var spawnPosition = podSpawnPositions.GetRandomItem();
         StructurePod pod = Instantiate(podPrefab, spawnPosition.position, Quaternion.LookRotation(spawnPosition.forward));
-        pod.Initialize(structure, targetPosition, surfaceNormal);
+        pod.Initialize(structure, targetPosition, surfaceNormal, forward);
     }
     
     #endregion

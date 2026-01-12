@@ -3,8 +3,6 @@ using DNExtensions;
 using UnityEngine;
 
 
-
-[RequireComponent(typeof(Camera))]
 public class FreeFormCameraController : MonoBehaviour
 {
 
@@ -44,12 +42,7 @@ public class FreeFormCameraController : MonoBehaviour
     }
 
 
-
-    private void OnValidate()
-    {
-        if (!camera) camera = GetComponent<Camera>();
-    }
-
+    
 
     private void Awake()
     {

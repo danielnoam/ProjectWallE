@@ -33,7 +33,7 @@ public class SpawnStructureEvent : LevelEvent
     {
         if (structurePrefab)
         {
-            StructureManager.Instance?.DeployPod(structurePrefab, spawnPosition, Vector3.up);
+            StructureManager.Instance?.DeployPod(structurePrefab, spawnPosition, Vector3.up, Vector3.forward);
         }
     }
 }

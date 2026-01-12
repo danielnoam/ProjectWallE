@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using DNExtensions;
+using DNExtensions.CinemachineImpulseSystem;
+using Unity.Cinemachine;
 using UnityEngine;
 
 [RequireComponent(typeof(AudioSource))]
@@ -13,13 +15,16 @@ public class StructurePod : MonoBehaviour
     [SerializeField] private float travelDuration = 3f;
     [SerializeField] private float rotationSpeed = 15f;
     [SerializeField] private AudioClip collisionSfx;
+    [SerializeField] private ImpulseSettings collisionImpulseSettings;
     
     [Header("References")]
     [SerializeField] private AudioSource audioSource;
+    [SerializeField] private CinemachineImpulseSource impulseSource;
     
     private Vector3 _startPosition;
     private Structure _structure;
     private Vector3 _targetPoint;
+    private Vector3 _forward;
     private bool _hasCollided;
     private Coroutine _moveCoroutine;
 
@@ -28,12 +33,13 @@ public class StructurePod : MonoBehaviour
         if (!audioSource) audioSource = this.GetOrAddComponent<AudioSource>();
     }
     
-    public void Initialize(Structure structure, Vector3 targetPoint, Vector3 surfaceNormal)
+    public void Initialize(Structure structure, Vector3 targetPoint, Vector3 surfaceNormal, Vector3 forward)
     {
         _startPosition = transform.position;
         _structure = structure;
         _targetPoint = targetPoint;
-        
+        _forward = forward;
+    
         _moveCoroutine = StartCoroutine(MoveInArc());
     }
 
@@ -50,6 +56,24 @@ public class StructurePod : MonoBehaviour
         Vector3 impactPoint = collision.contacts[0].point;
         Vector3 surfaceNormal = collision.contacts[0].normal;
         
+        
+        if (collisionSfx)
+        {
+            audioSource.PlayOneShot(collisionSfx);
+        }
+        
+        impulseSource?.GenerateImpulse(collisionImpulseSettings);
+
+        var enemiesInRange = Physics.OverlapSphere(impactPoint, 25f);
+        
+        foreach (Collider col in enemiesInRange)
+        {
+            if (col.TryGetComponent(out GroundEnemy enemy))
+            {
+                Vector3 direction = (col.transform.position - impactPoint).normalized;
+                enemy.Push(direction, 50);
+            }
+        }
         SpawnStructure(impactPoint, surfaceNormal);
     }
 
@@ -95,20 +119,27 @@ public class StructurePod : MonoBehaviour
         }
     }
     
+    
     private void SpawnStructure(Vector3 impactPoint, Vector3 surfaceNormal)
     {   
-        if (collisionSfx)
-        {
-            audioSource.PlayOneShot(collisionSfx);
-        }
+
         
         Quaternion surfaceRotation = Quaternion.FromToRotation(Vector3.up, surfaceNormal);
-        Vector3 rotatedBottom = surfaceRotation * _structure.BottomPoint;
+        Vector3 projectedForward = Vector3.ProjectOnPlane(_forward, surfaceNormal).normalized;
+        
+        Quaternion yawRotation = Quaternion.identity;
+        if (projectedForward.sqrMagnitude > 0.001f)
+        {
+            yawRotation = Quaternion.LookRotation(projectedForward, surfaceNormal);
+        }
+        
+        Quaternion finalRotation = yawRotation;
+        Vector3 rotatedBottom = finalRotation * _structure.BottomPoint;
         Vector3 structureSpawnPoint = impactPoint - rotatedBottom;
-        
-        Structure structure = Instantiate(_structure, structureSpawnPoint, surfaceRotation);
+    
+        Structure structure = Instantiate(_structure, structureSpawnPoint, finalRotation);
         structure.Build();
-        
+    
         Destroy(gameObject);
     }
 }

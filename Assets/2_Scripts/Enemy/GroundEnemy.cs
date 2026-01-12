@@ -2,13 +2,20 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(Rigidbody))]
 public class GroundEnemy : Enemy
 {
     [Header("Ground Enemy Settings")]
     [SerializeField] private NavMeshAgent navMeshAgent;
+    [SerializeField] private Rigidbody rigidBody;
     
     private EnemyState _state = EnemyState.MovingToTarget;
     private enum EnemyState { Attacking, MovingToTarget, Idle }
+
+    protected override void OnSetup()
+    {
+        navMeshAgent.stoppingDistance = attackRange * 0.8f;
+    }
 
     protected override void UpdateBehavior()
     {
@@ -23,10 +30,10 @@ public class GroundEnemy : Enemy
         switch (_state)
         {
             case EnemyState.MovingToTarget:
+                
                 if (distance <= attackRange)
                 {
                     _state = EnemyState.Attacking;
-                    navMeshAgent.ResetPath();
                 }
                 else
                 {
@@ -49,7 +56,7 @@ public class GroundEnemy : Enemy
                     AttackTimer += Time.deltaTime;
                     if (AttackTimer >= attackCooldown)
                     {
-                        PerformAttack();
+                        AttackTarget();
                         AttackTimer = 0f;
                     }
                 }
@@ -57,8 +64,9 @@ public class GroundEnemy : Enemy
         }
     }
 
-    protected override void PerformAttack()
+    protected override void AttackTarget()
     {
+
         CurrentTarget?.TakeDamage(attackDamage, this);
     }
 
@@ -68,6 +76,11 @@ public class GroundEnemy : Enemy
         {
             navMeshAgent.SetDestination(target.transform.position);
         }
+    }
+    
+    public void Push(Vector3 direction, float force)
+    {
+        rigidBody.AddForce(direction.normalized * force, ForceMode.Force);
     }
 
 #if UNITY_EDITOR

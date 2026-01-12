@@ -32,18 +32,17 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     protected IDamageable LastAttacker;
     
     public event Action<IDamageable> OnDeath;
-    
+
+    protected abstract void OnSetup();
     protected abstract void UpdateBehavior();
-    protected abstract void PerformAttack();
+    protected abstract void AttackTarget();
     protected abstract void MoveToTarget();
     
-    private void Awake()
-    {
-        currentHealth = maxHealth;
-    }
 
     private void Start()
     {
+        currentHealth = maxHealth;
+        OnSetup();
         EnemyManager.Instance.RegisterEnemy(this);
         UpdateTarget();
     }
@@ -54,17 +53,12 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     
         if (CurrentTarget != null)
         {
-            CurrentTarget.OnDeath -= HandleTargetDeath;
+            CurrentTarget.OnDeath -= OnTargetDeath;
         }
     }
 
     private void Update()
     {
-        if (CurrentTarget != null && !IsTargetValid(CurrentTarget))
-        {
-            UpdateTarget();
-        }
-        
         UpdateBehavior();
     }
     
@@ -76,16 +70,25 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         }
     }
     
-    private bool IsTargetValid(IDamageable target)
+    private void OnTargetChanged()
     {
-        return target is Component component && component;
+        MoveToTarget();
     }
+    
+    private void OnTargetDeath(IDamageable deadTarget)
+    {
+        if (deadTarget != CurrentTarget) return;
+        CurrentTarget.OnDeath -= OnTargetDeath;
+        UpdateTarget();
+    }
+
+    
 
     private void UpdateTarget()
     {
         if (CurrentTarget != null)
         {
-            CurrentTarget.OnDeath -= HandleTargetDeath;
+            CurrentTarget.OnDeath -= OnTargetDeath;
         }
     
         foreach (var priority in targetPriorities)
@@ -94,7 +97,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
             if (target != null && IsTargetValid(target))
             {
                 CurrentTarget = target;
-                CurrentTarget.OnDeath += HandleTargetDeath;
+                CurrentTarget.OnDeath += OnTargetDeath;
                 OnTargetChanged();
                 return;
             }
@@ -103,8 +106,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         CurrentTarget = null;
     }
     
-
-
 
 
     private IDamageable FindTargetByPriority(TargetPriority priority)
@@ -136,18 +137,12 @@ public abstract class Enemy : MonoBehaviour, IDamageable
                 return null;
         }
     }
-
-    protected virtual void OnTargetChanged()
-    {
-        MoveToTarget();
-    }
     
-    private void HandleTargetDeath(IDamageable deadTarget)
+    private bool IsTargetValid(IDamageable target)
     {
-        if (deadTarget != CurrentTarget) return;
-        CurrentTarget.OnDeath -= HandleTargetDeath;
-        UpdateTarget();
+        return target is Component component && component;
     }
+
 
     private void Die()
     {

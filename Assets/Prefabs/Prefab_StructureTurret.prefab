@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 2457870460926333871}
   - component: {fileID: 7975855849258831279}
   - component: {fileID: 6583791541103327334}
+  - component: {fileID: 495473235746644866}
   - component: {fileID: 7053805491111974174}
   m_Layer: 6
-  m_Name: Prefab_Turret
+  m_Name: Prefab_StructureTurret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -175,6 +176,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2, y: 4, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!208 &495473235746644866
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3381716777060979311}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 2, y: 2, z: 2}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0.67, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!114 &7053805491111974174
 MonoBehaviour:
   m_ObjectHideFlags: 0

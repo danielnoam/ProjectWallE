@@ -9,7 +9,7 @@ public class EnemyManager : MonoBehaviour
     [Header("Enemy Manager Settings")]
     [SerializeField] private ChanceList<Enemy> basicEnemies = new ChanceList<Enemy>();
     
-    [Header("Readonly Fields")]
+    [Header("Registered")]
     [SerializeField] private ChanceList<EnemySpawnPoint> enemySpawnPoints = new ChanceList<EnemySpawnPoint>();
     [SerializeField] private List<Enemy> activeEnemies = new List<Enemy>();
 
