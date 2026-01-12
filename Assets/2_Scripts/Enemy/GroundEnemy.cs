@@ -8,8 +8,8 @@ public class GroundEnemy : Enemy
     [SerializeField] private float targetRange = 5f;
     [SerializeField] private NavMeshAgent navMeshAgent;
     
-    private EnemyState _state = EnemyState.Moving;
-    private enum EnemyState { Attacking, Moving }
+    private EnemyState _state = EnemyState.MovingToTarget;
+    private enum EnemyState { Attacking, MovingToTarget }
 
     protected override void UpdateBehavior()
     {
@@ -19,7 +19,7 @@ public class GroundEnemy : Enemy
 
         switch (_state)
         {
-            case EnemyState.Moving:
+            case EnemyState.MovingToTarget:
                 if (distance <= targetRange)
                 {
                     _state = EnemyState.Attacking;
@@ -30,7 +30,7 @@ public class GroundEnemy : Enemy
             case EnemyState.Attacking:
                 if (distance > targetRange)
                 {
-                    _state = EnemyState.Moving;
+                    _state = EnemyState.MovingToTarget;
                     MoveToTarget();
                 }
                 else
