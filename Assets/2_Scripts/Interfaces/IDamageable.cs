@@ -5,4 +5,6 @@ public interface IDamageable
 {
     event Action<IDamageable> OnDeath;
     void TakeDamage(float damage, IDamageable attacker = null);
+    float CurrentHealth { get; }
+    float MaxHealth { get; }
 }

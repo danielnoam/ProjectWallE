@@ -41,7 +41,7 @@ public class StructureSpawnPoint : MonoBehaviour
         if (!structurePrefab || (spawnOnlyOnce && _hasSpawned)) return;
         
         _hasSpawned = true;
-        StructureDispatcher.Instance?.DeployPod(structurePrefab, transform.position, transform.up);
+        StructureManager.Instance?.DeployPod(structurePrefab, transform.position, transform.up);
     }
     
     

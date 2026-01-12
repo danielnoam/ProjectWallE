@@ -54,9 +54,14 @@ public abstract class Structure : MonoBehaviour, IDamageable
     }
 
 
-    protected void Awake()
+    private void Awake()
     {
         ResetStats();
+    }
+    
+    private void OnDestroy()
+    {
+        StructureManager.Instance?.RegisterStructure(this);
     }
 
     [Button(ButtonPlayMode.OnlyWhenPlaying)]
@@ -87,6 +92,7 @@ public abstract class Structure : MonoBehaviour, IDamageable
 
     public void Build()
     {
+        StructureManager.Instance?.RegisterStructure(this);
         ResetStats();
         PlaySpawnEffect();
         OnBuild();
@@ -96,15 +102,16 @@ public abstract class Structure : MonoBehaviour, IDamageable
     
 
     [Button(ButtonPlayMode.OnlyWhenPlaying)]
-    public void Break()
+    private void Break()
     {
+        StructureManager.Instance?.UnregisterStructure(this);
         OnDeath?.Invoke(this);
         OnBroken?.Invoke();
         OnBreak();
     }
     
     [Button(ButtonPlayMode.OnlyWhenPlaying)]
-    public void Upgrade()
+    private void Upgrade()
     {
         if (!CanUpgrade())
         {
@@ -128,7 +135,10 @@ public abstract class Structure : MonoBehaviour, IDamageable
             Break();
         }
     }
-    
+
+    public float CurrentHealth => currentHealth;
+    public float MaxHealth => startHealth;
+
     public Transform Transform()
     {
         return transform;

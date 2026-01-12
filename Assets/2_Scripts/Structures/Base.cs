@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(ResourceGenerator))]
 public class Base : Structure
 {
-
+    
     [Header("Base Settings")]
     [SerializeField] private float rotationSpeed = 10f;
     [SerializeField] private float moveSpeed = 0.3f;
@@ -11,15 +11,7 @@ public class Base : Structure
     [SerializeField] private ResourceGenerator resourceGenerator;
 
 
-    private void Start()
-    {
-        EnemyManager.Instance?.RegisterBase(this);
-    }
 
-    private void OnDestroy()
-    {
-        EnemyManager.Instance?.UnregisterBase(this);
-    }
     
     private void Update()
     {

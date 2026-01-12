@@ -102,7 +102,7 @@ public class PlayerStructureBuilder : MonoBehaviour
             return;
         }
 
-        StructureDispatcher.Instance.DeployPod(structure, hit.point, hit.normal);
+        StructureManager.Instance.DeployPod(structure, hit.point, hit.normal);
     }
 
 

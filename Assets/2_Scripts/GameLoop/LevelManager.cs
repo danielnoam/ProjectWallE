@@ -17,15 +17,16 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private float duration = 300f;
     [SerializeReference] private List<LevelEvent> events = new List<LevelEvent>();
     
+
+    private PlayerStructureBuilder _player;
     private float _timeRemaining;
     private bool _levelActive;
 
     public float TimeRemaining => _timeRemaining;
     public bool LevelActive => _levelActive;
     public float Duration => duration;
+    public PlayerStructureBuilder Player => _player;
     public List<LevelEvent> GetEvents() => events;
-    
-
 
     private void Awake()
     {
@@ -69,8 +70,6 @@ public class LevelManager : MonoBehaviour
             }
         }
     }
-    
-
 
     private IEnumerator StartLevel()
     {
@@ -79,6 +78,7 @@ public class LevelManager : MonoBehaviour
             evt.hasTriggered = false;
         }
         
+        _player = FindFirstObjectByType<PlayerStructureBuilder>();
         OnLevelInitializing?.Invoke();
         
         yield return new WaitForSeconds(3f);
@@ -111,6 +111,4 @@ public class LevelManager : MonoBehaviour
         events.Add(evt);
         events.Sort((a, b) => a.triggerTime.CompareTo(b.triggerTime));
     }
-    
-    
 }

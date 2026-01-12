@@ -1,5 +1,17 @@
 using System;
+using DNExtensions;
 using UnityEngine;
+
+public enum TargetPriority
+{
+    Player,
+    DamageGiver,
+    NearestBase,
+    NearestTurretInRange,
+    NearestGeneratorInRange,
+    WeakestStructureInRange,
+    NearestStructure,
+}
 
 public abstract class Enemy : MonoBehaviour, IDamageable
 {
@@ -7,15 +19,17 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     [SerializeField] protected float maxHealth = 100f;
     [SerializeField] protected float attackDamage = 10f;
     [SerializeField] protected float attackCooldown = 1f;
+    [SerializeField] protected float attackRange = 15f;
+    [SerializeField] protected float targetRange = 20f;
     [SerializeField] protected AudioClip damagedSfx;
     [SerializeField] protected AudioClip deathSfx;
     [SerializeField] protected AudioSource audioSource;
+    [SerializeField] protected TargetPriority[] targetPriorities = new[] { TargetPriority.NearestBase };
+    [SerializeField, ReadOnly] protected float currentHealth;
 
-    protected float CurrentHealth;
     protected float AttackTimer;
-    protected IDamageable MainTarget;
-    protected IDamageable SecondaryTarget;
-    protected IDamageable CurrentTarget => SecondaryTarget ?? MainTarget;
+    protected IDamageable CurrentTarget;
+    protected IDamageable LastAttacker;
     
     public event Action<IDamageable> OnDeath;
     
@@ -23,17 +37,37 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     protected abstract void PerformAttack();
     protected abstract void MoveToTarget();
     
-    protected virtual void Awake()
+    private void Awake()
     {
-        CurrentHealth = maxHealth;
-        EnemyManager.Instance.RegisterEnemy(this);
+        currentHealth = maxHealth;
     }
 
-    protected virtual void Update()
+    private void Start()
     {
+        EnemyManager.Instance.RegisterEnemy(this);
+        UpdateTarget();
+    }
+    
+    private void OnDestroy()
+    {
+        EnemyManager.Instance?.UnregisterEnemy(this);
+    
+        if (CurrentTarget != null)
+        {
+            CurrentTarget.OnDeath -= HandleTargetDeath;
+        }
+    }
+
+    private void Update()
+    {
+        if (CurrentTarget != null && !IsTargetValid(CurrentTarget))
+        {
+            UpdateTarget();
+        }
+        
         UpdateBehavior();
     }
-
+    
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.TryGetComponent(out StructurePod pod))
@@ -41,60 +75,81 @@ public abstract class Enemy : MonoBehaviour, IDamageable
             Die();
         }
     }
-
-    public void SetMainTarget(IDamageable target)
+    
+    private bool IsTargetValid(IDamageable target)
     {
-        MainTarget = target;
-        OnMainTargetSet();
+        return target is Component component && component;
+    }
+
+    private void UpdateTarget()
+    {
+        if (CurrentTarget != null)
+        {
+            CurrentTarget.OnDeath -= HandleTargetDeath;
+        }
+    
+        foreach (var priority in targetPriorities)
+        {
+            IDamageable target = FindTargetByPriority(priority);
+            if (target != null && IsTargetValid(target))
+            {
+                CurrentTarget = target;
+                CurrentTarget.OnDeath += HandleTargetDeath;
+                OnTargetChanged();
+                return;
+            }
+        }
+    
+        CurrentTarget = null;
     }
     
-    protected virtual void OnMainTargetSet()
+
+
+
+
+    private IDamageable FindTargetByPriority(TargetPriority priority)
+    {
+        switch (priority)
+        {
+            case TargetPriority.NearestBase:
+                return StructureManager.Instance?.GetNearestBase(transform.position);
+                
+            case TargetPriority.Player:
+                return LevelManager.Instance?.Player as IDamageable;
+                
+            case TargetPriority.NearestTurretInRange:
+                return StructureManager.Instance?.GetNearestTurretInRange(transform.position, targetRange);
+                
+            case TargetPriority.WeakestStructureInRange:
+                return StructureManager.Instance?.GetWeakestStructureInRange(transform.position, targetRange);
+            
+            case TargetPriority.DamageGiver:
+                return LastAttacker;
+
+            case TargetPriority.NearestGeneratorInRange:
+                return StructureManager.Instance?.GetNearestGeneratorInRange(transform.position, targetRange);
+
+            case TargetPriority.NearestStructure:
+
+                return StructureManager.Instance?.GetNearestStructure(transform.position);
+            default:
+                return null;
+        }
+    }
+
+    protected virtual void OnTargetChanged()
     {
         MoveToTarget();
     }
-
-    protected void UpdateSecondaryTarget(IDamageable newTarget)
+    
+    private void HandleTargetDeath(IDamageable deadTarget)
     {
-        if (newTarget == null) return;
-        
-        if (SecondaryTarget != null)
-        {
-            SecondaryTarget.OnDeath -= HandleAttackerDeath;
-        }
-        
-        SecondaryTarget = newTarget;
-        SecondaryTarget.OnDeath += HandleAttackerDeath;
-        MoveToTarget();
+        if (deadTarget != CurrentTarget) return;
+        CurrentTarget.OnDeath -= HandleTargetDeath;
+        UpdateTarget();
     }
 
-    private void HandleAttackerDeath(IDamageable deadAttacker)
-    {
-        if (deadAttacker == SecondaryTarget)
-        {
-            deadAttacker.OnDeath -= HandleAttackerDeath;
-            SecondaryTarget = null;
-            MoveToTarget();
-        }
-    }
-
-    public virtual void TakeDamage(float damage, IDamageable attacker = null)
-    {
-        CurrentHealth -= damage;
-        if (CurrentHealth <= 0)
-        {
-            Die();
-            return;
-        }
-        
-        UpdateSecondaryTarget(attacker);
-        
-        if (damagedSfx)
-        {
-            audioSource?.PlayOneShot(damagedSfx);
-        }
-    }
-
-    protected virtual void Die()
+    private void Die()
     {
         OnDeath?.Invoke(this);
         
@@ -105,14 +160,28 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         
         Destroy(gameObject);
     }
-
-    protected virtual void OnDestroy()
+    
+    public void TakeDamage(float damage, IDamageable attacker = null)
     {
-        EnemyManager.Instance?.UnregisterEnemy(this);
-        
-        if (SecondaryTarget != null)
+        currentHealth -= damage;
+        if (CurrentHealth <= 0)
         {
-            SecondaryTarget.OnDeath -= HandleAttackerDeath;
+            Die();
+            return;
+        }
+
+        if (attacker != null)
+        {
+            LastAttacker = attacker;
+            UpdateTarget();
+        }
+        
+        if (damagedSfx)
+        {
+            audioSource?.PlayOneShot(damagedSfx);
         }
     }
+
+    public float CurrentHealth => currentHealth;
+    public float MaxHealth => maxHealth;
 }
