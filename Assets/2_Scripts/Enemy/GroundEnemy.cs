@@ -63,12 +63,7 @@ public class GroundEnemy : Enemy
                 break;
         }
     }
-
-    protected override void AttackTarget()
-    {
-
-        CurrentTarget?.TakeDamage(attackDamage, this);
-    }
+    
 
     protected override void MoveToTarget()
     {

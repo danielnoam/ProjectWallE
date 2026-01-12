@@ -42,7 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 69911270091919848}
   - component: {fileID: 3687143007142646618}
-  - component: {fileID: 8002394182993961073}
+  - component: {fileID: 6155827126268699539}
   - component: {fileID: 5067021678384517133}
   - component: {fileID: 6487620541022002554}
   - component: {fileID: 899449055304212277}
@@ -166,8 +166,8 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!135 &8002394182993961073
-SphereCollider:
+--- !u!65 &6155827126268699539
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -185,8 +185,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 8.79
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 4.25, y: 11.49, z: 3.64}
+  m_Center: {x: 0, y: 3.56, z: 0}
 --- !u!208 &5067021678384517133
 NavMeshObstacle:
   m_ObjectHideFlags: 0

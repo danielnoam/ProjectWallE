@@ -13,18 +13,24 @@ public enum TargetPriority
     NearestStructure,
 }
 
+[SelectionBase]
 public abstract class Enemy : MonoBehaviour, IDamageable
 {
     [Header("General Enemy Settings")]
     [SerializeField] protected float maxHealth = 100f;
-    [SerializeField] protected float attackDamage = 10f;
-    [SerializeField] protected float attackCooldown = 1f;
-    [SerializeField] protected float attackRange = 15f;
     [SerializeField] protected float targetRange = 20f;
     [SerializeField] protected AudioClip damagedSfx;
     [SerializeField] protected AudioClip deathSfx;
     [SerializeField] protected AudioSource audioSource;
     [SerializeField] protected TargetPriority[] targetPriorities = new[] { TargetPriority.NearestBase };
+    [Separator]
+    [SerializeField] protected float attackDamage = 10f;
+    [SerializeField] protected float attackCooldown = 1f;
+    [SerializeField] protected float attackRange = 15f;
+    [SerializeField] private float projectileSpeed = 10f;
+    [SerializeField] private LayerMask projectileHitLayers;
+    [SerializeField] private Projectile projectilePrefab;
+    [Separator]
     [SerializeField, ReadOnly] protected float currentHealth;
 
     protected float AttackTimer;
@@ -35,7 +41,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 
     protected abstract void OnSetup();
     protected abstract void UpdateBehavior();
-    protected abstract void AttackTarget();
     protected abstract void MoveToTarget();
     
 
@@ -77,7 +82,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     
     private void OnTargetDeath(IDamageable deadTarget)
     {
-        if (deadTarget != CurrentTarget) return;
         CurrentTarget.OnDeath -= OnTargetDeath;
         UpdateTarget();
     }
@@ -141,6 +145,16 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     private bool IsTargetValid(IDamageable target)
     {
         return target is Component component && component;
+    }
+    
+    protected void AttackTarget()
+    {
+        if (CurrentTarget is Component targetComponent && targetComponent)
+        {
+            Vector3 direction = (targetComponent.transform.position - transform.position).normalized;
+            Projectile projectile = Instantiate(projectilePrefab, transform.position, Quaternion.LookRotation(direction));
+            projectile.Initialize(this, projectileSpeed, attackDamage, direction, projectileHitLayers);
+        }
     }
 
 

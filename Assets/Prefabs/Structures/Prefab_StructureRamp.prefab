@@ -42,8 +42,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7733275894302226080}
   - component: {fileID: 3311841052180671517}
-  - component: {fileID: 9136919383448841480}
   - component: {fileID: 6748665373679740288}
+  - component: {fileID: 6787564630580044107}
   - component: {fileID: 4497719034383223877}
   m_Layer: 6
   m_Name: Prefab_StructureRamp
@@ -165,8 +165,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!135 &9136919383448841480
-SphereCollider:
+--- !u!208 &6748665373679740288
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3026512305252668660}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 5.5, y: 3.88, z: 5.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 1.92, z: 0}
+  m_TimeToStationary: 0.5
+--- !u!65 &6787564630580044107
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -184,24 +200,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 5
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!208 &6748665373679740288
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3026512305252668660}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 5.5, y: 3.88, z: 5.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 1.92, z: 0}
-  m_TimeToStationary: 0.5
+  m_Size: {x: 11.18, y: 6.5, z: 8.47}
+  m_Center: {x: 0, y: 2.7, z: 0}
 --- !u!114 &4497719034383223877
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -226,7 +226,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7733275894302226080}
   - component: {fileID: 3311841052180671517}
-  - component: {fileID: 9136919383448841480}
+  - component: {fileID: 5977397639411850196}
   - component: {fileID: 6748665373679740288}
   - component: {fileID: 2308925685089836474}
   - component: {fileID: 5619648184734559487}
@@ -350,8 +350,8 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!135 &9136919383448841480
-SphereCollider:
+--- !u!65 &5977397639411850196
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -369,7 +369,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 5
+  m_Size: {x: 2, y: 3, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!208 &6748665373679740288
 NavMeshObstacle:
@@ -381,11 +381,11 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 2.5, y: 2, z: 2.5}
+  m_Extents: {x: 2, y: 2, z: 2}
   m_MoveThreshold: 0.1
-  m_Carve: 0
+  m_Carve: 1
   m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0.77, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
 --- !u!114 &2308925685089836474
 MonoBehaviour:

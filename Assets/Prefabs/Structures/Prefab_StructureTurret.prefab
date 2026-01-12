@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7587715294978992953}
   - component: {fileID: 2457870460926333871}
-  - component: {fileID: 7975855849258831279}
   - component: {fileID: 6583791541103327334}
   - component: {fileID: 495473235746644866}
   - component: {fileID: 7053805491111974174}
@@ -134,8 +133,8 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!135 &7975855849258831279
-SphereCollider:
+--- !u!65 &6583791541103327334
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -153,27 +152,6 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 25
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!65 &6583791541103327334
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3381716777060979311}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
   m_Size: {x: 2, y: 4, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!208 &495473235746644866
@@ -185,12 +163,12 @@ NavMeshObstacle:
   m_GameObject: {fileID: 3381716777060979311}
   m_Enabled: 1
   serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 2, y: 2, z: 2}
+  m_Shape: 0
+  m_Extents: {x: 1.81, y: 2.615, z: 1.81}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0.67, z: 0}
+  m_Center: {x: 0, y: 0.3, z: 0}
   m_TimeToStationary: 0.5
 --- !u!114 &7053805491111974174
 MonoBehaviour:
@@ -217,10 +195,9 @@ MonoBehaviour:
   currentUpgradeLevel: 0
   scanRotationSpeed: 35
   scanWaitDuration: 1.5
-  attackRotationSpeed: 125
-  attackDamage: 1
-  attackCooldown: 0.1
+  detectionRadius: 25
   brokenRotation: {x: 50, y: 0, z: 0}
+  headTransform: {fileID: 3118065064727651805}
   attackAnimationSettings:
     strength: {x: 2, y: 2, z: 2}
     duration: 0.2
@@ -241,8 +218,14 @@ MonoBehaviour:
     useUnscaledTime: 0
     _useFixedUpdate: 0
     _updateType: 0
-  headTransform: {fileID: 3118065064727651805}
-  detectionCollider: {fileID: 7975855849258831279}
+  attackRotationSpeed: 125
+  attackCooldown: 0.3
+  projectileDamage: 1
+  projectileSpeed: 30
+  projectileHitLayers:
+    serializedVersion: 2
+    m_Bits: 256
+  projectilePrefab: {fileID: 8338543337846540916, guid: 63924ffbc4055854e89c01d29a67c183, type: 3}
   currentState: 1
 --- !u!1 &5813210165579224113
 GameObject:

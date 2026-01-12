@@ -44,10 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86bce538c7d6a1344b472530c62a0b4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnPoint
-  availableEnemies:
-    internalItems:
-    - item: {fileID: 457793700210850756, guid: 311465a237bc47a4a80317173bf23667, type: 3}
-      chance: 100
-      isLocked: 0
+  isActive: 1
   spawnPointRange: 10
-  gizmoColor: {r: 0.5450981, g: 0, b: 0, a: 1}
