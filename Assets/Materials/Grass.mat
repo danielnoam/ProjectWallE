@@ -20,13 +20,13 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: GrassMat
+  m_Name: Grass
   m_Shader: {fileID: -6465566751694194690, guid: 7b66e9a1a6d1af94389fd652b9b57f3d, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _ALPHATEST_ON
-  - _MOVEMENT_BOTH
+  - _MOVEMENT_SWAY_ONLY
   - _RECEIVE_SHADOWS_OFF
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -71,7 +71,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Main_Tex:
-        m_Texture: {fileID: 2800000, guid: a6c9130d10bf47d489af87b27e279487, type: 3}
+        m_Texture: {fileID: 2800000, guid: 998b787f76d188f4a997a937f0a4e1e8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -143,7 +143,7 @@ Material:
     - _GlossyReflections: 0
     - _Height_Blend: 0.35
     - _Height_Color_Blend: 0.2
-    - _MOVEMENT: 3
+    - _MOVEMENT: 2
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
