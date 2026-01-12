@@ -1,6 +1,7 @@
 using DNExtensions;
 using UnityEngine;
 
+[SelectionBase]
 public class PlayerStructureBuilder : MonoBehaviour
 {
     [Header("Build Settings")]
