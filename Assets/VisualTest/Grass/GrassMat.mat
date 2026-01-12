@@ -24,15 +24,20 @@ Material:
   m_Shader: {fileID: -6465566751694194690, guid: 7b66e9a1a6d1af94389fd652b9b57f3d, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _ALPHATEST_ON
+  - _MOVEMENT_BOTH
+  - _RECEIVE_SHADOWS_OFF
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
+  m_CustomRenderQueue: 2450
+  stringTagMap:
+    RenderType: TransparentCutout
   disabledShaderPasses:
   - MOTIONVECTORS
+  - SHADOWCASTER
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -116,12 +121,14 @@ Material:
     m_Ints: []
     m_Floats:
     - _AddPrecomputedVelocity: 0
-    - _AlphaClip: 0
-    - _AlphaToMask: 0
+    - _AlphaClip: 1
+    - _AlphaToMask: 1
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
+    - _Blend_Color_By_Height: 0
     - _Blend_Height: 0
     - _BumpScale: 1
+    - _CastShadows: 0
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _Cull: 2
@@ -134,39 +141,47 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _Height_Blend: 0.12
+    - _Height_Blend: 0.35
+    - _Height_Color_Blend: 0.2
+    - _MOVEMENT: 3
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _ReceiveShadows: 1
+    - _ReceiveShadows: 0
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
-    - _Sway_Speed: 0.5
-    - _Sway_Strength: 0.16
+    - _Sway_Height_Blend: 0.5
+    - _Sway_Speed: 0.2
+    - _Sway_Strength: 0.1
     - _TerrainSize: 100
     - _Terrain_Size: 100
     - _Wave_Speed: 0.1
     - _Wave_Strength: 0.01
-    - _Wind_Height: 1
-    - _Wind_Noise_Scale: 100
-    - _Wind_Noise_Speed: 0.1
+    - _Wind_Height: 0.58
+    - _Wind_Noise_Scale: 200
+    - _Wind_Noise_Speed: 0.2
+    - _Wind_Speed: 0.2
     - _WorkflowMode: 1
     - _XRMotionVectorsPass: 1
+    - _ZTest: 4
     - _ZWrite: 1
+    - _ZWriteControl: 0
     m_Colors:
     - _BaseColor: {r: 0, g: 0, b: 0, a: 1}
     - _Base_Color: {r: 0, g: 0, b: 0, a: 1}
     - _Botton_Color: {r: 0, g: 0.37106913, b: 0.024784276, a: 1}
+    - _Botton_Color_Multiplier: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _Terrain_Offset: {r: 0, g: 0, b: 0, a: 0}
-    - _Wind_Noise_Constrast: {r: 0.1, g: 1, b: 0, a: 0}
+    - _Wind_Noise_Constrast: {r: 0.3, g: 1, b: 0, a: 0}
+    - _Wind_Noise_Scale: {r: 200, g: 200, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
