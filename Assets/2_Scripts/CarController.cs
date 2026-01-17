@@ -54,6 +54,7 @@ public class CarController : MonoBehaviour
     
     private Rigidbody _carRb;
     private List<Transform> _tireTransforms;
+    private List<Transform> _tireVisualsTransforms;
     private readonly Dictionary<Transform, float> _tireNormalForces = new();
     
     private float _currentSteering;
@@ -67,6 +68,7 @@ public class CarController : MonoBehaviour
     {
         _carRb = GetComponent<Rigidbody>();
         _tireTransforms = GetAllTiresTransforms();
+        _tireVisualsTransforms = GetAllTiresVisualsTransforms();
 
         foreach (var t in _tireTransforms)
             _tireNormalForces[t] = 0f;
@@ -370,6 +372,23 @@ public class CarController : MonoBehaviour
         foreach (var tire in staticTiresTransforms)
         {
             tires.Add(tire);
+        }
+        
+        return tires;
+    }
+    
+    private List<Transform> GetAllTiresVisualsTransforms()
+    {
+        List<Transform> tires = new List<Transform>();
+
+        foreach (var tire in steeringTiresTransforms)
+        {
+            tires.Add(tire.GetChild(0));
+        }
+
+        foreach (var tire in staticTiresTransforms)
+        {
+            tires.Add(tire.GetChild(0));
         }
         
         return tires;
