@@ -51,10 +51,16 @@ public class CarController : MonoBehaviour
     [SerializeField] private float airAlignmentDamping;
     [SerializeField] private float airSteeringStrength;
     [SerializeField] private float maxAirSteeringVelocity;
+
+    public struct TireAndVisualTransform
+    {
+        public Transform TireTransform;
+        public Transform VisualTransform;
+        public Vector3 VisualStartPosition;
+    }
     
     private Rigidbody _carRb;
-    private List<Transform> _tireTransforms;
-    private List<Transform> _tireVisualsTransforms;
+    public List<TireAndVisualTransform> _tireAndVisualTransforms;
     private readonly Dictionary<Transform, float> _tireNormalForces = new();
     
     private float _currentSteering;
@@ -67,11 +73,10 @@ public class CarController : MonoBehaviour
     void Awake()
     {
         _carRb = GetComponent<Rigidbody>();
-        _tireTransforms = GetAllTiresTransforms();
-        _tireVisualsTransforms = GetAllTiresVisualsTransforms();
+        _tireAndVisualTransforms = GetAllTiresTransforms();
 
-        foreach (var t in _tireTransforms)
-            _tireNormalForces[t] = 0f;
+        foreach (var t in _tireAndVisualTransforms)
+            _tireNormalForces[t.TireTransform] = 0f;
     }
     void FixedUpdate()
     {
@@ -86,17 +91,17 @@ public class CarController : MonoBehaviour
 
     private void ApplySuspension()
     {
-        ApplySuspensionPerTiresType(steeringTiresTransforms);
-        ApplySuspensionPerTiresType(staticTiresTransforms);
+        ApplySuspensionPerTiresType(_tireAndVisualTransforms);
     }
 
-    private void ApplySuspensionPerTiresType(Transform[] tires)
+    private void ApplySuspensionPerTiresType(List<TireAndVisualTransform> tires)
     {
         foreach (var tire in tires)
         {
-            if (!IsTireGrounded(tire, out var hit ))
+            if (!IsTireGrounded(tire.TireTransform, out var hit, false ))
             {
-                _tireNormalForces[tire] = 0f;
+                _tireNormalForces[tire.TireTransform] = 0f;
+                tire.VisualTransform.localPosition = Vector3.Lerp(tire.VisualTransform.localPosition,tire.VisualStartPosition, 5f * Time.fixedDeltaTime);
                 continue;
             }
             
@@ -104,16 +109,21 @@ public class CarController : MonoBehaviour
             
             Vector3 springDir = hit.normal; // push away from the ground
 
-            Vector3 pointVel = _carRb.GetPointVelocity(tire.position);
+            Vector3 pointVel = _carRb.GetPointVelocity(tire.TireTransform.position);
             float velAlongSpring = Vector3.Dot(pointVel, springDir);
 
             float suspensionForce =
                 (-offset * suspensionStrength) -
                 (velAlongSpring * suspensionDamping);
 
-            _carRb.AddForceAtPosition(springDir * suspensionForce, tire.position);
+            _carRb.AddForceAtPosition(springDir * suspensionForce, tire.TireTransform.position);
             
-            _tireNormalForces[tire] = suspensionForce;
+            _tireNormalForces[tire.TireTransform] = suspensionForce;
+            
+            //tire visual
+            var vector3 = tire.VisualTransform.localPosition;
+            vector3.y = tire.VisualStartPosition.y - offset;
+            tire.VisualTransform.localPosition = vector3;
         }
     }
 
@@ -174,7 +184,7 @@ public class CarController : MonoBehaviour
             
             float desiredAccel = desiredVelChange / Time.fixedDeltaTime;
             
-            _carRb.AddForceAtPosition(tire.right * _carRb.mass/_tireTransforms.Count * desiredAccel, tire.position);
+            _carRb.AddForceAtPosition(tire.right * _carRb.mass/_tireAndVisualTransforms.Count * desiredAccel, tire.position);
             
             // ===== NEW: slope gravity lateral counter-force =====
             // Gravity component parallel to the ground plane at this tire
@@ -196,7 +206,7 @@ public class CarController : MonoBehaviour
             counterAccel = Mathf.Clamp(counterAccel, -slopeAntiSlipMaxAccel, slopeAntiSlipMaxAccel);
             
             // Apply as force (F = m * a), distributed by tire count just like your other forces
-            Vector3 counterForce = tire.right * ((_carRb.mass / _tireTransforms.Count) * counterAccel);
+            Vector3 counterForce = tire.right * ((_carRb.mass / _tireAndVisualTransforms.Count) * counterAccel);
             _carRb.AddForceAtPosition(counterForce, tire.position);
         }
     }
@@ -227,9 +237,9 @@ public class CarController : MonoBehaviour
     {
         if(carSpeed > topForwardSpeed) return;
         
-        foreach (var tire in _tireTransforms)
+        foreach (var tire in _tireAndVisualTransforms)
         {
-            if (!IsTireGrounded(tire, out var hit )) continue;
+            if (!IsTireGrounded(tire.TireTransform, out var hit )) continue;
                 
             float normalizedSpeed = Mathf.Clamp01(Mathf.Abs(carSpeed) / topForwardSpeed);
                 
@@ -237,7 +247,7 @@ public class CarController : MonoBehaviour
                                           accelerationCurve.Evaluate(normalizedSpeed) * accelerationStrength :
                                           brakeStrength;
                 
-            _carRb.AddForceAtPosition(tire.forward * availableAcceleration / _tireTransforms.Count, tire.position);
+            _carRb.AddForceAtPosition(tire.TireTransform.forward * availableAcceleration / _tireAndVisualTransforms.Count, tire.TireTransform.position);
         }
         
     }
@@ -246,9 +256,9 @@ public class CarController : MonoBehaviour
     {
         if(carSpeed < -topBackwardSpeed) return;
         
-        foreach (var tire in _tireTransforms)
+        foreach (var tire in _tireAndVisualTransforms)
         {
-            if (!IsTireGrounded(tire, out var hit )) continue;
+            if (!IsTireGrounded(tire.TireTransform, out var hit )) continue;
                 
             float normalizedSpeed = Mathf.Clamp01(Mathf.Abs(carSpeed) / topBackwardSpeed);
                 
@@ -256,17 +266,17 @@ public class CarController : MonoBehaviour
                                           accelerationCurve.Evaluate(normalizedSpeed) * accelerationStrength :
                                           brakeStrength;  
             
-            _carRb.AddForceAtPosition(-tire.forward * availableAcceleration / _tireTransforms.Count, tire.position);
+            _carRb.AddForceAtPosition(-tire.TireTransform.forward * availableAcceleration / _tireAndVisualTransforms.Count, tire.TireTransform.position);
         }
     }
 
     private void ApplyEngineBreaking(float carSpeed)
     {
-        foreach (var tire in _tireTransforms)
+        foreach (var tire in _tireAndVisualTransforms)
         {
-            if (!IsTireGrounded(tire, out var hit )) continue;
+            if (!IsTireGrounded(tire.TireTransform, out var hit )) continue;
 
-            _carRb.AddForceAtPosition(tire.forward * (-Mathf.Sign(carSpeed) * engineBrakeStrength / _tireTransforms.Count), tire.position);
+            _carRb.AddForceAtPosition(tire.TireTransform.forward * (-Mathf.Sign(carSpeed) * engineBrakeStrength / _tireAndVisualTransforms.Count), tire.TireTransform.position);
         }
         
     }
@@ -345,65 +355,58 @@ public class CarController : MonoBehaviour
 
     private bool IsCarGrounded()
     {
-        foreach (Transform tire in _tireTransforms)
+        foreach (TireAndVisualTransform tire in _tireAndVisualTransforms)
         {
-            if (!IsTireGrounded(tire, out var hit )) continue;
+            if (!IsTireGrounded(tire.TireTransform, out var hit )) continue;
             return true;
         }
         return false;
     }
 
-    private bool IsTireGrounded(Transform tire, out RaycastHit tireHit )
+    private bool IsTireGrounded(Transform tire, out RaycastHit tireHit , bool isExtraDistance = true)
     {
-        bool isGrounded = Physics.Raycast(tire.position, -tire.up, out RaycastHit hit,  0.1f + groundHeight, groundLayer);
+        float distance = isExtraDistance ? groundHeight + 0.1f : groundHeight;
+        
+        bool isGrounded = Physics.Raycast(tire.position, -tire.up, out RaycastHit hit,  distance, groundLayer);
         tireHit = hit;
         
         return isGrounded;
     }
-    private List<Transform> GetAllTiresTransforms()
+    private List<TireAndVisualTransform> GetAllTiresTransforms()
     {
-        List<Transform> tires = new List<Transform>();
+        List<TireAndVisualTransform> tireAndVisuals = new List<TireAndVisualTransform>();
 
         foreach (var tire in steeringTiresTransforms)
         {
-            tires.Add(tire);
+            TireAndVisualTransform tireAndVisual = new TireAndVisualTransform();
+            tireAndVisual.TireTransform = tire;
+            tireAndVisual.VisualTransform = tire.GetChild(0);
+            tireAndVisual.VisualStartPosition = tireAndVisual.VisualTransform.localPosition;
+            tireAndVisuals.Add(tireAndVisual);
         }
 
         foreach (var tire in staticTiresTransforms)
         {
-            tires.Add(tire);
+            TireAndVisualTransform tireAndVisual = new TireAndVisualTransform();
+            tireAndVisual.TireTransform = tire;
+            tireAndVisual.VisualTransform = tire.GetChild(0);            
+            tireAndVisual.VisualStartPosition = tireAndVisual.VisualTransform.localPosition;
+            tireAndVisuals.Add(tireAndVisual);
         }
         
-        return tires;
-    }
-    
-    private List<Transform> GetAllTiresVisualsTransforms()
-    {
-        List<Transform> tires = new List<Transform>();
-
-        foreach (var tire in steeringTiresTransforms)
-        {
-            tires.Add(tire.GetChild(0));
-        }
-
-        foreach (var tire in staticTiresTransforms)
-        {
-            tires.Add(tire.GetChild(0));
-        }
-        
-        return tires;
+        return tireAndVisuals;
     }
     
     float GetGroundedRatio(out int groundedCount)
     {
         groundedCount = 0;
-        for (int i = 0; i < _tireTransforms.Count; i++)
+        for (int i = 0; i < _tireAndVisualTransforms.Count; i++)
         {
-            var t = _tireTransforms[i];
-            if (Physics.Raycast(t.position, -t.up, out _, 0.1f + groundHeight, groundLayer))
+            var t = _tireAndVisualTransforms[i];
+            if (Physics.Raycast(t.TireTransform.position, -t.TireTransform.up, out _, 0.1f + groundHeight, groundLayer))
                 groundedCount++;
         }
-        return (float)groundedCount / _tireTransforms.Count;
+        return (float)groundedCount / _tireAndVisualTransforms.Count;
     }
 
 
