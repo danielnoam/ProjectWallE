@@ -60,7 +60,7 @@ public class CarController : MonoBehaviour
     }
     
     private Rigidbody _carRb;
-    public List<TireAndVisualTransform> _tireAndVisualTransforms;
+    private List<TireAndVisualTransform> _tireAndVisualTransforms;
     private readonly Dictionary<Transform, float> _tireNormalForces = new();
     
     private float _currentSteering;
@@ -232,6 +232,9 @@ public class CarController : MonoBehaviour
         if(Input.GetKey(KeyCode.W)) ApplyForwardAcceleration(carSpeed);
         else if(Input.GetKey(KeyCode.S)) ApplyBackwardsAcceleration(carSpeed);
         else ApplyEngineBreaking(carSpeed);
+        
+        //visuals
+        RotateWheels(carSpeed, 0.5f);
     }
     void ApplyForwardAcceleration(float carSpeed)
     {
@@ -279,6 +282,18 @@ public class CarController : MonoBehaviour
             _carRb.AddForceAtPosition(tire.TireTransform.forward * (-Mathf.Sign(carSpeed) * engineBrakeStrength / _tireAndVisualTransforms.Count), tire.TireTransform.position);
         }
         
+    }
+
+    private void RotateWheels(float carSpeed, float wheelRadius)
+    {
+        float wheelSpeedRad = carSpeed / wheelRadius;
+        float wheelSpeedDeg = wheelSpeedRad * Mathf.Rad2Deg;
+
+        foreach (var tire in _tireAndVisualTransforms)
+        {
+            if (!IsTireGrounded(tire.TireTransform, out var hit )) continue;
+            tire.VisualTransform.Rotate(Vector3.up, wheelSpeedDeg * Time.fixedDeltaTime, Space.Self);
+        }
     }
 
     #endregion
