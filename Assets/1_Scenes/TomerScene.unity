@@ -1915,12 +1915,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 623665577e14e0140ae1f5e042b3b5a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarController
-  steeringTiresTransforms:
-  - {fileID: 1759084910}
-  - {fileID: 2058966036}
-  staticTiresTransforms:
-  - {fileID: 1216057442}
-  - {fileID: 882461188}
+  steeringTires:
+  - tireTransform: {fileID: 1759084910}
+    visualTransform: {fileID: 300980100}
+  - tireTransform: {fileID: 2058966036}
+    visualTransform: {fileID: 1559406675}
+  staticTires:
+  - tireTransform: {fileID: 1216057442}
+    visualTransform: {fileID: 1529644781}
+  - tireTransform: {fileID: 882461188}
+    visualTransform: {fileID: 431275718}
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -2016,9 +2020,9 @@ MonoBehaviour:
     m_RotationOrder: 4
   handBreakGripFactor: 0.03
   handbrakeBlendIn: 12
-  handbrakeBlendOut: 3
+  handbrakeBlendOut: 10
   slopeAntiSlipStrength: 1
-  slopeAntiSlipMaxAccel: 5
+  slopeAntiSlipMaxAccel: 10
   slopeAssistFadeStart: 0.1
   slopeAssistFadeEnd: 1.5
   minGripWhenPartialGround: 0.15
