@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using Random = UnityEngine.Random;
 
-namespace DNExtensions
+namespace DNExtensions.Utilities
 {
     /// <summary>
     /// A weighted chance-based collection that allows random selection of items based on percentage probabilities.
@@ -370,10 +370,6 @@ namespace DNExtensions
             return -1;
         }
 
-        public bool Contains(T item)
-        {
-            return IndexOf(item) != -1;
-        }
         #endregion Public API
 
         #region Random Selection

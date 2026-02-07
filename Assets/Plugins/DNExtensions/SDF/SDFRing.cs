@@ -9,8 +9,8 @@ namespace DNExtensions.Shapes
         private static readonly int OuterRadiusID = Shader.PropertyToID("_Outer_Radius");
         private static readonly int InnerRadiusID = Shader.PropertyToID("_Inner_Radius");
 
-        [SerializeField, Range(0f, 0.5f)] private float m_OuterRadius = 0.4f;
-        [SerializeField, Range(0f, 0.5f)] private float m_InnerRadius = 0.3f;
+        [SerializeField, Range(0f, 0.5f)] private float m_OuterRadius = 0.2f;
+        [SerializeField, Range(0f, 0.5f)] private float m_InnerRadius = 0.06f;
 
         protected override string GetShapeKeyword()
         {
@@ -19,8 +19,14 @@ namespace DNExtensions.Shapes
 
         protected override void SetShapeProperties()
         {
-            m_InstanceMaterial.SetFloat(OuterRadiusID, m_OuterRadius);
-            m_InstanceMaterial.SetFloat(InnerRadiusID, m_InnerRadius);
+            Vector2 rectSize = rectTransform.rect.size;
+            float minDim = Mathf.Min(rectSize.x, rectSize.y);
+    
+            float pixelOuterRadius = m_OuterRadius * minDim;
+            float pixelInnerRadius = m_InnerRadius * minDim;
+    
+            m_InstanceMaterial.SetFloat(OuterRadiusID, pixelOuterRadius);
+            m_InstanceMaterial.SetFloat(InnerRadiusID, pixelInnerRadius);
         }
 
         public float outerRadius
@@ -29,7 +35,7 @@ namespace DNExtensions.Shapes
             set
             {
                 value = Mathf.Clamp(value, 0f, 0.5f);
-                if (m_OuterRadius != value)
+                if (!Mathf.Approximately(m_OuterRadius, value))
                 {
                     m_OuterRadius = value;
                     UpdateMaterialProperties();
@@ -44,7 +50,7 @@ namespace DNExtensions.Shapes
             set
             {
                 value = Mathf.Clamp(value, 0f, 0.5f);
-                if (m_InnerRadius != value)
+                if (!Mathf.Approximately(m_InnerRadius, value))
                 {
                     m_InnerRadius = value;
                     UpdateMaterialProperties();

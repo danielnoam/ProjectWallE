@@ -1,5 +1,5 @@
 using System;
-using DNExtensions.Button;
+using DNExtensions.Utilities.Button;
 using UnityEngine;
 
 public class TerrainCamera : MonoBehaviour

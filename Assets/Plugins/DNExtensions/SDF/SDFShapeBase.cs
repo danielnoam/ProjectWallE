@@ -8,25 +8,35 @@ namespace DNExtensions.Shapes
     [RequireComponent(typeof(CanvasRenderer))]
     public abstract class SDFShapeBase : MaskableGraphic, ISerializationCallbackReceiver, ILayoutElement, ICanvasRaycastFilter
     {
-
         protected static readonly int BaseColorID = Shader.PropertyToID("_Base_Color");
         protected static readonly int RotationID = Shader.PropertyToID("_Rotation");
         protected static readonly int OffsetID = Shader.PropertyToID("_Offset");
+        protected static readonly int FillAmountID = Shader.PropertyToID("_Fill_Amount");
+        protected static readonly int FillTypeID = Shader.PropertyToID("_Fill_Type");
+        protected static readonly int FillOriginID = Shader.PropertyToID("_Fill_Origin");
         protected static readonly int OutlineThicknessID = Shader.PropertyToID("_Outline_Thickness");
         protected static readonly int OutlineColorID = Shader.PropertyToID("_Outline_Color");
-        protected static readonly int InlineThicknessID = Shader.PropertyToID("_Inline_Thickness");
-        protected static readonly int InlineColorID = Shader.PropertyToID("_Inline_Color");
-        
-        
+        protected static readonly int RectSize = Shader.PropertyToID("_Rect_Size");
+
+
         [SerializeField] protected Color m_BaseColor = Color.white;
         [SerializeField, Range(0, 360)] protected float m_Rotation;
+        [SerializeField] protected FillType m_FillType = FillType.None;
+        [SerializeField, Range(0f, 1f)] protected float m_FillAmount = 1.0f;
+        [SerializeField, Range(0f, 360f)] protected float m_FillOrigin = 0f;
         [SerializeField] protected Vector2 m_Offset;
         [SerializeField, Range(0f, 0.5f)] protected float m_OutlineThickness = 0.02f;
         [SerializeField] protected Color m_OutlineColor = Color.red;
-        [SerializeField, Range(0f, 0.5f)] protected float m_InlineThickness = 0f;
-        [SerializeField] protected Color m_InlineColor = Color.blue;
 
         protected Material m_InstanceMaterial;
+        
+        public enum FillType
+        {
+            None = 0,
+            Radial = 1,
+            Horizontal = 2,
+            Vertical = 3
+        }
 
 
         protected SDFShapeBase()
@@ -71,22 +81,21 @@ namespace DNExtensions.Shapes
         {
             if (m_InstanceMaterial == null) return;
 
-            // Disable all shape keywords
             DisableAllShapeKeywords();
-
-            // Enable this shape's keyword
             m_InstanceMaterial.EnableKeyword(GetShapeKeyword());
 
-            // Set common properties
+            Vector2 rectSize = rectTransform.rect.size;
+            float minDim = Mathf.Min(rectSize.x, rectSize.y);
+
             m_InstanceMaterial.SetColor(BaseColorID, m_BaseColor);
             m_InstanceMaterial.SetFloat(RotationID, m_Rotation);
             m_InstanceMaterial.SetVector(OffsetID, m_Offset);
-            m_InstanceMaterial.SetFloat(OutlineThicknessID, m_OutlineThickness);
+            m_InstanceMaterial.SetFloat(OutlineThicknessID, m_OutlineThickness * minDim);
             m_InstanceMaterial.SetColor(OutlineColorID, m_OutlineColor);
-            m_InstanceMaterial.SetFloat(InlineThicknessID, m_InlineThickness);
-            m_InstanceMaterial.SetColor(InlineColorID, m_InlineColor);
+            m_InstanceMaterial.SetFloat(FillAmountID, m_FillAmount);
+            m_InstanceMaterial.SetInt(FillTypeID, (int)m_FillType);
+            m_InstanceMaterial.SetFloat(FillOriginID, m_FillOrigin);
 
-            // Let derived class set its specific properties
             SetShapeProperties();
         }
 
@@ -98,6 +107,7 @@ namespace DNExtensions.Shapes
             m_InstanceMaterial.DisableKeyword("_SHAPE_HEART");
             m_InstanceMaterial.DisableKeyword("_SHAPE_RING");
             m_InstanceMaterial.DisableKeyword("_SHAPE_CROSS");
+            m_InstanceMaterial.DisableKeyword("_SHAPE_LINE");
         }
 
         protected override void UpdateMaterial()
@@ -150,6 +160,9 @@ namespace DNExtensions.Shapes
 
             vh.AddTriangle(0, 1, 2);
             vh.AddTriangle(2, 3, 0);
+    
+            Vector2 actualSize = rectTransform.rect.size;
+            material.SetVector(RectSize, new Vector4(actualSize.x, actualSize.y, 0, 0));
         }
         
         public Color baseColor
@@ -222,30 +235,44 @@ namespace DNExtensions.Shapes
                 }
             }
         }
-
-        public float inlineThickness
+        
+        public float fillAmount
         {
-            get { return m_InlineThickness; }
+            get { return m_FillAmount; }
             set
             {
-                value = Mathf.Clamp(value, 0f, 0.5f);
-                if (m_InlineThickness != value)
+                value = Mathf.Clamp01(value);
+                if (m_FillAmount != value)
                 {
-                    m_InlineThickness = value;
+                    m_FillAmount = value;
                     UpdateMaterialProperties();
                     SetMaterialDirty();
                 }
             }
         }
 
-        public Color inlineColor
+        public FillType fillType
         {
-            get { return m_InlineColor; }
+            get { return m_FillType; }
             set
             {
-                if (m_InlineColor != value)
+                if (m_FillType != value)
                 {
-                    m_InlineColor = value;
+                    m_FillType = value;
+                    UpdateMaterialProperties();
+                    SetMaterialDirty();
+                }
+            }
+        }
+
+        public float fillOrigin
+        {
+            get { return m_FillOrigin; }
+            set
+            {
+                if (m_FillOrigin != value)
+                {
+                    m_FillOrigin = value;
                     UpdateMaterialProperties();
                     SetMaterialDirty();
                 }
@@ -255,6 +282,8 @@ namespace DNExtensions.Shapes
 
         public void ExportToPNG(int width, int height, string path)
         {
+            int tempLayer = 31; 
+            
             RenderTexture renderTexture = RenderTexture.GetTemporary(width, height, 24, RenderTextureFormat.ARGB32);
             RenderTexture.active = renderTexture;
 
@@ -265,8 +294,10 @@ namespace DNExtensions.Shapes
             tempCamera.backgroundColor = Color.clear;
             tempCamera.orthographic = true;
             tempCamera.enabled = false;
+            tempCamera.cullingMask = 1 << tempLayer;
 
             GameObject tempCanvasObj = new GameObject("TempCanvas");
+            tempCanvasObj.layer = tempLayer;
             Canvas tempCanvas = tempCanvasObj.AddComponent<Canvas>();
             tempCanvas.renderMode = RenderMode.ScreenSpaceCamera;
             tempCanvas.worldCamera = tempCamera;
@@ -275,13 +306,12 @@ namespace DNExtensions.Shapes
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
 
             GameObject tempShapeObj = new GameObject("TempShape");
+            tempShapeObj.layer = tempLayer;
             tempShapeObj.transform.SetParent(tempCanvas.transform, false);
 
-            // Create instance of the same type as this shape
             SDFShapeBase tempShape = (SDFShapeBase)tempShapeObj.AddComponent(GetType());
             RectTransform tempRect = tempShape.GetComponent<RectTransform>();
 
-            // Copy properties using reflection or implement CopyTo method
             CopyPropertiesTo(tempShape);
 
             tempRect.anchorMin = Vector2.zero;
@@ -319,9 +349,10 @@ namespace DNExtensions.Shapes
             target.m_Offset = this.m_Offset;
             target.m_OutlineThickness = this.m_OutlineThickness;
             target.m_OutlineColor = this.m_OutlineColor;
-            target.m_InlineThickness = this.m_InlineThickness;
-            target.m_InlineColor = this.m_InlineColor;
             target.color = this.color;
+            target.m_FillAmount = this.m_FillAmount;
+            target.m_FillType = this.m_FillType;
+            target.m_FillOrigin = this.m_FillOrigin;
         }
 
 
