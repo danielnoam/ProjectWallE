@@ -15,6 +15,7 @@ public class GroundEnemy : Enemy
     protected override void OnSetup()
     {
         navMeshAgent.stoppingDistance = attackRange * 0.8f;
+        
     }
 
     protected override void UpdateBehavior()
