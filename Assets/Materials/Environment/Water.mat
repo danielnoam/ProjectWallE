@@ -25,9 +25,10 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _FOAM_FULL
+  - _FOAM_NOISE_GRADIENT_NOISE
   - _MOVEMENT_SWELL
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - _FOAM_FULL
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -60,6 +61,7 @@ Material:
     - _Depth: 10
     - _Depth_Sample_Offset: 0
     - _FOAM: 1
+    - _FOAM_NOISE: 0
     - _Foam_Amount: 0.906
     - _Foam_Cutoff: 2
     - _Foam_Distance: 0.24
