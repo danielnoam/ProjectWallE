@@ -1,6 +1,7 @@
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.AudioEvent;
 using DNExtensions.Utilities.InlineSO;
+using DNExtensions.Utilities.PrefabSelector;
 using UnityEngine;
 
 
@@ -11,13 +12,16 @@ public class PlayerStructureBuilder : MonoBehaviour
     [SerializeField] private float buildRange = 100f;
     [SerializeField] private LayerMask buildableLayerMask;
     [SerializeField] private LayerMask blockBuildLayerMask;
+    
+    [Header("Input")]
+    [SerializeField] private bool holdToOpen;
     [SerializeField] private KeyCode buildMenuKey = KeyCode.Mouse1;
     
     [Header("References")]
     [SerializeField] private Camera mainCamera;
     [SerializeField] private LineRenderer lineRenderer;
     [SerializeField] private RadialMenu<Structure> radialMenu;
-    [SerializeField] private Structure[] structuresArray;
+    [SerializeField, PrefabSelector("Assets/Prefabs/Structures")] private Structure[] structuresArray;
 
     private Ray _buildRay;
     public bool CanBuild { get; private set; }
@@ -43,15 +47,29 @@ public class PlayerStructureBuilder : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(buildMenuKey))
+        if (holdToOpen)
         {
-            radialMenu.OpenMenu();
+            if (Input.GetKeyDown(buildMenuKey))
+            {
+                radialMenu.OpenMenu();
+            }
+            else if (Input.GetKeyUp(buildMenuKey))
+            {
+                radialMenu.CloseMenu();
+            }
         }
-        else if (Input.GetKeyUp(buildMenuKey))
+        else
         {
-            radialMenu.CloseMenu();
+            if (Input.GetKeyDown(buildMenuKey) && !radialMenu.IsOpen)
+            {
+                radialMenu.OpenMenu();
+            }
+            else if (Input.GetKeyDown(buildMenuKey) && radialMenu.IsOpen)
+            {
+                radialMenu.CloseMenu();
+            }
         }
-        
+
         CastBuildRay();
     }
 
@@ -81,8 +99,17 @@ public class PlayerStructureBuilder : MonoBehaviour
 
     private void ConfigureStructureElement(RadialMenuElement element, Structure structure)
     {
-        element.text.text = $"{structure.Label}\n Cost: {structure.BuildCost}";
-        element.iconImage.sprite = structure.Icon;
+        element.elementInfo = $"{structure.Label}\n Cost: {structure.BuildCost}";
+
+        if (structure.Icon)
+        {
+            element.iconImage.sprite = structure.Icon;
+        }
+        else
+        {
+            element.iconImage.gameObject.SetActive(false);
+        }
+
     }
     
 
