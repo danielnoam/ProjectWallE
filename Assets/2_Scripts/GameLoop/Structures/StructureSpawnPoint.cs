@@ -1,22 +1,30 @@
-using System;
+using DNExtensions.Utilities;
 using DNExtensions.Utilities.PrefabSelector;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class StructureSpawnPoint : MonoBehaviour
 {
-    [Header("SpawnPoint Settings")]
+    [Header("Settings")]
+    [Tooltip("Wheter the spawn should happen at the start of the level or be triggered by an event.")]
     [SerializeField] private bool spawnAtStart = true;
-    [SerializeField] private bool spawnOnlyOnce = true;
-    [SerializeField, PrefabSelector("Assets/Prefabs/Structures")] private Structure structurePrefab;
+    [SerializeField, EnableIf("spawnAtStart"), PrefabSelector("Assets/Prefabs/Structures")] private Structure structurePrefab;
     
     private bool _hasSpawned;
 
     private void OnValidate()
     {
-        if (Application.isPlaying || gameObject.scene.name == null || !structurePrefab) return;
+        if (Application.isPlaying || gameObject.scene.name == null) return;
+
+        if (structurePrefab && spawnAtStart)
+        {
+            gameObject.name = $"StructureSpawnPointAtStart({structurePrefab.Label})";
+        }
+        else
+        {
+            gameObject.name = "StructureSpawnPoint(Event)";
+        }
         
-        gameObject.name = $"StructureSpawnPoint({structurePrefab.Label},AtStart:{spawnAtStart})";
+
     }
 
     private void Start()
@@ -33,23 +41,23 @@ public class StructureSpawnPoint : MonoBehaviour
     {
         if (spawnAtStart)
         {
-            SpawnStructure();
+            SpawnStructure(structurePrefab);
         }
     }
-
-    public void SpawnStructure()
+    
+    
+    public void SpawnStructure(Structure structure)
     {
-        if (!structurePrefab || (spawnOnlyOnce && _hasSpawned)) return;
+        if (!structure || _hasSpawned) return;
         
         _hasSpawned = true;
-        StructureManager.Instance?.DeployPod(structurePrefab, transform.position, transform.up, Vector3.forward);
+        StructureManager.Instance?.DeployPod(structure, transform.position, transform.up, Vector3.forward);
     }
-    
     
 
     private void OnDrawGizmos()
     {
-        if (spawnOnlyOnce && _hasSpawned) return;
+        if (_hasSpawned) return;
         
         if (spawnAtStart)
         {
@@ -67,7 +75,7 @@ public class StructureSpawnPoint : MonoBehaviour
 #if UNITY_EDITOR
         UnityEditor.Handles.Label(
             transform.position + Vector3.up * (2 + 0.5f),
-            structurePrefab ? $"Structure Spawn Point: {structurePrefab.Label}" :  $"Spawn Point: No Structure Assigned",
+            structurePrefab && spawnAtStart ? $"Start Structure Spawn Point: {structurePrefab.Label}" :  $"Structre Spawn Point: Event",
             new GUIStyle()
             {
                 normal = new GUIStyleState() { textColor = Color.cyan },

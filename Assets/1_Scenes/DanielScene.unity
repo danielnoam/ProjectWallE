@@ -1261,17 +1261,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2580018003251101731, guid: c69d220dc7d2f0f49a95a8376ac4840d, type: 3}
   m_PrefabInstance: {fileID: 581288654}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &581288656 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5206305802732792359, guid: c69d220dc7d2f0f49a95a8376ac4840d, type: 3}
-  m_PrefabInstance: {fileID: 581288654}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86bce538c7d6a1344b472530c62a0b4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnPoint
 --- !u!1 &591326626
 GameObject:
   m_ObjectHideFlags: 0
@@ -1429,7 +1418,7 @@ PrefabInstance:
       objectReference: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
     - target: {fileID: 2034748791248471063, guid: 8f65af854e1005b4d90932e5e0946ba1, type: 3}
       propertyPath: m_Name
-      value: StructureSpawnPoint(Turret,AtStart:False)
+      value: StructureSpawnPoint(Event)
       objectReference: {fileID: 0}
     - target: {fileID: 2034748791248471063, guid: 8f65af854e1005b4d90932e5e0946ba1, type: 3}
       propertyPath: m_IsActive
@@ -1482,7 +1471,7 @@ PrefabInstance:
     - target: {fileID: 3362832883325170318, guid: 8f65af854e1005b4d90932e5e0946ba1, type: 3}
       propertyPath: structurePrefab
       value: 
-      objectReference: {fileID: 7053805491111974174, guid: 290c791e53f525645b9870cd63da954e, type: 3}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1493,17 +1482,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2580018003251101731, guid: 8f65af854e1005b4d90932e5e0946ba1, type: 3}
   m_PrefabInstance: {fileID: 602198946}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &602198948 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3362832883325170318, guid: 8f65af854e1005b4d90932e5e0946ba1, type: 3}
-  m_PrefabInstance: {fileID: 602198946}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 343ca8c4be67baa46a6405c8f52eebc8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StructureSpawnPoint
 --- !u!1 &605297305
 GameObject:
   m_ObjectHideFlags: 0
@@ -1943,6 +1921,7 @@ GameObject:
   m_Component:
   - component: {fileID: 850447366}
   - component: {fileID: 850447365}
+  - component: {fileID: 850447367}
   - component: {fileID: 850447364}
   - component: {fileID: 850447363}
   - component: {fileID: 850447362}
@@ -2030,52 +2009,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2be2a7524b76488da57da260bee48d05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelManager
-  duration: 300
-  events:
-  - rid: 8175019693525696706
-  - rid: 8175019734825959495
-  - rid: 8175019734825959498
-  - rid: 8175019734825959499
-  - rid: 8175019693525696704
-  references:
-    version: 2
-    RefIds:
-    - rid: 8175019693525696704
-      type: {class: SpawnEnemyWaveEvent, ns: , asm: Assembly-CSharp}
-      data:
-        triggerTime: 37.306274
-        description: 
-        hasTriggered: 0
-        enemyCount: 5
-    - rid: 8175019693525696706
-      type: {class: SpawnEnemyWaveEvent, ns: , asm: Assembly-CSharp}
-      data:
-        triggerTime: 3.9852397
-        description: 
-        hasTriggered: 0
-        enemyCount: 1
-    - rid: 8175019734825959495
-      type: {class: UseStructureSpawnPointEvent, ns: , asm: Assembly-CSharp}
-      data:
-        triggerTime: 15.166051
-        description: 
-        hasTriggered: 0
-        structureSpawnPoint: {fileID: 602198948}
-    - rid: 8175019734825959498
-      type: {class: UseStructureSpawnPointEvent, ns: , asm: Assembly-CSharp}
-      data:
-        triggerTime: 19.649448
-        description: 
-        hasTriggered: 0
-        structureSpawnPoint: {fileID: 1576018967}
-    - rid: 8175019734825959499
-      type: {class: ToggleEnemySpawnPointEvent, ns: , asm: Assembly-CSharp}
-      data:
-        triggerTime: 33.265682
-        description: 
-        hasTriggered: 0
-        enemySpawnPoint: {fileID: 581288656}
-        spawnPointState: 1
+  timeline: {fileID: 850447367}
 --- !u!82 &850447365
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2188,6 +2122,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!320 &850447367
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850447360}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: 5069225b6f6b71a42b4ce5e4069ce095, type: 2}
+  m_InitialState: 1
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings: []
+  m_ExposedReferences:
+    m_References:
+    - 5fd921e99386b4b4aa06231416d43080: {fileID: 1638964037}
+    - 39d3772a72a8b694aac2fd893a0deadb: {fileID: 907185933}
+    - 6ec9f4eed904e6343904cbdedca3d8d8: {fileID: 1864182494}
+--- !u!114 &907185933 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3362832883325170318, guid: 8f65af854e1005b4d90932e5e0946ba1, type: 3}
+  m_PrefabInstance: {fileID: 602198946}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 343ca8c4be67baa46a6405c8f52eebc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StructureSpawnPoint
 --- !u!1001 &908535474
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2551,7 +2516,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2034748791248471063, guid: 8f65af854e1005b4d90932e5e0946ba1, type: 3}
       propertyPath: m_Name
-      value: StructureSpawnPoint(Turret,AtStart:True)
+      value: StructureSpawnPointAtStart(Turret)
       objectReference: {fileID: 0}
     - target: {fileID: 2034748791248471063, guid: 8f65af854e1005b4d90932e5e0946ba1, type: 3}
       propertyPath: m_IsActive
@@ -3341,7 +3306,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2034748791248471063, guid: 8f65af854e1005b4d90932e5e0946ba1, type: 3}
       propertyPath: m_Name
-      value: StructureSpawnPoint(Generator,AtStart:False)
+      value: StructureSpawnPoint(Event)
       objectReference: {fileID: 0}
     - target: {fileID: 2580018003251101731, guid: 8f65af854e1005b4d90932e5e0946ba1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3390,7 +3355,7 @@ PrefabInstance:
     - target: {fileID: 3362832883325170318, guid: 8f65af854e1005b4d90932e5e0946ba1, type: 3}
       propertyPath: structurePrefab
       value: 
-      objectReference: {fileID: 2308925685089836474, guid: eb9518b19b0f8d64fa00d3c4d128b9bf, type: 3}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3401,17 +3366,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2580018003251101731, guid: 8f65af854e1005b4d90932e5e0946ba1, type: 3}
   m_PrefabInstance: {fileID: 1576018965}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1576018967 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3362832883325170318, guid: 8f65af854e1005b4d90932e5e0946ba1, type: 3}
-  m_PrefabInstance: {fileID: 1576018965}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 343ca8c4be67baa46a6405c8f52eebc8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StructureSpawnPoint
 --- !u!1001 &1590853774
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3422,7 +3376,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2034748791248471063, guid: 8f65af854e1005b4d90932e5e0946ba1, type: 3}
       propertyPath: m_Name
-      value: StructureSpawnPoint(Base,AtStart:True)
+      value: StructureSpawnPointAtStart(Base)
       objectReference: {fileID: 0}
     - target: {fileID: 2580018003251101731, guid: 8f65af854e1005b4d90932e5e0946ba1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3568,6 +3522,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1609378219}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1638964037 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3362832883325170318, guid: 8f65af854e1005b4d90932e5e0946ba1, type: 3}
+  m_PrefabInstance: {fileID: 1576018965}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 343ca8c4be67baa46a6405c8f52eebc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StructureSpawnPoint
 --- !u!1 &1711300889
 GameObject:
   m_ObjectHideFlags: 0
@@ -3837,6 +3802,17 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: -0.25}
   m_TimeToStationary: 0.5
+--- !u!114 &1864182494 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5206305802732792359, guid: c69d220dc7d2f0f49a95a8376ac4840d, type: 3}
+  m_PrefabInstance: {fileID: 581288654}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86bce538c7d6a1344b472530c62a0b4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnPoint
 --- !u!1 &1931875474
 GameObject:
   m_ObjectHideFlags: 0
