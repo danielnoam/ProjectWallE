@@ -2,12 +2,12 @@ using System;
 using UnityEngine;
 
 [Serializable]
-public class SpawnEnemyWaveEventAsset : BaseLevelEventAsset
+public class SpawnEnemyWaveMarker : BaseLevelEventMarker
 {
     [Min(1)] public int enemyCount = 5;
     
     public override void Execute(IExposedPropertyTable resolver = null)
     {
-        EnemyManager.Instance?.SpawnEnemyWave(enemyCount);
+        EnemyManager.Instance?.TrySpawnEnemyWave(enemyCount);
     }
 }

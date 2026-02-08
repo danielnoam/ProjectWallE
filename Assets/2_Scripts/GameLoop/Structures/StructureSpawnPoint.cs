@@ -5,7 +5,7 @@ using UnityEngine;
 public class StructureSpawnPoint : MonoBehaviour
 {
     [Header("Settings")]
-    [Tooltip("Wheter the spawn should happen at the start of the level or be triggered by an event.")]
+    [Tooltip("Whether the spawn should happen at the start of the level or be triggered by an event.")]
     [SerializeField] private bool spawnAtStart = true;
     [SerializeField, EnableIf("spawnAtStart"), PrefabSelector("Assets/Prefabs/Structures")] private Structure structurePrefab;
     
@@ -21,7 +21,7 @@ public class StructureSpawnPoint : MonoBehaviour
         }
         else
         {
-            gameObject.name = "StructureSpawnPoint(Event)";
+            gameObject.name = "StructureSpawnPoint";
         }
         
 
@@ -75,7 +75,7 @@ public class StructureSpawnPoint : MonoBehaviour
 #if UNITY_EDITOR
         UnityEditor.Handles.Label(
             transform.position + Vector3.up * (2 + 0.5f),
-            structurePrefab && spawnAtStart ? $"Start Structure Spawn Point: {structurePrefab.Label}" :  $"Structre Spawn Point: Event",
+            structurePrefab && spawnAtStart ? $"Start Structure Spawn Point: {structurePrefab.Label}" :  $"Structre Spawn Point",
             new GUIStyle()
             {
                 normal = new GUIStyleState() { textColor = Color.cyan },

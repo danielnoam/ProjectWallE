@@ -14,7 +14,7 @@ public class EnemySpawnPoint : MonoBehaviour
     {
         if (Application.isPlaying || gameObject.scene.name == null) return;
         
-        gameObject.name = $"EnemySpawnPoint(IsActive:{isActive})";
+        gameObject.name = $"EnemySpawnPoint({(isActive ? "Active" : "NotActive")})";
     }
 
     private void Start()
@@ -75,7 +75,7 @@ public class EnemySpawnPoint : MonoBehaviour
         
         
 #if UNITY_EDITOR
-        var  enemyString = $"Enemy Spawn Point: {isActive} \nRange: {spawnPointRange}";
+        var  enemyString = $"Enemy Spawn Point: {(isActive ? "Active" : "Not Active")}";
         
         UnityEditor.Handles.Label(
             transform.position + Vector3.up * (spawnPointRange + 1f),

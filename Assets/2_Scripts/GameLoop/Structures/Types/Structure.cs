@@ -132,6 +132,7 @@ public abstract class Structure : MonoBehaviour, IDamageable
         currentHealth -= damage;
         if (currentHealth <= 0)
         {
+            currentHealth = 0f;
             Break();
         }
     }

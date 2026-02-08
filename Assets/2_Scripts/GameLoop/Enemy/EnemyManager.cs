@@ -1,18 +1,22 @@
 using System.Collections.Generic;
 using DNExtensions.Utilities;
+using DNExtensions.Utilities.PrefabSelector;
 using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager Instance { get; private set; }
     
-    [Header("Enemy Manager Settings")]
-    [SerializeField] private ChanceList<Enemy> basicEnemies = new ChanceList<Enemy>();
+    [Header("Settings")]
+    [SerializeField] private int maxEnemies = 50;
+    [SerializeField] private ChanceList<Enemy> enemyTypes = new ChanceList<Enemy>();
     
-    [Header("Registered")]
-    [SerializeField] private ChanceList<EnemySpawnPoint> enemySpawnPoints = new ChanceList<EnemySpawnPoint>();
-    [SerializeField] private List<Enemy> activeEnemies = new List<Enemy>();
+    
+    private readonly ChanceList<EnemySpawnPoint> _enemySpawnPoints = new ChanceList<EnemySpawnPoint>();
+    private readonly List<Enemy> _activeEnemies = new List<Enemy>();
 
+    
+    
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -22,61 +26,69 @@ public class EnemyManager : MonoBehaviour
         }
         Instance = this;
     }
-    
-    public void SpawnEnemyWave(int enemiesToSpawn)
+
+    private void SpawnEnemy(Enemy enemy, EnemySpawnPoint spawnPoint)
     {
-        var spawnPoint = enemySpawnPoints.GetRandomItem();
+        Vector3 spawnOffset = Random.insideUnitSphere * spawnPoint.SpawnPointRange;
+        spawnOffset.y = 0;
+        Vector3 spawnPosition = spawnPoint.transform.position + spawnOffset;
+        
+        Instantiate(enemy, spawnPosition, Quaternion.identity);
+    }
+    
+    public void TrySpawnEnemyWave(int enemiesToSpawn)
+    {
+        if (_enemySpawnPoints.Count == 0 || _activeEnemies.Count >= maxEnemies) return;
+        
+        var spawnPoint = _enemySpawnPoints.GetRandomItem();
         
         for (int i = 0; i < enemiesToSpawn; i++)
         {
-            var enemy = basicEnemies.GetRandomItem();
-            Vector3 spawnOffset = Random.insideUnitSphere * spawnPoint.SpawnPointRange;
-            spawnOffset.y = 0;
-            Vector3 spawnPosition = spawnPoint.transform.position + spawnOffset;
+            if (_activeEnemies.Count >= maxEnemies) return;
             
-            Enemy spawnedEnemy = Instantiate(enemy, spawnPosition, Quaternion.identity);
+            var enemy = enemyTypes.GetRandomItem();
+            SpawnEnemy(enemy, spawnPoint);
         }
     }
 
     public void RegisterEnemy(Enemy enemy)
     {
-        if (activeEnemies.Contains(enemy)) return;
+        if (_activeEnemies.Contains(enemy)) return;
         
-        activeEnemies.Add(enemy);
+        _activeEnemies.Add(enemy);
     }
 
     public void UnregisterEnemy(Enemy enemy)
     {
-        if (!activeEnemies.Contains(enemy)) return;
+        if (!_activeEnemies.Contains(enemy)) return;
         
-        activeEnemies.Remove(enemy);
+        _activeEnemies.Remove(enemy);
     }
     
     public void RegisterSpawnPoint(EnemySpawnPoint spawnPoint)
     {
-        if (enemySpawnPoints.ToList().Contains(spawnPoint)) return;
+        if (_enemySpawnPoints.ToList().Contains(spawnPoint)) return;
         
-        enemySpawnPoints.AddItem(spawnPoint);
-        enemySpawnPoints.NormalizeChances();
+        _enemySpawnPoints.AddItem(spawnPoint);
+        _enemySpawnPoints.NormalizeChances();
     }
     
     public void UnregisterSpawnPoint(EnemySpawnPoint spawnPoint)
     {
-        if (!enemySpawnPoints.ToList().Contains(spawnPoint)) return;
+        if (!_enemySpawnPoints.ToList().Contains(spawnPoint)) return;
         
-        var index = enemySpawnPoints.IndexOf(spawnPoint);
-        enemySpawnPoints.RemoveAt(index);
-        enemySpawnPoints.NormalizeChances();
+        var index = _enemySpawnPoints.IndexOf(spawnPoint);
+        _enemySpawnPoints.RemoveAt(index);
+        _enemySpawnPoints.NormalizeChances();
     }
     
-    public List<Enemy> GetAllEnemies() => activeEnemies;
     
     public Enemy GetNearestEnemy(Vector3 position)
     {
         Enemy nearest = null;
         float closestDist = float.MaxValue;
         
-        foreach (var enemy in activeEnemies)
+        foreach (var enemy in _activeEnemies)
         {
             if (!enemy) continue;
             

@@ -86,12 +86,12 @@ public class GroundEnemy : Enemy
         
         UnityEditor.Handles.Label(
             transform.position + Vector3.up * 2.5f,
-            $"Health: {CurrentHealth}/{maxHealth}\nState: {_state}, Target: {targetName}",
+            $"Health: {CurrentHealth}/{maxHealth}\nState: {_state}\nTarget: {targetName}",
             new GUIStyle()
             {
                 normal = new GUIStyleState() { textColor = Color.red },
-                fontSize = 10,
-                fontStyle = FontStyle.Bold,
+                fontSize = 8,
+                fontStyle = FontStyle.Normal,
                 alignment = TextAnchor.MiddleCenter
             });
     }

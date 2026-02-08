@@ -7,15 +7,15 @@ public class StructureManager : MonoBehaviour
 {
     public static StructureManager Instance { get; private set; }
     
-    [Header("Deployment Settings")]
+    [Header("Settings")]
     [SerializeField] private StructurePod podPrefab;
     [SerializeField] private ChanceList<Transform> podSpawnPositions = new ChanceList<Transform>();
     
-    [Header("Registered")]
-    [SerializeField] private List<Structure> allStructures = new List<Structure>();
-    [SerializeField] private List<Generator> generators = new List<Generator>();
-    [SerializeField] private List<Turret> turrets = new List<Turret>();
-    [SerializeField] private List<Base> bases = new List<Base>();
+
+    private readonly List<Structure> _allStructures = new List<Structure>();
+    private readonly List<Generator> _generators = new List<Generator>();
+    private readonly List<Turret> _turrets = new List<Turret>();
+    private readonly List<Base> _bases = new List<Base>();
     
     
 
@@ -48,9 +48,9 @@ public class StructureManager : MonoBehaviour
     
     public void RegisterStructure(Structure structure)
     {
-        if (allStructures.Contains(structure)) return;
+        if (_allStructures.Contains(structure)) return;
         
-        allStructures.Add(structure);
+        _allStructures.Add(structure);
         
         switch (structure)
         {
@@ -68,9 +68,9 @@ public class StructureManager : MonoBehaviour
     
     public void UnregisterStructure(Structure structure)
     {
-        if (!allStructures.Contains(structure)) return;
+        if (!_allStructures.Contains(structure)) return;
         
-        allStructures.Remove(structure);
+        _allStructures.Remove(structure);
         
         switch (structure)
         {
@@ -89,38 +89,38 @@ public class StructureManager : MonoBehaviour
     
     private void RegisterTurret(Turret turret)
     {
-        if (turrets.Contains(turret)) return;
-        turrets.Add(turret);
+        if (_turrets.Contains(turret)) return;
+        _turrets.Add(turret);
     }
     
     private void UnregisterTurret(Turret turret)
     {
-        if (!turrets.Contains(turret)) return;
-        turrets.Remove(turret);
+        if (!_turrets.Contains(turret)) return;
+        _turrets.Remove(turret);
     }
 
     private void RegisterGenerator(Generator generator)
     {
-        if (generators.Contains(generator)) return;
-        generators.Add(generator);
+        if (_generators.Contains(generator)) return;
+        _generators.Add(generator);
     }
 
     private void UnregisterGenerator(Generator generator)
     {
-        if (!generators.Contains(generator)) return;
-        generators.Remove(generator);
+        if (!_generators.Contains(generator)) return;
+        _generators.Remove(generator);
     }
     
     private void RegisterBase(Base baseStructure)
     {
-        if (bases.Contains(baseStructure)) return;
-        bases.Add(baseStructure);
+        if (_bases.Contains(baseStructure)) return;
+        _bases.Add(baseStructure);
     }
     
     private void UnregisterBase(Base baseStructure)
     {
-        if (!bases.Contains(baseStructure)) return;
-        bases.Remove(baseStructure);
+        if (!_bases.Contains(baseStructure)) return;
+        _bases.Remove(baseStructure);
     }
     
     #endregion
@@ -134,7 +134,7 @@ public class StructureManager : MonoBehaviour
         Turret nearest = null;
         float closestDist = float.MaxValue;
         
-        foreach (var turret in turrets)
+        foreach (var turret in _turrets)
         {
             if (!turret) continue;
             
@@ -155,7 +155,7 @@ public class StructureManager : MonoBehaviour
         Turret nearest = null;
         float closestDist = float.MaxValue;
         
-        foreach (var turret in turrets)
+        foreach (var turret in _turrets)
         {
             if (!turret) continue;
             
@@ -178,7 +178,7 @@ public class StructureManager : MonoBehaviour
         Generator nearest = null;
         float closestDist = float.MaxValue;
         
-        foreach (var generator in generators)
+        foreach (var generator in _generators)
         {
             if (!generator) continue;
             
@@ -200,7 +200,7 @@ public class StructureManager : MonoBehaviour
         Base nearest = null;
         float closestDist = float.MaxValue;
         
-        foreach (var baseStructure in bases)
+        foreach (var baseStructure in _bases)
         {
             if (!baseStructure) continue;
             
@@ -220,7 +220,7 @@ public class StructureManager : MonoBehaviour
         Structure nearest = null;
         float closestDist = float.MaxValue;
         
-        foreach (var structure in allStructures)
+        foreach (var structure in _allStructures)
         {
             if (!structure) continue;
             
@@ -241,7 +241,7 @@ public class StructureManager : MonoBehaviour
         IDamageable weakest = null;
         float lowestHealthPercent = float.MaxValue;
         
-        foreach (var structure in allStructures)
+        foreach (var structure in _allStructures)
         {
             if (!(structure is IDamageable damageable)) continue;
             if (!structure) continue;
@@ -265,7 +265,7 @@ public class StructureManager : MonoBehaviour
         Base weakest = null;
         float lowestHealthPercent = float.MaxValue;
         
-        foreach (var baseStructure in bases)
+        foreach (var baseStructure in _bases)
         {
             if (!baseStructure) continue;
             
@@ -287,7 +287,7 @@ public class StructureManager : MonoBehaviour
     {
         List<Structure> inRange = new List<Structure>();
         
-        foreach (var structure in allStructures)
+        foreach (var structure in _allStructures)
         {
             if (!structure) continue;
             
@@ -305,7 +305,7 @@ public class StructureManager : MonoBehaviour
     {
         List<Turret> inRange = new List<Turret>();
         
-        foreach (var turret in turrets)
+        foreach (var turret in _turrets)
         {
             if (!turret) continue;
             

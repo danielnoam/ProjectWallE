@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Playables;
 
 [RequireComponent(typeof(PlayableDirector))]
+[RequireComponent(typeof(LevelEventReceiver))]
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance { get; private set; }
@@ -15,10 +16,13 @@ public class LevelManager : MonoBehaviour
     public static event Action OnLevelFailed;
     public static event Action<float> OnTimeUpdated;
     
+    
     [SerializeField, AutoGetSelf] private PlayableDirector timeline;
 
-    public bool LevelActive { get; private set; }
-    public float TimeRemaining => LevelActive ? (float)(timeline.duration - timeline.time) : 0f;
+    private bool _levelActive;
+    private float TimeRemaining => _levelActive ? (float)(timeline.duration - timeline.time) : 0f;
+    
+    
     public PlayerStructureBuilder Player { get; private set; }
     
     
@@ -49,7 +53,7 @@ public class LevelManager : MonoBehaviour
 
     private void Update()
     {
-        if (!LevelActive) return;
+        if (!_levelActive) return;
         
         OnTimeUpdated?.Invoke(TimeRemaining);
     }
@@ -61,7 +65,7 @@ public class LevelManager : MonoBehaviour
         
         yield return new WaitForSeconds(3f);
         
-        LevelActive = true;
+        _levelActive = true;
         timeline.Play();
         
         OnLevelStarted?.Invoke();
@@ -69,7 +73,7 @@ public class LevelManager : MonoBehaviour
 
     private void OnTimelineStopped(PlayableDirector director)
     {
-        if (director == timeline && LevelActive)
+        if (director == timeline && _levelActive)
         {
             CompleteLevel();
         }
@@ -77,15 +81,15 @@ public class LevelManager : MonoBehaviour
 
     private void CompleteLevel()
     {
-        LevelActive = false;
+        _levelActive = false;
         OnLevelCompleted?.Invoke();
     }
 
     public void FailLevel()
     {
-        if (!LevelActive) return;
+        if (!_levelActive) return;
         
-        LevelActive = false;
+        _levelActive = false;
         timeline.Stop();
         OnLevelFailed?.Invoke();
     }
