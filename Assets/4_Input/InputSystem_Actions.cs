@@ -984,6 +984,118 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""CarControls"",
+            ""id"": ""d4343afa-f8fd-45f6-b723-d70d2c91c1f4"",
+            ""actions"": [
+                {
+                    ""name"": ""Accel/Decel"",
+                    ""type"": ""Value"",
+                    ""id"": ""2edf2fa2-2655-4695-a074-0dcff3884bbd"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Steering"",
+                    ""type"": ""Value"",
+                    ""id"": ""ed7511ad-8c52-497b-a4c2-32b8074a4a19"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Handbreak"",
+                    ""type"": ""Button"",
+                    ""id"": ""e38dbe07-403d-4914-a951-3e8c56e4bb39"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""9d54b5a6-6bfa-48b5-b8e1-5a2f5ffe2df9"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Accel/Decel"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""5d8c0398-dcf8-4088-84ed-55597e3633ac"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Accel/Decel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""e66458a4-1308-48ab-9878-c4f9640bd7b3"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Accel/Decel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""4df72575-b6ff-4df9-800d-5d7c0958d442"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Steering"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""9c0454aa-f179-443b-8ecb-de9ab8298886"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Steering"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""b01f4ad6-0c06-4690-a365-22c055fd6fd5"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Steering"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fcc6c516-917c-4acb-854f-3a43ab8f996f"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Handbreak"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -1069,12 +1181,18 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_UI_ScrollWheel = m_UI.FindAction("ScrollWheel", throwIfNotFound: true);
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
+        // CarControls
+        m_CarControls = asset.FindActionMap("CarControls", throwIfNotFound: true);
+        m_CarControls_AccelDecel = m_CarControls.FindAction("Accel/Decel", throwIfNotFound: true);
+        m_CarControls_Steering = m_CarControls.FindAction("Steering", throwIfNotFound: true);
+        m_CarControls_Handbreak = m_CarControls.FindAction("Handbreak", throwIfNotFound: true);
     }
 
     ~@InputSystem_Actions()
     {
         UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Player.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, InputSystem_Actions.UI.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_CarControls.enabled, "This will cause a leak and performance issues, InputSystem_Actions.CarControls.Disable() has not been called.");
     }
 
     /// <summary>
@@ -1492,6 +1610,124 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="UIActions" /> instance referencing this action map.
     /// </summary>
     public UIActions @UI => new UIActions(this);
+
+    // CarControls
+    private readonly InputActionMap m_CarControls;
+    private List<ICarControlsActions> m_CarControlsActionsCallbackInterfaces = new List<ICarControlsActions>();
+    private readonly InputAction m_CarControls_AccelDecel;
+    private readonly InputAction m_CarControls_Steering;
+    private readonly InputAction m_CarControls_Handbreak;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "CarControls".
+    /// </summary>
+    public struct CarControlsActions
+    {
+        private @InputSystem_Actions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public CarControlsActions(@InputSystem_Actions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "CarControls/AccelDecel".
+        /// </summary>
+        public InputAction @AccelDecel => m_Wrapper.m_CarControls_AccelDecel;
+        /// <summary>
+        /// Provides access to the underlying input action "CarControls/Steering".
+        /// </summary>
+        public InputAction @Steering => m_Wrapper.m_CarControls_Steering;
+        /// <summary>
+        /// Provides access to the underlying input action "CarControls/Handbreak".
+        /// </summary>
+        public InputAction @Handbreak => m_Wrapper.m_CarControls_Handbreak;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_CarControls; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="CarControlsActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(CarControlsActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="CarControlsActions" />
+        public void AddCallbacks(ICarControlsActions instance)
+        {
+            if (instance == null || m_Wrapper.m_CarControlsActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_CarControlsActionsCallbackInterfaces.Add(instance);
+            @AccelDecel.started += instance.OnAccelDecel;
+            @AccelDecel.performed += instance.OnAccelDecel;
+            @AccelDecel.canceled += instance.OnAccelDecel;
+            @Steering.started += instance.OnSteering;
+            @Steering.performed += instance.OnSteering;
+            @Steering.canceled += instance.OnSteering;
+            @Handbreak.started += instance.OnHandbreak;
+            @Handbreak.performed += instance.OnHandbreak;
+            @Handbreak.canceled += instance.OnHandbreak;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="CarControlsActions" />
+        private void UnregisterCallbacks(ICarControlsActions instance)
+        {
+            @AccelDecel.started -= instance.OnAccelDecel;
+            @AccelDecel.performed -= instance.OnAccelDecel;
+            @AccelDecel.canceled -= instance.OnAccelDecel;
+            @Steering.started -= instance.OnSteering;
+            @Steering.performed -= instance.OnSteering;
+            @Steering.canceled -= instance.OnSteering;
+            @Handbreak.started -= instance.OnHandbreak;
+            @Handbreak.performed -= instance.OnHandbreak;
+            @Handbreak.canceled -= instance.OnHandbreak;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="CarControlsActions.UnregisterCallbacks(ICarControlsActions)" />.
+        /// </summary>
+        /// <seealso cref="CarControlsActions.UnregisterCallbacks(ICarControlsActions)" />
+        public void RemoveCallbacks(ICarControlsActions instance)
+        {
+            if (m_Wrapper.m_CarControlsActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="CarControlsActions.AddCallbacks(ICarControlsActions)" />
+        /// <seealso cref="CarControlsActions.RemoveCallbacks(ICarControlsActions)" />
+        /// <seealso cref="CarControlsActions.UnregisterCallbacks(ICarControlsActions)" />
+        public void SetCallbacks(ICarControlsActions instance)
+        {
+            foreach (var item in m_Wrapper.m_CarControlsActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_CarControlsActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="CarControlsActions" /> instance referencing this action map.
+    /// </summary>
+    public CarControlsActions @CarControls => new CarControlsActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     /// <summary>
     /// Provides access to the input control scheme.
@@ -1684,5 +1920,34 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "CarControls" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="CarControlsActions.AddCallbacks(ICarControlsActions)" />
+    /// <seealso cref="CarControlsActions.RemoveCallbacks(ICarControlsActions)" />
+    public interface ICarControlsActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Accel/Decel" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnAccelDecel(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Steering" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSteering(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Handbreak" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnHandbreak(InputAction.CallbackContext context);
     }
 }

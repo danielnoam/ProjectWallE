@@ -4,6 +4,8 @@ namespace _2_Scripts
 {
 using System.Collections.Generic;
 using UnityEngine;
+
+[RequireComponent(typeof(CarInput))]
 public class CarController : MonoBehaviour, IPlayerController
 {
     [SerializeField] private TireAndVisualTransform[] steeringTires;
@@ -54,6 +56,7 @@ public class CarController : MonoBehaviour, IPlayerController
     [SerializeField] private float airSteeringStrength;
     [SerializeField] private float maxAirSteeringVelocity;
 
+    private CarInput _carInput;
     
     private List<TireAndVisualTransform> _allTires;
     private readonly Dictionary<Transform, float> _tireNormalForces = new();
@@ -67,6 +70,7 @@ public class CarController : MonoBehaviour, IPlayerController
 
     private void Awake()
     {
+        _carInput = GetComponent<CarInput>();
         _allTires = GetAllTiresTransforms();
 
         foreach (var t in _allTires)
@@ -132,7 +136,7 @@ public class CarController : MonoBehaviour, IPlayerController
         float desiredSteeringAngle = Mathf.Lerp(steeringAngle, topSpeedSteeringFactor * steeringAngle,
             Mathf.Abs(Vector3.Dot(transform.forward, carRb.linearVelocity)) / topForwardSpeed);
 
-        float target = Input.GetAxis("Horizontal") * desiredSteeringAngle;
+        float target = _carInput.Steering * desiredSteeringAngle;
 
         _currentSteering = Mathf.Lerp(
             _currentSteering,
@@ -152,7 +156,7 @@ public class CarController : MonoBehaviour, IPlayerController
         _airborneBlend = Mathf.Lerp(minGripWhenPartialGround, 1f, planted);
 
         //handbreak calcs
-        float targetHb = Input.GetKey(KeyCode.Space) ? 1f : 0f;
+        float targetHb = _carInput.HandBreakHeld ? 1f : 0f;
         float rate = (targetHb > _handbrake01) ? handbrakeBlendIn : handbrakeBlendOut;
         _handbrake01 = Mathf.Lerp(_handbrake01, targetHb, rate * Time.fixedDeltaTime);
 
@@ -189,7 +193,6 @@ public class CarController : MonoBehaviour, IPlayerController
 
             // We only care about lateral (sideways) direction relative to the tire
             float gLatAccel = Vector3.Dot(gParallel, tire.tireTransform.right); // m/s^2 along tire.right
-            Debug.Log(gLatAccel);
 
             // Fade out assist when already sliding fast sideways (so it doesn't feel sticky/weird)
             float latSpeedAbs = Mathf.Clamp(Mathf.Abs(steeringVel), slopeAssistFadeStart, slopeAssistFadeEnd);
@@ -226,8 +229,8 @@ public class CarController : MonoBehaviour, IPlayerController
     {
         float carSpeed = Vector3.Dot(transform.forward, carRb.linearVelocity);
 
-        if (Input.GetKey(KeyCode.W)) ApplyForwardAcceleration(carSpeed);
-        else if (Input.GetKey(KeyCode.S)) ApplyBackwardsAcceleration(carSpeed);
+        if (_carInput.Acceleration > 0) ApplyForwardAcceleration(carSpeed);
+        else if (_carInput.Acceleration < 0) ApplyBackwardsAcceleration(carSpeed);
         else ApplyEngineBreaking(carSpeed);
 
         //visuals
@@ -313,9 +316,7 @@ public class CarController : MonoBehaviour, IPlayerController
     private void AirSteeringTorque()
     {
         // old input manager: A = -1, D = +1
-        float input =
-            (Input.GetKey(KeyCode.D) ? 1f : 0f) -
-            (Input.GetKey(KeyCode.A) ? 1f : 0f);
+        float input = _carInput.Steering;
 
         if (Mathf.Abs(input) < 0.001f) return;
 
