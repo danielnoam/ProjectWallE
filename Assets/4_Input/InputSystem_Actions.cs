@@ -986,6 +986,34 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             ]
         },
         {
+            ""name"": ""PlayerManagerControls"",
+            ""id"": ""64ef2242-6a7b-4550-973d-cc1e528bc3ae"",
+            ""actions"": [
+                {
+                    ""name"": ""SwitchController"",
+                    ""type"": ""Button"",
+                    ""id"": ""0f9de4d7-3210-4e21-ac50-0ee12cdf60cb"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""062de85b-9563-4ce2-b222-e6d6da6a54fb"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchController"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
             ""name"": ""CarControls"",
             ""id"": ""d4343afa-f8fd-45f6-b723-d70d2c91c1f4"",
             ""actions"": [
@@ -1096,6 +1124,98 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""RobotControls"",
+            ""id"": ""2362af72-8efb-4827-895a-67fb264d32ce"",
+            ""actions"": [
+                {
+                    ""name"": ""Movement"",
+                    ""type"": ""Value"",
+                    ""id"": ""2f2c0142-85da-4ee7-9ba4-febd675edf98"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""17670ff0-620c-4e68-8e72-3ed15adafae8"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""f21aacb9-468b-4f13-b393-fa1d2be03f80"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""27573bd1-4abf-4728-afc2-1f56388f0c3e"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""2c9c6a85-08ff-4158-b0ca-bbace84e7156"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""9114052f-f15c-46f8-b2cd-a87e4513428d"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""92fc0747-c139-42c8-a5f1-2de2394649d6"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f5ea3f90-cead-4a84-9d2d-8310eae7e85a"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -1181,18 +1301,27 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_UI_ScrollWheel = m_UI.FindAction("ScrollWheel", throwIfNotFound: true);
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
+        // PlayerManagerControls
+        m_PlayerManagerControls = asset.FindActionMap("PlayerManagerControls", throwIfNotFound: true);
+        m_PlayerManagerControls_SwitchController = m_PlayerManagerControls.FindAction("SwitchController", throwIfNotFound: true);
         // CarControls
         m_CarControls = asset.FindActionMap("CarControls", throwIfNotFound: true);
         m_CarControls_AccelDecel = m_CarControls.FindAction("Accel/Decel", throwIfNotFound: true);
         m_CarControls_Steering = m_CarControls.FindAction("Steering", throwIfNotFound: true);
         m_CarControls_Handbreak = m_CarControls.FindAction("Handbreak", throwIfNotFound: true);
+        // RobotControls
+        m_RobotControls = asset.FindActionMap("RobotControls", throwIfNotFound: true);
+        m_RobotControls_Movement = m_RobotControls.FindAction("Movement", throwIfNotFound: true);
+        m_RobotControls_Jump = m_RobotControls.FindAction("Jump", throwIfNotFound: true);
     }
 
     ~@InputSystem_Actions()
     {
         UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, InputSystem_Actions.Player.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, InputSystem_Actions.UI.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_PlayerManagerControls.enabled, "This will cause a leak and performance issues, InputSystem_Actions.PlayerManagerControls.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_CarControls.enabled, "This will cause a leak and performance issues, InputSystem_Actions.CarControls.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_RobotControls.enabled, "This will cause a leak and performance issues, InputSystem_Actions.RobotControls.Disable() has not been called.");
     }
 
     /// <summary>
@@ -1611,6 +1740,102 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     /// </summary>
     public UIActions @UI => new UIActions(this);
 
+    // PlayerManagerControls
+    private readonly InputActionMap m_PlayerManagerControls;
+    private List<IPlayerManagerControlsActions> m_PlayerManagerControlsActionsCallbackInterfaces = new List<IPlayerManagerControlsActions>();
+    private readonly InputAction m_PlayerManagerControls_SwitchController;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "PlayerManagerControls".
+    /// </summary>
+    public struct PlayerManagerControlsActions
+    {
+        private @InputSystem_Actions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public PlayerManagerControlsActions(@InputSystem_Actions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerManagerControls/SwitchController".
+        /// </summary>
+        public InputAction @SwitchController => m_Wrapper.m_PlayerManagerControls_SwitchController;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_PlayerManagerControls; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="PlayerManagerControlsActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(PlayerManagerControlsActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="PlayerManagerControlsActions" />
+        public void AddCallbacks(IPlayerManagerControlsActions instance)
+        {
+            if (instance == null || m_Wrapper.m_PlayerManagerControlsActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_PlayerManagerControlsActionsCallbackInterfaces.Add(instance);
+            @SwitchController.started += instance.OnSwitchController;
+            @SwitchController.performed += instance.OnSwitchController;
+            @SwitchController.canceled += instance.OnSwitchController;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="PlayerManagerControlsActions" />
+        private void UnregisterCallbacks(IPlayerManagerControlsActions instance)
+        {
+            @SwitchController.started -= instance.OnSwitchController;
+            @SwitchController.performed -= instance.OnSwitchController;
+            @SwitchController.canceled -= instance.OnSwitchController;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="PlayerManagerControlsActions.UnregisterCallbacks(IPlayerManagerControlsActions)" />.
+        /// </summary>
+        /// <seealso cref="PlayerManagerControlsActions.UnregisterCallbacks(IPlayerManagerControlsActions)" />
+        public void RemoveCallbacks(IPlayerManagerControlsActions instance)
+        {
+            if (m_Wrapper.m_PlayerManagerControlsActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="PlayerManagerControlsActions.AddCallbacks(IPlayerManagerControlsActions)" />
+        /// <seealso cref="PlayerManagerControlsActions.RemoveCallbacks(IPlayerManagerControlsActions)" />
+        /// <seealso cref="PlayerManagerControlsActions.UnregisterCallbacks(IPlayerManagerControlsActions)" />
+        public void SetCallbacks(IPlayerManagerControlsActions instance)
+        {
+            foreach (var item in m_Wrapper.m_PlayerManagerControlsActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_PlayerManagerControlsActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="PlayerManagerControlsActions" /> instance referencing this action map.
+    /// </summary>
+    public PlayerManagerControlsActions @PlayerManagerControls => new PlayerManagerControlsActions(this);
+
     // CarControls
     private readonly InputActionMap m_CarControls;
     private List<ICarControlsActions> m_CarControlsActionsCallbackInterfaces = new List<ICarControlsActions>();
@@ -1728,6 +1953,113 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="CarControlsActions" /> instance referencing this action map.
     /// </summary>
     public CarControlsActions @CarControls => new CarControlsActions(this);
+
+    // RobotControls
+    private readonly InputActionMap m_RobotControls;
+    private List<IRobotControlsActions> m_RobotControlsActionsCallbackInterfaces = new List<IRobotControlsActions>();
+    private readonly InputAction m_RobotControls_Movement;
+    private readonly InputAction m_RobotControls_Jump;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "RobotControls".
+    /// </summary>
+    public struct RobotControlsActions
+    {
+        private @InputSystem_Actions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public RobotControlsActions(@InputSystem_Actions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "RobotControls/Movement".
+        /// </summary>
+        public InputAction @Movement => m_Wrapper.m_RobotControls_Movement;
+        /// <summary>
+        /// Provides access to the underlying input action "RobotControls/Jump".
+        /// </summary>
+        public InputAction @Jump => m_Wrapper.m_RobotControls_Jump;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_RobotControls; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="RobotControlsActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(RobotControlsActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="RobotControlsActions" />
+        public void AddCallbacks(IRobotControlsActions instance)
+        {
+            if (instance == null || m_Wrapper.m_RobotControlsActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_RobotControlsActionsCallbackInterfaces.Add(instance);
+            @Movement.started += instance.OnMovement;
+            @Movement.performed += instance.OnMovement;
+            @Movement.canceled += instance.OnMovement;
+            @Jump.started += instance.OnJump;
+            @Jump.performed += instance.OnJump;
+            @Jump.canceled += instance.OnJump;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="RobotControlsActions" />
+        private void UnregisterCallbacks(IRobotControlsActions instance)
+        {
+            @Movement.started -= instance.OnMovement;
+            @Movement.performed -= instance.OnMovement;
+            @Movement.canceled -= instance.OnMovement;
+            @Jump.started -= instance.OnJump;
+            @Jump.performed -= instance.OnJump;
+            @Jump.canceled -= instance.OnJump;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="RobotControlsActions.UnregisterCallbacks(IRobotControlsActions)" />.
+        /// </summary>
+        /// <seealso cref="RobotControlsActions.UnregisterCallbacks(IRobotControlsActions)" />
+        public void RemoveCallbacks(IRobotControlsActions instance)
+        {
+            if (m_Wrapper.m_RobotControlsActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="RobotControlsActions.AddCallbacks(IRobotControlsActions)" />
+        /// <seealso cref="RobotControlsActions.RemoveCallbacks(IRobotControlsActions)" />
+        /// <seealso cref="RobotControlsActions.UnregisterCallbacks(IRobotControlsActions)" />
+        public void SetCallbacks(IRobotControlsActions instance)
+        {
+            foreach (var item in m_Wrapper.m_RobotControlsActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_RobotControlsActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="RobotControlsActions" /> instance referencing this action map.
+    /// </summary>
+    public RobotControlsActions @RobotControls => new RobotControlsActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     /// <summary>
     /// Provides access to the input control scheme.
@@ -1922,6 +2254,21 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
     }
     /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "PlayerManagerControls" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="PlayerManagerControlsActions.AddCallbacks(IPlayerManagerControlsActions)" />
+    /// <seealso cref="PlayerManagerControlsActions.RemoveCallbacks(IPlayerManagerControlsActions)" />
+    public interface IPlayerManagerControlsActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "SwitchController" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSwitchController(InputAction.CallbackContext context);
+    }
+    /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "CarControls" which allows adding and removing callbacks.
     /// </summary>
     /// <seealso cref="CarControlsActions.AddCallbacks(ICarControlsActions)" />
@@ -1949,5 +2296,27 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnHandbreak(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "RobotControls" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="RobotControlsActions.AddCallbacks(IRobotControlsActions)" />
+    /// <seealso cref="RobotControlsActions.RemoveCallbacks(IRobotControlsActions)" />
+    public interface IRobotControlsActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Movement" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMovement(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Jump" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnJump(InputAction.CallbackContext context);
     }
 }
