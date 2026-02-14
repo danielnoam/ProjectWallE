@@ -1,3 +1,4 @@
+using DNExtensions.Utilities.AutoGet;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -5,12 +6,9 @@ using UnityEngine.AI;
 [RequireComponent(typeof(Rigidbody))]
 public class GroundEnemy : Enemy
 {
-    [Header("Ground Enemy Settings")]
-    [SerializeField] private NavMeshAgent navMeshAgent;
-    [SerializeField] private Rigidbody rigidBody;
+    [SerializeField, AutoGetSelf, HideInInspector] private NavMeshAgent navMeshAgent;
+    [SerializeField, AutoGetSelf, HideInInspector] private Rigidbody rigidBody;
     
-    private EnemyState _state = EnemyState.MovingToTarget;
-    private enum EnemyState { Attacking, MovingToTarget, Idle }
 
     protected override void OnSetup()
     {
@@ -22,25 +20,25 @@ public class GroundEnemy : Enemy
     {
         if (!(CurrentTarget is Component target) || !target)
         {
-            _state = EnemyState.MovingToTarget;
+            State = EnemyState.MovingToTarget;
             return;
         }
 
         float distance = Vector3.Distance(transform.position, target.transform.position);
 
-        switch (_state)
+        switch (State)
         {
             case EnemyState.MovingToTarget:
                 
                 if (distance <= attackRange)
                 {
-                    _state = EnemyState.Attacking;
+                    State = EnemyState.Attacking;
                 }
                 else
                 {
                     if (!target)
                     {
-                        _state = EnemyState.Idle;
+                        State = EnemyState.Idle;
                         navMeshAgent.ResetPath();
                     }
                 }
@@ -49,7 +47,7 @@ public class GroundEnemy : Enemy
             case EnemyState.Attacking:
                 if (distance > attackRange)
                 {
-                    _state = EnemyState.MovingToTarget;
+                    State = EnemyState.MovingToTarget;
                     MoveToTarget();
                 }
                 else
@@ -78,22 +76,5 @@ public class GroundEnemy : Enemy
     {
         rigidBody.AddForce(direction.normalized * force, ForceMode.Force);
     }
-
-#if UNITY_EDITOR
-    private void OnDrawGizmos()
-    {
-        string targetName = (CurrentTarget is Component target && target) ? target.name : "None";
-        
-        UnityEditor.Handles.Label(
-            transform.position + Vector3.up * 2.5f,
-            $"Health: {CurrentHealth}/{maxHealth}\nState: {_state}\nTarget: {targetName}",
-            new GUIStyle()
-            {
-                normal = new GUIStyleState() { textColor = Color.red },
-                fontSize = 8,
-                fontStyle = FontStyle.Normal,
-                alignment = TextAnchor.MiddleCenter
-            });
-    }
-#endif
+    
 }

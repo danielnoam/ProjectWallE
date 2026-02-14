@@ -14,13 +14,10 @@ public class StructurePod : MonoBehaviour
     [SerializeField] private float arcHeight = 125f;
     [SerializeField] private float travelDuration = 3f;
     [SerializeField] private float rotationSpeed = 15f;
-    [SerializeField] private AudioClip collisionSfx;
     [SerializeField] private ImpulseSettings collisionImpulseSettings;
     
-    [Header("References")]
-    [SerializeField, AutoGetSelf] private AudioSource audioSource;
-    [SerializeField, AutoGetSelf] private CinemachineImpulseSource impulseSource;
-    
+    [SerializeField, AutoGetSelf, HideInInspector] private AudioSource audioSource;
+    [SerializeField, AutoGetSelf, HideInInspector] private CinemachineImpulseSource impulseSource;
     private Vector3 _startPosition;
     private Structure _structure;
     private Vector3 _targetPoint;
@@ -52,11 +49,6 @@ public class StructurePod : MonoBehaviour
         Vector3 impactPoint = collision.contacts[0].point;
         Vector3 surfaceNormal = collision.contacts[0].normal;
         
-        
-        if (collisionSfx)
-        {
-            audioSource.PlayOneShot(collisionSfx);
-        }
         
         impulseSource?.GenerateImpulse(collisionImpulseSettings);
 

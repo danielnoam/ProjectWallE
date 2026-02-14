@@ -2,20 +2,19 @@ using DNExtensions.Utilities;
 using DNExtensions.Utilities.AudioEvent;
 using DNExtensions.Utilities.InlineSO;
 using DNExtensions.Utilities.PrefabSelector;
+using ProjectWallE.UI;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 
 [SelectionBase]
 public class PlayerStructureBuilder : MonoBehaviour
 {
     [Header("Build Settings")]
+    [SerializeField] private bool holdToOpen;
     [SerializeField] private float buildRange = 100f;
     [SerializeField] private LayerMask buildableLayerMask;
     [SerializeField] private LayerMask blockBuildLayerMask;
-    
-    [Header("Input")]
-    [SerializeField] private bool holdToOpen;
-    [SerializeField] private KeyCode buildMenuKey = KeyCode.Mouse1;
     
     [Header("References")]
     [SerializeField] private Camera mainCamera;
@@ -24,7 +23,8 @@ public class PlayerStructureBuilder : MonoBehaviour
     [SerializeField, PrefabSelector("Assets/Prefabs/Structures")] private Structure[] structuresArray;
 
     private Ray _buildRay;
-    public bool CanBuild { get; private set; }
+    private bool _canBuild;
+    private bool _buildMenuOpen;
     
     
     private void OnValidate()
@@ -49,24 +49,31 @@ public class PlayerStructureBuilder : MonoBehaviour
     {
         if (holdToOpen)
         {
-            if (Input.GetKeyDown(buildMenuKey))
+            if (Mouse.current.rightButton.wasPressedThisFrame)
             {
                 radialMenu.OpenMenu();
+                _buildMenuOpen = true;
             }
-            else if (Input.GetKeyUp(buildMenuKey))
+            else if (Mouse.current.rightButton.wasReleasedThisFrame)
             {
                 radialMenu.CloseMenu();
+                _buildMenuOpen = false;
+                BuildPrompt.Instance?.Hide();
             }
         }
         else
         {
-            if (Input.GetKeyDown(buildMenuKey) && !radialMenu.IsOpen)
+            switch (Mouse.current.rightButton.wasPressedThisFrame)
             {
-                radialMenu.OpenMenu();
-            }
-            else if (Input.GetKeyDown(buildMenuKey) && radialMenu.IsOpen)
-            {
-                radialMenu.CloseMenu();
+                case true when !radialMenu.IsOpen:
+                    radialMenu.OpenMenu();
+                    _buildMenuOpen = true;
+                    break;
+                case true when radialMenu.IsOpen:
+                    radialMenu.CloseMenu();
+                    _buildMenuOpen = false;
+                    BuildPrompt.Instance?.Hide();
+                    break;
             }
         }
 
@@ -81,17 +88,20 @@ public class PlayerStructureBuilder : MonoBehaviour
         if (Physics.Raycast(_buildRay, buildRange, blockBuildLayerMask))
         {
             lineRenderer.SetPosition(1, transform.position + _buildRay.direction * buildRange);
-            CanBuild = false;
+            _canBuild = false;
+            BuildPrompt.Instance?.Hide();
         }
         else if (Physics.Raycast(_buildRay, out RaycastHit hit, buildRange, buildableLayerMask))
         {
             lineRenderer.SetPosition(1, hit.point);
-            CanBuild = true;
+            _canBuild = true;
+            if (_buildMenuOpen) BuildPrompt.Instance?.Show(hit.point);
         }
         else
         {
             lineRenderer.SetPosition(1, transform.position + _buildRay.direction * buildRange);
-            CanBuild = false;
+            _canBuild = false;
+            BuildPrompt.Instance?.Hide();
         }
     }
     
@@ -115,7 +125,7 @@ public class PlayerStructureBuilder : MonoBehaviour
 
     private void TryBuildStructure(Structure structure)
     {
-        if (!CanBuild)
+        if (!_canBuild)
         {
             Debug.Log("Cannot build here");
             return;
