@@ -3,8 +3,11 @@ using UnityEngine;
 
 namespace ProjectWallE
 {
+    [RequireComponent(typeof(RobotInput))]
     public class RobotController : MonoBehaviour, IPlayerController
     {
+        private RobotInput _input;
+        
         [SerializeField] Transform _groundRayPoint;
         [SerializeField] private LayerMask groundLayer;
         [SerializeField] private Rigidbody playerRB;
@@ -15,13 +18,34 @@ namespace ProjectWallE
         [SerializeField] private float springStrength;
         [SerializeField] private float springDamping;
         
+        [Header("Locomotion Settings")]
+        [SerializeField] float moveAccel;
+        [SerializeField] float maxMoveSpeed;
+        
         private bool _isGrounded = false;
 
+
+        void Awake()
+        {
+            _input = GetComponent<RobotInput>();
+        }
         public void ApplyMovement()
         {
             UpdateGroundHeight();
+            UpdateLocomotion();
         }
 
+        #region Locomotion
+
+        private void UpdateLocomotion()
+        {
+            Vector3 targetDir = new Vector3(_input.Movement.x, 0, _input.Movement.y);
+            
+            playerRB.AddForce(targetDir * moveAccel);
+        }
+
+        #endregion
+        
         #region Ground
 
         private void UpdateGroundHeight()
@@ -41,32 +65,25 @@ namespace ProjectWallE
 
         #endregion
         
-
         #region Helpers
 
         private bool IsGrounded(out RaycastHit hit)
         {
-            if (_isGrounded)
-            {
-                _isGrounded = GroundedGroundCheck(out hit);
-                return _isGrounded;
-            }
+            float dist = _isGrounded ? maxCheckHeight : groundHeight;
 
-            _isGrounded = AirGroundCheck(out hit);
-            return _isGrounded;
+            bool groundedNow = Physics.Raycast(
+                _groundRayPoint.position,
+                Vector3.down,
+                out hit,
+                dist,
+                groundLayer,
+                QueryTriggerInteraction.Ignore
+            );
+
+            _isGrounded = groundedNow;
+            return groundedNow;
         }
 
-        private bool AirGroundCheck(out RaycastHit hit)
-        {
-            bool isGrounded = Physics.Raycast(_groundRayPoint.position, Vector3.down, out hit, groundHeight, groundLayer);
-            return isGrounded;
-        }
-
-        private bool GroundedGroundCheck(out RaycastHit hit)
-        {
-            bool isGrounded = Physics.Raycast(_groundRayPoint.position, Vector3.down, out hit, maxCheckHeight, groundLayer);
-            return isGrounded;
-        }
 
         #endregion
     }

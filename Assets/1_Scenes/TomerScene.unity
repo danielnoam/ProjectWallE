@@ -2420,10 +2420,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   playerRB: {fileID: 2089575079}
-  groundHeight: 0.74
-  maxCheckHeight: 1.24
+  groundHeight: 0.75
+  maxCheckHeight: 1.25
   springStrength: 100
   springDamping: 8
+  moveAccel: 10
+  maxMoveSpeed: 5
 --- !u!114 &1499038485
 MonoBehaviour:
   m_ObjectHideFlags: 0
