@@ -8,15 +8,13 @@ public class GroundEnemy : Enemy
 {
     [SerializeField, AutoGetSelf, HideInInspector] private NavMeshAgent navMeshAgent;
     [SerializeField, AutoGetSelf, HideInInspector] private Rigidbody rigidBody;
-    
 
-    protected override void OnSetup()
+    protected override void Initialize()
     {
         navMeshAgent.stoppingDistance = attackRange * 0.8f;
-        
     }
 
-    protected override void UpdateBehavior()
+    protected override void UpdateState()
     {
         if (!(CurrentTarget is Component target) || !target)
         {
@@ -29,26 +27,15 @@ public class GroundEnemy : Enemy
         switch (State)
         {
             case EnemyState.MovingToTarget:
-                
                 if (distance <= attackRange)
-                {
                     State = EnemyState.Attacking;
-                }
-                else
-                {
-                    if (!target)
-                    {
-                        State = EnemyState.Idle;
-                        navMeshAgent.ResetPath();
-                    }
-                }
                 break;
 
             case EnemyState.Attacking:
                 if (distance > attackRange)
                 {
                     State = EnemyState.MovingToTarget;
-                    MoveToTarget();
+                    SetDestination();
                 }
                 else
                 {
@@ -62,19 +49,17 @@ public class GroundEnemy : Enemy
                 break;
         }
     }
-    
 
-    protected override void MoveToTarget()
+    protected override void SetDestination()
     {
         if (CurrentTarget is Component target && target)
         {
             navMeshAgent.SetDestination(target.transform.position);
         }
     }
-    
-    public void Push(Vector3 direction, float force)
+
+    protected override void OnPush(Vector3 direction, float force)
     {
         rigidBody.AddForce(direction.normalized * force, ForceMode.Force);
     }
-    
 }

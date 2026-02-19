@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using DNExtensions.Utilities;
-using DNExtensions.Utilities.PrefabSelector;
 using UnityEngine;
 
 public class EnemyManager : MonoBehaviour

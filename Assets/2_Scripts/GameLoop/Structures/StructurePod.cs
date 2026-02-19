@@ -1,6 +1,6 @@
 using System.Collections;
-using DNExtensions.CinemachineExtesnstions;
 using DNExtensions.Utilities.AutoGet;
+using DNExtensions.Utilities.CinemachineExtensions;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -56,7 +56,7 @@ public class StructurePod : MonoBehaviour
         
         foreach (Collider col in enemiesInRange)
         {
-            if (col.TryGetComponent(out GroundEnemy enemy))
+            if (col.TryGetComponent(out Enemy enemy))
             {
                 Vector3 direction = (col.transform.position - impactPoint).normalized;
                 enemy.Push(direction, 50);

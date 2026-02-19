@@ -1,6 +1,5 @@
     using System;
     using System.Collections.Generic;
-    using DNExtensions.Components;
     using DNExtensions.Utilities;
     using TMPro;
     using UnityEngine;

@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
@@ -8,136 +8,115 @@ namespace DNExtensions.Utilities.CustomFields.Editor
     [CustomPropertyDrawer(typeof(AnimatorStateField))]
     public class AnimatorStateFieldDrawer : PropertyDrawer
     {
-        private const string NoStateSelected = "None";
-        private static readonly string[] EmptyStates = { NoStateSelected };
-        
-        private const float IconWidth = 20f;
+        private const string NoneOption = "None";
+        private const string NoAnimator = "No Animator";
+        private const string NoController = "No Controller";
+        private static readonly string[] EmptyStates = { NoneOption };
+        private static readonly string[] NoAnimatorStates = { NoAnimator };
+        private static readonly string[] NoControllerStates = { NoController };
+
         private const float Spacing = 2f;
-        
-        private static readonly Color WarningColor = new Color(1f, 0.7f, 0.3f);
-        private static readonly Color AssignedColor = new Color(0.3f, 0.8f, 0.4f);
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             var animatorProperty = property.FindPropertyRelative("animator");
+            var assetControllerProperty = property.FindPropertyRelative("assetController");
+            var sourceProperty = property.FindPropertyRelative("source");
             var stateNameProperty = property.FindPropertyRelative("stateName");
             var stateHashProperty = property.FindPropertyRelative("stateHash");
             var assignedProperty = property.FindPropertyRelative("assigned");
 
-            EditorGUI.BeginProperty(position, GUIContent.none, property);
+            EditorGUI.BeginProperty(position, label, property);
 
-            var animator = FindAnimator(property, animatorProperty);
-            
-            var labelRect = new Rect(position.x, position.y, EditorGUIUtility.labelWidth - IconWidth, position.height);
-            var iconRect = new Rect(position.x + EditorGUIUtility.labelWidth - IconWidth, position.y, IconWidth, position.height);
+            HandleContextMenu(position, property, sourceProperty, stateNameProperty, stateHashProperty, assignedProperty);
 
-            EditorGUI.LabelField(labelRect, label);
+            position = EditorGUI.PrefixLabel(position, label);
 
-            if (animator == null)
+            var referenceRect = new Rect(position.x, position.y, position.width * 0.5f, position.height);
+            var dropdownRect = new Rect(referenceRect.xMax + Spacing, position.y, position.width * 0.5f - Spacing, position.height);
+
+            var source = (AnimatorSource)sourceProperty.enumValueIndex;
+            AnimatorController controller = null;
+
+            if (source == AnimatorSource.Component)
             {
-                DrawWarningIcon(iconRect, "No Animator assigned");
-                
-                var animatorRect = new Rect(position.x + EditorGUIUtility.labelWidth + Spacing, position.y, 
-                    position.width - EditorGUIUtility.labelWidth - Spacing, position.height);
-                EditorGUI.ObjectField(animatorRect, animatorProperty, GUIContent.none);
+                EditorGUI.ObjectField(referenceRect, animatorProperty, typeof(Animator), GUIContent.none);
+                controller = GetAnimatorController(animatorProperty.objectReferenceValue as Animator);
             }
             else
             {
-                var controller = GetAnimatorController(animator);
-                if (controller == null)
-                {
-                    DrawWarningIcon(iconRect, "Animator has no Controller");
-                    
-                    var animatorRect = new Rect(position.x + EditorGUIUtility.labelWidth + Spacing, position.y, 
-                        position.width - EditorGUIUtility.labelWidth - Spacing, position.height);
-                    EditorGUI.ObjectField(animatorRect, animatorProperty, GUIContent.none);
-                }
-                else
-                {
-                    var fieldRect = new Rect(position.x + EditorGUIUtility.labelWidth + Spacing, position.y, 
-                        (position.width - EditorGUIUtility.labelWidth - Spacing) * 0.35f, position.height);
-                    var animatorRect = new Rect(fieldRect.xMax + Spacing, position.y, 
-                        (position.width - EditorGUIUtility.labelWidth - Spacing) * 0.65f - Spacing, position.height);
-                    
-                    var states = GetAnimatorStates(controller);
-                    var currentIndex = GetCurrentStateIndex(states, stateNameProperty.stringValue);
-                    var isAssigned = currentIndex > 0;
+                EditorGUI.ObjectField(referenceRect, assetControllerProperty, typeof(RuntimeAnimatorController), GUIContent.none);
+                controller = GetControllerFromAsset(assetControllerProperty.objectReferenceValue as RuntimeAnimatorController);
+            }
 
-                    DrawStatusIcon(iconRect, isAssigned);
+            if (!controller)
+            {
+                EditorGUI.BeginDisabledGroup(true);
+                EditorGUI.Popup(dropdownRect, 0, source == AnimatorSource.Component ? NoAnimatorStates : NoControllerStates);
+                EditorGUI.EndDisabledGroup();
+                EditorGUI.EndProperty();
+                return;
+            }
 
-                    var newIndex = EditorGUI.Popup(fieldRect, currentIndex, states);
-                    EditorGUI.ObjectField(animatorRect, animatorProperty, GUIContent.none);
+            var states = GetAnimatorStates(controller);
+            var currentIndex = GetCurrentStateIndex(states, stateNameProperty.stringValue);
+            var newIndex = EditorGUI.Popup(dropdownRect, currentIndex, states);
 
-                    if (newIndex != currentIndex)
-                    {
-                        var selectedState = states[newIndex];
-                        stateNameProperty.stringValue = selectedState;
-                        stateHashProperty.intValue = Animator.StringToHash(selectedState);
-                        assignedProperty.boolValue = newIndex > 0;
-                        property.serializedObject.ApplyModifiedProperties();
-                    }
-                }
+            if (newIndex != currentIndex)
+            {
+                var selectedState = states[newIndex];
+                stateNameProperty.stringValue = selectedState == NoneOption ? string.Empty : selectedState;
+                stateHashProperty.intValue = selectedState == NoneOption ? 0 : Animator.StringToHash(selectedState);
+                assignedProperty.boolValue = newIndex > 0;
+                property.serializedObject.ApplyModifiedProperties();
             }
 
             EditorGUI.EndProperty();
         }
 
-        private void DrawStatusIcon(Rect rect, bool isAssigned)
+        private static void HandleContextMenu(
+            Rect rect,
+            SerializedProperty property,
+            SerializedProperty sourceProperty,
+            SerializedProperty stateNameProperty,
+            SerializedProperty stateHashProperty,
+            SerializedProperty assignedProperty)
         {
-            var icon = isAssigned ? "▶" : "○";
-            var tooltip = isAssigned ? "State assigned" : "No state selected";
-            var iconColor = isAssigned ? AssignedColor : WarningColor;
+            if (Event.current.type != EventType.ContextClick) return;
+            if (!rect.Contains(Event.current.mousePosition)) return;
 
-            var originalColor = GUI.color;
-            GUI.color = iconColor;
-            
-            var iconContent = new GUIContent(icon, tooltip);
-            var iconStyle = new GUIStyle(EditorStyles.label)
-            {
-                alignment = TextAnchor.MiddleCenter,
-                fontSize = 12,
-                fontStyle = FontStyle.Bold
-            };
-            
-            EditorGUI.LabelField(rect, iconContent, iconStyle);
-            GUI.color = originalColor;
-        }
+            var menu = new GenericMenu();
 
-        private void DrawWarningIcon(Rect rect, string tooltip)
-        {
-            var originalColor = GUI.color;
-            GUI.color = WarningColor;
-            
-            var iconContent = new GUIContent("⚠", tooltip);
-            var iconStyle = new GUIStyle(EditorStyles.label)
+            menu.AddDisabledItem(new GUIContent("Source"));
+            menu.AddSeparator("");
+            foreach (AnimatorSource src in System.Enum.GetValues(typeof(AnimatorSource)))
             {
-                alignment = TextAnchor.MiddleCenter,
-                fontSize = 12,
-                fontStyle = FontStyle.Bold
-            };
-            
-            EditorGUI.LabelField(rect, iconContent, iconStyle);
-            GUI.color = originalColor;
-        }
-
-        private Animator FindAnimator(SerializedProperty property, SerializedProperty animatorProperty)
-        {
-            if (animatorProperty.objectReferenceValue != null)
-                return animatorProperty.objectReferenceValue as Animator;
-            
-            var component = property.serializedObject.targetObject as Component;
-            var animator = component?.GetComponentInChildren<Animator>(true);
-            
-            if (animator != null)
-            {
-                animatorProperty.objectReferenceValue = animator;
-                animatorProperty.serializedObject.ApplyModifiedProperties();
+                var capturedSrc = src;
+                var current = (AnimatorSource)sourceProperty.enumValueIndex;
+                menu.AddItem(new GUIContent(src.ToString()), current == src, () =>
+                {
+                    sourceProperty.enumValueIndex = (int)capturedSrc;
+                    stateNameProperty.stringValue = string.Empty;
+                    stateHashProperty.intValue = 0;
+                    assignedProperty.boolValue = false;
+                    property.serializedObject.ApplyModifiedProperties();
+                });
             }
-            
-            return animator;
+
+            menu.AddSeparator("");
+            menu.AddItem(new GUIContent("Clear Selection"), false, () =>
+            {
+                stateNameProperty.stringValue = string.Empty;
+                stateHashProperty.intValue = 0;
+                assignedProperty.boolValue = false;
+                property.serializedObject.ApplyModifiedProperties();
+            });
+
+            menu.ShowAsContext();
+            Event.current.Use();
         }
 
-        private string[] GetAnimatorStates(AnimatorController controller)
+        private static string[] GetAnimatorStates(AnimatorController controller)
         {
             var stateNames = controller.layers
                 .SelectMany(layer => layer.stateMachine.states)
@@ -149,8 +128,9 @@ namespace DNExtensions.Utilities.CustomFields.Editor
             return EmptyStates.Concat(stateNames).ToArray();
         }
 
-        private AnimatorController GetAnimatorController(Animator animator)
+        private static AnimatorController GetAnimatorController(Animator animator)
         {
+            if (!animator) return null;
             if (animator.runtimeAnimatorController is AnimatorController controller)
                 return controller;
 
@@ -160,15 +140,21 @@ namespace DNExtensions.Utilities.CustomFields.Editor
             return null;
         }
 
-        private int GetCurrentStateIndex(string[] states, string currentStateName)
+        private static AnimatorController GetControllerFromAsset(RuntimeAnimatorController asset)
+        {
+            if (!asset) return null;
+            if (asset is AnimatorController direct) return direct;
+            if (asset is AnimatorOverrideController ov)
+                return ov.runtimeAnimatorController as AnimatorController;
+            return null;
+        }
+
+        private static int GetCurrentStateIndex(string[] states, string currentStateName)
         {
             if (string.IsNullOrEmpty(currentStateName)) return 0;
 
             for (int i = 0; i < states.Length; i++)
-            {
-                if (states[i] == currentStateName)
-                    return i;
-            }
+                if (states[i] == currentStateName) return i;
 
             return 0;
         }

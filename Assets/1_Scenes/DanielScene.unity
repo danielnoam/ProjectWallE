@@ -1970,10 +1970,13 @@ MonoBehaviour:
   enemyTypes:
     internalItems:
     - item: {fileID: 622395889724703068, guid: 311465a237bc47a4a80317173bf23667, type: 3}
-      chance: 91
+      chance: 48
+      isLocked: 0
+    - item: {fileID: -4769723865369596212, guid: 942ec3fb68d51bb418bece848d6bfd88, type: 3}
+      chance: 40
       isLocked: 0
     - item: {fileID: 622395889724703068, guid: 9e63c2e032022934290829d686f0c357, type: 3}
-      chance: 9
+      chance: 12
       isLocked: 0
 --- !u!114 &850447363
 MonoBehaviour:
@@ -2489,6 +2492,7 @@ MonoBehaviour:
   m_Offset: {x: 0, y: -0.07}
   m_OutlineThickness: 0.019
   m_OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+  m_SDFShader: {fileID: -6465566751694194690, guid: e616caa92c5094c48a31e485a4eadd13, type: 3}
   m_Size: 0.5
   m_Sides: 3
   m_InnerRadius: 0
@@ -2737,6 +2741,7 @@ MonoBehaviour:
   m_Offset: {x: 0, y: 0}
   m_OutlineThickness: 0.022
   m_OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+  m_SDFShader: {fileID: -6465566751694194690, guid: e616caa92c5094c48a31e485a4eadd13, type: 3}
   m_OuterRadius: 0.375
   m_InnerRadius: 0.1
 --- !u!1 &1415940232
@@ -3222,7 +3227,7 @@ MonoBehaviour:
   zoomLimits:
     minValue: 5
     maxValue: 50
-  camera: {fileID: 1505572071}
+  cam: {fileID: 1505572071}
 --- !u!20 &1505572071
 Camera:
   m_ObjectHideFlags: 0
