@@ -2,15 +2,14 @@ using System.Collections;
 using DNExtensions.Utilities;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class ResourceGenerator : MonoBehaviour
 {
-    [Header("Generation Settings")]
+    [Header("Settings")]
     [SerializeField] private int resourcesPerInterval = 10;
     [SerializeField] private float generationInterval = 5f;
     [SerializeField, ReadOnly] private bool generating;
     
-    public int ResourcesPerInterval => resourcesPerInterval;
-    public float GenerationInterval => generationInterval;
     
     private Coroutine _generationCoroutine;
 

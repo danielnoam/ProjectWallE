@@ -149,7 +149,7 @@ GameObject:
   - component: {fileID: -6820564451760052507}
   - component: {fileID: 6064574791381144385}
   m_Layer: 6
-  m_Name: Prefab_StructurePod
+  m_Name: Prefab_Pod
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -164,7 +164,7 @@ Transform:
   m_GameObject: {fileID: 8090829536125406347}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.68755, y: 0.97, z: -1.0099}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -356,13 +356,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48ad350436494da0891d08164d9a4a38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructurePod
-  collisionMask:
-    serializedVersion: 2
-    m_Bits: 128
   arcHeight: 125
   travelDuration: 3
   rotationSpeed: 300
-  collisionSfx: {fileID: 0}
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 456
   collisionImpulseSettings:
     impulseChannel: 1
     impulseType: 0
@@ -373,7 +372,6 @@ MonoBehaviour:
     dissipationDistance: 100
     dissipationRate: 0.25
     propagationSpeed: 343
-  audioSource: {fileID: 8466014174855652475}
   impulseSource: {fileID: -6820564451760052507}
 --- !u!1001 &201915716223834861
 PrefabInstance:

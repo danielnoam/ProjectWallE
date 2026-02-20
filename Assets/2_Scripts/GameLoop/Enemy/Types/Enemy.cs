@@ -70,7 +70,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.TryGetComponent(out StructurePod _))
+        if (collision.gameObject.TryGetComponent(out Pod _))
             Die();
     }
 

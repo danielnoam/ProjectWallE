@@ -1,7 +1,7 @@
 using DNExtensions.Utilities;
 using UnityEngine;
 
-public class StructureSpawnPoint : MonoBehaviour
+public class StructureSpawnPoint : BaseSpawnPoint
 {
     [Header("Settings")]
     [Tooltip("Whether the spawn should happen at the start of the level or be triggered by an event.")]
@@ -25,18 +25,8 @@ public class StructureSpawnPoint : MonoBehaviour
         
 
     }
-
-    private void Start()
-    {
-        LevelManager.OnLevelInitializing += OnLevelInitializing;
-    }
-
-    private void OnDestroy()
-    {
-        LevelManager.OnLevelInitializing -= OnLevelInitializing;
-    }
-
-    private void OnLevelInitializing()
+    
+    protected override void OnLevelInitializing()
     {
         if (spawnAtStart)
         {
@@ -50,9 +40,10 @@ public class StructureSpawnPoint : MonoBehaviour
         if (!structure || _hasSpawned) return;
         
         _hasSpawned = true;
-        StructureManager.Instance?.DeployPod(structure, transform.position, transform.up, Vector3.forward);
+        StructureManager.Instance?.DeployPod(structure, transform.position, Vector3.forward);
     }
     
+#if UNITY_EDITOR
 
     private void OnDrawGizmos()
     {
@@ -70,11 +61,9 @@ public class StructureSpawnPoint : MonoBehaviour
             Gizmos.DrawWireSphere(transform.position, 2);
         }
 
-        
-#if UNITY_EDITOR
         UnityEditor.Handles.Label(
             transform.position + Vector3.up * (2 + 0.5f),
-            structurePrefab && spawnAtStart ? $"Start Structure Spawn Point: {structurePrefab.Label}" :  $"Structre Spawn Point",
+            structurePrefab && spawnAtStart ? $"Start Structure Spawn Point: {structurePrefab.Label}" :  $"Structure Spawn Point",
             new GUIStyle()
             {
                 normal = new GUIStyleState() { textColor = Color.cyan },
@@ -83,7 +72,7 @@ public class StructureSpawnPoint : MonoBehaviour
                 alignment = TextAnchor.MiddleCenter
             }
         );
-
-#endif
     }
+    
+#endif
 }

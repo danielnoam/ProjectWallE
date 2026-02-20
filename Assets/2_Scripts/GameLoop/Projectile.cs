@@ -1,14 +1,12 @@
-using System;
+
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Projectile : MonoBehaviour
 {
-    [Header("Projectile Settings")]
+    [Header("Settings")]
     [SerializeField] private float maxLifetime = 10f;
-    [SerializeField] private ParticleSystem hitEffect;
-    [SerializeField] private AudioClip hitSound;
-    [SerializeField] private AudioSource audioSource;
+
     
     private bool _isInitialized;
     private bool _hitSomething;
@@ -18,16 +16,6 @@ public class Projectile : MonoBehaviour
     private LayerMask _hitLayers;
     private float _lifetimeTimer;
     private IDamageable _owner;
-    
-    public void Initialize(IDamageable owner, float speed, float damage, Vector3 direction, LayerMask hitLayers)
-    {
-        _owner = owner;
-        _speed = speed;
-        _damage = damage;
-        _direction = direction.normalized;
-        _hitLayers = hitLayers;
-        _isInitialized = true;
-    }
     
     private void Update()
     {
@@ -50,16 +38,6 @@ public class Projectile : MonoBehaviour
             damageable.TakeDamage(_damage, _owner);
         }
         
-        if (hitEffect)
-        {
-            hitEffect.Play();
-        }
-        
-        if (hitSound && audioSource)
-        {
-            audioSource.PlayOneShot(hitSound);
-        }
-        
         Destroy(gameObject);
     }
 
@@ -78,5 +56,15 @@ public class Projectile : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+    
+    public void Initialize(IDamageable owner, float speed, float damage, Vector3 direction, LayerMask hitLayers)
+    {
+        _owner = owner;
+        _speed = speed;
+        _damage = damage;
+        _direction = direction.normalized;
+        _hitLayers = hitLayers;
+        _isInitialized = true;
     }
 }

@@ -4,37 +4,25 @@ using DNExtensions.Utilities.CinemachineExtensions;
 using Unity.Cinemachine;
 using UnityEngine;
 
-[RequireComponent(typeof(AudioSource))]
 [RequireComponent(typeof(Collider))]
 [RequireComponent(typeof(CinemachineImpulseSource))]
-public class StructurePod : MonoBehaviour
+public class Pod : MonoBehaviour
 {
-    [Header("Pod Settings")]
-    [SerializeField] private LayerMask collisionMask;
+    [Header("Settings")]
     [SerializeField] private float arcHeight = 125f;
     [SerializeField] private float travelDuration = 3f;
     [SerializeField] private float rotationSpeed = 15f;
+    [SerializeField] private LayerMask collisionMask;
     [SerializeField] private ImpulseSettings collisionImpulseSettings;
-    
-    [SerializeField, AutoGetSelf, HideInInspector] private AudioSource audioSource;
     [SerializeField, AutoGetSelf, HideInInspector] private CinemachineImpulseSource impulseSource;
+    
     private Vector3 _startPosition;
-    private Structure _structure;
+    private IDeployable _deployable;
     private Vector3 _targetPoint;
     private Vector3 _forward;
     private bool _hasCollided;
     private Coroutine _moveCoroutine;
-
     
-    public void Initialize(Structure structure, Vector3 targetPoint, Vector3 surfaceNormal, Vector3 forward)
-    {
-        _startPosition = transform.position;
-        _structure = structure;
-        _targetPoint = targetPoint;
-        _forward = forward;
-    
-        _moveCoroutine = StartCoroutine(MoveInArc());
-    }
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -62,7 +50,8 @@ public class StructurePod : MonoBehaviour
                 enemy.Push(direction, 50);
             }
         }
-        SpawnStructure(impactPoint, surfaceNormal);
+        
+        Land(impactPoint, surfaceNormal);
     }
 
     private IEnumerator MoveInArc()
@@ -98,34 +87,30 @@ public class StructurePod : MonoBehaviour
         {
             if (Physics.Raycast(_targetPoint, Vector3.down, out RaycastHit hit, 200f, collisionMask))
             {
-                SpawnStructure(hit.point, hit.normal);
+                Land(hit.point, hit.normal);
             }
             else
             {
-                SpawnStructure(_targetPoint, Vector3.up);
+                Land(_targetPoint, Vector3.up);
             }
         }
     }
     
     
-    private void SpawnStructure(Vector3 impactPoint, Vector3 surfaceNormal)
-    {   
-        Quaternion surfaceRotation = Quaternion.FromToRotation(Vector3.up, surfaceNormal);
-        Vector3 projectedForward = Vector3.ProjectOnPlane(_forward, surfaceNormal).normalized;
-        
-        Quaternion yawRotation = Quaternion.identity;
-        if (projectedForward.sqrMagnitude > 0.001f)
-        {
-            yawRotation = Quaternion.LookRotation(projectedForward, surfaceNormal);
-        }
-        
-        Quaternion finalRotation = yawRotation;
-        Vector3 rotatedBottom = finalRotation * _structure.BottomPoint;
-        Vector3 structureSpawnPoint = impactPoint - rotatedBottom;
-    
-        Structure structure = Instantiate(_structure, structureSpawnPoint, finalRotation);
-        structure.Build();
-    
+    private void Land(Vector3 impactPoint, Vector3 surfaceNormal)
+    {
+        var instance = Instantiate(_deployable as MonoBehaviour);
+        ((IDeployable)instance).Deploy(impactPoint, surfaceNormal, _forward);
         Destroy(gameObject);
+    }
+    
+    public void Initialize<T>(T deployable, Vector3 targetPoint, Vector3 forward) where T : MonoBehaviour, IDeployable
+    {
+        _startPosition = transform.position;
+        _deployable = deployable;
+        _targetPoint = targetPoint;
+        _forward = forward;
+        
+        _moveCoroutine = StartCoroutine(MoveInArc());
     }
 }

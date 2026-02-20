@@ -2,9 +2,9 @@ using System;
 using DNExtensions;
 using UnityEngine;
 
-public class EnemySpawnPoint : MonoBehaviour
+public class EnemySpawnPoint : BaseSpawnPoint
 {
-    [Header("SpawnPoint Settings")]
+    [Header("Settings")]
     [SerializeField] private bool isActive = true;
     [SerializeField] private float spawnPointRange = 10f;
     
@@ -16,22 +16,9 @@ public class EnemySpawnPoint : MonoBehaviour
         
         gameObject.name = $"EnemySpawnPoint({(isActive ? "Active" : "NotActive")})";
     }
+    
 
-    private void Start()
-    {
-        LevelManager.OnLevelStarted += OnLevelStarted;
-        LevelManager.OnLevelCompleted += OnLevelFinished;
-        LevelManager.OnLevelFailed += OnLevelFinished;
-    }
-
-    private void OnDestroy()
-    {
-        LevelManager.OnLevelStarted -= OnLevelStarted;
-        LevelManager.OnLevelCompleted -= OnLevelFinished;
-        LevelManager.OnLevelFailed -= OnLevelFinished;
-    }
-
-    private void OnLevelStarted()
+    protected override void OnLevelStarted()
     {
         if (isActive)
         {
@@ -39,7 +26,7 @@ public class EnemySpawnPoint : MonoBehaviour
         }
     }
     
-    private void OnLevelFinished()
+    protected override void OnLevelFinished()
     {
         EnemyManager.Instance.UnregisterSpawnPoint(this);
     }
@@ -58,6 +45,7 @@ public class EnemySpawnPoint : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
 
     private void OnDrawGizmos()
     {
@@ -74,7 +62,7 @@ public class EnemySpawnPoint : MonoBehaviour
         }
         
         
-#if UNITY_EDITOR
+
         var  enemyString = $"Enemy Spawn Point: {(isActive ? "Active" : "Not Active")}";
         
         UnityEditor.Handles.Label(
@@ -88,7 +76,7 @@ public class EnemySpawnPoint : MonoBehaviour
                 alignment = TextAnchor.MiddleCenter
             }
         );
-
-#endif
     }
+    
+#endif
 }

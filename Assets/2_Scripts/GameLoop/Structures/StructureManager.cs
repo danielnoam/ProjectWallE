@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using DNExtensions;
 using DNExtensions.Utilities;
+using DNExtensions.Utilities.SerializedInterface;
 using UnityEngine;
 
 public class StructureManager : MonoBehaviour
@@ -8,7 +9,7 @@ public class StructureManager : MonoBehaviour
     public static StructureManager Instance { get; private set; }
     
     [Header("Settings")]
-    [SerializeField] private StructurePod podPrefab;
+    [SerializeField] private Pod podPrefab;
     [SerializeField] private ChanceList<Transform> podSpawnPositions = new ChanceList<Transform>();
     
 
@@ -31,11 +32,11 @@ public class StructureManager : MonoBehaviour
     }
     
     
-    public void DeployPod(Structure structure, Vector3 targetPosition, Vector3 surfaceNormal, Vector3 forward)
+    public void DeployPod(Structure structure, Vector3 targetPosition, Vector3 forward)
     {
         var spawnPosition = podSpawnPositions.GetRandomItem();
-        StructurePod pod = Instantiate(podPrefab, spawnPosition.position, Quaternion.LookRotation(spawnPosition.forward));
-        pod.Initialize(structure, targetPosition, surfaceNormal, forward);
+        Pod pod = Instantiate(podPrefab, spawnPosition.position, Quaternion.LookRotation(spawnPosition.forward));
+        pod.Initialize(structure, targetPosition, forward);
     }
     
     
@@ -123,195 +124,63 @@ public class StructureManager : MonoBehaviour
     
     #region Query Methods
 
-    public Turret GetNearestTurret(Vector3 position)
-    {
-        Turret nearest = null;
-        float closestDist = float.MaxValue;
-        
-        foreach (var turret in _turrets)
-        {
-            if (!turret) continue;
-            
-            float dist = Vector3.Distance(position, turret.transform.position);
-            if (dist < closestDist)
-            {
-                closestDist = dist;
-                nearest = turret;
-            }
-        }
-        
-        return nearest;
-    }
+    public Turret GetNearestTurret(Vector3 position) => GetNearest(_turrets, position);
+    public Turret GetNearestTurretInRange(Vector3 position, float maxRange) => GetNearest(_turrets, position, maxRange);
+    public Generator GetNearestGeneratorInRange(Vector3 position, float maxRange) => GetNearest(_generators, position, maxRange);
+    public Base GetNearestBase(Vector3 position) => GetNearest(_bases, position);
+    public Structure GetNearestStructure(Vector3 position) => GetNearest(_allStructures, position);
     
+    public Structure GetWeakestStructureInRange(Vector3 position, float maxRange) => GetWeakest(_allStructures, maxRange, position);
+    public Base GetWeakestBase() => GetWeakest(_bases);
     
-    public Turret GetNearestTurretInRange(Vector3 position, float  maxRange)
-    {
-        Turret nearest = null;
-        float closestDist = float.MaxValue;
-        
-        foreach (var turret in _turrets)
-        {
-            if (!turret) continue;
-            
-            float dist = Vector3.Distance(position, turret.transform.position);
-            if (dist > maxRange) continue;
-            
-            if (dist < closestDist)
-            {
-                closestDist = dist;
-                nearest = turret;
-            }
-        }
-        
-        return nearest;
-    }
+    #endregion
 
-    public Generator GetNearestGeneratorInRange(Vector3 position, float maxRange)
-    {
-        
-        Generator nearest = null;
-        float closestDist = float.MaxValue;
-        
-        foreach (var generator in _generators)
-        {
-            if (!generator) continue;
-            
-            float dist = Vector3.Distance(position, generator.transform.position);
-            if (dist > maxRange) continue;
-            
-            if (dist < closestDist)
-            {
-                closestDist = dist;
-                nearest = generator;
-            }
-        }
-        
-        return nearest;
-    }
-    
-    public Base GetNearestBase(Vector3 position)
-    {
-        Base nearest = null;
-        float closestDist = float.MaxValue;
-        
-        foreach (var baseStructure in _bases)
-        {
-            if (!baseStructure) continue;
-            
-            float dist = Vector3.Distance(position, baseStructure.transform.position);
-            if (dist < closestDist)
-            {
-                closestDist = dist;
-                nearest = baseStructure;
-            }
-        }
-        
-        return nearest;
-    }
-    
-    public Structure GetNearestStructure(Vector3 position)
-    {
-        Structure nearest = null;
-        float closestDist = float.MaxValue;
-        
-        foreach (var structure in _allStructures)
-        {
-            if (!structure) continue;
-            
-            float dist = Vector3.Distance(position, structure.transform.position);
-            if (dist < closestDist)
-            {
-                closestDist = dist;
-                nearest = structure;
-            }
-        }
-        
-        return nearest;
-    }
-    
 
-    public IDamageable GetWeakestStructureInRange(Vector3 position, float maxRange)
+    #region Helpers
+    
+    private T GetNearest<T>(List<T> list, Vector3 position, float maxRange = float.MaxValue) where T : MonoBehaviour
     {
-        IDamageable weakest = null;
+        T nearest = null;
+        float closestDist = float.MaxValue;
+
+        foreach (var item in list)
+        {
+            if (!item) continue;
+
+            float dist = Vector3.Distance(position, item.transform.position);
+            if (dist > maxRange) continue;
+
+            if (dist < closestDist)
+            {
+                closestDist = dist;
+                nearest = item;
+            }
+        }
+
+        return nearest;
+    }
+    
+    private T GetWeakest<T>(List<T> list, float maxRange = float.MaxValue, Vector3? position = null) where T : Structure
+    {
+        T weakest = null;
         float lowestHealthPercent = float.MaxValue;
-        
-        foreach (var structure in _allStructures)
+
+        foreach (var item in list)
         {
-            if (!(structure is IDamageable damageable)) continue;
-            if (!structure) continue;
-            
-            float dist = Vector3.Distance(position, structure.transform.position);
-            if (dist > maxRange) continue;
-            
-            float healthPercent = structure.CurrentHealth / structure.MaxHealth;
+            if (!item) continue;
+
+            if (position.HasValue && Vector3.Distance(position.Value, item.transform.position) > maxRange) continue;
+
+            float healthPercent = item.CurrentHealth / item.MaxHealth;
             if (healthPercent < lowestHealthPercent)
             {
                 lowestHealthPercent = healthPercent;
-                weakest = damageable;
+                weakest = item;
             }
         }
-        
-        return weakest;
-    }
-    
-    public Base GetWeakestBase()
-    {
-        Base weakest = null;
-        float lowestHealthPercent = float.MaxValue;
-        
-        foreach (var baseStructure in _bases)
-        {
-            if (!baseStructure) continue;
-            
-            float healthPercent = baseStructure.CurrentHealth / baseStructure.MaxHealth;
-            if (healthPercent < lowestHealthPercent)
-            {
-                lowestHealthPercent = healthPercent;
-                weakest = baseStructure;
-            }
-        }
-        
-        return weakest;
-    }
-    
 
-    
-    
-    public List<Structure> GetStructuresInRange(Vector3 position, float range)
-    {
-        List<Structure> inRange = new List<Structure>();
-        
-        foreach (var structure in _allStructures)
-        {
-            if (!structure) continue;
-            
-            float dist = Vector3.Distance(position, structure.transform.position);
-            if (dist <= range)
-            {
-                inRange.Add(structure);
-            }
-        }
-        
-        return inRange;
+        return weakest;
     }
-    
-    public List<Turret> GetTurretsInRange(Vector3 position, float range)
-    {
-        List<Turret> inRange = new List<Turret>();
-        
-        foreach (var turret in _turrets)
-        {
-            if (!turret) continue;
-            
-            float dist = Vector3.Distance(position, turret.transform.position);
-            if (dist <= range)
-            {
-                inRange.Add(turret);
-            }
-        }
-        
-        return inRange;
-    }
-    
+
     #endregion
 }

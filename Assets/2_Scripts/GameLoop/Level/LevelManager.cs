@@ -39,13 +39,16 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
-        timeline.stopped += OnTimelineStopped;
-        StartCoroutine(StartLevel());
+        if (timeline)
+        {
+            timeline.stopped += OnTimelineStopped;
+            StartCoroutine(StartLevel());
+        }
     }
 
     private void OnDestroy()
     {
-        if (timeline != null)
+        if (timeline)
         {
             timeline.stopped -= OnTimelineStopped;
         }

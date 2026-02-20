@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class ResourceManager : MonoBehaviour
 {
     public static ResourceManager Instance { get; private set; }

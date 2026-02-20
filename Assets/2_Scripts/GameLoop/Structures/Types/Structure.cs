@@ -6,12 +6,9 @@ using UnityEditor;
 using UnityEngine;
 
 
-
-
-[RequireComponent(typeof(AudioSource))]
 [DisallowMultipleComponent]
 [SelectionBase]
-public abstract class Structure : MonoBehaviour, IDamageable
+public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
 {
     [Header("Structure Settings")]
     [SerializeField] private int buildCost = 100;
@@ -21,20 +18,19 @@ public abstract class Structure : MonoBehaviour, IDamageable
     [SerializeField, Range(1,3)] protected int maxUpgradeLevel = 1;
     [SerializeField] protected float startHealth = 100f;
     [SerializeField] protected Vector3 bottomPoint = Vector3.down;
-    [SerializeField] protected AudioClip buildSfx;
     [SerializeField] protected Transform gfx;
     [SerializeField, ReadOnly] protected float currentHealth;
     [SerializeField, ReadOnly] protected int currentUpgradeLevel;
     
 
     protected string StateInfo;
-    private AudioSource _audioSource;
-    public Vector3 BottomPoint => bottomPoint;
+    
     public int BuildCost => buildCost;
     public  string Label => label;
     public string Description => description;
     public Sprite Icon => icon;
-
+    public float CurrentHealth => currentHealth;
+    public float MaxHealth => startHealth;
     
     public event Action OnBuilt;
     public event Action OnUpgraded;
@@ -47,11 +43,7 @@ public abstract class Structure : MonoBehaviour, IDamageable
     protected abstract void OnUpgrade();
     protected abstract void OnBreak();
 
-
-    private void OnValidate()
-    {
-        if (!_audioSource) _audioSource = this.GetOrAddComponent<AudioSource>();
-    }
+    
 
 
     private void Awake()
@@ -61,7 +53,7 @@ public abstract class Structure : MonoBehaviour, IDamageable
     
     private void OnDestroy()
     {
-        StructureManager.Instance?.RegisterStructure(this);
+        StructureManager.Instance?.UnregisterStructure(this);
     }
 
     [Button(ButtonPlayMode.OnlyWhenPlaying)]
@@ -82,11 +74,6 @@ public abstract class Structure : MonoBehaviour, IDamageable
         var spawnSequence = Sequence.Create();
         
         spawnSequence.Group(Tween.Scale(gfx,Vector3.zero, Vector3.one , 0.3f, Ease.OutBack));
-        spawnSequence.OnComplete(() =>
-        {
-            if (buildSfx) _audioSource?.PlayOneShot(buildSfx);
-        });
-
     }
     
 
@@ -120,7 +107,6 @@ public abstract class Structure : MonoBehaviour, IDamageable
         }
 
         currentUpgradeLevel++;
-        if (buildSfx) _audioSource?.PlayOneShot(buildSfx);
         OnUpgrade();
         OnUpgraded?.Invoke();
     }
@@ -137,13 +123,20 @@ public abstract class Structure : MonoBehaviour, IDamageable
         }
     }
 
-    public float CurrentHealth => currentHealth;
-    public float MaxHealth => startHealth;
 
-    public Transform Transform()
+    
+    public void Deploy(Vector3 impactPoint, Vector3 surfaceNormal, Vector3 forward)
     {
-        return transform;
+        Vector3 projectedForward = Vector3.ProjectOnPlane(forward, surfaceNormal).normalized;
+        Quaternion yawRotation = projectedForward.sqrMagnitude > 0.001f 
+            ? Quaternion.LookRotation(projectedForward, surfaceNormal) 
+            : Quaternion.identity;
+
+        transform.position = impactPoint - yawRotation * bottomPoint;
+        transform.rotation = yawRotation;
+        Build();
     }
+    
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()
@@ -170,5 +163,6 @@ public abstract class Structure : MonoBehaviour, IDamageable
     }
     
 #endif
+
 
 }

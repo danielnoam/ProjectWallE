@@ -1,4 +1,5 @@
 using DNExtensions.Utilities;
+using DNExtensions.Utilities.AutoGet;
 using ProjectWallE.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -14,9 +15,9 @@ public class PlayerStructureBuilder : MonoBehaviour
     [SerializeField] private LayerMask blockBuildLayerMask;
     
     [Header("References")]
-    [SerializeField] private Camera mainCamera;
-    [SerializeField] private LineRenderer lineRenderer;
-    [SerializeField] private RadialMenu<Structure> radialMenu;
+    [SerializeField, AutoGetSelf] private LineRenderer lineRenderer;
+    [SerializeField, AutoGetScene] private Camera mainCamera;
+    [SerializeField, AutoGetScene] private RadialMenu<Structure> radialMenu;
     [SerializeField, PrefabSelector("Assets/Prefabs/Structures")] private Structure[] structuresArray;
 
     private Ray _buildRay;
@@ -26,7 +27,6 @@ public class PlayerStructureBuilder : MonoBehaviour
     
     private void OnValidate()
     {
-        if (!mainCamera) mainCamera = Camera.main;
         lineRenderer.SetPosition(0, transform.position);
         lineRenderer.SetPosition(1, transform.position);
     }
@@ -140,7 +140,7 @@ public class PlayerStructureBuilder : MonoBehaviour
             return;
         }
 
-        StructureManager.Instance.DeployPod(structure, hit.point, hit.normal, transform.forward);
+        StructureManager.Instance?.DeployPod(structure, hit.point, transform.forward);
     }
 
 
