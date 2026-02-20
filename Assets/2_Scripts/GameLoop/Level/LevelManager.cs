@@ -17,7 +17,7 @@ public class LevelManager : MonoBehaviour
     public static event Action<float> OnTimeUpdated;
     
     
-    [SerializeField, AutoGetSelf] private PlayableDirector timeline;
+    [SerializeField, AutoGetSelf, HideInInspector] private PlayableDirector timeline;
 
     private bool _levelActive;
     private float TimeRemaining => _levelActive ? (float)(timeline.duration - timeline.time) : 0f;

@@ -9,7 +9,7 @@ using UnityEngine.InputSystem;
 public class PlayerStructureBuilder : MonoBehaviour
 {
     [Header("Build Settings")]
-    [SerializeField] private bool holdToOpen;
+    [SerializeField] private bool holdToOpen = true;
     [SerializeField] private float buildRange = 100f;
     [SerializeField] private LayerMask buildableLayerMask;
     [SerializeField] private LayerMask blockBuildLayerMask;
@@ -18,6 +18,7 @@ public class PlayerStructureBuilder : MonoBehaviour
     [SerializeField, AutoGetSelf] private LineRenderer lineRenderer;
     [SerializeField, AutoGetScene] private Camera mainCamera;
     [SerializeField, AutoGetScene] private RadialMenu<Structure> radialMenu;
+    [SerializeField, AutoGetSelf] private FreeFormCameraController cameraController;
     [SerializeField, PrefabSelector("Assets/Prefabs/Structures")] private Structure[] structuresArray;
 
     private Ray _buildRay;
@@ -35,6 +36,9 @@ public class PlayerStructureBuilder : MonoBehaviour
     {
         radialMenu.SetupMenu(structuresArray, ConfigureStructureElement);
         radialMenu.OnItemSelected += TryBuildStructure;
+        
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
     
     private void OnDestroy()
@@ -48,14 +52,11 @@ public class PlayerStructureBuilder : MonoBehaviour
         {
             if (Mouse.current.rightButton.wasPressedThisFrame)
             {
-                radialMenu.OpenMenu();
-                _buildMenuOpen = true;
+                OpenMenu();
             }
             else if (Mouse.current.rightButton.wasReleasedThisFrame)
             {
-                radialMenu.CloseMenu();
-                _buildMenuOpen = false;
-                BuildPrompt.Instance?.Hide();
+                CloseMenu();
             }
         }
         else
@@ -63,18 +64,32 @@ public class PlayerStructureBuilder : MonoBehaviour
             switch (Mouse.current.rightButton.wasPressedThisFrame)
             {
                 case true when !radialMenu.IsOpen:
-                    radialMenu.OpenMenu();
-                    _buildMenuOpen = true;
+                    OpenMenu();
                     break;
                 case true when radialMenu.IsOpen:
-                    radialMenu.CloseMenu();
-                    _buildMenuOpen = false;
-                    BuildPrompt.Instance?.Hide();
+                    CloseMenu();
                     break;
             }
         }
 
         CastBuildRay();
+    }
+    
+    private void OpenMenu()
+    {
+        cameraController.enabled = false;
+        radialMenu.OpenMenu();
+        
+        _buildMenuOpen = true;
+    }
+    
+    private void CloseMenu()
+    {
+        cameraController.enabled = true;
+        radialMenu.CloseMenu();
+        BuildPrompt.Instance?.Hide();
+        
+        _buildMenuOpen = false;
     }
 
     private void CastBuildRay()

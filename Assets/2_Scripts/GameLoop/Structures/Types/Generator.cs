@@ -7,7 +7,7 @@ using UnityEngine;
 public class Generator : Structure
 {
 
-    [Header("Generator Settings")]
+    [Header("Generator")]
     [SerializeField] private ShakeSettings pumpAnimationSettings;
     [SerializeField] private Transform[] pumpArray = Array.Empty<Transform>();
     [SerializeField] private ResourceGenerator resourceGenerator;
@@ -17,7 +17,7 @@ public class Generator : Structure
 
     private void Update()
     {
-        StateInfo = $"Health: {currentHealth}/{startHealth}";
+        StateInfo = $"Health: {CurrentHealth}/{startHealth}";
     }
 
     [Button]

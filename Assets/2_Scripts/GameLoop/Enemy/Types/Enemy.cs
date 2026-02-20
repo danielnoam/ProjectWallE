@@ -18,19 +18,15 @@ public enum EnemyState { Attacking, MovingToTarget, Idle }
 [SelectionBase]
 public abstract class Enemy : MonoBehaviour, IDamageable
 {
-    [Header("Stats")]
+    [Header("Settings")]
     [SerializeField] protected float maxHealth = 100f;
-    [SerializeField] protected float attackDamage = 10f;
-    [SerializeField] protected float attackCooldown = 1f;
-    [SerializeField] protected float attackRange = 15f;
-
-    [Header("Targeting")]
     [SerializeField] private float targetFindRange = 20f;
     [SerializeField] private TargetPriority[] targetPriorities = new[] { TargetPriority.NearestBase };
 
-    [Header("Projectile")]
-    [SerializeField] private float projectileSpeed = 10f;
-    [SerializeField] private LayerMask projectileHitLayers;
+    [Header("Attack")]
+    [SerializeField] protected float attackCooldown = 1f;
+    [SerializeField] protected float attackRange = 15f;
+    [SerializeField] private ProjectileSettings projectileSettings;
     [SerializeField, PrefabSelector("Assets/Prefabs")] private Projectile projectilePrefab;
 
     private IDamageable _lastAttacker;
@@ -144,8 +140,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         if (CurrentTarget is Component targetComponent && targetComponent)
         {
             Vector3 direction = (targetComponent.transform.position - transform.position).normalized;
-            Projectile p = Instantiate(projectilePrefab, transform.position, Quaternion.LookRotation(direction));
-            p.Initialize(this, projectileSpeed, attackDamage, direction, projectileHitLayers);
+            Projectile projectile = Instantiate(projectilePrefab, transform.position, Quaternion.LookRotation(direction));
+            projectile.Initialize(this, projectileSettings, direction, transform.position);
         }
     }
 

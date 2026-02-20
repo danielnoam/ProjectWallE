@@ -622,7 +622,7 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2.87
-  m_BaseOffset: 1.18
+  m_BaseOffset: 0.66
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!114 &622395889724703068
@@ -638,15 +638,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GroundEnemy
   maxHealth: 200
-  attackDamage: 35
-  attackCooldown: 2
-  attackRange: 20
   targetFindRange: 20
   targetPriorities: 010000000200000006000000
-  projectileSpeed: 15
-  projectileHitLayers:
-    serializedVersion: 2
-    m_Bits: 576
+  attackCooldown: 2
+  attackRange: 20
+  projectileSettings:
+    damage: 25
+    hitLayers:
+      serializedVersion: 2
+      m_Bits: 584
+    movementType: 0
+    speed: 15
+    arcHeight: 0
   projectilePrefab: {fileID: 8338543337846540916, guid: dc38d455f7f64e745868fa7512b7724c, type: 3}
   navMeshAgent: {fileID: 8909220601765990049}
   rigidBody: {fileID: 2448601663206975914}

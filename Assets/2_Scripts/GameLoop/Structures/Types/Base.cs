@@ -4,7 +4,7 @@ using UnityEngine;
 public class Base : Structure
 {
     
-    [Header("Base Settings")]
+    [Header("Base")]
     [SerializeField] private float rotationSpeed = 10f;
     [SerializeField] private float moveSpeed = 0.3f;
     [SerializeField] private Transform obelisk;
@@ -19,7 +19,7 @@ public class Base : Structure
         float sine = Mathf.Sin(Time.time * 2f) * moveSpeed;
         obelisk.localPosition = new Vector3(0f, sine, 0f);
         
-        StateInfo = $"Health: {currentHealth}/{startHealth}";
+        StateInfo = $"Health: {CurrentHealth}/{startHealth}";
     }
 
 

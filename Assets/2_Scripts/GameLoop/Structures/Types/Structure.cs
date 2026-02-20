@@ -10,7 +10,7 @@ using UnityEngine;
 [SelectionBase]
 public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
 {
-    [Header("Structure Settings")]
+    [Header("Structure")]
     [SerializeField] private int buildCost = 100;
     [SerializeField] private string label = "Structure";
     [SerializeField] private string description = "A basic structure.";
@@ -19,17 +19,15 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     [SerializeField] protected float startHealth = 100f;
     [SerializeField] protected Vector3 bottomPoint = Vector3.down;
     [SerializeField] protected Transform gfx;
-    [SerializeField, ReadOnly] protected float currentHealth;
-    [SerializeField, ReadOnly] protected int currentUpgradeLevel;
     
-
+    private int _currentUpgradeLevel;
     protected string StateInfo;
     
     public int BuildCost => buildCost;
     public  string Label => label;
     public string Description => description;
     public Sprite Icon => icon;
-    public float CurrentHealth => currentHealth;
+    public float CurrentHealth { get; private set; }
     public float MaxHealth => startHealth;
     
     public event Action OnBuilt;
@@ -59,13 +57,13 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     [Button(ButtonPlayMode.OnlyWhenPlaying)]
     protected virtual void ResetStats()
     {
-        currentHealth = startHealth;
-        currentUpgradeLevel = 1;
+        CurrentHealth = startHealth;
+        _currentUpgradeLevel = 1;
     }
     
     protected virtual bool CanUpgrade()
     {
-        return currentUpgradeLevel < maxUpgradeLevel;
+        return _currentUpgradeLevel < maxUpgradeLevel;
     }
     
     protected virtual void PlaySpawnEffect()
@@ -106,19 +104,19 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
             return;
         }
 
-        currentUpgradeLevel++;
+        _currentUpgradeLevel++;
         OnUpgrade();
         OnUpgraded?.Invoke();
     }
     
     public void TakeDamage(float damage, IDamageable attacker = null)
     {
-        if (currentHealth <= 0 || damage <= 0) return;
+        if (CurrentHealth <= 0 || damage <= 0) return;
         
-        currentHealth -= damage;
-        if (currentHealth <= 0)
+        CurrentHealth -= damage;
+        if (CurrentHealth <= 0)
         {
-            currentHealth = 0f;
+            CurrentHealth = 0f;
             Break();
         }
     }
