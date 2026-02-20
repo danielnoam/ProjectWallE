@@ -31,17 +31,12 @@ public class StructureManager : MonoBehaviour
     }
     
     
-    #region Deployment 
-    
     public void DeployPod(Structure structure, Vector3 targetPosition, Vector3 surfaceNormal, Vector3 forward)
     {
         var spawnPosition = podSpawnPositions.GetRandomItem();
         StructurePod pod = Instantiate(podPrefab, spawnPosition.position, Quaternion.LookRotation(spawnPosition.forward));
         pod.Initialize(structure, targetPosition, surfaceNormal, forward);
     }
-    
-    #endregion
-    
     
     
     #region Structure Registration
@@ -124,7 +119,6 @@ public class StructureManager : MonoBehaviour
     }
     
     #endregion
-    
     
     
     #region Query Methods

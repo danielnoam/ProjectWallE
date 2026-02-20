@@ -185,9 +185,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable
                 fontStyle = FontStyle.Normal,
                 alignment = TextAnchor.MiddleCenter
             });
-        
-        
-
     }
 
     protected virtual void OnDrawGizmosSelected()

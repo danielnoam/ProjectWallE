@@ -96,7 +96,7 @@ public class StructurePod : MonoBehaviour
         
         if (!_hasCollided)
         {
-            if (Physics.Raycast(_targetPoint, Vector3.down, out RaycastHit hit, 100f, collisionMask))
+            if (Physics.Raycast(_targetPoint, Vector3.down, out RaycastHit hit, 200f, collisionMask))
             {
                 SpawnStructure(hit.point, hit.normal);
             }
