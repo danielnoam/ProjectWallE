@@ -643,8 +643,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.26262677, y: 0.0000000135846445, z: -0.0000000036974823, w: 0.9648975}
-  m_LocalPosition: {x: -9, y: 11.003529, z: -4.8742685}
+  m_LocalRotation: {x: 0.26262674, y: -0.00000007059784, z: 0.000000019215388, w: 0.9648975}
+  m_LocalPosition: {x: -8.535, y: 11.468529, z: -4.8742685}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2425,8 +2425,48 @@ MonoBehaviour:
   maxCheckHeight: 1.25
   springStrength: 100
   springDamping: 8
-  moveAccel: 10
-  maxMoveSpeed: 5
+  moveAccel: 20
+  dirChangeAccelFactor:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -1
+      value: 2
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.0007572379
+      value: 1.3164191
+      inSlope: -0.30529493
+      outSlope: -0.30529493
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.16710478
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: -0.2704833
+      outSlope: -0.2704833
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.22023146
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  maxMoveSpeed: 8
+  forcePointBelowCOM: 0.25
+  groundMoveFactor: 1
+  airMoveFactor: 0.35
+  uprightStrength: 80
+  uprightDamping: 12
+  yawStrength: 40
+  yawDamping: 8
 --- !u!114 &1499038485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3648,8 +3688,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2060643197}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.26262677, y: 0.000000013584645, z: -0.0000000036974823, w: 0.9648975}
-  m_LocalPosition: {x: -9, y: 11.003529, z: -4.8742685}
+  m_LocalRotation: {x: 0.26262674, y: -0.00000007059784, z: 0.000000019215381, w: 0.9648975}
+  m_LocalPosition: {x: -8.535, y: 11.468529, z: -4.8742685}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3859,8 +3899,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2089575078}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -9, y: 8.2, z: -0.10568384}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -8.535, y: 8.665, z: -0.10568384}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
