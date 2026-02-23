@@ -6,8 +6,8 @@ using UnityEngine;
 public class ResourceGenerator : MonoBehaviour
 {
     [Header("Settings")]
-    [SerializeField] private int resourcesPerInterval = 10;
-    [SerializeField] private float generationInterval = 5f;
+    public int resourcesPerInterval = 10;
+    public float generationInterval = 5f;
     [SerializeField, ReadOnly] private bool generating;
     
     

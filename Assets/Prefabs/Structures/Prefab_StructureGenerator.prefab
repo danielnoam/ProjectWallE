@@ -316,14 +316,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c72f8049da654147ba3c44168bfc0b12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Generator
-  buildCost: 200
   label: Generator
-  description: A basic structure.
   icon: {fileID: 0}
-  maxUpgradeLevel: 3
-  startHealth: 200
   bottomPoint: {x: 0, y: -0.75, z: 0}
   gfx: {fileID: 2170286402575911496}
+  levels:
+  - rid: 4437626158574207053
+  - rid: 4437626158574207056
   pumpAnimationSettings:
     strength: {x: 0, y: 0, z: 5}
     duration: 0.2
@@ -349,6 +348,25 @@ MonoBehaviour:
   - {fileID: 8802858184367549448}
   - {fileID: 8319919916144149395}
   resourceGenerator: {fileID: 5619648184734559487}
+  references:
+    version: 2
+    RefIds:
+    - rid: 4437626158574207053
+      type: {class: GeneratorLevelData, ns: , asm: Assembly-CSharp}
+      data:
+        maxHealth: 200
+        cost: 200
+        fixCostPerHealthPoint: 0.5
+        generationInterval: 2
+        resourcesPerInterval: 1
+    - rid: 4437626158574207056
+      type: {class: GeneratorLevelData, ns: , asm: Assembly-CSharp}
+      data:
+        maxHealth: 300
+        cost: 100
+        fixCostPerHealthPoint: 1
+        generationInterval: 4
+        resourcesPerInterval: 5
 --- !u!1 &3288394557823347119
 GameObject:
   m_ObjectHideFlags: 0

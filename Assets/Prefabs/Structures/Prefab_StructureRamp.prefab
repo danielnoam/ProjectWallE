@@ -116,14 +116,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 386116e238224b778a9d13e8ff7010fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Ramp
-  buildCost: 200
   label: Ramp
-  description: A ramp
   icon: {fileID: 0}
-  maxUpgradeLevel: 1
-  startHealth: 100
   bottomPoint: {x: 0, y: 0.52, z: 0}
   gfx: {fileID: 2170286402575911496}
+  levels:
+  - rid: 4437626158574207055
+  references:
+    version: 2
+    RefIds:
+    - rid: 4437626158574207055
+      type: {class: StructureLevelData, ns: , asm: Assembly-CSharp}
+      data:
+        maxHealth: 600
+        cost: 400
+        fixCostPerHealthPoint: 0.5
 --- !u!1 &8451801116168845029
 GameObject:
   m_ObjectHideFlags: 0

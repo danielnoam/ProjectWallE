@@ -1,102 +1,90 @@
 using System;
-using DNExtensions.Utilities;
 using DNExtensions.Utilities.Button;
 using PrimeTween;
 using UnityEditor;
 using UnityEngine;
 
+[Serializable]
+public class StructureLevelData
+{
+    public float maxHealth = 100f;
+    public int cost = 100;
+    public float fixCostPerHealthPoint = 1;
+}
 
 [DisallowMultipleComponent]
 [SelectionBase]
 public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
 {
     [Header("Structure")]
-    [SerializeField] private int buildCost = 100;
     [SerializeField] private string label = "Structure";
-    [SerializeField] private string description = "A basic structure.";
     [SerializeField] private Sprite icon;
-    [SerializeField, Range(1,3)] protected int maxUpgradeLevel = 1;
-    [SerializeField] protected float startHealth = 100f;
     [SerializeField] protected Vector3 bottomPoint = Vector3.down;
     [SerializeField] protected Transform gfx;
     
-    private int _currentUpgradeLevel;
+    
+    protected int CurrentUpgradeLevel;
+    protected StructureLevelData CurrentLevelData => Levels[CurrentUpgradeLevel - 1];
     protected string StateInfo;
-    
-    public int BuildCost => buildCost;
-    public  string Label => label;
-    public string Description => description;
-    public Sprite Icon => icon;
+    protected abstract StructureLevelData[] Levels { get; }
     public float CurrentHealth { get; private set; }
-    public float MaxHealth => startHealth;
     
-    public event Action OnBuilt;
-    public event Action OnUpgraded;
-    public event Action OnBroken;
+    public string Label => label;
+    public Sprite Icon => icon;
+    public float MaxHealth => CurrentLevelData.maxHealth;
+    public int BuildCost => Levels[0].cost;
+    public int UpgradeCost => CanUpgrade() ? Levels[CurrentUpgradeLevel].cost : 0;
+    public float FixCost => (MaxHealth - CurrentHealth) * CurrentLevelData.fixCostPerHealthPoint;
+    
     public event Action<IDamageable> OnDeath;
-    
-    
 
     protected abstract void OnBuild();
+    protected abstract void OnFix();
     protected abstract void OnUpgrade();
     protected abstract void OnBreak();
-
-    
-
-
-    private void Awake()
-    {
-        ResetStats();
-    }
     
     private void OnDestroy()
     {
         StructureManager.Instance?.UnregisterStructure(this);
     }
 
-    [Button(ButtonPlayMode.OnlyWhenPlaying)]
-    protected virtual void ResetStats()
+    private void OnValidate()
     {
-        CurrentHealth = startHealth;
-        _currentUpgradeLevel = 1;
-    }
-    
-    protected virtual bool CanUpgrade()
-    {
-        return _currentUpgradeLevel < maxUpgradeLevel;
-    }
-    
-    protected virtual void PlaySpawnEffect()
-    {
+        if (Levels == null || Levels.Length == 0)
+        {
+            Debug.LogWarning($"{name}: Levels array is empty, must have at least 1 level.", this);
+        }
 
-        var spawnSequence = Sequence.Create();
-        
-        spawnSequence.Group(Tween.Scale(gfx,Vector3.zero, Vector3.one , 0.3f, Ease.OutBack));
     }
     
-
-    public void Build()
+    
+    private void Build()
     {
         StructureManager.Instance?.RegisterStructure(this);
-        ResetStats();
+        CurrentUpgradeLevel = 1;
+        CurrentHealth = CurrentLevelData.maxHealth;
         PlaySpawnEffect();
         OnBuild();
-        OnBuilt?.Invoke();
     }
-    
+
+    protected virtual void PlaySpawnEffect()
+    {
+        Sequence.Create().Group(Tween.Scale(gfx, Vector3.zero, Vector3.one, 0.3f, Ease.OutBack));
+    }
     
 
     [Button(ButtonPlayMode.OnlyWhenPlaying)]
-    private void Break()
+    public void Fix()
     {
-        StructureManager.Instance?.UnregisterStructure(this);
-        OnDeath?.Invoke(this);
-        OnBroken?.Invoke();
-        OnBreak();
+        if (CurrentHealth >= MaxHealth) return;
+        if (!ResourceManager.Instance.TrySpendResources((int)FixCost)) return;
+
+        CurrentHealth = MaxHealth;
+        OnFix();
     }
-    
+
     [Button(ButtonPlayMode.OnlyWhenPlaying)]
-    private void Upgrade()
+    public void Upgrade()
     {
         if (!CanUpgrade())
         {
@@ -104,15 +92,25 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
             return;
         }
 
-        _currentUpgradeLevel++;
+        if (!ResourceManager.Instance.TrySpendResources(UpgradeCost)) return;
+
+        CurrentUpgradeLevel++;
+        CurrentHealth = CurrentLevelData.maxHealth;
         OnUpgrade();
-        OnUpgraded?.Invoke();
     }
-    
+
+    [Button(ButtonPlayMode.OnlyWhenPlaying)]
+    private void Break()
+    {
+        StructureManager.Instance?.UnregisterStructure(this);
+        OnDeath?.Invoke(this);
+        OnBreak();
+    }
+
     public void TakeDamage(float damage, IDamageable attacker = null)
     {
         if (CurrentHealth <= 0 || damage <= 0) return;
-        
+
         CurrentHealth -= damage;
         if (CurrentHealth <= 0)
         {
@@ -121,13 +119,11 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
         }
     }
 
-
-    
     public void Deploy(Vector3 impactPoint, Vector3 surfaceNormal, Vector3 forward)
     {
         Vector3 projectedForward = Vector3.ProjectOnPlane(forward, surfaceNormal).normalized;
-        Quaternion yawRotation = projectedForward.sqrMagnitude > 0.001f 
-            ? Quaternion.LookRotation(projectedForward, surfaceNormal) 
+        Quaternion yawRotation = projectedForward.sqrMagnitude > 0.001f
+            ? Quaternion.LookRotation(projectedForward, surfaceNormal)
             : Quaternion.identity;
 
         transform.position = impactPoint - yawRotation * bottomPoint;
@@ -135,6 +131,10 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
         Build();
     }
     
+    public bool CanUpgrade() 
+    {
+        return CurrentUpgradeLevel < Levels.Length;
+    }
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()
@@ -149,7 +149,6 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
                 fontStyle = FontStyle.Bold,
                 alignment = TextAnchor.MiddleCenter
             });
-
     }
 
     private void OnDrawGizmosSelected()
@@ -159,8 +158,5 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
         Gizmos.DrawLine(transform.position, transform.position + bottomPoint);
         Handles.Label(transform.position + bottomPoint, "Bottom Point");
     }
-    
 #endif
-
-
 }

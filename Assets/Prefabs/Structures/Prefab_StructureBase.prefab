@@ -132,18 +132,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ead681678a5b4db8af32e1bcfc0eb1b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Base
-  buildCost: 500
   label: Base
-  description: A basic structure.
   icon: {fileID: 0}
-  maxUpgradeLevel: 3
-  startHealth: 1000
   bottomPoint: {x: 0, y: -1.62, z: 0}
   gfx: {fileID: 6592863634933569427}
+  levels:
+  - rid: 4437626158574207057
   rotationSpeed: 10
   moveSpeed: 0.3
   obelisk: {fileID: 4040410745440894463}
   resourceGenerator: {fileID: 899449055304212277}
+  references:
+    version: 2
+    RefIds:
+    - rid: 4437626158574207057
+      type: {class: BaseLevelData, ns: , asm: Assembly-CSharp}
+      data:
+        maxHealth: 100
+        cost: 100
+        fixCostPerHealthPoint: 1
+        generationInterval: 10
+        resourcesPerInterval: 5
 --- !u!1 &6069659134689033695
 GameObject:
   m_ObjectHideFlags: 0

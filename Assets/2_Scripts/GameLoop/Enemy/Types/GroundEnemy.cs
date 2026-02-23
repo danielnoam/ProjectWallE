@@ -11,7 +11,7 @@ public class GroundEnemy : Enemy
 
     protected override void Initialize()
     {
-        navMeshAgent.stoppingDistance = attackRange * 0.8f;
+        navMeshAgent.stoppingDistance = targetFindRange * 0.8f;
     }
 
     protected override void UpdateState()
@@ -27,12 +27,12 @@ public class GroundEnemy : Enemy
         switch (State)
         {
             case EnemyState.MovingToTarget:
-                if (distance <= attackRange)
+                if (distance <= targetFindRange)
                     State = EnemyState.Attacking;
                 break;
 
             case EnemyState.Attacking:
-                if (distance > attackRange)
+                if (distance > targetFindRange)
                 {
                     State = EnemyState.MovingToTarget;
                     SetDestination();

@@ -115,14 +115,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c9a5b9f2b3348dd85aee4c33acc2514, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunTurret
-  buildCost: 100
   label: Gun Turret
-  description: A basic turret
   icon: {fileID: 0}
-  maxUpgradeLevel: 1
-  startHealth: 100
   bottomPoint: {x: 0, y: 0, z: 0}
   gfx: {fileID: 6756884417540177175}
+  levels:
+  - rid: 4437626158574207052
   scanRotationSpeed: 35
   scanWaitDuration: 1.5
   detectionRadius: 25
@@ -149,18 +147,23 @@ MonoBehaviour:
     _useFixedUpdate: 0
     _updateType: 0
   attackRotationSpeed: 125
-  attackCooldown: 0.3
+  attackCooldown: 0.5
   firePoint: {fileID: 2441275468809066944}
-  projectilePrefab: {fileID: 8338543337846540916, guid: 63924ffbc4055854e89c01d29a67c183, type: 3}
-  projectileSettings:
-    damage: 25
-    hitLayers:
-      serializedVersion: 2
-      m_Bits: 264
-    movementType: 0
-    speed: 25
-    arcHeight: 0
+  projectileData: {fileID: 11400000, guid: 8ffdf2f42528d434f91c7d9b565e08fd, type: 2}
+  hitLayers: {fileID: 11400000, guid: 2d607d7566d764844b32be4199186943, type: 2}
   angleThreshold: 10
+  references:
+    version: 2
+    RefIds:
+    - rid: 4437626158574207052
+      type: {class: TurretLevelData, ns: , asm: Assembly-CSharp}
+      data:
+        maxHealth: 200
+        cost: 200
+        fixCostPerHealthPoint: 0.5
+        detectionRadius: 25
+        attackCooldown: 0.5
+        projectileData: {fileID: 11400000, guid: 8ffdf2f42528d434f91c7d9b565e08fd, type: 2}
 --- !u!1 &5813210165579224113
 GameObject:
   m_ObjectHideFlags: 0

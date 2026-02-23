@@ -18,19 +18,15 @@ public class FlyingEnemy : Enemy
     [SerializeField, Tooltip("Vertical bob frequency while hovering.")]
     private float hoverFrequency = 1.2f;
 
-    [Header("Altitude Settings")]
+    [Header("Obstacle Settings")]
     [SerializeField, Tooltip("Maximum distance to check for ground or obstacles below.")]
     private float obstacleCheckDistance = 30f;
-    [SerializeField, Tooltip("Layers considered as ground or obstacles for altitude maintenance.")]
-    private LayerMask obstacleMask;
-
-    [Header("Separation Settings")]
     [SerializeField, Tooltip("Radius within which other flyers trigger separation.")]
     private float separationRadius = 3f;
     [SerializeField, Tooltip("Force applied to push away from nearby flyers.")]
     private float separationForce = 8f;
-    [SerializeField, Tooltip("Layer mask identifying other flying enemies.")]
-    private LayerMask separationMask;
+    [SerializeField, Tooltip("Layers considered as ground or obstacles for altitude maintenance.")]
+    private LayerMask obstacleMask;
 
     [SerializeField,AutoGetSelf,HideInInspector] private Rigidbody rigidBody;
     
@@ -89,14 +85,14 @@ public class FlyingEnemy : Enemy
         {
             case EnemyState.MovingToTarget:
                 FlyTowardTarget();
-                if (distanceXZ <= attackRange)
+                if (distanceXZ <= targetFindRange)
                     State = EnemyState.Attacking;
                 break;
 
             case EnemyState.Attacking:
                 Hover();
                 FaceTarget(target.transform.position);
-                if (distanceXZ > attackRange)
+                if (distanceXZ > targetFindRange)
                 {
                     State = EnemyState.MovingToTarget;
                     break;
@@ -133,7 +129,7 @@ public class FlyingEnemy : Enemy
 
     private void ApplySeparation()
     {
-        Collider[] nearby = Physics.OverlapSphere(transform.position, separationRadius, separationMask);
+        Collider[] nearby = Physics.OverlapSphere(transform.position, separationRadius, obstacleMask);
         foreach (var col in nearby)
         {
             if (col.gameObject == gameObject) continue;

@@ -978,18 +978,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FlyingEnemy
   maxHealth: 100
   targetFindRange: 20
-  targetPriorities: 02000000030000000600000000000000
+  targetPriorities: 03000000010000000200000006000000
   attackCooldown: 0.5
-  attackRange: 15
-  projectileSettings:
-    damage: 0.5
-    hitLayers:
-      serializedVersion: 2
-      m_Bits: 584
-    movementType: 0
-    speed: 30
-    arcHeight: 0
-  projectilePrefab: {fileID: 8338543337846540916, guid: c8c31cbf02bd8d14d8bb0cf76912092b, type: 3}
+  projectileData: {fileID: 11400000, guid: 8ffdf2f42528d434f91c7d9b565e08fd, type: 2}
+  hitLayers: {fileID: 11400000, guid: b3e3f0ea33464b048aaf56518036cb00, type: 2}
   flightHeight: 8
   moveSpeed: 14
   heightAdjustSpeed: 4
@@ -997,14 +989,11 @@ MonoBehaviour:
   hoverAmplitude: 0.4
   hoverFrequency: 1.2
   obstacleCheckDistance: 30
+  separationRadius: 5
+  separationForce: 15
   obstacleMask:
     serializedVersion: 2
     m_Bits: 584
-  separationRadius: 5
-  separationForce: 15
-  separationMask:
-    serializedVersion: 2
-    m_Bits: 832
   rigidBody: {fileID: 2448601663206975914}
 --- !u!1 &6719073531406608010
 GameObject:

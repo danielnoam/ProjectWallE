@@ -1,26 +1,33 @@
+using System;
 using System.Collections;
+using DNExtensions.Systems.Scriptables;
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.Button;
 using PrimeTween;
 using UnityEngine;
-using Sequence = PrimeTween.Sequence;
+
+[Serializable]
+public class TurretLevelData : StructureLevelData
+{
+    public float detectionRadius = 25f;
+    public float attackRotationSpeed = 125f;
+    public float attackCooldown = 0.3f;
+    [SOSelector("Assets/Data")] public ProjectileData projectileData;
+}
+
+public enum TurretState { Scanning, Attacking, Broken }
 
 public abstract class Turret : Structure
 {
     [Header("Turret")]
+    [SerializeReference, DrawSerializeReference] private TurretLevelData[] levels = Array.Empty<TurretLevelData>();
+    [SerializeField, SOSelector("Assets/Data")] protected SOLayerMask hitLayers;
     [SerializeField] private float scanRotationSpeed = 35f;
     [SerializeField] private float scanWaitDuration = 1.5f;
-    [SerializeField] private float detectionRadius = 25f;
-    [SerializeField] private Vector3 brokenRotation;
+    [SerializeField] protected Vector3 brokenRotation;
     [SerializeField] protected Transform headTransform;
-
-    [Header("Attack")]
-    [SerializeField] private ShakeSettings attackAnimationSettings;
-    [SerializeField] protected float attackRotationSpeed = 125f;
-    [SerializeField] private float attackCooldown = 0.3f;
-    [SerializeField] private Transform firePoint;
-    [SerializeField, PrefabSelector("Assets/Prefabs")] protected Projectile projectilePrefab;
-    [SerializeField] protected ProjectileSettings projectileSettings;
+    [SerializeField] protected Transform firePoint;
+    [SerializeField] protected ShakeSettings attackAnimationSettings;
 
     private float _attackTimer;
     private TurretState _currentState;
@@ -28,7 +35,9 @@ public abstract class Turret : Structure
     private Coroutine _scanRoutine;
     private Sequence _attackSequence;
 
-    private enum TurretState { Scanning, Idle, Attacking, Broken }
+    protected TurretLevelData CurrentTurretLevelData => (TurretLevelData)Levels[CurrentUpgradeLevel - 1];
+    protected override StructureLevelData[] Levels => levels;
+    
 
     protected abstract Quaternion GetAimRotation(Vector3 targetPosition);
     protected abstract bool CanFire(Vector3 targetPosition);
@@ -36,11 +45,8 @@ public abstract class Turret : Structure
     private void OnDestroy()
     {
         if (_attackSequence.isAlive) _attackSequence.Stop();
-
         if (_currentTarget != null)
-        {
             _currentTarget.OnDeath -= OnTargetDeath;
-        }
     }
 
     private void Update()
@@ -55,12 +61,12 @@ public abstract class Turret : Structure
                 headTransform.rotation = Quaternion.RotateTowards(
                     headTransform.rotation,
                     GetAimRotation(targetPosition),
-                    attackRotationSpeed * Time.deltaTime
+                    CurrentTurretLevelData.attackRotationSpeed * Time.deltaTime
                 );
 
                 if (!CanFire(targetPosition)) return;
 
-                if (_attackTimer >= attackCooldown)
+                if (_attackTimer >= CurrentTurretLevelData.attackCooldown)
                 {
                     Vector3 capturedPosition = targetPosition;
                     _attackSequence = Sequence.Create();
@@ -76,14 +82,13 @@ public abstract class Turret : Structure
             }
         }
 
-        StateInfo = $"State: {_currentState} \nHealth: {CurrentHealth}/{startHealth}";
+        StateInfo = $"State: {_currentState} \nHealth: {CurrentHealth}/{MaxHealth}";
     }
 
     private void Fire(Vector3 targetPosition)
     {
-        Vector3 direction = (targetPosition - headTransform.position).normalized;
-        var projectile = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
-        projectile.Initialize(this, projectileSettings, direction, targetPosition);
+        Vector3 direction = (targetPosition - firePoint.position).normalized;
+        CurrentTurretLevelData.projectileData?.Spawn(this, hitLayers.Value, firePoint.position, direction, targetPosition);
     }
 
     protected override void OnBuild()
@@ -93,8 +98,14 @@ public abstract class Turret : Structure
 
     protected override void OnUpgrade()
     {
-        
+        StartScanning();
     }
+    
+    protected override void OnFix()
+    {
+        StartScanning();
+    }
+
 
     protected override void OnBreak()
     {
@@ -112,18 +123,9 @@ public abstract class Turret : Structure
             _scanRoutine = null;
         }
 
-        Tween.LocalRotation(headTransform, Quaternion.Euler(brokenRotation), duration: 0.5f);
-    }
-
-    [Button(ButtonPlayMode.OnlyWhenPlaying)]
-    private void Idle()
-    {
-        _currentState = TurretState.Idle;
-        if (_scanRoutine != null)
-        {
-            StopCoroutine(_scanRoutine);
-            _scanRoutine = null;
-        }
+        var endRotation = headTransform.localEulerAngles;
+        endRotation.x = brokenRotation.x;
+        Tween.LocalRotation(headTransform, Quaternion.Euler(endRotation), duration: 1f);
     }
 
     [Button(ButtonPlayMode.OnlyWhenPlaying)]
@@ -169,9 +171,7 @@ public abstract class Turret : Structure
         if (target == null) return;
 
         if (_currentTarget != null)
-        {
             _currentTarget.OnDeath -= OnTargetDeath;
-        }
 
         _currentState = TurretState.Attacking;
         _currentTarget = target;
@@ -190,7 +190,7 @@ public abstract class Turret : Structure
 
     private bool TryAcquireTarget()
     {
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius, projectileSettings.hitLayers);
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, CurrentTurretLevelData.detectionRadius, hitLayers.Value);
         foreach (var hitCollider in hitColliders)
         {
             if (hitCollider.TryGetComponent<Enemy>(out var enemy))
@@ -205,6 +205,9 @@ public abstract class Turret : Structure
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, detectionRadius);
+        if (levels is { Length: > 0 } && levels[0] != null)
+        {
+            Gizmos.DrawWireSphere(transform.position, CurrentTurretLevelData.detectionRadius);
+        }
     }
 }

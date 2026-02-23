@@ -4,13 +4,13 @@ public class MortarTurret : Turret
 {
     protected override Quaternion GetAimRotation(Vector3 targetPosition)
     {
-        Vector3 direction = (targetPosition - headTransform.position).normalized;
-        direction = (direction + Vector3.up).normalized;
-        return Quaternion.LookRotation(direction);
+        Vector3 launchVelocity = ProjectileUtility.GetArcLaunchVelocity(headTransform.position, targetPosition, CurrentTurretLevelData.projectileData.speed);
+        return Quaternion.LookRotation(launchVelocity.normalized);
     }
 
     protected override bool CanFire(Vector3 targetPosition)
     {
-        return true;
+        Vector3 launchVelocity = ProjectileUtility.GetArcLaunchVelocity(headTransform.position, targetPosition, CurrentTurretLevelData.projectileData.speed);
+        return Quaternion.Angle(headTransform.rotation, Quaternion.LookRotation(launchVelocity.normalized)) < 5f;
     }
 }

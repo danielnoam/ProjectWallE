@@ -115,18 +115,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4530925dd93b44439533af7dc35dbf36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MortarTurret
-  buildCost: 200
   label: Mortar Turret
-  description: A mortar turret
   icon: {fileID: 0}
-  maxUpgradeLevel: 1
-  startHealth: 100
   bottomPoint: {x: 0, y: -1, z: 0}
   gfx: {fileID: 6756884417540177175}
+  levels:
+  - rid: 4437626158574207051
   scanRotationSpeed: 35
   scanWaitDuration: 1.5
   detectionRadius: 55
-  brokenRotation: {x: 50, y: 0, z: 0}
+  brokenRotation: {x: 80, y: 0, z: 0}
   headTransform: {fileID: 3118065064727651805}
   attackAnimationSettings:
     strength: {x: 0.3, y: 0.3, z: 0.3}
@@ -151,15 +149,20 @@ MonoBehaviour:
   attackRotationSpeed: 125
   attackCooldown: 2
   firePoint: {fileID: 4716077006973447867}
-  projectilePrefab: {fileID: 8338543337846540916, guid: 5bd177565f170f8498a68ad83c8892d2, type: 3}
-  projectileSettings:
-    damage: 35
-    hitLayers:
-      serializedVersion: 2
-      m_Bits: 264
-    movementType: 1
-    speed: 200
-    arcHeight: 100
+  projectileData: {fileID: 11400000, guid: c32a03d395cada347bd4ebe76d2ed779, type: 2}
+  hitLayers: {fileID: 11400000, guid: 2d607d7566d764844b32be4199186943, type: 2}
+  references:
+    version: 2
+    RefIds:
+    - rid: 4437626158574207051
+      type: {class: TurretLevelData, ns: , asm: Assembly-CSharp}
+      data:
+        maxHealth: 350
+        cost: 350
+        fixCostPerHealthPoint: 1
+        detectionRadius: 55
+        attackCooldown: 2
+        projectileData: {fileID: 11400000, guid: c32a03d395cada347bd4ebe76d2ed779, type: 2}
 --- !u!1 &5813210165579224113
 GameObject:
   m_ObjectHideFlags: 0

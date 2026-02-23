@@ -1,11 +1,12 @@
 using System;
+using DNExtensions.Systems.Scriptables;
 using DNExtensions.Utilities;
 using UnityEngine;
 
 public enum TargetPriority
 {
     Player,
-    DamageGiver,
+    PlayerInRange,
     NearestBase,
     NearestTurretInRange,
     NearestGeneratorInRange,
@@ -20,16 +21,14 @@ public abstract class Enemy : MonoBehaviour, IDamageable
 {
     [Header("Settings")]
     [SerializeField] protected float maxHealth = 100f;
-    [SerializeField] private float targetFindRange = 20f;
-    [SerializeField] private TargetPriority[] targetPriorities = new[] { TargetPriority.NearestBase };
+    [SerializeField] protected float targetFindRange = 20f;
+    [SerializeField] protected TargetPriority[] targetPriorities = new[] { TargetPriority.NearestBase };
 
     [Header("Attack")]
     [SerializeField] protected float attackCooldown = 1f;
-    [SerializeField] protected float attackRange = 15f;
-    [SerializeField] private ProjectileSettings projectileSettings;
-    [SerializeField, PrefabSelector("Assets/Prefabs")] private Projectile projectilePrefab;
-
-    private IDamageable _lastAttacker;
+    [SerializeField, SOSelector("Assets/Data")] protected ProjectileData projectileData;
+    [SerializeField, SOSelector("Assets/Data")] protected SOLayerMask hitLayers;
+    
     private float _currentHealth;
 
     protected EnemyState State = EnemyState.MovingToTarget;
@@ -113,8 +112,10 @@ public abstract class Enemy : MonoBehaviour, IDamageable
                 return StructureManager.Instance?.GetNearestTurretInRange(transform.position, targetFindRange);
             case TargetPriority.WeakestStructureInRange:
                 return StructureManager.Instance?.GetWeakestStructureInRange(transform.position, targetFindRange);
-            case TargetPriority.DamageGiver:
-                return _lastAttacker;
+            case TargetPriority.PlayerInRange:
+                var player = LevelManager.Instance?.Player;
+                if (!player) return null;
+                return Vector3.Distance(transform.position, (player as Component).transform.position) <= targetFindRange ? player as IDamageable : null;
             case TargetPriority.NearestGeneratorInRange:
                 return StructureManager.Instance?.GetNearestGeneratorInRange(transform.position, targetFindRange);
             case TargetPriority.NearestStructure:
@@ -140,8 +141,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         if (CurrentTarget is Component targetComponent && targetComponent)
         {
             Vector3 direction = (targetComponent.transform.position - transform.position).normalized;
-            Projectile projectile = Instantiate(projectilePrefab, transform.position, Quaternion.LookRotation(direction));
-            projectile.Initialize(this, projectileSettings, direction, transform.position);
+            projectileData?.Spawn(this, hitLayers.Value, transform.position, direction, targetComponent.transform.position);
         }
     }
 
@@ -151,13 +151,6 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         if (_currentHealth <= 0)
         {
             Die();
-            return;
-        }
-
-        if (attacker != null)
-        {
-            _lastAttacker = attacker;
-            UpdateTarget();
         }
     }
     
@@ -186,7 +179,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     protected virtual void OnDrawGizmosSelected()
     {
         Gizmos.color = new Color(1f, 0.5f, 0f, 0.3f);
-        Gizmos.DrawWireSphere(transform.position, attackRange);
+        Gizmos.DrawWireSphere(transform.position, targetFindRange);
     }
 #endif
 }
