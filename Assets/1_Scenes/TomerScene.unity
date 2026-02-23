@@ -2423,8 +2423,8 @@ MonoBehaviour:
   cameraTransform: {fileID: 330585546}
   groundHeight: 0.75
   maxCheckHeight: 1.25
-  springStrength: 100
-  springDamping: 8
+  springStrength: 150
+  springDamping: 12
   moveAccel: 20
   dirChangeAccelFactor:
     serializedVersion: 2
@@ -2463,10 +2463,10 @@ MonoBehaviour:
   forcePointBelowCOM: 0.25
   groundMoveFactor: 1
   airMoveFactor: 0.35
-  uprightStrength: 80
-  uprightDamping: 12
-  yawStrength: 40
-  yawDamping: 8
+  uprightStrength: 40
+  uprightDamping: 6
+  yawStrength: 60
+  yawDamping: 10
 --- !u!114 &1499038485
 MonoBehaviour:
   m_ObjectHideFlags: 0
