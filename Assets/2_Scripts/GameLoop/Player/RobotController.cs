@@ -29,6 +29,10 @@ namespace ProjectWallE
         [SerializeField] private float groundMoveFactor = 1f;     // optionally reduce in air
         [SerializeField] private float airMoveFactor = 0.35f;
         
+        [Header("Jump Settings")]
+        [SerializeField] private float jumpHeight = 3f;
+        [SerializeField] private float jumpBuffer = 0.2f;
+        
         [Header("Rotation Settings")]
         [SerializeField] private float uprightStrength = 80f;
         [SerializeField] private float uprightDamping = 12f;
@@ -36,18 +40,33 @@ namespace ProjectWallE
         [SerializeField] private float yawDamping = 8f;
         
         private bool _isGrounded = false;
+        private bool _isJumpAvail = false;
+        private bool _isJumping = false;
+        private float _jumpTimer = 0f;
+        
+        /// <summary>
+        /// controls how much dv affects the acceleration (bigger = less control)
+        /// </summary>
+        private float accelControlFactor => moveAccel * 0.25f;
 
 
         void Awake()
         {
             _input = GetComponent<RobotInput>();
         }
+
+        void Update()
+        {
+            JumpBufferTimer();
+        }
         public void ApplyMovement()
         {
+            UpdateJump();
             UpdateGroundHeight();
             UpdateLocomotion();
             UpdateRotation();
         }
+        
 
         #region Locomotion
 
@@ -95,7 +114,7 @@ namespace ProjectWallE
             float dirChangeFactor = Vector3.Dot(desiredHorizVel.normalized, horizVel.normalized);
             float accelCap = dirChangeAccelFactor.Evaluate(dirChangeFactor) * moveAccel;
 
-            Vector3 accel = Vector3.ClampMagnitude(dv * moveAccel / 4f, accelCap);
+            Vector3 accel = Vector3.ClampMagnitude(dv * accelControlFactor, accelCap);
             return accel * control;
         }
 
@@ -112,8 +131,56 @@ namespace ProjectWallE
             Vector3 horizVel = new Vector3(vel.x, 0f, vel.z);
             Vector3 dv = -horizVel;
 
-            Vector3 brakeAccel = Vector3.ClampMagnitude(dv * moveAccel / 4f, moveAccel);
+            Vector3 brakeAccel = Vector3.ClampMagnitude(dv * accelControlFactor, moveAccel);
             playerRB.AddForce(brakeAccel * control, ForceMode.Acceleration);
+        }
+        
+        #endregion
+        
+        #region Jumping
+
+        private void UpdateJump()
+        {
+            bool isGrounded = IsGrounded(out RaycastHit hit);
+            _isJumping = _isJumping && isGrounded;
+            if(!_isJumpAvail || !isGrounded || _isJumping) return;
+            
+            float groundOffset = groundHeight - hit.distance;
+           Jump(groundOffset);
+        }
+
+        private void Jump(float groundOffset = 0)
+        {
+            _isJumpAvail = false;
+            _isJumping = true;
+            _isGrounded = false;
+
+            float gravity = Mathf.Abs(Physics.gravity.y);
+            float targetHeight = jumpHeight + groundOffset;
+
+            float desiredJumpVel = Mathf.Sqrt(2f * gravity * targetHeight);
+
+            float currentYVel = playerRB.linearVelocity.y;
+            float deltaV = desiredJumpVel - currentYVel;
+
+            if (deltaV <= 0f)
+                return;
+
+            Vector3 forcePoint = playerRB.worldCenterOfMass - transform.up * forcePointBelowCOM;
+            playerRB.AddForceAtPosition(Vector3.up * deltaV, forcePoint, ForceMode.VelocityChange);
+        }
+
+        //called in update
+        private void JumpBufferTimer()
+        {
+            if (_input.JumpPressed)
+            {
+                _isJumpAvail = true;
+                _jumpTimer = Time.time + jumpBuffer;
+            }
+            
+            if(_jumpTimer <= Time.time) { _isJumpAvail = false; }
+
         }
         
         #endregion
@@ -122,17 +189,18 @@ namespace ProjectWallE
 
         private void UpdateGroundHeight()
         {
-            if (!IsGrounded(out RaycastHit hit)) return;
+            if (!IsGrounded(out RaycastHit hit) || _isJumping) return;
             
             float offset = hit.distance - groundHeight;
 
             float yVel = playerRB.linearVelocity.y;
 
-            float suspensionForce =
-                (-offset * springStrength) -
-                (yVel * springDamping);
+            float gravityComp = -Physics.gravity.y;
+            float suspensionAccel = gravityComp + (-offset * springStrength) - (yVel * springDamping);
 
-            playerRB.AddForce(Vector3.up * suspensionForce);
+            playerRB.AddForce(Vector3.up * suspensionAccel, ForceMode.Acceleration);
+            
+            print(hit.distance);
         }
         
         //helpers
@@ -149,7 +217,7 @@ namespace ProjectWallE
                 groundLayer,
                 QueryTriggerInteraction.Ignore
             );
-
+            
             _isGrounded = groundedNow;
             return groundedNow;
         }
@@ -173,7 +241,7 @@ namespace ProjectWallE
 
             Vector3 uprightTorque = (tiltAxisWorld * uprightStrength) - (tiltAngVelWorld * uprightDamping);
 
-            playerRB.AddTorque(uprightTorque);
+            playerRB.AddTorque(uprightTorque, ForceMode.Acceleration);
         }
 
         private Vector3 GetUprightCorrectionAxisWorld()
@@ -206,7 +274,7 @@ namespace ProjectWallE
             float yawVelLocal = GetLocalYawAngularVelocity();
             float yawAccel = (yawErrorRad * yawStrength) - (yawVelLocal * yawDamping);
 
-            playerRB.AddRelativeTorque(0f, yawAccel, 0f);
+            playerRB.AddRelativeTorque(0f, yawAccel, 0f, ForceMode.Acceleration);
         }
 
         private bool TryGetFlattenedCameraForward(out Vector3 camForwardFlat)
