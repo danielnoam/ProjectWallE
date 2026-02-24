@@ -17,7 +17,7 @@ public enum TargetPriority
 public enum EnemyState { Attacking, MovingToTarget, Idle }
 
 [SelectionBase]
-public abstract class Enemy : MonoBehaviour, IDamageable
+public abstract class Enemy : MonoBehaviour, IDamageable, IPushable
 {
     [Header("Settings")]
     [SerializeField] protected float maxHealth = 100f;
@@ -153,15 +153,18 @@ public abstract class Enemy : MonoBehaviour, IDamageable
             Die();
         }
     }
-    
+
     public void Push(Vector3 direction, float force)
     {
         OnPush(direction, force);
     }
+    
 
 #if UNITY_EDITOR
     protected virtual void OnDrawGizmos()
     {
+        if (!Application.isPlaying) return;
+        
         string targetName = (CurrentTarget is Component t && t) ? t.name : "None";
 
         UnityEditor.Handles.Label(

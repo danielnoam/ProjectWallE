@@ -35,7 +35,7 @@ public abstract class Turret : Structure
     private Coroutine _scanRoutine;
     private Sequence _attackSequence;
 
-    protected TurretLevelData CurrentTurretLevelData => (TurretLevelData)Levels[CurrentUpgradeLevel - 1];
+    protected TurretLevelData CurrentTurretLevelData => (TurretLevelData)Levels[currentUpgradeLevel - 1];
     protected override StructureLevelData[] Levels => levels;
     
 
@@ -202,12 +202,19 @@ public abstract class Turret : Structure
         return false;
     }
 
-    private void OnDrawGizmosSelected()
+#if UNITY_EDITOR
+    protected override void OnDrawGizmosSelected()
     {
+        base.OnDrawGizmosSelected();
+        if (!Application.isPlaying || levels == null) return;
+
+            
         Gizmos.color = Color.red;
         if (levels is { Length: > 0 } && levels[0] != null)
         {
             Gizmos.DrawWireSphere(transform.position, CurrentTurretLevelData.detectionRadius);
         }
     }
+#endif
+
 }

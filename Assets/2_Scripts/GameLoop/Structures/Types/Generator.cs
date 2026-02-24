@@ -25,7 +25,7 @@ public class Generator : Structure
 
 
     private Sequence _pumpAnimation;
-    private GeneratorLevelData CurrentGeneratorLevelData => (GeneratorLevelData)Levels[CurrentUpgradeLevel - 1];
+    private GeneratorLevelData CurrentGeneratorLevelData => (GeneratorLevelData)Levels[currentUpgradeLevel - 1];
     
     protected override StructureLevelData[] Levels => levels;
 

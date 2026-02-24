@@ -4170,6 +4170,7 @@ GameObject:
   - component: {fileID: 1505572071}
   - component: {fileID: 1505572070}
   - component: {fileID: 1505572073}
+  - component: {fileID: 1505572074}
   - component: {fileID: 1505572069}
   m_Layer: 9
   m_Name: Player
@@ -4471,6 +4472,23 @@ MonoBehaviour:
   - {fileID: 7498951326900205619, guid: 22eee64180129c841a1ce897f19c4847, type: 3}
   - {fileID: 2308925685089836474, guid: eb9518b19b0f8d64fa00d3c4d128b9bf, type: 3}
   - {fileID: 4497719034383223877, guid: f8af469e485543e4bb4aedbcff5e5358, type: 3}
+--- !u!114 &1505572074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1505572064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da3f03942bd4251800628fa5b420e2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerShooter
+  fireRate: 0.2
+  projectileData: {fileID: 11400000, guid: 8ffdf2f42528d434f91c7d9b565e08fd, type: 2}
+  enemyLayerMask: {fileID: 11400000, guid: 2d607d7566d764844b32be4199186943, type: 2}
+  firePoint: {fileID: 1505572068}
+  mainCamera: {fileID: 591326629}
 --- !u!1 &1538142517
 GameObject:
   m_ObjectHideFlags: 0
@@ -5365,7 +5383,7 @@ MonoBehaviour:
   distanceToCameraAffectsScale: 1
   minMaxScaleMultiplier:
     minValue: 0.2
-    maxValue: 1.2
+    maxValue: 1
   minMaxDistance:
     minValue: 10
     maxValue: 35

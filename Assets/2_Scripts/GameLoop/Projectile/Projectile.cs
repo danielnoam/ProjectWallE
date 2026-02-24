@@ -1,12 +1,9 @@
+using System;
+using DNExtensions.Utilities;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-
-
-
-    
-
     private IDamageable _owner;
     private ProjectileData _data;
     private float _maxLifetime;
@@ -51,10 +48,49 @@ public class Projectile : MonoBehaviour
 
         _hitSomething = true;
 
-        if (other.TryGetComponent<IDamageable>(out var damageable))
+        switch (_data.damageType)
         {
-            damageable.TakeDamage(_data.damage, _owner);
+            case ProjectileDamageType.Single:
+                
+                if (other.TryGetComponent<IDamageable>(out var damageable))
+                {
+                    damageable.TakeDamage(_data.damage, _owner);
+                }
+        
+                if (other.TryGetComponent<IPushable>(out var pushable))
+                {
+                    Vector3 pushDirection = (other.transform.position - transform.position).normalized;
+                    pushable.Push(pushDirection, _data.pushStrength);
+                }
+                
+                break;
+            case ProjectileDamageType.AreaOfEffect:
+                
+                Collider[] damagedObjects = Physics.OverlapSphere(transform.position, _data.aoeRadius, _hitLayers);
+                foreach (var damagedObject in damagedObjects)
+                {
+                    float distance = Vector3.Distance(transform.position, damagedObject.transform.position);
+                    float normalizedDistance = distance / _data.aoeRadius;
+                    float damage = _data.damageRange.Lerp(1 - normalizedDistance);
+                    
+                    if (damagedObject.TryGetComponent<IDamageable>(out var aoeHit))
+                    {
+                        aoeHit .TakeDamage(damage, _owner);
+                    }
+
+                    if (damagedObject.TryGetComponent<IPushable>(out var aoePush))
+                    {
+                        Vector3 pushDirection = (damagedObject.transform.position - transform.position).normalized;
+                        aoePush.Push(pushDirection, _data.pushStrength);
+                    }
+                }
+                
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
+
+
 
         Destroy(gameObject);
     }

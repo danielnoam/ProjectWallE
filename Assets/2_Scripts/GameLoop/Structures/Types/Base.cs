@@ -22,7 +22,7 @@ public class Base : Structure
     [SerializeField] private Transform obelisk;
     [SerializeField, AutoGetSelf, HideInInspector] private ResourceGenerator resourceGenerator;
 
-    private BaseLevelData CurrentBaseLevelData => (BaseLevelData)Levels[CurrentUpgradeLevel - 1];
+    private BaseLevelData CurrentBaseLevelData => (BaseLevelData)Levels[currentUpgradeLevel - 1];
     protected override StructureLevelData[] Levels => levels;
     
     private void Update()

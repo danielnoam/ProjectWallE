@@ -44,10 +44,10 @@ public class Pod : MonoBehaviour
         
         foreach (Collider col in enemiesInRange)
         {
-            if (col.TryGetComponent(out Enemy enemy))
+            if (col.TryGetComponent(out IPushable pushable))
             {
                 Vector3 direction = (col.transform.position - impactPoint).normalized;
-                enemy.Push(direction, 50);
+                pushable.Push(direction, 50);
             }
         }
         

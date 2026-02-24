@@ -134,6 +134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Base
   label: Base
   icon: {fileID: 0}
+  topPoint: {x: 0, y: 9.7, z: 0}
   bottomPoint: {x: 0, y: -1.62, z: 0}
   gfx: {fileID: 6592863634933569427}
   levels:
@@ -148,11 +149,11 @@ MonoBehaviour:
     - rid: 4437626158574207057
       type: {class: BaseLevelData, ns: , asm: Assembly-CSharp}
       data:
-        maxHealth: 100
+        maxHealth: 1000
         cost: 100
-        fixCostPerHealthPoint: 1
-        generationInterval: 10
-        resourcesPerInterval: 5
+        fixCostPerHealthPoint: 2
+        generationInterval: 5
+        resourcesPerInterval: 3
 --- !u!1 &6069659134689033695
 GameObject:
   m_ObjectHideFlags: 0

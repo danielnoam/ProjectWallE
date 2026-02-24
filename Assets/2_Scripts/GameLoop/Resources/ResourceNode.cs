@@ -38,13 +38,18 @@ public class ResourceNode : MonoBehaviour, IDamageable
             DestroySelf();
         }
     }
-    
 
-    
-    
+    public void Push(Vector3 direction, float force)
+    {
+        
+    }
+
+
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
+        if (!Application.isPlaying) return;
+
         UnityEditor.Handles.Label(
             transform.position + Vector3.up * 2.5f,
             $"Health: {currentHealth}/{maxHealth}",

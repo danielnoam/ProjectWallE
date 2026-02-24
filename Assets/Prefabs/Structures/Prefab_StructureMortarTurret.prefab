@@ -117,15 +117,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MortarTurret
   label: Mortar Turret
   icon: {fileID: 0}
-  bottomPoint: {x: 0, y: -1, z: 0}
+  topPoint: {x: 0, y: 5.28, z: 0}
+  bottomPoint: {x: 0, y: -0.73, z: 0}
   gfx: {fileID: 6756884417540177175}
   levels:
   - rid: 4437626158574207051
+  hitLayers: {fileID: 11400000, guid: 2d607d7566d764844b32be4199186943, type: 2}
   scanRotationSpeed: 35
   scanWaitDuration: 1.5
-  detectionRadius: 55
   brokenRotation: {x: 80, y: 0, z: 0}
   headTransform: {fileID: 3118065064727651805}
+  firePoint: {fileID: 4716077006973447867}
   attackAnimationSettings:
     strength: {x: 0.3, y: 0.3, z: 0.3}
     duration: 0.2
@@ -146,11 +148,6 @@ MonoBehaviour:
     useUnscaledTime: 0
     _useFixedUpdate: 0
     _updateType: 0
-  attackRotationSpeed: 125
-  attackCooldown: 2
-  firePoint: {fileID: 4716077006973447867}
-  projectileData: {fileID: 11400000, guid: c32a03d395cada347bd4ebe76d2ed779, type: 2}
-  hitLayers: {fileID: 11400000, guid: 2d607d7566d764844b32be4199186943, type: 2}
   references:
     version: 2
     RefIds:
@@ -161,6 +158,7 @@ MonoBehaviour:
         cost: 350
         fixCostPerHealthPoint: 1
         detectionRadius: 55
+        attackRotationSpeed: 125
         attackCooldown: 2
         projectileData: {fileID: 11400000, guid: c32a03d395cada347bd4ebe76d2ed779, type: 2}
 --- !u!1 &5813210165579224113

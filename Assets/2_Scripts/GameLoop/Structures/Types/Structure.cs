@@ -7,8 +7,11 @@ using UnityEngine;
 [Serializable]
 public class StructureLevelData
 {
+    [Tooltip("Max health for this level")]
     public float maxHealth = 100f;
+    [Tooltip("Cost to upgrade to this level")]
     public int cost = 100;
+    [Tooltip("Cost to fix per 1 health point")]
     public float fixCostPerHealthPoint = 1;
 }
 
@@ -19,21 +22,24 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     [Header("Structure")]
     [SerializeField] private string label = "Structure";
     [SerializeField] private Sprite icon;
+    [SerializeField] protected Vector3 topPoint = Vector3.up;
     [SerializeField] protected Vector3 bottomPoint = Vector3.down;
     [SerializeField] protected Transform gfx;
     
     
-    protected int CurrentUpgradeLevel;
-    protected StructureLevelData CurrentLevelData => Levels[CurrentUpgradeLevel - 1];
+
+    protected StructureLevelData CurrentLevelData => Levels[currentUpgradeLevel - 1];
     protected string StateInfo;
     protected abstract StructureLevelData[] Levels { get; }
     public float CurrentHealth { get; private set; }
     
+    public int currentUpgradeLevel;
     public string Label => label;
     public Sprite Icon => icon;
+    public Vector3 TopPoint => transform.position + transform.TransformVector(topPoint);
     public float MaxHealth => CurrentLevelData.maxHealth;
     public int BuildCost => Levels[0].cost;
-    public int UpgradeCost => CanUpgrade() ? Levels[CurrentUpgradeLevel].cost : 0;
+    public int UpgradeCost => CanUpgrade() ? Levels[currentUpgradeLevel].cost : 0;
     public float FixCost => (MaxHealth - CurrentHealth) * CurrentLevelData.fixCostPerHealthPoint;
     
     public event Action<IDamageable> OnDeath;
@@ -61,7 +67,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     private void Build()
     {
         StructureManager.Instance?.RegisterStructure(this);
-        CurrentUpgradeLevel = 1;
+        currentUpgradeLevel = 1;
         CurrentHealth = CurrentLevelData.maxHealth;
         PlaySpawnEffect();
         OnBuild();
@@ -94,7 +100,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
 
         if (!ResourceManager.Instance.TrySpendResources(UpgradeCost)) return;
 
-        CurrentUpgradeLevel++;
+        currentUpgradeLevel++;
         CurrentHealth = CurrentLevelData.maxHealth;
         OnUpgrade();
     }
@@ -133,11 +139,11 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     
     public bool CanUpgrade() 
     {
-        return CurrentUpgradeLevel < Levels.Length;
+        return currentUpgradeLevel < Levels.Length;
     }
 
 #if UNITY_EDITOR
-    private void OnDrawGizmos()
+    protected virtual void OnDrawGizmos()
     {
         Handles.Label(
             transform.position + Vector3.up * 2.5f,
@@ -151,12 +157,17 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
             });
     }
 
-    private void OnDrawGizmosSelected()
+    protected virtual void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position + bottomPoint, 0.05f);
         Gizmos.DrawLine(transform.position, transform.position + bottomPoint);
         Handles.Label(transform.position + bottomPoint, "Bottom Point");
+        
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position + topPoint, 0.05f);
+        Gizmos.DrawLine(transform.position, transform.position + topPoint);
+        Handles.Label(transform.position + topPoint, "Top Point");
     }
 #endif
 }

@@ -90,10 +90,14 @@ public class PlayerStructureBuilder : MonoBehaviour
 
         if (Physics.Raycast(_buildRay, out RaycastHit structureHit, buildRange, structureLayerMask))
         {
-            _targetedStructure = structureHit.collider.GetComponentInParent<Structure>();
-            _canBuild = false;
-            lineRenderer.SetPosition(1, structureHit.point);
-            BuildPrompt.Instance?.Hide();
+            if (structureHit.collider.TryGetComponent(out Structure structure))
+            {
+                _targetedStructure = structure;
+                _canBuild = false;
+                lineRenderer.SetPosition(1, structureHit.point);
+                if (_menuOpen && _targetedStructure) BuildPrompt.Instance?.Show(_targetedStructure.TopPoint);
+            }
+
         }
         else if (Physics.Raycast(_buildRay, buildRange, blockBuildLayerMask))
         {
@@ -172,12 +176,12 @@ public class PlayerStructureBuilder : MonoBehaviour
         bool canFix = structure.CurrentHealth < structure.MaxHealth;
 
         string upgradeLabel = canUpgrade 
-            ? $"Upgrade\n{structure.UpgradeCost}" 
-            : "At Max Level";
+            ? $"Upgrade {structure.currentUpgradeLevel} -> {structure.currentUpgradeLevel + 1}\n{structure.UpgradeCost}" 
+            : $"At Max Level\n {structure.currentUpgradeLevel}/{structure.currentUpgradeLevel}";
     
         string fixLabel = canFix 
-            ? $"Fix\n{(int)structure.FixCost}" 
-            : "At Full Health";
+            ? $"Fix\n{(int)structure.FixCost}\n{structure.CurrentHealth}/{structure.MaxHealth}" 
+            : $"At Full Health\n{structure.CurrentHealth}/{structure.MaxHealth}";
 
         return new List<StructureAction>
         {
