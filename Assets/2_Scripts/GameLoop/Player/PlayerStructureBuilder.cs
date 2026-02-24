@@ -180,7 +180,7 @@ public class PlayerStructureBuilder : MonoBehaviour
             : $"At Max Level\n {structure.currentUpgradeLevel}/{structure.currentUpgradeLevel}";
     
         string fixLabel = canFix 
-            ? $"Fix\n{(int)structure.FixCost}\n{structure.CurrentHealth}/{structure.MaxHealth}" 
+            ? $"Fix {(int)structure.FixCost}\n{structure.CurrentHealth}/{structure.MaxHealth}" 
             : $"At Full Health\n{structure.CurrentHealth}/{structure.MaxHealth}";
 
         return new List<StructureAction>

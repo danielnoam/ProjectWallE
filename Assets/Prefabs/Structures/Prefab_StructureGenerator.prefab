@@ -227,7 +227,6 @@ GameObject:
   - component: {fileID: 7733275894302226080}
   - component: {fileID: 5977397639411850196}
   - component: {fileID: 6748665373679740288}
-  - component: {fileID: 5619648184734559487}
   - component: {fileID: 2308925685089836474}
   m_Layer: 6
   m_Name: Prefab_StructureGenerator
@@ -289,21 +288,6 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
---- !u!114 &5619648184734559487
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3026512305252668660}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 253d98dac5f24343a48ad587e917597c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ResourceGenerator
-  resourcesPerInterval: 2
-  generationInterval: 1
-  generating: 0
 --- !u!114 &2308925685089836474
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -321,9 +305,11 @@ MonoBehaviour:
   topPoint: {x: 0, y: 2.56, z: 0}
   bottomPoint: {x: 0, y: -0.75, z: 0}
   gfx: {fileID: 2170286402575911496}
+  currentUpgradeLevel: 0
   levels:
-  - rid: 4437626158574207053
-  - rid: 4437626158574207056
+  - rid: 4437626180964712524
+  - rid: 4437626180964712525
+  generating: 0
   pumpAnimationSettings:
     strength: {x: 0, y: 0, z: 5}
     duration: 0.2
@@ -348,26 +334,25 @@ MonoBehaviour:
   - {fileID: 5220587565146210407}
   - {fileID: 8802858184367549448}
   - {fileID: 8319919916144149395}
-  resourceGenerator: {fileID: 5619648184734559487}
   references:
     version: 2
     RefIds:
-    - rid: 4437626158574207053
-      type: {class: GeneratorLevelData, ns: , asm: Assembly-CSharp}
+    - rid: 4437626180964712524
+      type: {class: ResourceGeneratorLevelData, ns: , asm: Assembly-CSharp}
       data:
-        maxHealth: 200
-        cost: 200
-        fixCostPerHealthPoint: 0.5
-        generationInterval: 2
-        resourcesPerInterval: 1
-    - rid: 4437626158574207056
-      type: {class: GeneratorLevelData, ns: , asm: Assembly-CSharp}
-      data:
-        maxHealth: 300
+        maxHealth: 100
         cost: 100
         fixCostPerHealthPoint: 1
-        generationInterval: 4
-        resourcesPerInterval: 5
+        generationInterval: 2
+        resourcesPerInterval: 1
+    - rid: 4437626180964712525
+      type: {class: ResourceGeneratorLevelData, ns: , asm: Assembly-CSharp}
+      data:
+        maxHealth: 100
+        cost: 100
+        fixCostPerHealthPoint: 1
+        generationInterval: 2
+        resourcesPerInterval: 2
 --- !u!1 &3288394557823347119
 GameObject:
   m_ObjectHideFlags: 0

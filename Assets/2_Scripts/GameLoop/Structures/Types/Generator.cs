@@ -1,33 +1,15 @@
 using System;
-using DNExtensions.Utilities.AutoGet;
 using PrimeTween;
 using UnityEngine;
 
 
-[Serializable]
-public class GeneratorLevelData : StructureLevelData
-{
-    public float generationInterval = 10;
-    public int resourcesPerInterval = 5;
-}
-
-
-[RequireComponent(typeof(ResourceGenerator))]
-public class Generator : Structure
+public class Generator : ResourceGenerator
 {
 
     [Header("Generator")]
-    [SerializeReference, DrawSerializeReference] private GeneratorLevelData[] levels = Array.Empty<GeneratorLevelData>();
     [SerializeField] private ShakeSettings pumpAnimationSettings;
     [SerializeField] private Transform[] pumpArray = Array.Empty<Transform>();
-    [SerializeField, AutoGetSelf, HideInInspector]  private ResourceGenerator resourceGenerator;
-
-
-
     private Sequence _pumpAnimation;
-    private GeneratorLevelData CurrentGeneratorLevelData => (GeneratorLevelData)Levels[currentUpgradeLevel - 1];
-    
-    protected override StructureLevelData[] Levels => levels;
 
 
     private void Update()
@@ -38,26 +20,24 @@ public class Generator : Structure
     protected override void OnBuild()
     {
         StartPumpingAnimation();
-        resourceGenerator.generationInterval = CurrentGeneratorLevelData.generationInterval;
-        resourceGenerator.resourcesPerInterval = CurrentGeneratorLevelData.resourcesPerInterval;
-        resourceGenerator.StartGenerating();
+        StartGenerating();
     }
 
     protected override void OnFix()
     {
-        
+        StartPumpingAnimation();
+        StartGenerating();
     }
 
     protected override void OnUpgrade()
     {
-        resourceGenerator.generationInterval = CurrentGeneratorLevelData.generationInterval;
-        resourceGenerator.resourcesPerInterval = CurrentGeneratorLevelData.resourcesPerInterval;
+
     }
 
     protected override void OnBreak()
     {
         _pumpAnimation.Stop();
-        resourceGenerator.StopGenerating();
+        StopGenerating();
         Destroy(gameObject);
     }
     

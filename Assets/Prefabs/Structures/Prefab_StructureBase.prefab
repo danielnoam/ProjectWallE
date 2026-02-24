@@ -43,7 +43,6 @@ GameObject:
   - component: {fileID: 69911270091919848}
   - component: {fileID: 6155827126268699539}
   - component: {fileID: 5067021678384517133}
-  - component: {fileID: 899449055304212277}
   - component: {fileID: 6487620541022002554}
   m_Layer: 6
   m_Name: Prefab_StructureBase
@@ -105,21 +104,6 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
---- !u!114 &899449055304212277
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3747161382905212349}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 253d98dac5f24343a48ad587e917597c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ResourceGenerator
-  resourcesPerInterval: 5
-  generationInterval: 3
-  generating: 0
 --- !u!114 &6487620541022002554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -137,23 +121,24 @@ MonoBehaviour:
   topPoint: {x: 0, y: 9.7, z: 0}
   bottomPoint: {x: 0, y: -1.62, z: 0}
   gfx: {fileID: 6592863634933569427}
+  currentUpgradeLevel: 0
   levels:
-  - rid: 4437626158574207057
+  - rid: 4437626180964712523
+  generating: 0
   rotationSpeed: 10
   moveSpeed: 0.3
   obelisk: {fileID: 4040410745440894463}
-  resourceGenerator: {fileID: 899449055304212277}
   references:
     version: 2
     RefIds:
-    - rid: 4437626158574207057
-      type: {class: BaseLevelData, ns: , asm: Assembly-CSharp}
+    - rid: 4437626180964712523
+      type: {class: ResourceGeneratorLevelData, ns: , asm: Assembly-CSharp}
       data:
-        maxHealth: 1000
+        maxHealth: 100
         cost: 100
-        fixCostPerHealthPoint: 2
-        generationInterval: 5
-        resourcesPerInterval: 3
+        fixCostPerHealthPoint: 1
+        generationInterval: 2
+        resourcesPerInterval: 5
 --- !u!1 &6069659134689033695
 GameObject:
   m_ObjectHideFlags: 0
