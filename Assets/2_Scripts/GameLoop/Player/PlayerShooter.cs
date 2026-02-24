@@ -1,8 +1,4 @@
-using System.Collections.Generic;
 using DNExtensions.Systems.Scriptables;
-using DNExtensions.Utilities;
-using DNExtensions.Utilities.AutoGet;
-using ProjectWallE.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,8 +9,6 @@ public class PlayerShooter : MonoBehaviour
     [SerializeField] private float fireRate = 0.2f;
     [SerializeField] private ProjectileData projectileData;
     [SerializeField] private SOLayerMask enemyLayerMask;
-    [SerializeField] private Transform firePoint;
-    [SerializeField, AutoGetScene] private Camera mainCamera;
     
     private float _nextTimeToFire;
     
@@ -33,11 +27,7 @@ public class PlayerShooter : MonoBehaviour
 
     private void ShootProjectile()
     {
-        if (!projectileData || !firePoint) return;
-
         _nextTimeToFire = fireRate;
-    
-        var lookDir = transform.forward;
-        projectileData.Spawn(null, enemyLayerMask.Value, firePoint.position, lookDir);
+        projectileData?.Spawn(null, enemyLayerMask.Value, transform.position, transform.forward);
     }
 }

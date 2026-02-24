@@ -12,8 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 112b5f81215549d982d6424af1c2b370, type: 3}
   m_Name: ProjectileData_Basic
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileData
-  damage: 25
   maxLifetime: 10
+  pushStrength: 25
+  damageType: 0
+  damage: 25
+  aoeRadius: 5
+  damageRange:
+    minValue: 1
+    maxValue: 100
   movementType: 0
   speed: 50
   prefab: {fileID: 8338543337846540916, guid: 63924ffbc4055854e89c01d29a67c183, type: 3}
