@@ -199,8 +199,6 @@ namespace ProjectWallE
             float suspensionAccel = gravityComp + (-offset * springStrength) - (yVel * springDamping);
 
             playerRB.AddForce(Vector3.up * suspensionAccel, ForceMode.Acceleration);
-            
-            print(hit.distance);
         }
         
         //helpers
