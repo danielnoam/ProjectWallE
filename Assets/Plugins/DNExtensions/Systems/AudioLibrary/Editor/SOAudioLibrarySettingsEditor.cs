@@ -9,7 +9,7 @@ namespace DNExtensions.Systems.AudioLibrary
     [CustomEditor(typeof(SOAudioLibrarySettings))]
     public class SOAudioLibrarySettingsEditor : Editor
     {
-        private const string SettingsPath = "Assets/Settings/Resources/AudioLibrarySettings.asset";
+        private const string SettingsPath = "Assets/Resources/AudioLibrarySettings.asset";
         
         private readonly Dictionary<string, bool> _foldouts = new();
         private readonly Dictionary<string, SerializedObject> _serializedCategories = new();
@@ -19,64 +19,69 @@ namespace DNExtensions.Systems.AudioLibrary
             base.OnInspectorGUI();
             var audioLibrary = (SOAudioLibrarySettings)target;
 
-            if (audioLibrary.AudioCategories == null || audioLibrary.AudioCategories.Length == 0) return;
-
-            EditorGUILayout.Space(10);
-
-            foreach (var category in audioLibrary.AudioCategories)
+            if (audioLibrary.AudioCategories != null && audioLibrary.AudioCategories.Length != 0)
             {
-                if (!category) continue;
-    
-                _foldouts.TryAdd(category.name, true);
-    
-                if (!_serializedCategories.TryGetValue(category.name, out var serializedCategory))
-                {
-                    serializedCategory = new SerializedObject(category);
-                    _serializedCategories[category.name] = serializedCategory;
-                }
-    
-                EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-                serializedCategory.Update();
-                GUILayout.Space(5);
+                EditorGUILayout.Space(10);
 
-                
-                // Header
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.Space(10);
-                _foldouts[category.name] = EditorGUILayout.Foldout(_foldouts[category.name], category.Label, true, EditorStyles.foldoutHeader);
-                GUILayout.FlexibleSpace();
-                SerializedProperty resMixer = serializedCategory.FindProperty("audioMixerGroup");
-                if (resMixer != null)
+                foreach (var category in audioLibrary.AudioCategories)
                 {
-                    EditorGUILayout.PropertyField(resMixer, GUIContent.none);
+                    if (!category) continue;
+
+                    _foldouts.TryAdd(category.name, true);
+
+                    if (!_serializedCategories.TryGetValue(category.name, out var serializedCategory))
+                    {
+                        serializedCategory = new SerializedObject(category);
+                        _serializedCategories[category.name] = serializedCategory;
+                    }
+
+                    EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+                    serializedCategory.Update();
                     GUILayout.Space(5);
-                }
 
-                if (GUILayout.Button("+", EditorStyles.miniButtonRight, GUILayout.Width(20)))
-                {
-                    AddNewResourceToCategory(category);
-                    _foldouts[category.name] = true; 
-                }
-                EditorGUILayout.EndHorizontal();
-                GUILayout.Space(3);
-                
-                // Content
-                if (_foldouts[category.name])
-                {
-                    Rect lineRect = EditorGUILayout.GetControlRect(false, 3);
-                    EditorGUI.DrawRect(lineRect, new Color(0.5f, 0.5f, 0.5f, 0.5f));
+
+                    // Header
+                    EditorGUILayout.BeginHorizontal();
+                    GUILayout.Space(10);
+                    _foldouts[category.name] = EditorGUILayout.Foldout(_foldouts[category.name], category.label, true, EditorStyles.foldoutHeader);
+                    GUILayout.FlexibleSpace();
+                    SerializedProperty resMixer = serializedCategory.FindProperty("audioMixerGroup");
+                    if (resMixer != null)
+                    {
+                        EditorGUILayout.PropertyField(resMixer, GUIContent.none);
+                        GUILayout.Space(5);
+                    }
+
+
+
+                    EditorGUILayout.EndHorizontal();
+                    GUILayout.Space(3);
+
+                    // Content
+                    if (_foldouts[category.name])
+                    {
+                        Rect lineRect = EditorGUILayout.GetControlRect(false, 3);
+                        EditorGUI.DrawRect(lineRect, new Color(0.5f, 0.5f, 0.5f, 0.5f));
+
+                        EditorGUILayout.Space(5);
+                        DrawMappingList(serializedCategory);
+                        
+                        if (GUILayout.Button("+ New Mapping"))
+                        {
+                            AddNewMappingToCategory(category);
+                        }
+                        EditorGUILayout.Space(2);
+                        serializedCategory.ApplyModifiedProperties();
+                    }
+                    EditorGUILayout.EndVertical();
                     
-                    EditorGUILayout.Space(2);
-                    DrawMappingList(serializedCategory);
-                    EditorGUILayout.Space(2);
-                    serializedCategory.ApplyModifiedProperties();
+                    // Space between categories
+                    EditorGUILayout.Space(5);
                 }
-                
-                EditorGUILayout.EndVertical();
-                EditorGUILayout.Space(5);
             }
             
-            if (GUILayout.Button("+ New Category"))
+            // Space before button
+            if (GUILayout.Button("+ New Category", GUILayout.Height(30)))
             {
                 AddNewCategory(audioLibrary);
             }
@@ -109,7 +114,7 @@ namespace DNExtensions.Systems.AudioLibrary
             }
         }
 
-        private void AddNewResourceToCategory(SOAudioCategory category)
+        private void AddNewMappingToCategory(SOAudioCategory category)
         {
             if (!_serializedCategories.TryGetValue(category.name, out var so)) return;
     
@@ -138,6 +143,7 @@ namespace DNExtensions.Systems.AudioLibrary
 
             var newCategory = CreateInstance<SOAudioCategory>();
             AssetDatabase.CreateAsset(newCategory, path);
+            newCategory.label = Path.GetFileNameWithoutExtension(path);
             AssetDatabase.SaveAssets();
 
             var so = new SerializedObject(audioLibrary);
@@ -190,34 +196,19 @@ namespace DNExtensions.Systems.AudioLibrary
             var settings = CreateInstance<SOAudioLibrarySettings>();
 
             string directory = Path.GetDirectoryName(SettingsPath);
-            if (!AssetDatabase.IsValidFolder(directory))
+            if (!string.IsNullOrEmpty(directory))
             {
-                if (directory != null)
-                {
-                    string[] folders = directory.Split('/');
-                    string currentPath = folders[0];
-                
-                    for (int i = 1; i < folders.Length; i++)
-                    {
-                        string parentPath = currentPath;
-                        currentPath = $"{currentPath}/{folders[i]}";
-                    
-                        if (!AssetDatabase.IsValidFolder(currentPath))
-                        {
-                            AssetDatabase.CreateFolder(parentPath, folders[i]);
-                        }
-                    }
-                }
+                Directory.CreateDirectory(directory);
+                AssetDatabase.Refresh();
             }
-            
+
             AssetDatabase.CreateAsset(settings, SettingsPath);
             AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-            
+
             Selection.activeObject = settings;
             EditorGUIUtility.PingObject(settings);
             
-            Debug.Log($"Created AudioLibrarySettings at: {SettingsPath}");
+            Debug.Log("Created Audio Library Settings at " + SettingsPath);
         }
     }
 }

@@ -4369,13 +4369,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5963c4abded2e6840ae3e22c4807f630, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.Components.FreeFormCameraController
+  lockCursor: 1
+  allowMovement: 1
   moveSpeed: 25
-  sprintMultiplier: 2
-  rotationMode: 1
-  rotationSpeed: 100
+  fastMultiplier: 2
+  rotationMode: 2
+  rotationSpeed: 25
   rotationSmoothing: 1
   invertY: 0
   invertX: 0
+  allowZoom: 1
   zoomSpeed: 10
   zoomLimits:
     minValue: 5
@@ -4487,8 +4490,6 @@ MonoBehaviour:
   fireRate: 0.2
   projectileData: {fileID: 11400000, guid: 8ffdf2f42528d434f91c7d9b565e08fd, type: 2}
   enemyLayerMask: {fileID: 11400000, guid: 2d607d7566d764844b32be4199186943, type: 2}
-  firePoint: {fileID: 1505572068}
-  mainCamera: {fileID: 591326629}
 --- !u!1 &1538142517
 GameObject:
   m_ObjectHideFlags: 0
@@ -5167,6 +5168,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Prefab_ResourceNode (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 5031903860840323695, guid: 05369447099cd794a94358bee74ae73b, type: 3}
+      propertyPath: m_Carve
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5682523960380088853, guid: 05369447099cd794a94358bee74ae73b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 24.545944
@@ -5742,6 +5747,10 @@ PrefabInstance:
     - target: {fileID: 246559008959531550, guid: 05369447099cd794a94358bee74ae73b, type: 3}
       propertyPath: m_Name
       value: Prefab_ResourceNode
+      objectReference: {fileID: 0}
+    - target: {fileID: 5031903860840323695, guid: 05369447099cd794a94358bee74ae73b, type: 3}
+      propertyPath: m_Carve
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5682523960380088853, guid: 05369447099cd794a94358bee74ae73b, type: 3}
       propertyPath: m_LocalPosition.x

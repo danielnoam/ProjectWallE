@@ -11,50 +11,26 @@ public class GroundEnemy : Enemy
 
     protected override void Initialize()
     {
-        navMeshAgent.stoppingDistance = targetFindRange * 0.8f;
+       
     }
 
-    protected override void UpdateState()
+    protected override void UpdateMovement()
     {
-        if (!(CurrentTarget is Component target) || !target)
+        if (!IsTargetValid(CurrentTarget, out _))
         {
-            State = EnemyState.MovingToTarget;
+            State = EnemyState.Idle;
             return;
         }
 
-        float distance = Vector3.Distance(transform.position, target.transform.position);
-
-        switch (State)
-        {
-            case EnemyState.MovingToTarget:
-                if (distance <= targetFindRange)
-                    State = EnemyState.Attacking;
-                break;
-
-            case EnemyState.Attacking:
-                if (distance > targetFindRange)
-                {
-                    State = EnemyState.MovingToTarget;
-                    SetDestination();
-                }
-                else
-                {
-                    AttackTimer += Time.deltaTime;
-                    if (AttackTimer >= attackCooldown)
-                    {
-                        AttackTarget();
-                        AttackTimer = 0f;
-                    }
-                }
-                break;
-        }
+        State = EnemyState.MovingToTarget;
+        SetDestination();
     }
 
     protected override void SetDestination()
     {
-        if (CurrentTarget is Component target && target)
+        if (IsTargetValid(CurrentTarget, out var targetComponent))
         {
-            navMeshAgent.SetDestination(target.transform.position);
+            navMeshAgent.SetDestination(targetComponent.transform.position);
         }
     }
 

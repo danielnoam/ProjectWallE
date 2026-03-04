@@ -5,16 +5,11 @@ using UnityEngine;
 
 public enum TargetPriority
 {
-    Player,
-    PlayerInRange,
-    NearestBase,
-    NearestTurretInRange,
-    NearestGeneratorInRange,
-    WeakestStructureInRange,
-    NearestStructure,
+    Player, PlayerInRange, NearestBase, NearestTurretInRange,
+    NearestGeneratorInRange, WeakestStructureInRange, NearestStructure,
 }
 
-public enum EnemyState { Attacking, MovingToTarget, Idle }
+public enum EnemyState { MovingToTarget, Idle }
 
 [SelectionBase]
 public abstract class Enemy : MonoBehaviour, IDamageable, IPushable
@@ -28,20 +23,27 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPushable
     [SerializeField] protected float attackCooldown = 1f;
     [SerializeField, SOSelector("Assets/Data")] protected ProjectileData projectileData;
     [SerializeField, SOSelector("Assets/Data")] protected SOLayerMask hitLayers;
-    
+
     private float _currentHealth;
+    private float _attackTimer;
 
     protected EnemyState State = EnemyState.MovingToTarget;
-    protected float AttackTimer;
     protected IDamageable CurrentTarget;
 
     public event Action<IDamageable> OnDeath;
 
     protected abstract void Initialize();
-    protected abstract void UpdateState();
+    protected abstract void UpdateMovement();
     protected abstract void SetDestination();
     protected abstract void OnPush(Vector3 direction, float force);
 
+    
+    private void OnDestroy()
+    {
+        EnemyManager.Instance?.UnregisterEnemy(this);
+        if (CurrentTarget != null) CurrentTarget.OnDeath -= OnTargetDeath;
+    }
+    
     private void Start()
     {
         _currentHealth = maxHealth;
@@ -50,25 +52,20 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPushable
         Initialize();
     }
 
-    private void OnDestroy()
-    {
-        EnemyManager.Instance?.UnregisterEnemy(this);
-
-        if (CurrentTarget != null)
-            CurrentTarget.OnDeath -= OnTargetDeath;
-    }
-
     private void Update()
     {
-        UpdateState();
+        UpdateMovement();
+        TryAttack();
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.TryGetComponent(out Pod _))
+        {
             Die();
+        }
     }
-
+    
     private void OnTargetChanged()
     {
         SetDestination();
@@ -80,6 +77,23 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPushable
         UpdateTarget();
     }
 
+    private void TryAttack()
+    {
+        if (!IsInAttackRange())
+        {
+            _attackTimer = 0f;
+            return;
+        }
+
+        _attackTimer += Time.deltaTime;
+        if (_attackTimer >= attackCooldown)
+        {
+            AttackTarget();
+            _attackTimer = 0f;
+        }
+    }
+    
+
     private void UpdateTarget()
     {
         if (CurrentTarget != null)
@@ -88,7 +102,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPushable
         foreach (var priority in targetPriorities)
         {
             IDamageable target = FindTargetByPriority(priority);
-            if (target != null && IsTargetValid(target))
+            if (IsTargetValid(target, out _))
             {
                 CurrentTarget = target;
                 CurrentTarget.OnDeath += OnTargetDeath;
@@ -124,11 +138,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPushable
                 return null;
         }
     }
-
-    private bool IsTargetValid(IDamageable target)
-    {
-        return target is Component component && component;
-    }
+    
 
     private void Die()
     {
@@ -136,37 +146,42 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPushable
         Destroy(gameObject);
     }
 
-    protected void AttackTarget()
+    private void AttackTarget()
     {
-        if (CurrentTarget is Component targetComponent && targetComponent)
+        if (IsTargetValid(CurrentTarget, out var targetComponent))
         {
-            Vector3 direction = (targetComponent.transform.position - transform.position).normalized;
-            projectileData?.Spawn(this, hitLayers.Value, transform.position, direction, targetComponent.transform.position);
+            projectileData?.Spawn(hitLayers.Value, transform.position, targetComponent.transform.position);
         }
     }
+    
+    private bool IsInAttackRange() 
+    {
+        return IsTargetValid(CurrentTarget, out var component) && Vector3.Distance(transform.position, component.transform.position) <= targetFindRange;
+    }
 
+    
+    protected bool IsTargetValid(IDamageable target, out Component targetComponent)
+    {
+        targetComponent = target as Component;
+        return targetComponent && targetComponent.gameObject.activeInHierarchy;
+    }
+    
     public void TakeDamage(float damage, IDamageable attacker = null)
     {
         _currentHealth -= damage;
-        if (_currentHealth <= 0)
-        {
-            Die();
-        }
+        if (_currentHealth <= 0) Die();
     }
 
     public void Push(Vector3 direction, float force)
     {
         OnPush(direction, force);
     }
-    
 
 #if UNITY_EDITOR
     protected virtual void OnDrawGizmos()
     {
         if (!Application.isPlaying) return;
-        
         string targetName = (CurrentTarget is Component t && t) ? t.name : "None";
-
         UnityEditor.Handles.Label(
             transform.position + Vector3.up * 2.5f,
             $"Health: {_currentHealth}/{maxHealth}\nState: {State}\nTarget: {targetName}",

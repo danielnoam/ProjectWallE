@@ -5,42 +5,30 @@ using UnityEngine;
 public class FlyingEnemy : Enemy
 {
     [Header("Flying Settings")]
-    [SerializeField, Tooltip("Flight height above terrain and targets.")]
-    private float flightHeight = 8f;
-    [SerializeField, Tooltip("Movement speed toward the target.")]
-    private float moveSpeed = 6f;
-    [SerializeField, Tooltip("How fast the enemy adjusts its vertical position.")]
-    private float heightAdjustSpeed = 4f;
-    [SerializeField, Tooltip("Rotation speed when facing the target.")]
-    private float rotationSpeed = 5f;
-    [SerializeField, Tooltip("Vertical bob amplitude while hovering.")]
-    private float hoverAmplitude = 0.4f;
-    [SerializeField, Tooltip("Vertical bob frequency while hovering.")]
-    private float hoverFrequency = 1.2f;
+    [SerializeField] private float flightHeight = 8f;
+    [SerializeField] private float moveSpeed = 14f;
+    [SerializeField] private float heightAdjustSpeed = 4f;
+    [SerializeField] private float rotationSpeed = 5f;
+    [SerializeField] private float hoverAmplitude = 0.4f;
+    [SerializeField] private float hoverFrequency = 1.2f;
 
     [Header("Obstacle Settings")]
-    [SerializeField, Tooltip("Maximum distance to check for ground or obstacles below.")]
-    private float obstacleCheckDistance = 30f;
-    [SerializeField, Tooltip("Radius within which other flyers trigger separation.")]
-    private float separationRadius = 3f;
-    [SerializeField, Tooltip("Force applied to push away from nearby flyers.")]
-    private float separationForce = 8f;
-    [SerializeField, Tooltip("Layers considered as ground or obstacles for altitude maintenance.")]
-    private LayerMask obstacleMask;
+    [SerializeField] private float obstacleCheckDistance = 30f;
+    [SerializeField] private float separationRadius = 5f;
+    [SerializeField] private float separationForce = 15f;
+    [SerializeField] private LayerMask obstacleMask;
 
-    [SerializeField,AutoGetSelf,HideInInspector] private Rigidbody rigidBody;
-    
+    [SerializeField, AutoGetSelf, HideInInspector] private Rigidbody rigidBody;
+
     private const float ArrivalThreshold = 1f;
     private const int SeparationCheckInterval = 5;
-    
-    
+
     private Vector3 _targetFlyPosition;
     private int _separationFrameOffset;
     private static int _frameOffsetCounter;
 
     protected override void Initialize()
     {
-        rigidBody = GetComponent<Rigidbody>();
         rigidBody.useGravity = false;
         rigidBody.linearDamping = 4f;
         rigidBody.angularDamping = 10f;
@@ -52,8 +40,10 @@ public class FlyingEnemy : Enemy
 
     protected override void SetDestination()
     {
-        if (CurrentTarget is not Component targetComponent || !targetComponent) return;
-        _targetFlyPosition = targetComponent.transform.position + Vector3.up * flightHeight;
+        if (IsTargetValid(CurrentTarget, out var targetComponent))
+        {
+            _targetFlyPosition = targetComponent.transform.position + Vector3.up * flightHeight;
+        }
     }
 
     protected override void OnPush(Vector3 direction, float force)
@@ -61,15 +51,17 @@ public class FlyingEnemy : Enemy
         rigidBody.AddForce(direction.normalized * force, ForceMode.Force);
     }
 
-    protected override void UpdateState()
+    protected override void UpdateMovement()
     {
-        if (!(CurrentTarget is Component target) || !target)
+        if (!IsTargetValid(CurrentTarget, out var targetComponent))
         {
             State = EnemyState.Idle;
+            Hover();
             return;
         }
 
-        _targetFlyPosition = target.transform.position + Vector3.up * flightHeight;
+        _targetFlyPosition = targetComponent.transform.position + Vector3.up * flightHeight;
+        State = EnemyState.MovingToTarget;
 
         MaintainAltitude();
 
@@ -78,36 +70,15 @@ public class FlyingEnemy : Enemy
 
         float distanceXZ = Vector3.Distance(
             new Vector3(transform.position.x, 0, transform.position.z),
-            new Vector3(target.transform.position.x, 0, target.transform.position.z)
+            new Vector3(targetComponent.transform.position.x, 0, targetComponent.transform.position.z)
         );
 
-        switch (State)
+        if (distanceXZ > targetFindRange)
+            FlyTowardTarget();
+        else
         {
-            case EnemyState.MovingToTarget:
-                FlyTowardTarget();
-                if (distanceXZ <= targetFindRange)
-                    State = EnemyState.Attacking;
-                break;
-
-            case EnemyState.Attacking:
-                Hover();
-                FaceTarget(target.transform.position);
-                if (distanceXZ > targetFindRange)
-                {
-                    State = EnemyState.MovingToTarget;
-                    break;
-                }
-                AttackTimer += Time.deltaTime;
-                if (AttackTimer >= attackCooldown)
-                {
-                    AttackTarget();
-                    AttackTimer = 0f;
-                }
-                break;
-
-            case EnemyState.Idle:
-                Hover();
-                break;
+            Hover();
+            FaceTarget(targetComponent.transform.position);
         }
     }
 
@@ -133,7 +104,6 @@ public class FlyingEnemy : Enemy
         foreach (var col in nearby)
         {
             if (col.gameObject == gameObject) continue;
-
             Vector3 away = transform.position - col.transform.position;
             float strength = 1f - (away.magnitude / separationRadius);
             rigidBody.AddForce(away.normalized * (separationForce * strength), ForceMode.Force);
@@ -143,7 +113,6 @@ public class FlyingEnemy : Enemy
     private void FlyTowardTarget()
     {
         Vector3 direction = _targetFlyPosition - transform.position;
-
         if (direction.magnitude > ArrivalThreshold)
         {
             Vector3 velocity = direction.normalized * moveSpeed;
@@ -172,9 +141,7 @@ public class FlyingEnemy : Enemy
         Vector3 direction = targetPosition - transform.position;
         direction.y = 0;
         if (direction.sqrMagnitude < 0.01f) return;
-
-        Quaternion targetRotation = Quaternion.LookRotation(direction);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * Time.deltaTime);
     }
 
     protected override void OnDrawGizmosSelected()

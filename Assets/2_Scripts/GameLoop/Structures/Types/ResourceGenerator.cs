@@ -50,9 +50,4 @@ public abstract class ResourceGenerator : Structure
             ResourceManager.Instance.AddResources(CurrentBaseLevelData.resourcesPerInterval);
         }
     }
-
-    private void OnDestroy()
-    {
-        StopGenerating();
-    }
 }

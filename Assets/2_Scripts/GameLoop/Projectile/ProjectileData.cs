@@ -39,10 +39,12 @@ public class ProjectileData : ScriptableObject
     [Header("Visuals")]
     [PrefabSelector("Assets/Prefabs")] public Projectile prefab;
 
-    public Projectile Spawn(IDamageable owner, LayerMask hitLayers, Vector3 position, Vector3 direction, Vector3 targetPosition = default)
+    public Projectile Spawn(LayerMask hitLayers, Vector3 position, Vector3 targetPosition = default)
     {
-        var p = Instantiate(prefab, position, Quaternion.LookRotation(direction));
-        p.Initialize(owner, this, hitLayers, direction, targetPosition);
-        return p;
+        
+        var projectile = Instantiate(prefab, position, Quaternion.identity);
+        projectile.Initialize(this, hitLayers, targetPosition);
+        
+        return projectile;
     }
 }

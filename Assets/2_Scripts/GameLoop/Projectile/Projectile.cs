@@ -117,16 +117,18 @@ public class Projectile : MonoBehaviour
     }
 
     
-    public void Initialize(IDamageable owner, ProjectileData data, LayerMask hitLayers, Vector3 direction, Vector3 targetPosition)
+    public void Initialize(ProjectileData data, LayerMask hitLayers, Vector3 targetPosition)
     {
-        _owner = owner;
         _data = data;
         _hitLayers = hitLayers;
         _maxLifetime = data.maxLifetime;
-        _direction = direction.normalized;
         _startPosition = transform.position;
         _targetPosition = targetPosition;
-        _isInitialized = true;
+        _direction  = (targetPosition - transform.position).normalized;
+        transform.forward = _direction;
+
         if (_data.movementType == ProjectileMovementType.Arc) InitializeArc();
+
+        _isInitialized = true;
     }
 }

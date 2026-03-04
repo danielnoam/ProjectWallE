@@ -28,6 +28,14 @@ public class PlayerShooter : MonoBehaviour
     private void ShootProjectile()
     {
         _nextTimeToFire = fireRate;
-        projectileData?.Spawn(null, enemyLayerMask.Value, transform.position, transform.forward);
+        if (Physics.Raycast(transform.position, transform.forward, out var hit, 200, enemyLayerMask.Value))
+        {
+            projectileData?.Spawn(enemyLayerMask.Value, transform.position, hit.point);
+        }
+        else
+        {
+            projectileData?.Spawn(enemyLayerMask.Value, transform.position, transform.forward * 200);
+        }
+
     }
 }

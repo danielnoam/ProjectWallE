@@ -97,7 +97,7 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 0
-  m_Extents: {x: 1.81, y: 2.615, z: 1.81}
+  m_Extents: {x: 1.5, y: 2.615, z: 1.5}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1
@@ -120,6 +120,7 @@ MonoBehaviour:
   topPoint: {x: 0, y: 5.28, z: 0}
   bottomPoint: {x: 0, y: -0.73, z: 0}
   gfx: {fileID: 6756884417540177175}
+  currentUpgradeLevel: 0
   levels:
   - rid: 4437626158574207051
   hitLayers: {fileID: 11400000, guid: 2d607d7566d764844b32be4199186943, type: 2}
