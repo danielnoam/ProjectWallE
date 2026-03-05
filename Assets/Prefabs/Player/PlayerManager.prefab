@@ -169,10 +169,6 @@ MonoBehaviour:
     visualTransform: {fileID: 2452485598096478041}
   - tireTransform: {fileID: 5027628266276025665}
     visualTransform: {fileID: 6550488882789729935}
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  playerRB: {fileID: 9192427627125825943}
   groundHeight: 0.5
   suspensionStrength: 25
   suspensionDamping: 2
@@ -272,6 +268,8 @@ MonoBehaviour:
   slopeAssistFadeEnd: 1.5
   minGripWhenPartialGround: 0.15
   partialGroundGripPower: 2
+  gravityStrength: 10
+  terminalVelocity: 20
   accelerationStrength: 10
   accelerationCurve:
     serializedVersion: 2
@@ -470,16 +468,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 830060e31abac274bae31a6c5402f78f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.RobotController
-  _groundRayPoint: {fileID: 4045004396600311935}
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  playerRB: {fileID: 9192427627125825943}
-  cameraTransform: {fileID: 0}
+  groundRayPoint: {fileID: 4045004396600311935}
   groundHeight: 0.75
   maxCheckHeight: 1.25
   springStrength: 150
   springDamping: 12
+  gravityStrength: 20
+  terminalVelocity: 20
   moveAccel: 20
   dirChangeAccelFactor:
     serializedVersion: 2
@@ -515,7 +510,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   maxMoveSpeed: 8
-  forcePointBelowCOM: 0.25
+  forcePointBelowCom: 0.2
   groundMoveFactor: 1
   airMoveFactor: 0.35
   jumpHeight: 3
@@ -995,7 +990,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 0
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
@@ -1012,8 +1007,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a6a9bcdc8d5a5844ae487dff7baf6e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.PlayerManager
+  cameraTransform: {fileID: 0}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
   carController: {fileID: 2635220521126351491}
   robotController: {fileID: 1860573053989788979}
+  carCamera: {fileID: 0}
+  robotCamera: {fileID: 0}
 --- !u!114 &12555983524666578
 MonoBehaviour:
   m_ObjectHideFlags: 0

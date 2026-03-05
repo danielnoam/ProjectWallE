@@ -10,8 +10,6 @@ public class CarController : MonoBehaviour, IPlayerController
 {
     [SerializeField] private TireAndVisualTransform[] steeringTires;
     [SerializeField] private TireAndVisualTransform[] staticTires;
-    [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private Rigidbody playerRB;
 
     [Header("Suspension Parameters")] 
     [SerializeField] private float groundHeight = 0.2f;
@@ -39,6 +37,10 @@ public class CarController : MonoBehaviour, IPlayerController
     [Header("Takeoff / partial-ground tuning")] 
     [SerializeField] private float minGripWhenPartialGround = 0.15f; // 0..1
     [SerializeField] private float partialGroundGripPower = 1.0f; // curve feel
+    
+    [Header("Gravity Settings")]
+    [SerializeField] private float gravityStrength = 1.0f;
+    [SerializeField] private float terminalVelocity = 1.0f;
 
     [Header("Acceleration Parameters")] 
     [SerializeField] private float accelerationStrength;
@@ -57,6 +59,8 @@ public class CarController : MonoBehaviour, IPlayerController
     [SerializeField] private float maxAirSteeringVelocity;
 
     private CarInput _carInput;
+    private LayerMask _groundLayer;
+    private Rigidbody _playerRb;
     
     private List<TireAndVisualTransform> _allTires;
     private readonly Dictionary<Transform, float> _tireNormalForces = new();
@@ -66,6 +70,10 @@ public class CarController : MonoBehaviour, IPlayerController
     private float _groundedRatio;
     private float _airborneBlend;
     private float _handbrake01;
+    /// <summary>
+    /// controls how much dv affects the gravity (bigger = less control)
+    /// </summary>
+    private float gravityControlFactor => gravityStrength * 0.25f;
 
 
     private void Awake()
@@ -77,8 +85,15 @@ public class CarController : MonoBehaviour, IPlayerController
             _tireNormalForces[t.tireTransform] = 0f;
     }
 
+    public void Initialize(PlayerReferences playerReferences)
+    {
+        _playerRb = playerReferences.rigidBody;
+        _groundLayer = playerReferences.groundLayer;
+    }
+
     public void ApplyMovement()
     {
+        ApplyGravity();
         ApplySuspension();
         ApplyTireRotation();
         ApplyTireFriction();
@@ -109,14 +124,14 @@ public class CarController : MonoBehaviour, IPlayerController
 
             Vector3 springDir = hit.normal; // push away from the ground
 
-            Vector3 pointVel = playerRB.GetPointVelocity(tire.tireTransform.position);
+            Vector3 pointVel = _playerRb.GetPointVelocity(tire.tireTransform.position);
             float velAlongSpring = Vector3.Dot(pointVel, springDir);
 
             float suspensionForce =
                 (-offset * suspensionStrength) -
                 (velAlongSpring * suspensionDamping);
 
-            playerRB.AddForceAtPosition(springDir * suspensionForce, tire.tireTransform.position);
+            _playerRb.AddForceAtPosition(springDir * (suspensionForce * _playerRb.mass), tire.tireTransform.position, ForceMode.Force);
 
             _tireNormalForces[tire.tireTransform] = suspensionForce;
 
@@ -134,7 +149,7 @@ public class CarController : MonoBehaviour, IPlayerController
     private void ApplyTireRotation()
     {
         float desiredSteeringAngle = Mathf.Lerp(steeringAngle, topSpeedSteeringFactor * steeringAngle,
-            Mathf.Abs(Vector3.Dot(transform.forward, playerRB.linearVelocity)) / topForwardSpeed);
+            Mathf.Abs(Vector3.Dot(transform.forward, _playerRb.linearVelocity)) / topForwardSpeed);
 
         float target = _carInput.Steering * desiredSteeringAngle;
 
@@ -170,7 +185,7 @@ public class CarController : MonoBehaviour, IPlayerController
         {
             if (!IsTireGrounded(tire.tireTransform, out var hit)) continue;
 
-            Vector3 tireVel = playerRB.GetPointVelocity(tire.tireTransform.position);
+            Vector3 tireVel = _playerRb.GetPointVelocity(tire.tireTransform.position);
 
             float steeringVel = Vector3.Dot(tire.tireTransform.right, tireVel);
 
@@ -183,12 +198,12 @@ public class CarController : MonoBehaviour, IPlayerController
 
             float desiredAccel = desiredVelChange / Time.fixedDeltaTime;
 
-            playerRB.AddForceAtPosition(tire.tireTransform.right * playerRB.mass / _allTires.Count * desiredAccel,
+            _playerRb.AddForceAtPosition(tire.tireTransform.right * _playerRb.mass / _allTires.Count * desiredAccel,
                 tire.tireTransform.position);
 
             // ===== NEW: slope gravity lateral counter-force =====
             // Gravity component parallel to the ground plane at this tire
-            Vector3 g = Physics.gravity; // (0,-9.81,0)
+            Vector3 g = new Vector3(0, -gravityStrength, 0); // (0,-9.81,0)
             Vector3 gParallel = Vector3.ProjectOnPlane(g, -hit.normal); // "down the slope"
 
             // We only care about lateral (sideways) direction relative to the tire
@@ -206,14 +221,14 @@ public class CarController : MonoBehaviour, IPlayerController
             counterAccel = Mathf.Clamp(counterAccel, -slopeAntiSlipMaxAccel, slopeAntiSlipMaxAccel);
 
             // Apply as force (F = m * a), distributed by tire count just like your other forces
-            Vector3 counterForce = tire.tireTransform.right * ((playerRB.mass / _allTires.Count) * counterAccel);
-            playerRB.AddForceAtPosition(counterForce, tire.tireTransform.position);
+            Vector3 counterForce = tire.tireTransform.right * ((_playerRb.mass / _allTires.Count) * counterAccel);
+            _playerRb.AddForceAtPosition(counterForce, tire.tireTransform.position);
         }
     }
 
     private float CalcCurrenTireGripFactor(Transform tire, AnimationCurve frictionCurve)
     {
-        Vector3 tireVel = playerRB.GetPointVelocity(tire.position);
+        Vector3 tireVel = _playerRb.GetPointVelocity(tire.position);
         tireVel.y = 0;
         float slippingAmount = Mathf.Clamp(Vector3.Dot(tire.right, tireVel.normalized), -1.0f, 1.0f);
         float gripFactor = frictionCurve.Evaluate(Mathf.Abs(slippingAmount));
@@ -227,7 +242,7 @@ public class CarController : MonoBehaviour, IPlayerController
 
     private void ApplyLongitudinalMovement()
     {
-        float carSpeed = Vector3.Dot(transform.forward, playerRB.linearVelocity);
+        float carSpeed = Vector3.Dot(transform.forward, _playerRb.linearVelocity);
 
         if (_carInput.Acceleration > 0) ApplyForwardAcceleration(carSpeed);
         else if (_carInput.Acceleration < 0) ApplyBackwardsAcceleration(carSpeed);
@@ -251,7 +266,7 @@ public class CarController : MonoBehaviour, IPlayerController
                 ? accelerationCurve.Evaluate(normalizedSpeed) * accelerationStrength
                 : brakeStrength;
 
-            playerRB.AddForceAtPosition(tire.tireTransform.forward * availableAcceleration / _allTires.Count,
+            _playerRb.AddForceAtPosition(tire.tireTransform.forward * (availableAcceleration * _playerRb.mass) / _allTires.Count,
                 tire.tireTransform.position);
         }
 
@@ -271,7 +286,7 @@ public class CarController : MonoBehaviour, IPlayerController
                 ? accelerationCurve.Evaluate(normalizedSpeed) * accelerationStrength
                 : brakeStrength;
 
-            playerRB.AddForceAtPosition(-tire.tireTransform.forward * availableAcceleration / _allTires.Count,
+            _playerRb.AddForceAtPosition(-tire.tireTransform.forward * (availableAcceleration * _playerRb.mass) / _allTires.Count,
                 tire.tireTransform.position);
         }
     }
@@ -282,8 +297,8 @@ public class CarController : MonoBehaviour, IPlayerController
         {
             if (!IsTireGrounded(tire.tireTransform, out var hit)) continue;
 
-            playerRB.AddForceAtPosition(
-                tire.tireTransform.forward * (-Mathf.Sign(carSpeed) * engineBrakeStrength / _allTires.Count),
+            _playerRb.AddForceAtPosition(
+                tire.tireTransform.forward * (-Mathf.Sign(carSpeed) * engineBrakeStrength * _playerRb.mass / _allTires.Count),
                 tire.tireTransform.position);
         }
 
@@ -299,6 +314,22 @@ public class CarController : MonoBehaviour, IPlayerController
             if (!IsTireGrounded(tire.tireTransform, out var hit)) continue;
             tire.visualTransform.Rotate(Vector3.up, wheelSpeedDeg * Time.fixedDeltaTime, Space.Self);
         }
+    }
+
+    #endregion
+
+    #region Gravity
+
+    private void ApplyGravity()
+    {
+        float verticalVel = _playerRb.linearVelocity.y;
+        float desiredVerticalVel = -terminalVelocity;
+
+        float dv = desiredVerticalVel - verticalVel;
+
+        float gravityForce = Mathf.Clamp(dv * gravityControlFactor, -gravityStrength, Mathf.Infinity);
+            
+        _playerRb.AddForce(Vector3.up * gravityForce, ForceMode.Acceleration);
     }
 
     #endregion
@@ -324,7 +355,7 @@ public class CarController : MonoBehaviour, IPlayerController
         float targetYawRate = input * maxAirSteeringVelocity;
 
         // current yaw rate (rad/s) measured around car up
-        float currentYawRate = Vector3.Dot(playerRB.angularVelocity, transform.up);
+        float currentYawRate = Vector3.Dot(_playerRb.angularVelocity, transform.up);
 
         // PD-ish: drive yaw rate error with torque-as-angular-acceleration
         float yawRateError = targetYawRate - currentYawRate;
@@ -333,7 +364,7 @@ public class CarController : MonoBehaviour, IPlayerController
         float yawAccelCmd = yawRateError * airSteeringStrength;
 
         // apply around car up
-        playerRB.AddTorque(transform.up * yawAccelCmd, ForceMode.Acceleration);
+        _playerRb.AddTorque(transform.up * yawAccelCmd, ForceMode.Acceleration);
     }
 
     private void AirAlignTorque()
@@ -353,7 +384,7 @@ public class CarController : MonoBehaviour, IPlayerController
         errorLocal.y = 0f;
 
         // angular velocity in local space, ignore yaw
-        Vector3 angVelLocal = transform.InverseTransformDirection(playerRB.angularVelocity);
+        Vector3 angVelLocal = transform.InverseTransformDirection(_playerRb.angularVelocity);
         angVelLocal.y = 0f;
 
         // PD control in local space (outputs "angular acceleration" if using ForceMode.Acceleration)
@@ -364,7 +395,7 @@ public class CarController : MonoBehaviour, IPlayerController
         // back to world and apply
         Vector3 torqueWorld = transform.TransformDirection(torqueLocal);
 
-        playerRB.AddTorque(torqueWorld, ForceMode.Acceleration);
+        _playerRb.AddTorque(torqueWorld, ForceMode.Acceleration);
     }
 
 
@@ -387,7 +418,7 @@ public class CarController : MonoBehaviour, IPlayerController
     {
         float distance = isExtraDistance ? groundHeight + 0.1f : groundHeight;
 
-        bool isGrounded = Physics.Raycast(tire.position, -tire.up, out RaycastHit hit, distance, groundLayer);
+        bool isGrounded = Physics.Raycast(tire.position, -tire.up, out RaycastHit hit, distance, _groundLayer);
         tireHit = hit;
 
         return isGrounded;
@@ -419,7 +450,7 @@ public class CarController : MonoBehaviour, IPlayerController
         {
             var t = _allTires[i];
             if (Physics.Raycast(t.tireTransform.position, -t.tireTransform.up, out _, 0.1f + groundHeight,
-                    groundLayer))
+                    _groundLayer))
                 groundedCount++;
         }
 

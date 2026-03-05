@@ -433,7 +433,7 @@ Transform:
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
   m_LocalRotation: {x: 0.15212344, y: 2.1402298e-16, z: -3.2941297e-17, w: 0.98836154}
-  m_LocalPosition: {x: -8.535, y: 8.38353, z: -4.8742685}
+  m_LocalPosition: {x: -8.535, y: 34.37353, z: -4.8742685}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -989,17 +989,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 866634638711074481, guid: 64589ab739d629446b89ba620cb66455, type: 3}
-      propertyPath: HorizontalAxis.Center
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3597165278892699104, guid: 64589ab739d629446b89ba620cb66455, type: 3}
       propertyPath: m_Name
       value: CarCam
-      objectReference: {fileID: 0}
-    - target: {fileID: 3597165278892699104, guid: 64589ab739d629446b89ba620cb66455, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4198729986291760618, guid: 64589ab739d629446b89ba620cb66455, type: 3}
       propertyPath: Target.TrackingTarget
@@ -1011,7 +1003,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7500245497519737915, guid: 64589ab739d629446b89ba620cb66455, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 8.535646
+      value: 34.52565
       objectReference: {fileID: 0}
     - target: {fileID: 7500245497519737915, guid: 64589ab739d629446b89ba620cb66455, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2498,7 +2490,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7500245497519737915, guid: db2c78c3486fc974294ad2f5ecd871ff, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 8.38353
+      value: 34.37353
       objectReference: {fileID: 0}
     - target: {fileID: 7500245497519737915, guid: db2c78c3486fc974294ad2f5ecd871ff, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2545,17 +2537,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1860573053989788979, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
-      propertyPath: cameraTransform
-      value: 
-      objectReference: {fileID: 330585546}
     - target: {fileID: 2207471271178187077, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
       propertyPath: m_LocalPosition.x
       value: -8.535
       objectReference: {fileID: 0}
     - target: {fileID: 2207471271178187077, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.38
+      value: 31.37
       objectReference: {fileID: 0}
     - target: {fileID: 2207471271178187077, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2598,20 +2586,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2044880602}
     - target: {fileID: 2369243402749369746, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
-      propertyPath: bridgeCamera
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 2369243402749369746, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
       propertyPath: cameraTransform
       value: 
       objectReference: {fileID: 330585546}
     - target: {fileID: 5821086676760150823, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
       propertyPath: m_Name
       value: PlayerManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 9192427627125825943, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
-      propertyPath: m_Interpolate
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
