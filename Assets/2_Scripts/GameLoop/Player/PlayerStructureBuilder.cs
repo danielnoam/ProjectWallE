@@ -15,11 +15,9 @@ public class PlayerStructureBuilder : MonoBehaviour
     [SerializeField] private LayerMask structureLayerMask;
 
     [Header("References")]
-    [SerializeField, AutoGetSelf] private LineRenderer lineRenderer;
     [SerializeField, AutoGetScene] private Camera mainCamera;
     [SerializeField, AutoGetScene] private StructureBuildMenu buildMenu;
     [SerializeField, AutoGetScene] private StructureActionsMenu actionsMenu;
-    [SerializeField, AutoGetSelf] private FreeFormCameraController cameraController;
     [SerializeField, PrefabSelector("Assets/Prefabs/Structures")] private Structure[] structuresArray;
 
     private Ray _buildRay;
@@ -27,21 +25,18 @@ public class PlayerStructureBuilder : MonoBehaviour
     private bool _menuOpen;
     private Structure _targetedStructure;
 
-    private void Awake()
+    private void OnEnable()
     {
-        buildMenu.SetupMenu(structuresArray, ConfigureBuildElement);
         buildMenu.OnItemSelected += TryBuildStructure;
         actionsMenu.OnItemSelected += OnStructureActionSelected;
-
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         buildMenu.OnItemSelected -= TryBuildStructure;
         actionsMenu.OnItemSelected -= OnStructureActionSelected;
     }
+
 
     private void Update()
     {
@@ -59,7 +54,6 @@ public class PlayerStructureBuilder : MonoBehaviour
 
     private void OpenContextMenu()
     {
-        cameraController.enabled = false;
         _menuOpen = true;
 
         if (_targetedStructure)
@@ -76,7 +70,6 @@ public class PlayerStructureBuilder : MonoBehaviour
 
     private void CloseMenus()
     {
-        cameraController.enabled = true;
         buildMenu.CloseMenu();
         actionsMenu.CloseMenu();
         BuildPrompt.Instance?.Hide();
@@ -85,7 +78,6 @@ public class PlayerStructureBuilder : MonoBehaviour
 
     private void CastBuildRay()
     {
-        lineRenderer.SetPosition(0, transform.position.RemoveY(0.5f));
         _buildRay = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 
         if (Physics.Raycast(_buildRay, out RaycastHit structureHit, buildRange, structureLayerMask))
@@ -94,7 +86,6 @@ public class PlayerStructureBuilder : MonoBehaviour
             {
                 _targetedStructure = structure;
                 _canBuild = false;
-                lineRenderer.SetPosition(1, structureHit.point);
                 if (_menuOpen && _targetedStructure) BuildPrompt.Instance?.Show(_targetedStructure.TopPoint);
             }
 
@@ -103,21 +94,18 @@ public class PlayerStructureBuilder : MonoBehaviour
         {
             _targetedStructure = null;
             _canBuild = false;
-            lineRenderer.SetPosition(1, transform.position + _buildRay.direction * buildRange);
             BuildPrompt.Instance?.Hide();
         }
         else if (Physics.Raycast(_buildRay, out RaycastHit groundHit, buildRange, buildableLayerMask))
         {
             _targetedStructure = null;
             _canBuild = true;
-            lineRenderer.SetPosition(1, groundHit.point);
             if (_menuOpen) BuildPrompt.Instance?.Show(groundHit.point);
         }
         else
         {
             _targetedStructure = null;
             _canBuild = false;
-            lineRenderer.SetPosition(1, transform.position + _buildRay.direction * buildRange);
             BuildPrompt.Instance?.Hide();
         }
     }

@@ -1,9 +1,11 @@
 using System;
-using DNExtensions.Utilities;
+using DNExtensions.Utilities.AutoGet;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
+
+    [SerializeField, AutoGetSelf] private Rigidbody rigidBody;
     private IDamageable _owner;
     private ProjectileData _data;
     private float _maxLifetime;
@@ -22,6 +24,17 @@ public class Projectile : MonoBehaviour
     private void Update()
     {
         if (!_isInitialized) return;
+        
+        _lifetimeTimer += Time.deltaTime;
+        if (_lifetimeTimer >= _maxLifetime)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (!_isInitialized) return;
 
         switch (_data.movementType)
         {
@@ -32,13 +45,6 @@ public class Projectile : MonoBehaviour
                 MoveArc();
                 break;
         }
-
-        _lifetimeTimer += Time.deltaTime;
-        if (_lifetimeTimer >= _maxLifetime)
-        {
-            Destroy(gameObject);
-        }
-
     }
 
     private void OnTriggerEnter(Collider other)
@@ -97,15 +103,15 @@ public class Projectile : MonoBehaviour
 
     private void MoveLinear()
     {
-        transform.position += _direction * (_data.speed * Time.deltaTime);
-        transform.forward = _direction;
+        rigidBody.position += _direction * (_data.speed * Time.fixedDeltaTime);
+        rigidBody.rotation = Quaternion.LookRotation(_direction);
     }
 
     private void MoveArc()
     {
-        _arcVelocity += Physics.gravity * Time.deltaTime;
-        transform.position += _arcVelocity * Time.deltaTime;
-        transform.forward = _arcVelocity.normalized;
+        _arcVelocity += Physics.gravity * Time.fixedDeltaTime;
+        rigidBody.position += _arcVelocity * Time.fixedDeltaTime;
+        rigidBody.rotation = Quaternion.LookRotation(_arcVelocity.normalized);
     }
     
     private void InitializeArc()
@@ -117,15 +123,14 @@ public class Projectile : MonoBehaviour
     }
 
     
-    public void Initialize(ProjectileData data, LayerMask hitLayers, Vector3 targetPosition)
+    public void Initialize(ProjectileData data, LayerMask hitLayers, Vector3 direction, Vector3 targetPosition)
     {
         _data = data;
         _hitLayers = hitLayers;
         _maxLifetime = data.maxLifetime;
         _startPosition = transform.position;
         _targetPosition = targetPosition;
-        _direction  = (targetPosition - transform.position).normalized;
-        transform.forward = _direction;
+        _direction = direction;
 
         if (_data.movementType == ProjectileMovementType.Arc) InitializeArc();
 

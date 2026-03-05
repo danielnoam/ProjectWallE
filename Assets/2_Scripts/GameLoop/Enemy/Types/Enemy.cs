@@ -150,7 +150,8 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPushable
     {
         if (IsTargetValid(CurrentTarget, out var targetComponent))
         {
-            projectileData?.Spawn(hitLayers.Value, transform.position, targetComponent.transform.position);
+            var direction = (targetComponent.transform.position - transform.position).normalized;
+            projectileData?.Spawn(hitLayers.Value, transform.position, direction, targetComponent.transform.position);
         }
     }
     

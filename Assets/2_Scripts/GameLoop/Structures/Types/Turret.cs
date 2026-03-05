@@ -87,7 +87,8 @@ public abstract class Turret : Structure
 
     private void Fire(Vector3 targetPosition)
     {
-        CurrentTurretLevelData.projectileData?.Spawn(hitLayers.Value, firePoint.position, targetPosition);
+        var direction = (targetPosition - firePoint.position).normalized;
+        CurrentTurretLevelData.projectileData?.Spawn(hitLayers.Value, firePoint.position, direction, targetPosition);
     }
 
     protected override void OnBuild()
@@ -132,11 +133,9 @@ public abstract class Turret : Structure
     {
         _currentState = TurretState.Scanning;
 
-        if (_scanRoutine != null)
-            StopCoroutine(_scanRoutine);
+        if (_scanRoutine != null) StopCoroutine(_scanRoutine);
 
-        if (!TryAcquireTarget())
-            _scanRoutine = StartCoroutine(ScanningRoutine());
+        if (!TryAcquireTarget()) _scanRoutine = StartCoroutine(ScanningRoutine());
     }
 
     private IEnumerator ScanningRoutine()
