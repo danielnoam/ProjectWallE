@@ -38,7 +38,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Clouds_Texture:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 6d03b639ebb5b0547808293cb651caf3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture:
@@ -60,30 +60,30 @@ Material:
     m_Ints: []
     m_Floats:
     - _BadirBlendPower: 0.77
-    - _Badir_Blend_Power: 1.51
-    - _Clouds_Distance_Fade_Power: 2
+    - _Badir_Blend_Power: 2.96
+    - _Clouds_Distance_Fade_Power: 10
     - _Distance_Fade_Power: 2
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Sun_Exponent: 5
-    - _Sun_Intensity: 666
-    - _Sun_Radius_A: 0.0903
+    - _Sun_Exponent: 13.84
+    - _Sun_Intensity: 65
+    - _Sun_Radius_A: 0.0822
     - _Sun_Radius_B: 0.1
     - _ZenithBlendPower: 0.5
-    - _Zenith_Blend_Power: 0.89
+    - _Zenith_Blend_Power: 0.54
     m_Colors:
-    - _Clouds_Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Clouds_Color: {r: 1, g: 1, b: 1, a: 0}
     - _Clouds_Scale: {r: 1, g: 1, b: 0, a: 0}
     - _Clouds_Speed: {r: 0.01, g: 0.01, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _HorizonColor: {r: 0.75157225, g: 0.9044516, b: 1, a: 1}
-    - _Horizon_Color: {r: 0.28584704, g: 0.46555007, b: 0.61006284, a: 1}
+    - _Horizon_Color: {r: 0.836478, g: 0.14467373, b: 0.65903264, a: 1}
     - _NadirColor: {r: 1, g: 0.8848348, b: 0, a: 1}
-    - _Nadir_Color: {r: 0.8553459, g: 0, b: 0.66791964, a: 1}
+    - _Nadir_Color: {r: 1, g: 0, b: 0.7798166, a: 1}
     - _Scale: {r: 1, g: 1, b: 0, a: 0}
     - _Speed: {r: 0.01, g: 0.01, b: 0, a: 0}
-    - _Sun_Color: {r: 1, g: 0, b: 0.84775305, a: 1}
+    - _Sun_Color: {r: 0.16393518, g: 0, b: 1, a: 1}
     - _ZennithColor: {r: 0, g: 0.7322017, b: 0.76862746, a: 1}
-    - _Zennith_Color: {r: 1, g: 0.047169685, b: 0.6637071, a: 1}
+    - _Zennith_Color: {r: 0, g: 0.13752651, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

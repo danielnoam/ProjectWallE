@@ -36,9 +36,6 @@ public class Pod : MonoBehaviour
         
         Vector3 impactPoint = collision.contacts[0].point;
         Vector3 surfaceNormal = collision.contacts[0].normal;
-        
-        
-        impulseSource?.GenerateImpulse(collisionImpulseSettings);
 
         var enemiesInRange = Physics.OverlapSphere(impactPoint, 25f);
         
@@ -99,6 +96,8 @@ public class Pod : MonoBehaviour
     
     private void Land(Vector3 impactPoint, Vector3 surfaceNormal)
     {
+        impulseSource?.GenerateImpulse(collisionImpulseSettings);
+        
         var instance = Instantiate(_deployable as MonoBehaviour);
         ((IDeployable)instance).Deploy(impactPoint, surfaceNormal, _forward);
         Destroy(gameObject);
