@@ -28,11 +28,15 @@ public class CarController : MonoBehaviour, IPlayerController
     [SerializeField] private float handbrakeBlendIn = 12f; // how fast it engages
     [SerializeField] private float handbrakeBlendOut = 8f; // how fast it releases
 
-    [Header("Slope Anti-Slip (extra)")] 
-    [SerializeField] private float slopeAntiSlipStrength = 1.0f; // 0..1+ (1 cancels gravity fully)
-    [SerializeField] private float slopeAntiSlipMaxAccel = 30f; // m/s^2 clamp safety
-    [SerializeField] private float slopeAssistFadeStart = 0.2f; // m/s lateral speed where assist starts fading out
-    [SerializeField] private float slopeAssistFadeEnd = 2.0f; // m/s lateral speed where assist is fully off
+    [Header("Slope Slip")]
+    [SerializeField] private float slopeSlipStartAngle = 20f;   // below this = normal grip
+    [SerializeField] private float slopeSlipFullAngle = 35f;    // at this angle = full reduced grip
+    [SerializeField] private float steepSlopeGripMultiplier = 0.2f; // how much grip remains on steep slopes
+
+    [Header("Lateral Slip")]
+    [SerializeField] private float maxLateralSlipSpeed = 3f;
+    [SerializeField] private float overspeedSlipGripMultiplier = 0.25f; // grip when lateral slip speed is too high
+    [SerializeField] private float overspeedSlipBlendRange = 1.5f; // how smoothly grip falls after threshold
 
     [Header("Takeoff / partial-ground tuning")] 
     [SerializeField] private float minGripWhenPartialGround = 0.15f; // 0..1
@@ -187,52 +191,65 @@ public class CarController : MonoBehaviour, IPlayerController
 
             Vector3 tireVel = _playerRb.GetPointVelocity(tire.tireTransform.position);
 
-            float steeringVel = Vector3.Dot(tire.tireTransform.right, tireVel);
+            // actual lateral speed in m/s
+            float lateralSpeed = Vector3.Dot(tire.tireTransform.right, tireVel);
 
-            float normalGrip = CalcCurrenTireGripFactor(tire.tireTransform, frictionCurve);
-            float gripFactor = Mathf.Lerp(normalGrip, handBreakGripFactor, _handbrake01);
+            float normalGrip = CalculateCurrentTireGripFactor(tire.tireTransform, frictionCurve);
+            
+            // reduce grip when standing on a steep slope
+            float slopeGrip = GetSlopeGripMultiplier(hit.normal);
 
+            float gripFactor = normalGrip * slopeGrip;
+
+            // handbrake
+            gripFactor = Mathf.Lerp(gripFactor, handBreakGripFactor * slopeGrip, _handbrake01);
+
+            // partial ground blending
             gripFactor *= _airborneBlend;
 
-            float desiredVelChange = -steeringVel * gripFactor;
-
+            float desiredVelChange = -lateralSpeed * gripFactor;
             float desiredAccel = desiredVelChange / Time.fixedDeltaTime;
 
-            _playerRb.AddForceAtPosition(tire.tireTransform.right * _playerRb.mass / _allTires.Count * desiredAccel,
-                tire.tireTransform.position);
-
-            // ===== NEW: slope gravity lateral counter-force =====
-            // Gravity component parallel to the ground plane at this tire
-            Vector3 g = new Vector3(0, -gravityStrength, 0); // (0,-9.81,0)
-            Vector3 gParallel = Vector3.ProjectOnPlane(g, -hit.normal); // "down the slope"
-
-            // We only care about lateral (sideways) direction relative to the tire
-            float gLatAccel = Vector3.Dot(gParallel, tire.tireTransform.right); // m/s^2 along tire.right
-
-            // Fade out assist when already sliding fast sideways (so it doesn't feel sticky/weird)
-            float latSpeedAbs = Mathf.Clamp(Mathf.Abs(steeringVel), slopeAssistFadeStart, slopeAssistFadeEnd);
-            float fade = 1f - Mathf.InverseLerp(slopeAssistFadeStart, slopeAssistFadeEnd, latSpeedAbs);
-            fade = Mathf.Clamp01(fade);
-
-            // Counter acceleration (opposite to the gravity lateral accel)
-            float counterAccel = -gLatAccel * slopeAntiSlipStrength * fade;
-
-            // Safety clamp
-            counterAccel = Mathf.Clamp(counterAccel, -slopeAntiSlipMaxAccel, slopeAntiSlipMaxAccel);
-
-            // Apply as force (F = m * a), distributed by tire count just like your other forces
-            Vector3 counterForce = tire.tireTransform.right * ((_playerRb.mass / _allTires.Count) * counterAccel);
-            _playerRb.AddForceAtPosition(counterForce, tire.tireTransform.position);
+            Vector3 force = tire.tireTransform.right * (_playerRb.mass / _allTires.Count * desiredAccel);
+            _playerRb.AddForceAtPosition(force, tire.tireTransform.position, ForceMode.Force);
         }
     }
 
-    private float CalcCurrenTireGripFactor(Transform tire, AnimationCurve frictionCurve)
+    private float CalculateCurrentTireGripFactor(Transform tire, AnimationCurve frictionCurve)
     {
         Vector3 tireVel = _playerRb.GetPointVelocity(tire.position);
-        tireVel.y = 0;
-        float slippingAmount = Mathf.Clamp(Vector3.Dot(tire.right, tireVel.normalized), -1.0f, 1.0f);
-        float gripFactor = frictionCurve.Evaluate(Mathf.Abs(slippingAmount));
-        return gripFactor;
+        tireVel.y = 0f;
+
+        float speed = tireVel.magnitude;
+        if (speed < 0.01f)
+            return frictionCurve.Evaluate(0f);
+
+        // Original logic: how much of the velocity is in the lateral direction
+        float directionalSlip = Mathf.Abs(Vector3.Dot(tire.right, tireVel.normalized));
+        float baseGrip = frictionCurve.Evaluate(directionalSlip);
+
+        // New logic: actual sideways speed in m/s
+        float lateralSpeed = Mathf.Abs(Vector3.Dot(tire.right, tireVel));
+
+        // If lateral speed exceeds threshold, reduce grip
+        float overspeed01 = Mathf.InverseLerp(
+            maxLateralSlipSpeed,
+            maxLateralSlipSpeed + overspeedSlipBlendRange,
+            lateralSpeed
+        );
+
+        float slipSpeedGrip = Mathf.Lerp(1f, overspeedSlipGripMultiplier, overspeed01);
+
+        return baseGrip * slipSpeedGrip;
+    }
+    
+    private float GetSlopeGripMultiplier(Vector3 groundNormal)
+    {
+        float slopeAngle = Vector3.Angle(groundNormal, Vector3.up);
+
+        float slope01 = Mathf.InverseLerp(slopeSlipStartAngle, slopeSlipFullAngle, slopeAngle);
+
+        return Mathf.Lerp(1f, steepSlopeGripMultiplier, slope01);
     }
 
 

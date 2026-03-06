@@ -262,10 +262,10 @@ MonoBehaviour:
   handBreakGripFactor: 0.03
   handbrakeBlendIn: 12
   handbrakeBlendOut: 10
-  slopeAntiSlipStrength: 1
-  slopeAntiSlipMaxAccel: 10
-  slopeAssistFadeStart: 0.1
-  slopeAssistFadeEnd: 1.5
+  slopeSlipStartAngle: 20
+  slopeSlipFullAngle: 35
+  steepSlopeGripMultiplier: 0.2
+  maxLateralSlipSpeed: 18
   minGripWhenPartialGround: 0.15
   partialGroundGripPower: 2
   gravityStrength: 10
