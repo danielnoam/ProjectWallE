@@ -256,7 +256,7 @@ public class CarController : MonoBehaviour, IPlayerController
     {
         if (carSpeed > topForwardSpeed) return;
 
-        foreach (var tire in _allTires)
+        foreach (var tire in steeringTires)
         {
             if (!IsTireGrounded(tire.tireTransform, out var hit)) continue;
 
@@ -266,7 +266,7 @@ public class CarController : MonoBehaviour, IPlayerController
                 ? accelerationCurve.Evaluate(normalizedSpeed) * accelerationStrength
                 : brakeStrength;
 
-            _playerRb.AddForceAtPosition(tire.tireTransform.forward * (availableAcceleration * _playerRb.mass) / _allTires.Count,
+            _playerRb.AddForceAtPosition(tire.tireTransform.forward * (availableAcceleration * _playerRb.mass) / steeringTires.Length,
                 tire.tireTransform.position);
         }
 
@@ -276,7 +276,7 @@ public class CarController : MonoBehaviour, IPlayerController
     {
         if (carSpeed < -topBackwardSpeed) return;
 
-        foreach (var tire in _allTires)
+        foreach (var tire in steeringTires)
         {
             if (!IsTireGrounded(tire.tireTransform, out var hit)) continue;
 
@@ -286,7 +286,7 @@ public class CarController : MonoBehaviour, IPlayerController
                 ? accelerationCurve.Evaluate(normalizedSpeed) * accelerationStrength
                 : brakeStrength;
 
-            _playerRb.AddForceAtPosition(-tire.tireTransform.forward * (availableAcceleration * _playerRb.mass) / _allTires.Count,
+            _playerRb.AddForceAtPosition(-tire.tireTransform.forward * (availableAcceleration * _playerRb.mass) / steeringTires.Length,
                 tire.tireTransform.position);
         }
     }

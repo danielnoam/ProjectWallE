@@ -61,6 +61,7 @@ namespace ProjectWallE
         {
             if (_input.SwitchPressed) SwitchController();
             SwitchBehavior();
+            
         }
 
         private void FixedUpdate()
