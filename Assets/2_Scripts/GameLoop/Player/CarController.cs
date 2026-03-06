@@ -28,16 +28,6 @@ public class CarController : MonoBehaviour, IPlayerController
     [SerializeField] private float handbrakeBlendIn = 12f; // how fast it engages
     [SerializeField] private float handbrakeBlendOut = 8f; // how fast it releases
 
-    [Header("Slope Slip")]
-    [SerializeField] private float slopeSlipStartAngle = 20f;   // below this = normal grip
-    [SerializeField] private float slopeSlipFullAngle = 35f;    // at this angle = full reduced grip
-    [SerializeField] private float steepSlopeGripMultiplier = 0.2f; // how much grip remains on steep slopes
-
-    [Header("Lateral Slip")]
-    [SerializeField] private float maxLateralSlipSpeed = 3f;
-    [SerializeField] private float overspeedSlipGripMultiplier = 0.25f; // grip when lateral slip speed is too high
-    [SerializeField] private float overspeedSlipBlendRange = 1.5f; // how smoothly grip falls after threshold
-
     [Header("Takeoff / partial-ground tuning")] 
     [SerializeField] private float minGripWhenPartialGround = 0.15f; // 0..1
     [SerializeField] private float partialGroundGripPower = 1.0f; // curve feel
@@ -55,6 +45,12 @@ public class CarController : MonoBehaviour, IPlayerController
     [Header("Breaking Parameters")] 
     [SerializeField] private float brakeStrength;
     [SerializeField] private float engineBrakeStrength;
+    
+    [Header("Boost Settings")]
+    [SerializeField] private float boostAccelFactor;
+    [SerializeField] private float boostSpeedFactor;
+    [SerializeField] private float boostDuration;
+    [SerializeField] private float boostCooldown;
 
     [Header("Air Control Parameters")] 
     [SerializeField] private float airAlignmentStrength;
@@ -190,66 +186,35 @@ public class CarController : MonoBehaviour, IPlayerController
             if (!IsTireGrounded(tire.tireTransform, out var hit)) continue;
 
             Vector3 tireVel = _playerRb.GetPointVelocity(tire.tireTransform.position);
+            float steeringVel = Vector3.Dot(tire.tireTransform.right, tireVel);
 
-            // actual lateral speed in m/s
-            float lateralSpeed = Vector3.Dot(tire.tireTransform.right, tireVel);
+            float normalGrip = CalcCurrentTireGripFactor(tire.tireTransform, frictionCurve);
+            float gripFactor = Mathf.Lerp(normalGrip, handBreakGripFactor, _handbrake01);
 
-            float normalGrip = CalculateCurrentTireGripFactor(tire.tireTransform, frictionCurve);
-            
-            // reduce grip when standing on a steep slope
-            float slopeGrip = GetSlopeGripMultiplier(hit.normal);
-
-            float gripFactor = normalGrip * slopeGrip;
-
-            // handbrake
-            gripFactor = Mathf.Lerp(gripFactor, handBreakGripFactor * slopeGrip, _handbrake01);
-
-            // partial ground blending
             gripFactor *= _airborneBlend;
 
-            float desiredVelChange = -lateralSpeed * gripFactor;
+            float desiredVelChange = -steeringVel * gripFactor;
             float desiredAccel = desiredVelChange / Time.fixedDeltaTime;
 
-            Vector3 force = tire.tireTransform.right * (_playerRb.mass / _allTires.Count * desiredAccel);
-            _playerRb.AddForceAtPosition(force, tire.tireTransform.position, ForceMode.Force);
+            _playerRb.AddForceAtPosition(
+                tire.tireTransform.right * (_playerRb.mass / _allTires.Count * desiredAccel),
+                tire.tireTransform.position,
+                ForceMode.Force
+            );
         }
     }
 
-    private float CalculateCurrentTireGripFactor(Transform tire, AnimationCurve frictionCurve)
+    private float CalcCurrentTireGripFactor(Transform tire, AnimationCurve frictionCurve)
     {
         Vector3 tireVel = _playerRb.GetPointVelocity(tire.position);
         tireVel.y = 0f;
-
-        float speed = tireVel.magnitude;
-        if (speed < 0.01f)
+        
+        if (tireVel.magnitude < 0.1f)
             return frictionCurve.Evaluate(0f);
 
-        // Original logic: how much of the velocity is in the lateral direction
-        float directionalSlip = Mathf.Abs(Vector3.Dot(tire.right, tireVel.normalized));
-        float baseGrip = frictionCurve.Evaluate(directionalSlip);
-
-        // New logic: actual sideways speed in m/s
-        float lateralSpeed = Mathf.Abs(Vector3.Dot(tire.right, tireVel));
-
-        // If lateral speed exceeds threshold, reduce grip
-        float overspeed01 = Mathf.InverseLerp(
-            maxLateralSlipSpeed,
-            maxLateralSlipSpeed + overspeedSlipBlendRange,
-            lateralSpeed
-        );
-
-        float slipSpeedGrip = Mathf.Lerp(1f, overspeedSlipGripMultiplier, overspeed01);
-
-        return baseGrip * slipSpeedGrip;
-    }
-    
-    private float GetSlopeGripMultiplier(Vector3 groundNormal)
-    {
-        float slopeAngle = Vector3.Angle(groundNormal, Vector3.up);
-
-        float slope01 = Mathf.InverseLerp(slopeSlipStartAngle, slopeSlipFullAngle, slopeAngle);
-
-        return Mathf.Lerp(1f, steepSlopeGripMultiplier, slope01);
+        float slippingAmount = Mathf.Clamp(Vector3.Dot(tire.right, tireVel.normalized), -1f, 1f);
+        float gripFactor = frictionCurve.Evaluate(Mathf.Abs(slippingAmount));
+        return gripFactor;
     }
 
 
@@ -261,7 +226,7 @@ public class CarController : MonoBehaviour, IPlayerController
     {
         float carSpeed = Vector3.Dot(transform.forward, _playerRb.linearVelocity);
 
-        if (_carInput.Acceleration > 0) ApplyForwardAcceleration(carSpeed);
+        if (_carInput.Acceleration > 0 || _carInput.BoostHeld) ApplyForwardAcceleration(carSpeed);
         else if (_carInput.Acceleration < 0) ApplyBackwardsAcceleration(carSpeed);
         else ApplyEngineBreaking(carSpeed);
 
@@ -271,17 +236,21 @@ public class CarController : MonoBehaviour, IPlayerController
 
     private void ApplyForwardAcceleration(float carSpeed)
     {
-        if (carSpeed > topForwardSpeed) return;
+        bool isBoost = _carInput.BoostHeld;
+        float maxSpeed = isBoost ? topForwardSpeed * boostSpeedFactor : topForwardSpeed;
+        if (carSpeed > maxSpeed) return;
 
         foreach (var tire in steeringTires)
         {
             if (!IsTireGrounded(tire.tireTransform, out var hit)) continue;
-
-            float normalizedSpeed = Mathf.Clamp01(Mathf.Abs(carSpeed) / topForwardSpeed);
-
+            
+            float normalizedSpeed = Mathf.Clamp01(Mathf.Abs(carSpeed) / maxSpeed);
+            
             float availableAcceleration = carSpeed >= 0
                 ? accelerationCurve.Evaluate(normalizedSpeed) * accelerationStrength
                 : brakeStrength;
+            
+            availableAcceleration *= isBoost ? boostAccelFactor : 1;
 
             _playerRb.AddForceAtPosition(tire.tireTransform.forward * (availableAcceleration * _playerRb.mass) / steeringTires.Length,
                 tire.tireTransform.position);
