@@ -80,36 +80,62 @@ public class PlayerStructureBuilder : MonoBehaviour
     {
         _buildRay = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 
-        if (Physics.Raycast(_buildRay, out RaycastHit structureHit, buildRange, structureLayerMask))
+        if (Physics.Raycast(_buildRay, out RaycastHit structureHit, buildRange, structureLayerMask) && structureHit.collider.TryGetComponent(out Structure structure))
         {
-            if (structureHit.collider.TryGetComponent(out Structure structure))
-            {
-                _targetedStructure = structure;
-                _canBuild = false;
-                if (_menuOpen && _targetedStructure) BuildPrompt.Instance?.Show(_targetedStructure.TopPoint);
-            }
-
+            _targetedStructure = structure;
+            _canBuild = false;
+            UpdateBuildPrompt(_menuOpen ? structure.TopPoint : null);
         }
         else if (Physics.Raycast(_buildRay, buildRange, blockBuildLayerMask))
         {
             _targetedStructure = null;
             _canBuild = false;
-            BuildPrompt.Instance?.Hide();
+            UpdateBuildPrompt(null);
         }
         else if (Physics.Raycast(_buildRay, out RaycastHit groundHit, buildRange, buildableLayerMask))
         {
             _targetedStructure = null;
             _canBuild = true;
-            if (_menuOpen) BuildPrompt.Instance?.Show(groundHit.point);
+            UpdateBuildPrompt(_menuOpen ? groundHit.point : null);
         }
         else
         {
             _targetedStructure = null;
             _canBuild = false;
+            UpdateBuildPrompt(null);
+        }
+    }
+    
+    private void UpdateBuildPrompt(Vector3? position)
+    {
+        if (position.HasValue)
+        {
+            BuildPrompt.Instance?.Show(position.Value);
+        }
+        else
+        {
             BuildPrompt.Instance?.Hide();
         }
     }
+    
 
+    private void TryBuildStructure(Structure structure)
+    {
+        if (!_canBuild) return;
+        if (!Physics.Raycast(_buildRay, out RaycastHit hit, buildRange, buildableLayerMask)) return;
+        if (!ResourceManager.Instance.TrySpendResources(structure.BuildCost)) return;
+
+        StructureManager.Instance?.DeployPod(structure, hit.point, transform.forward);
+    }
+
+    private void OnStructureActionSelected(StructureAction action)
+    {
+        if (action.isAvailable)
+        {
+            action.onSelected?.Invoke();
+        }
+    }
+    
     private void ConfigureBuildElement(RadialMenuElement element, Structure structure)
     {
         bool canAfford = ResourceManager.Instance.CanAfford(structure.BuildCost);
@@ -141,23 +167,6 @@ public class PlayerStructureBuilder : MonoBehaviour
         }
     }
 
-    private void TryBuildStructure(Structure structure)
-    {
-        if (!_canBuild) return;
-        if (!Physics.Raycast(_buildRay, out RaycastHit hit, buildRange, buildableLayerMask)) return;
-        if (!ResourceManager.Instance.TrySpendResources(structure.BuildCost)) return;
-
-        StructureManager.Instance?.DeployPod(structure, hit.point, transform.forward);
-    }
-
-    private void OnStructureActionSelected(StructureAction action)
-    {
-        if (action.isAvailable)
-        {
-            action.onSelected?.Invoke();
-        }
-    }
-
     private List<StructureAction> BuildStructureActions(Structure structure)
     {
         bool canUpgrade = structure.CanUpgrade();
@@ -168,8 +177,8 @@ public class PlayerStructureBuilder : MonoBehaviour
             : $"At Max Level\n {structure.currentUpgradeLevel}/{structure.currentUpgradeLevel}";
     
         string fixLabel = canFix 
-            ? $"Fix {(int)structure.FixCost}\n{structure.CurrentHealth}/{structure.MaxHealth}" 
-            : $"At Full Health\n{structure.CurrentHealth}/{structure.MaxHealth}";
+            ? $"Fix {(int)structure.FixCost}\n{(int)structure.CurrentHealth}/{(int)structure.MaxHealth}" 
+            : $"At Full Health\n{(int)structure.CurrentHealth}/{(int)structure.MaxHealth}";
 
         return new List<StructureAction>
         {

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Outline Ultimate
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.FullScreenPassRendererFeature
   m_Active: 0
-  injectionPoint: 600
+  injectionPoint: 550
   fetchColorBuffer: 1
   requirements: 7
   passMaterial: {fileID: 2100000, guid: 2fd362cb456092543b5507b3ba9e51b3, type: 2}
@@ -30,7 +30,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b00045f12942b46c698459096c89274e, type: 3}
-  m_Name: FullScreenPassRendererFeature
+  m_Name: Fog
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.FullScreenPassRendererFeature
   m_Active: 1
   injectionPoint: 600
@@ -86,13 +86,13 @@ MonoBehaviour:
     probeVolumeBlendStatesCS: {fileID: 7200000, guid: b9a23f869c4fd45f19c5ada54dd82176, type: 3}
   m_RendererFeatures:
   - {fileID: 7833122117494664109}
+  - {fileID: -2150769587562243004}
   - {fileID: -1983433968388261668}
   - {fileID: 4126539813256152135}
   - {fileID: 9053551594666534145}
   - {fileID: 4296741069671190061}
   - {fileID: -4254251670421829634}
-  - {fileID: -2150769587562243004}
-  m_RendererFeatureMap: ad6b866f10d7b46cdc38c67e506d79e447c4a3c8186a44390125c52335ada47d2d4e95dd3c17a13bfe07654fa5dcf5c4449ca39374ee26e2
+  m_RendererFeatureMap: ad6b866f10d7b46c449ca39374ee26e2dc38c67e506d79e447c4a3c8186a44390125c52335ada47d2d4e95dd3c17a13bfe07654fa5dcf5c4
   m_UseNativeRenderPass: 1
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
