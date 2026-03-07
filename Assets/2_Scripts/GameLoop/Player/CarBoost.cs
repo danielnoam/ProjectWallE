@@ -32,8 +32,13 @@ namespace ProjectWallE
 
         private void OnDisable()
         {
+            bool wasBoosting = _isBoosting;
             _disableTime = Time.time;
             _isBoosting = false;
+
+            if (!wasBoosting) return;
+            PlayerManager.InvokeOnBoostEnd();
+            Debug.Log("Slow poke looking ahh");
         }
 
         private void OnEnable()
@@ -84,23 +89,31 @@ namespace ProjectWallE
 
         private void HandleBoostState()
         {
+            bool wasBoosting = _isBoosting;
+            
             if (!_carInput.BoostHeld)
             {
                 _isBoosting = false;
-                return;
             }
-
-            if (_isBoosting)
+            else if (_isBoosting && _currentFuel <= 0f)
             {
-                if (_currentFuel <= 0f)
-                    _isBoosting = false;
-
-                return;
+                _isBoosting = false;
             }
-
-            if (_currentFuel >= minFuelToStartBoost)
+            else if (_currentFuel >= minFuelToStartBoost)
             {
                 _isBoosting = true;
+            }
+            
+            //events
+            if (_isBoosting && !wasBoosting)
+            {
+                PlayerManager.InvokeOnBoostStart();
+                Debug.Log("Zoom Zoom");
+            }
+            else if (!_isBoosting && wasBoosting)
+            {
+                PlayerManager.InvokeOnBoostEnd();
+                Debug.Log("Slow poke looking ahh");
             }
         }
 
