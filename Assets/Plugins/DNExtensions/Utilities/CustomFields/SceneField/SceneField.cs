@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -10,7 +12,7 @@ namespace DNExtensions.Utilities.CustomFields
     /// Serializable scene reference with validation and convenient loading methods.
     /// Provides type-safe scene management with build settings validation.
     /// </summary>
-    [System.Serializable]
+    [Serializable]
     public class SceneField
     {
         [SerializeField] private Object sceneAsset;
@@ -33,7 +35,7 @@ namespace DNExtensions.Utilities.CustomFields
                 // Validate scene exists and is in build settings
                 if (!IsSceneValid())
                 {
-                    Debug.LogWarning($"Scene '{sceneName}' is not valid or not in build settings!");
+                    // Debug.LogWarning($"Scene '{sceneName}' is not valid or not in build settings!");
                 }
 
                 return sceneName;

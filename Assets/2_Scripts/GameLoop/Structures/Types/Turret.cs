@@ -1,63 +1,77 @@
+using System;
 using System.Collections;
+using DNExtensions.Systems.Scriptables;
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.Button;
 using PrimeTween;
 using UnityEngine;
-using Sequence = PrimeTween.Sequence;
 
-public class Turret : Structure
+[Serializable]
+public class TurretLevelData : StructureLevelData
 {
-    [Header("Turret Settings")]
+    public float detectionRadius = 25f;
+    public float attackRotationSpeed = 125f;
+    public float attackCooldown = 0.3f;
+    [SOSelector("Assets/Data")] public ProjectileData projectileData;
+}
+
+public enum TurretState { Scanning, Attacking, Broken }
+
+public abstract class Turret : Structure
+{
+    [Header("Turret")]
+    [SerializeReference, DrawSerializeReference] private TurretLevelData[] levels = Array.Empty<TurretLevelData>();
+    [SerializeField, SOSelector("Assets/Data")] protected SOLayerMask hitLayers;
     [SerializeField] private float scanRotationSpeed = 35f;
     [SerializeField] private float scanWaitDuration = 1.5f;
-    [SerializeField] private float detectionRadius = 10f;
-    [SerializeField] private Vector3 brokenRotation;
-    [SerializeField] private Transform headTransform;
-    [Separator]
-    [SerializeField] private ShakeSettings attackAnimationSettings;
-    [SerializeField] private float attackRotationSpeed = 100f;
-    [SerializeField] private float attackCooldown = 1f;
-    [SerializeField] private float projectileDamage = 20f;
-    [SerializeField] private float projectileSpeed = 30f;
-    [SerializeField] private LayerMask projectileHitLayers;
-    [SerializeField] private Projectile projectilePrefab;
-    [Separator]
-    [SerializeField, ReadOnly] private TurretState currentState = TurretState.Idle;
-    
+    [SerializeField] protected Vector3 brokenRotation;
+    [SerializeField] protected Transform headTransform;
+    [SerializeField] protected Transform firePoint;
+    [SerializeField] protected ShakeSettings attackAnimationSettings;
+
     private float _attackTimer;
+    private TurretState _currentState;
     private IDamageable _currentTarget;
-    private Coroutine _scanCoroutine;
-    private enum TurretState { Scanning, Idle, Attacking, Broken }
+    private Coroutine _scanRoutine;
     private Sequence _attackSequence;
+
+    protected TurretLevelData CurrentTurretLevelData => (TurretLevelData)Levels[currentUpgradeLevel - 1];
+    protected override StructureLevelData[] Levels => levels;
+    
+
+    protected abstract Quaternion GetAimRotation(Vector3 targetPosition);
+    protected abstract bool CanFire(Vector3 targetPosition);
+
+    private void OnDestroy()
+    {
+        if (_attackSequence.isAlive) _attackSequence.Stop();
+        if (_currentTarget != null)
+            _currentTarget.OnDeath -= OnTargetDeath;
+    }
 
     private void Update()
     {
-        if (currentState == TurretState.Attacking)
+        if (_currentState == TurretState.Attacking)
         {
-            if (_currentTarget is Component targetComponent && targetComponent)
+            if (_currentTarget is MonoBehaviour target && target)
             {
                 _attackTimer += Time.deltaTime;
-                Vector3 directionToTarget = (targetComponent.transform.position - headTransform.position).normalized;
-                Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+                Vector3 targetPosition = target.transform.position;
+
                 headTransform.rotation = Quaternion.RotateTowards(
                     headTransform.rotation,
-                    targetRotation,
-                    attackRotationSpeed * Time.deltaTime
+                    GetAimRotation(targetPosition),
+                    CurrentTurretLevelData.attackRotationSpeed * Time.deltaTime
                 );
-                
-                
-                float angleToTarget = Quaternion.Angle(headTransform.rotation, targetRotation);
-                if (angleToTarget > 10f) return;
-            
-                if (_attackTimer >= attackCooldown)
+
+                if (!CanFire(targetPosition)) return;
+
+                if (_attackTimer >= CurrentTurretLevelData.attackCooldown)
                 {
+                    Vector3 capturedPosition = targetPosition;
                     _attackSequence = Sequence.Create();
                     _attackSequence.Group(Tween.PunchScale(headTransform, attackAnimationSettings));
-                    _attackSequence.OnComplete(() =>
-                    {
-                        var projectile = Instantiate(projectilePrefab, headTransform.position, headTransform.rotation);
-                        projectile.Initialize(this, projectileSpeed, projectileDamage, directionToTarget, projectileHitLayers);
-                    });
+                    _attackSequence.OnComplete(() => Fire(capturedPosition));
                     _attackTimer = 0f;
                 }
             }
@@ -67,99 +81,14 @@ public class Turret : Structure
                 StartScanning();
             }
         }
-    
-        StateInfo = $"State: {currentState} \nHealth: {currentHealth}/{startHealth}";
-    }
-    
-    [Button(ButtonPlayMode.OnlyWhenPlaying)]
-    private void Idle()
-    {
-        currentState = TurretState.Idle;
-        if (_scanCoroutine != null)
-        {
-            StopCoroutine(_scanCoroutine);
-            _scanCoroutine = null;
-        }
+
+        StateInfo = $"State: {_currentState} \nHealth: {CurrentHealth}/{MaxHealth}";
     }
 
-    [Button(ButtonPlayMode.OnlyWhenPlaying)]
-    private void StartScanning()
+    private void Fire(Vector3 targetPosition)
     {
-        currentState = TurretState.Scanning;
-        if (_scanCoroutine != null)
-        {
-            StopCoroutine(_scanCoroutine);
-        }
-        
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius, projectileHitLayers);
-        foreach (var hitCollider in hitColliders)
-        {
-            if (hitCollider.TryGetComponent<Enemy>(out var enemy))
-            {
-                StartAttackingTarget(enemy);
-                return;
-            }
-        }
-        
-        _scanCoroutine = StartCoroutine(ScanningRoutine());
-    }
-
-    private IEnumerator ScanningRoutine()
-    {
-        float[] scanAngles = { -90, -45f, 0f, 45f, 90, 0f };
-        int currentAngleIndex = 0;
-
-        while (currentState == TurretState.Scanning)
-        {
-            Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius, projectileHitLayers);
-            foreach (var hitCollider in hitColliders)
-            {
-                if (hitCollider.TryGetComponent<Enemy>(out var enemy))
-                {
-                    StartAttackingTarget(enemy);
-                    yield break;
-                }
-            }
-        
-            Quaternion targetRotation = Quaternion.Euler(0, scanAngles[currentAngleIndex], 0);
-        
-            while (Quaternion.Angle(headTransform.localRotation, targetRotation) > 0.1f)
-            {
-                headTransform.localRotation = Quaternion.RotateTowards(
-                    headTransform.localRotation, 
-                    targetRotation, 
-                    scanRotationSpeed * Time.deltaTime
-                );
-                yield return null;
-            }
-            yield return new WaitForSeconds(scanWaitDuration);
-        
-            currentAngleIndex = (currentAngleIndex + 1) % scanAngles.Length;
-        }
-    }
-
-    private void StartAttackingTarget(IDamageable target)
-    {
-        if (target == null) return;
-        
-        if (_currentTarget != null)
-        {
-            _currentTarget.OnDeath -= HandleTargetDeath;
-        }
-        
-        currentState = TurretState.Attacking;
-        _currentTarget = target;
-        _currentTarget.OnDeath += HandleTargetDeath;
-    }
-
-    private void HandleTargetDeath(IDamageable deadTarget)
-    {
-        if (deadTarget == _currentTarget)
-        {
-            deadTarget.OnDeath -= HandleTargetDeath;
-            _currentTarget = null;
-            StartScanning();
-        }
+        var direction = (targetPosition - firePoint.position).normalized;
+        CurrentTurretLevelData.projectileData?.Spawn(hitLayers.Value, firePoint.position, direction, targetPosition);
     }
 
     protected override void OnBuild()
@@ -169,40 +98,121 @@ public class Turret : Structure
 
     protected override void OnUpgrade()
     {
+        StartScanning();
     }
+    
+    protected override void OnFix()
+    {
+        StartScanning();
+    }
+
 
     protected override void OnBreak()
     {
-        currentState = TurretState.Broken;
-        
+        _currentState = TurretState.Broken;
+
         if (_currentTarget != null)
         {
-            _currentTarget.OnDeath -= HandleTargetDeath;
+            _currentTarget.OnDeath -= OnTargetDeath;
             _currentTarget = null;
         }
-        
-        if (_scanCoroutine != null)
+
+        if (_scanRoutine != null)
         {
-            StopCoroutine(_scanCoroutine);
-            _scanCoroutine = null;
+            StopCoroutine(_scanRoutine);
+            _scanRoutine = null;
         }
-        
-        Tween.LocalRotation(headTransform, Quaternion.Euler(brokenRotation), duration: 0.5f);
+
+        var endRotation = headTransform.localEulerAngles;
+        endRotation.x = brokenRotation.x;
+        Tween.LocalRotation(headTransform, Quaternion.Euler(endRotation), duration: 1f);
     }
 
-    private void OnDestroy()
+    [Button(ButtonPlayMode.OnlyWhenPlaying)]
+    private void StartScanning()
     {
-        if (_attackSequence.isAlive) _attackSequence.Stop();
-        
+        _currentState = TurretState.Scanning;
+
+        if (_scanRoutine != null) StopCoroutine(_scanRoutine);
+
+        if (!TryAcquireTarget()) _scanRoutine = StartCoroutine(ScanningRoutine());
+    }
+
+    private IEnumerator ScanningRoutine()
+    {
+        float[] scanAngles = { -90, -45f, 0f, 45f, 90, 0f };
+        int currentAngleIndex = 0;
+
+        while (_currentState == TurretState.Scanning)
+        {
+            if (TryAcquireTarget()) yield break;
+
+            Quaternion targetRotation = Quaternion.Euler(0, scanAngles[currentAngleIndex], 0);
+
+            while (Quaternion.Angle(headTransform.localRotation, targetRotation) > 0.1f)
+            {
+                headTransform.localRotation = Quaternion.RotateTowards(
+                    headTransform.localRotation,
+                    targetRotation,
+                    scanRotationSpeed * Time.deltaTime
+                );
+                yield return null;
+            }
+
+            yield return new WaitForSeconds(scanWaitDuration);
+            currentAngleIndex = (currentAngleIndex + 1) % scanAngles.Length;
+        }
+    }
+
+    private void StartAttackingTarget(IDamageable target)
+    {
+        if (target == null) return;
+
         if (_currentTarget != null)
+            _currentTarget.OnDeath -= OnTargetDeath;
+
+        _currentState = TurretState.Attacking;
+        _currentTarget = target;
+        _currentTarget.OnDeath += OnTargetDeath;
+    }
+
+    private void OnTargetDeath(IDamageable deadTarget)
+    {
+        if (deadTarget == _currentTarget)
         {
-            _currentTarget.OnDeath -= HandleTargetDeath;
+            deadTarget.OnDeath -= OnTargetDeath;
+            _currentTarget = null;
+            StartScanning();
         }
     }
 
-    private void OnDrawGizmosSelected()
+    private bool TryAcquireTarget()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, detectionRadius);
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, CurrentTurretLevelData.detectionRadius, hitLayers.Value);
+        foreach (var hitCollider in hitColliders)
+        {
+            if (hitCollider.TryGetComponent<Enemy>(out var enemy))
+            {
+                StartAttackingTarget(enemy);
+                return true;
+            }
+        }
+        return false;
     }
+
+#if UNITY_EDITOR
+    protected override void OnDrawGizmosSelected()
+    {
+        base.OnDrawGizmosSelected();
+        if (!Application.isPlaying || levels == null) return;
+
+            
+        Gizmos.color = Color.red;
+        if (levels is { Length: > 0 } && levels[0] != null)
+        {
+            Gizmos.DrawWireSphere(transform.position, CurrentTurretLevelData.detectionRadius);
+        }
+    }
+#endif
+
 }

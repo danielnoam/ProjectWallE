@@ -1,75 +1,66 @@
 using System;
+using DNExtensions.Systems.Scriptables;
 using DNExtensions.Utilities;
 using UnityEngine;
 
 public enum TargetPriority
 {
-    Player,
-    DamageGiver,
-    NearestBase,
-    NearestTurretInRange,
-    NearestGeneratorInRange,
-    WeakestStructureInRange,
-    NearestStructure,
+    Player, PlayerInRange, NearestBase, NearestTurretInRange,
+    NearestGeneratorInRange, WeakestStructureInRange, NearestStructure,
 }
 
-[SelectionBase]
-public abstract class Enemy : MonoBehaviour, IDamageable
-{
-    [Header("General Enemy Settings")]
-    [SerializeField] protected float maxHealth = 100f;
-    [SerializeField] protected float targetRange = 20f;
-    [SerializeField] protected AudioClip damagedSfx;
-    [SerializeField] protected AudioClip deathSfx;
-    [SerializeField] protected AudioSource audioSource;
-    [SerializeField] protected TargetPriority[] targetPriorities = new[] { TargetPriority.NearestBase };
-    [Separator]
-    [SerializeField] protected float attackDamage = 10f;
-    [SerializeField] protected float attackCooldown = 1f;
-    [SerializeField] protected float attackRange = 15f;
-    [SerializeField] private float projectileSpeed = 10f;
-    [SerializeField] private LayerMask projectileHitLayers;
-    [SerializeField] private Projectile projectilePrefab;
-    [Separator]
-    [SerializeField, ReadOnly] protected float currentHealth;
+public enum EnemyState { MovingToTarget, Idle }
 
-    protected float AttackTimer;
+[SelectionBase]
+public abstract class Enemy : MonoBehaviour, IDamageable, IPushable
+{
+    [Header("Settings")]
+    [SerializeField] protected float maxHealth = 100f;
+    [SerializeField] protected float targetFindRange = 20f;
+    [SerializeField] protected TargetPriority[] targetPriorities = new[] { TargetPriority.NearestBase };
+
+    [Header("Attack")]
+    [SerializeField] protected float attackCooldown = 1f;
+    [SerializeField, SOSelector("Assets/Data")] protected ProjectileData projectileData;
+    [SerializeField, SOSelector("Assets/Data")] protected SOLayerMask hitLayers;
+
+    private float _currentHealth;
+    private float _attackTimer;
+
+    protected EnemyState State = EnemyState.MovingToTarget;
     protected IDamageable CurrentTarget;
-    protected IDamageable LastAttacker;
-    
+
     public event Action<IDamageable> OnDeath;
 
-    protected abstract void OnSetup();
-    protected abstract void UpdateBehavior();
-    protected abstract void MoveToTarget();
-    
+    protected abstract void Initialize();
+    protected abstract void UpdateMovement();
+    protected abstract void SetDestination();
+    protected abstract void OnPush(Vector3 direction, float force);
 
-    private void Start()
-    {
-        currentHealth = maxHealth;
-        OnSetup();
-        EnemyManager.Instance.RegisterEnemy(this);
-        UpdateTarget();
-    }
     
     private void OnDestroy()
     {
         EnemyManager.Instance?.UnregisterEnemy(this);
+        if (CurrentTarget != null) CurrentTarget.OnDeath -= OnTargetDeath;
+    }
     
-        if (CurrentTarget != null)
-        {
-            CurrentTarget.OnDeath -= OnTargetDeath;
-        }
+    private void Start()
+    {
+        _currentHealth = maxHealth;
+        UpdateTarget();
+        EnemyManager.Instance.RegisterEnemy(this);
+        Initialize();
     }
 
     private void Update()
     {
-        UpdateBehavior();
+        UpdateMovement();
+        TryAttack();
     }
-    
+
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.TryGetComponent(out StructurePod pod))
+        if (collision.gameObject.TryGetComponent(out Pod _))
         {
             Die();
         }
@@ -77,28 +68,41 @@ public abstract class Enemy : MonoBehaviour, IDamageable
     
     private void OnTargetChanged()
     {
-        MoveToTarget();
+        SetDestination();
     }
-    
+
     private void OnTargetDeath(IDamageable deadTarget)
     {
         CurrentTarget.OnDeath -= OnTargetDeath;
         UpdateTarget();
     }
 
+    private void TryAttack()
+    {
+        if (!IsInAttackRange())
+        {
+            _attackTimer = 0f;
+            return;
+        }
+
+        _attackTimer += Time.deltaTime;
+        if (_attackTimer >= attackCooldown)
+        {
+            AttackTarget();
+            _attackTimer = 0f;
+        }
+    }
     
 
     private void UpdateTarget()
     {
         if (CurrentTarget != null)
-        {
             CurrentTarget.OnDeath -= OnTargetDeath;
-        }
-    
+
         foreach (var priority in targetPriorities)
         {
             IDamageable target = FindTargetByPriority(priority);
-            if (target != null && IsTargetValid(target))
+            if (IsTargetValid(target, out _))
             {
                 CurrentTarget = target;
                 CurrentTarget.OnDeath += OnTargetDeath;
@@ -106,11 +110,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable
                 return;
             }
         }
-    
+
         CurrentTarget = null;
     }
-    
-
 
     private IDamageable FindTargetByPriority(TargetPriority priority)
     {
@@ -118,79 +120,85 @@ public abstract class Enemy : MonoBehaviour, IDamageable
         {
             case TargetPriority.NearestBase:
                 return StructureManager.Instance?.GetNearestBase(transform.position);
-                
             case TargetPriority.Player:
                 return LevelManager.Instance?.Player as IDamageable;
-                
             case TargetPriority.NearestTurretInRange:
-                return StructureManager.Instance?.GetNearestTurretInRange(transform.position, targetRange);
-                
+                return StructureManager.Instance?.GetNearestTurretInRange(transform.position, targetFindRange);
             case TargetPriority.WeakestStructureInRange:
-                return StructureManager.Instance?.GetWeakestStructureInRange(transform.position, targetRange);
-            
-            case TargetPriority.DamageGiver:
-                return LastAttacker;
-
+                return StructureManager.Instance?.GetWeakestStructureInRange(transform.position, targetFindRange);
+            case TargetPriority.PlayerInRange:
+                var player = LevelManager.Instance?.Player;
+                if (!player) return null;
+                return Vector3.Distance(transform.position, (player as Component).transform.position) <= targetFindRange ? player as IDamageable : null;
             case TargetPriority.NearestGeneratorInRange:
-                return StructureManager.Instance?.GetNearestGeneratorInRange(transform.position, targetRange);
-
+                return StructureManager.Instance?.GetNearestGeneratorInRange(transform.position, targetFindRange);
             case TargetPriority.NearestStructure:
-
                 return StructureManager.Instance?.GetNearestStructure(transform.position);
             default:
                 return null;
         }
     }
     
-    private bool IsTargetValid(IDamageable target)
-    {
-        return target is Component component && component;
-    }
-    
-    protected void AttackTarget()
-    {
-        if (CurrentTarget is Component targetComponent && targetComponent)
-        {
-            Vector3 direction = (targetComponent.transform.position - transform.position).normalized;
-            Projectile projectile = Instantiate(projectilePrefab, transform.position, Quaternion.LookRotation(direction));
-            projectile.Initialize(this, projectileSpeed, attackDamage, direction, projectileHitLayers);
-        }
-    }
-
 
     private void Die()
     {
         OnDeath?.Invoke(this);
-        
-        if (deathSfx)
-        {
-            audioSource?.PlayOneShot(deathSfx);
-        }
-        
         Destroy(gameObject);
+    }
+
+    private void AttackTarget()
+    {
+        if (IsTargetValid(CurrentTarget, out var targetComponent))
+        {
+            var direction = (targetComponent.transform.position - transform.position).normalized;
+            projectileData?.Spawn(hitLayers.Value, transform.position, direction, targetComponent.transform.position);
+        }
+    }
+    
+    private bool IsInAttackRange() 
+    {
+        return IsTargetValid(CurrentTarget, out var component) && Vector3.Distance(transform.position, component.transform.position) <= targetFindRange;
+    }
+
+    
+    protected bool IsTargetValid(IDamageable target, out Component targetComponent)
+    {
+        targetComponent = target as Component;
+        return targetComponent && targetComponent.gameObject.activeInHierarchy;
     }
     
     public void TakeDamage(float damage, IDamageable attacker = null)
     {
-        currentHealth -= damage;
-        if (CurrentHealth <= 0)
-        {
-            Die();
-            return;
-        }
-
-        if (attacker != null)
-        {
-            LastAttacker = attacker;
-            UpdateTarget();
-        }
-        
-        if (damagedSfx)
-        {
-            audioSource?.PlayOneShot(damagedSfx);
-        }
+        _currentHealth -= damage;
+        if (_currentHealth <= 0) Die();
     }
 
-    public float CurrentHealth => currentHealth;
-    public float MaxHealth => maxHealth;
+    public void Push(Vector3 direction, float force)
+    {
+        OnPush(direction, force);
+    }
+
+#if UNITY_EDITOR
+    protected virtual void OnDrawGizmos()
+    {
+        if (!Application.isPlaying) return;
+        string targetName = (CurrentTarget is Component t && t) ? t.name : "None";
+        UnityEditor.Handles.Label(
+            transform.position + Vector3.up * 2.5f,
+            $"Health: {_currentHealth}/{maxHealth}\nState: {State}\nTarget: {targetName}",
+            new GUIStyle()
+            {
+                normal = new GUIStyleState() { textColor = Color.red },
+                fontSize = 8,
+                fontStyle = FontStyle.Normal,
+                alignment = TextAnchor.MiddleCenter
+            });
+    }
+
+    protected virtual void OnDrawGizmosSelected()
+    {
+        Gizmos.color = new Color(1f, 0.5f, 0f, 0.3f);
+        Gizmos.DrawWireSphere(transform.position, targetFindRange);
+    }
+#endif
 }

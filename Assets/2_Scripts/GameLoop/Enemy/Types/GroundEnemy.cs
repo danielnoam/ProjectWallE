@@ -1,3 +1,4 @@
+using DNExtensions.Utilities.AutoGet;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -5,95 +6,36 @@ using UnityEngine.AI;
 [RequireComponent(typeof(Rigidbody))]
 public class GroundEnemy : Enemy
 {
-    [Header("Ground Enemy Settings")]
-    [SerializeField] private NavMeshAgent navMeshAgent;
-    [SerializeField] private Rigidbody rigidBody;
-    
-    private EnemyState _state = EnemyState.MovingToTarget;
-    private enum EnemyState { Attacking, MovingToTarget, Idle }
+    [SerializeField, AutoGetSelf, HideInInspector] private NavMeshAgent navMeshAgent;
+    [SerializeField, AutoGetSelf, HideInInspector] private Rigidbody rigidBody;
 
-    protected override void OnSetup()
+    protected override void Initialize()
     {
-        navMeshAgent.stoppingDistance = attackRange * 0.8f;
-        
+       
     }
 
-    protected override void UpdateBehavior()
+    protected override void UpdateMovement()
     {
-        if (!(CurrentTarget is Component target) || !target)
+        if (!IsTargetValid(CurrentTarget, out _))
         {
-            _state = EnemyState.MovingToTarget;
+            State = EnemyState.Idle;
             return;
         }
 
-        float distance = Vector3.Distance(transform.position, target.transform.position);
-
-        switch (_state)
-        {
-            case EnemyState.MovingToTarget:
-                
-                if (distance <= attackRange)
-                {
-                    _state = EnemyState.Attacking;
-                }
-                else
-                {
-                    if (!target)
-                    {
-                        _state = EnemyState.Idle;
-                        navMeshAgent.ResetPath();
-                    }
-                }
-                break;
-
-            case EnemyState.Attacking:
-                if (distance > attackRange)
-                {
-                    _state = EnemyState.MovingToTarget;
-                    MoveToTarget();
-                }
-                else
-                {
-                    AttackTimer += Time.deltaTime;
-                    if (AttackTimer >= attackCooldown)
-                    {
-                        AttackTarget();
-                        AttackTimer = 0f;
-                    }
-                }
-                break;
-        }
+        State = EnemyState.MovingToTarget;
+        SetDestination();
     }
-    
 
-    protected override void MoveToTarget()
+    protected override void SetDestination()
     {
-        if (CurrentTarget is Component target && target)
+        if (IsTargetValid(CurrentTarget, out var targetComponent))
         {
-            navMeshAgent.SetDestination(target.transform.position);
+            navMeshAgent.SetDestination(targetComponent.transform.position);
         }
     }
-    
-    public void Push(Vector3 direction, float force)
+
+    protected override void OnPush(Vector3 direction, float force)
     {
         rigidBody.AddForce(direction.normalized * force, ForceMode.Force);
     }
-
-#if UNITY_EDITOR
-    private void OnDrawGizmos()
-    {
-        string targetName = (CurrentTarget is Component target && target) ? target.name : "None";
-        
-        UnityEditor.Handles.Label(
-            transform.position + Vector3.up * 2.5f,
-            $"Health: {CurrentHealth}/{maxHealth}\nState: {_state}, Target: {targetName}",
-            new GUIStyle()
-            {
-                normal = new GUIStyleState() { textColor = Color.red },
-                fontSize = 10,
-                fontStyle = FontStyle.Bold,
-                alignment = TextAnchor.MiddleCenter
-            });
-    }
-#endif
 }

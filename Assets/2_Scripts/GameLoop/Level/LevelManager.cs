@@ -1,8 +1,11 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
+using DNExtensions.Utilities.AutoGet;
 using UnityEngine;
+using UnityEngine.Playables;
 
+[RequireComponent(typeof(PlayableDirector))]
+[RequireComponent(typeof(LevelEventReceiver))]
 public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance { get; private set; }
@@ -13,20 +16,16 @@ public class LevelManager : MonoBehaviour
     public static event Action OnLevelFailed;
     public static event Action<float> OnTimeUpdated;
     
-    [Header("Level Settings")]
-    [SerializeField] private float duration = 300f;
-    [SerializeReference] private List<LevelEvent> events = new List<LevelEvent>();
     
+    [SerializeField, AutoGetSelf, HideInInspector] private PlayableDirector timeline;
 
-    private PlayerStructureBuilder _player;
-    private float _timeRemaining;
     private bool _levelActive;
-
-    public float TimeRemaining => _timeRemaining;
-    public bool LevelActive => _levelActive;
-    public float Duration => duration;
-    public PlayerStructureBuilder Player => _player;
-    public List<LevelEvent> GetEvents() => events;
+    private float TimeRemaining => _levelActive ? (float)(timeline.duration - timeline.time) : 0f;
+    
+    
+    public PlayerStructureBuilder Player { get; private set; }
+    
+    
 
     private void Awake()
     {
@@ -40,61 +39,53 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(StartLevel());
+        if (timeline)
+        {
+            timeline.stopped += OnTimelineStopped;
+            StartCoroutine(StartLevel());
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (timeline)
+        {
+            timeline.stopped -= OnTimelineStopped;
+        }
     }
 
     private void Update()
     {
         if (!_levelActive) return;
-
-        _timeRemaining -= Time.deltaTime;
-        OnTimeUpdated?.Invoke(_timeRemaining);
         
-        float elapsedTime = duration - _timeRemaining;
-        CheckEvents(elapsedTime);
-
-        if (_timeRemaining <= 0)
-        {
-            CompleteLevel();
-        }
-    }
-    
-    private void CheckEvents(float currentTime)
-    {
-        foreach (var evt in events)
-        {
-            if (!evt.hasTriggered && currentTime >= evt.triggerTime)
-            {
-                evt.Execute();
-                evt.hasTriggered = true;
-            }
-        }
+        OnTimeUpdated?.Invoke(TimeRemaining);
     }
 
     private IEnumerator StartLevel()
     {
-        foreach (var evt in events)
-        {
-            evt.hasTriggered = false;
-        }
-        
-        _player = FindFirstObjectByType<PlayerStructureBuilder>();
+        Player = FindFirstObjectByType<PlayerStructureBuilder>();
         OnLevelInitializing?.Invoke();
         
         yield return new WaitForSeconds(3f);
         
-        _timeRemaining = duration;
         _levelActive = true;
+        timeline.Play();
         
         OnLevelStarted?.Invoke();
-        Debug.Log("Level Started");
+    }
+
+    private void OnTimelineStopped(PlayableDirector director)
+    {
+        if (director == timeline && _levelActive)
+        {
+            CompleteLevel();
+        }
     }
 
     private void CompleteLevel()
     {
         _levelActive = false;
         OnLevelCompleted?.Invoke();
-        Debug.Log("Game Won");
     }
 
     public void FailLevel()
@@ -102,13 +93,7 @@ public class LevelManager : MonoBehaviour
         if (!_levelActive) return;
         
         _levelActive = false;
+        timeline.Stop();
         OnLevelFailed?.Invoke();
-        Debug.Log("Game Lost");
-    }
-    
-    public void AddEvent(LevelEvent evt)
-    {
-        events.Add(evt);
-        events.Sort((a, b) => a.triggerTime.CompareTo(b.triggerTime));
     }
 }

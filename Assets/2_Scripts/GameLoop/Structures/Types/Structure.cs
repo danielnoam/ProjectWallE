@@ -1,117 +1,136 @@
 using System;
-using DNExtensions.Utilities;
 using DNExtensions.Utilities.Button;
 using PrimeTween;
 using UnityEditor;
 using UnityEngine;
 
+[Serializable]
+public class StructureLevelData
+{
+    [Tooltip("Max health for this level")]
+    public float maxHealth = 100f;
+    [Tooltip("Cost to upgrade to this level")]
+    public int cost = 100;
+    [Tooltip("Cost to fix per 1 health point")]
+    public float fixCostPerHealthPoint = 1;
+}
 
-
-
-[RequireComponent(typeof(AudioSource))]
 [DisallowMultipleComponent]
 [SelectionBase]
-public abstract class Structure : MonoBehaviour, IDamageable
+public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
 {
-    [Header("Structure Settings")]
-    [SerializeField] private int buildCost = 100;
+    [Header("Structure")]
     [SerializeField] private string label = "Structure";
-    [SerializeField] private string description = "A basic structure.";
     [SerializeField] private Sprite icon;
-    [SerializeField, Range(1,3)] protected int maxUpgradeLevel = 1;
-    [SerializeField] protected float startHealth = 100f;
+    [SerializeField] protected Vector3 topPoint = Vector3.up;
     [SerializeField] protected Vector3 bottomPoint = Vector3.down;
-    [SerializeField] protected AudioClip buildSfx;
     [SerializeField] protected Transform gfx;
-    [SerializeField, ReadOnly] protected float currentHealth;
-    [SerializeField, ReadOnly] protected int currentUpgradeLevel;
+    
     
 
+    protected StructureLevelData CurrentLevelData => Levels[currentUpgradeLevel - 1];
     protected string StateInfo;
-    private AudioSource _audioSource;
-    public Vector3 BottomPoint => bottomPoint;
-    public int BuildCost => buildCost;
-    public  string Label => label;
-    public string Description => description;
+    protected abstract StructureLevelData[] Levels { get; }
+    public float CurrentHealth { get; private set; }
+    
+    public int currentUpgradeLevel;
+    public string Label => label;
     public Sprite Icon => icon;
-
+    public Vector3 TopPoint => transform.position + transform.TransformVector(topPoint);
+    public float MaxHealth => CurrentLevelData.maxHealth;
+    public int BuildCost => Levels[0].cost;
+    public int UpgradeCost => CanUpgrade() ? Levels[currentUpgradeLevel].cost : 0;
+    public float FixCost => (MaxHealth - CurrentHealth) * CurrentLevelData.fixCostPerHealthPoint;
     
-    public event Action OnBuilt;
-    public event Action OnUpgraded;
-    public event Action OnBroken;
     public event Action<IDamageable> OnDeath;
-    
-    
 
     protected abstract void OnBuild();
+    protected abstract void OnFix();
     protected abstract void OnUpgrade();
     protected abstract void OnBreak();
-
-
+    
     private void OnValidate()
     {
-        if (!_audioSource) _audioSource = this.GetOrAddComponent<AudioSource>();
-    }
+        if (Levels == null || Levels.Length == 0)
+        {
+            Debug.LogWarning($"{name}: Levels array is empty, must have at least 1 level.", this);
+        }
 
-
-    private void Awake()
-    {
-        ResetStats();
     }
     
     private void OnDestroy()
     {
-        StructureManager.Instance?.RegisterStructure(this);
+        StructureManager.Instance?.UnregisterStructure(this);
     }
-
-    [Button(ButtonPlayMode.OnlyWhenPlaying)]
-    protected virtual void ResetStats()
+    
+    private void Build()
     {
-        currentHealth = startHealth;
+        StructureManager.Instance?.RegisterStructure(this);
         currentUpgradeLevel = 1;
-    }
-    
-    protected virtual bool CanUpgrade()
-    {
-        return currentUpgradeLevel < maxUpgradeLevel;
-    }
-    
-    protected virtual void PlaySpawnEffect()
-    {
-
-        var spawnSequence = Sequence.Create();
-        
-        spawnSequence.Group(Tween.Scale(gfx,Vector3.zero, Vector3.one , 0.3f, Ease.OutBack));
-        spawnSequence.OnComplete(() =>
-        {
-            if (buildSfx) _audioSource?.PlayOneShot(buildSfx);
-        });
-
-    }
-    
-
-    public void Build()
-    {
-        StructureManager.Instance?.RegisterStructure(this);
-        ResetStats();
+        CurrentHealth = CurrentLevelData.maxHealth;
         PlaySpawnEffect();
         OnBuild();
-        OnBuilt?.Invoke();
+    }
+
+    private void PlaySpawnEffect()
+    {
+        Sequence.Create().Group(Tween.Scale(gfx, Vector3.zero, Vector3.one, 0.3f, Ease.OutBack));
     }
     
+    private void PlayUpgradeEffect()
+    {
+        Sequence.Create().Group(Tween.PunchScale(gfx, Vector3.one * 0.9f, 0.2f,1,true, Ease.OutBack));
+    }
     
 
     [Button(ButtonPlayMode.OnlyWhenPlaying)]
     private void Break()
     {
+        CurrentHealth = 0f;
         StructureManager.Instance?.UnregisterStructure(this);
         OnDeath?.Invoke(this);
-        OnBroken?.Invoke();
         OnBreak();
+    }
+
+    public void TakeDamage(float damage, IDamageable attacker = null)
+    {
+        if (CurrentHealth <= 0 || damage <= 0) return;
+
+        CurrentHealth -= damage;
+        if (CurrentHealth <= 0)
+        {
+            Break();
+        }
+    }
+    
+    public void Deploy(Vector3 impactPoint, Vector3 surfaceNormal, Vector3 forward)
+    {
+        Vector3 projectedForward = Vector3.ProjectOnPlane(forward, surfaceNormal).normalized;
+        Quaternion yawRotation = projectedForward.sqrMagnitude > 0.001f
+            ? Quaternion.LookRotation(projectedForward, surfaceNormal)
+            : Quaternion.identity;
+
+        transform.position = impactPoint - yawRotation * bottomPoint;
+        transform.rotation = yawRotation;
+        Build();
+    }
+    
+    public bool CanUpgrade() 
+    {
+        return currentUpgradeLevel < Levels.Length;
     }
     
     [Button(ButtonPlayMode.OnlyWhenPlaying)]
-    private void Upgrade()
+    public void Fix()
+    {
+        if (!ResourceManager.Instance.TrySpendResources((int)FixCost)) return;
+
+        CurrentHealth = MaxHealth;
+        OnFix();
+    }
+
+    [Button(ButtonPlayMode.OnlyWhenPlaying)]
+    public void Upgrade()
     {
         if (!CanUpgrade())
         {
@@ -119,33 +138,17 @@ public abstract class Structure : MonoBehaviour, IDamageable
             return;
         }
 
+        if (!ResourceManager.Instance.TrySpendResources(UpgradeCost)) return;
+
         currentUpgradeLevel++;
-        if (buildSfx) _audioSource?.PlayOneShot(buildSfx);
+        CurrentHealth = CurrentLevelData.maxHealth;
+        PlayUpgradeEffect();
         OnUpgrade();
-        OnUpgraded?.Invoke();
     }
     
-    public void TakeDamage(float damage, IDamageable attacker = null)
-    {
-        if (currentHealth <= 0 || damage <= 0) return;
-        
-        currentHealth -= damage;
-        if (currentHealth <= 0)
-        {
-            Break();
-        }
-    }
-
-    public float CurrentHealth => currentHealth;
-    public float MaxHealth => startHealth;
-
-    public Transform Transform()
-    {
-        return transform;
-    }
 
 #if UNITY_EDITOR
-    private void OnDrawGizmos()
+    protected virtual void OnDrawGizmos()
     {
         Handles.Label(
             transform.position + Vector3.up * 2.5f,
@@ -157,17 +160,19 @@ public abstract class Structure : MonoBehaviour, IDamageable
                 fontStyle = FontStyle.Bold,
                 alignment = TextAnchor.MiddleCenter
             });
-
     }
 
-    private void OnDrawGizmosSelected()
+    protected virtual void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position + bottomPoint, 0.05f);
         Gizmos.DrawLine(transform.position, transform.position + bottomPoint);
         Handles.Label(transform.position + bottomPoint, "Bottom Point");
+        
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position + topPoint, 0.05f);
+        Gizmos.DrawLine(transform.position, transform.position + topPoint);
+        Handles.Label(transform.position + topPoint, "Top Point");
     }
-    
 #endif
-
 }

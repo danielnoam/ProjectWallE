@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class ResourceManager : MonoBehaviour
 {
     public static ResourceManager Instance { get; private set; }
@@ -19,14 +20,30 @@ public class ResourceManager : MonoBehaviour
             return;
         }
         Instance = this;
-        
-        _currentResources = startingResources;
+    }
 
+    private void OnEnable()
+    {
+        LevelManager.OnLevelInitializing += SetStartingResources;
+    }
+
+    private void OnDisable()
+    {
+        LevelManager.OnLevelInitializing -= SetStartingResources;
+    }
+
+    private void SetStartingResources()
+    {
+        AddResources(startingResources);
     }
     
-    
+    public void AddResources(int amount)
+    {
+        _currentResources += amount;
+        OnResourcesChanged?.Invoke(_currentResources);
+    }
 
-    
+
     public bool TrySpendResources(int cost)
     {
         if (!CanAfford(cost)) return false;
@@ -34,12 +51,6 @@ public class ResourceManager : MonoBehaviour
         _currentResources -= cost;
         OnResourcesChanged?.Invoke(_currentResources);
         return true;
-    }
-    
-    public void AddResources(int amount)
-    {
-        _currentResources += amount;
-        OnResourcesChanged?.Invoke(_currentResources);
     }
     
     public bool CanAfford(int cost) => _currentResources >= cost;

@@ -1,21 +1,22 @@
 using System.Collections.Generic;
 using DNExtensions;
 using DNExtensions.Utilities;
+using DNExtensions.Utilities.SerializedInterface;
 using UnityEngine;
 
 public class StructureManager : MonoBehaviour
 {
     public static StructureManager Instance { get; private set; }
     
-    [Header("Deployment Settings")]
-    [SerializeField] private StructurePod podPrefab;
+    [Header("Settings")]
+    [SerializeField] private Pod podPrefab;
     [SerializeField] private ChanceList<Transform> podSpawnPositions = new ChanceList<Transform>();
     
-    [Header("Registered")]
-    [SerializeField] private List<Structure> allStructures = new List<Structure>();
-    [SerializeField] private List<Generator> generators = new List<Generator>();
-    [SerializeField] private List<Turret> turrets = new List<Turret>();
-    [SerializeField] private List<Base> bases = new List<Base>();
+
+    private readonly List<Structure> _allStructures = new List<Structure>();
+    private readonly List<Generator> _generators = new List<Generator>();
+    private readonly List<Turret> _turrets = new List<Turret>();
+    private readonly List<Base> _bases = new List<Base>();
     
     
 
@@ -31,26 +32,21 @@ public class StructureManager : MonoBehaviour
     }
     
     
-    #region Deployment 
-    
-    public void DeployPod(Structure structure, Vector3 targetPosition, Vector3 surfaceNormal, Vector3 forward)
+    public void DeployPod(Structure structure, Vector3 targetPosition, Vector3 forward)
     {
         var spawnPosition = podSpawnPositions.GetRandomItem();
-        StructurePod pod = Instantiate(podPrefab, spawnPosition.position, Quaternion.LookRotation(spawnPosition.forward));
-        pod.Initialize(structure, targetPosition, surfaceNormal, forward);
+        Pod pod = Instantiate(podPrefab, spawnPosition.position, Quaternion.LookRotation(spawnPosition.forward));
+        pod.Initialize(structure, targetPosition, forward);
     }
-    
-    #endregion
-    
     
     
     #region Structure Registration
     
     public void RegisterStructure(Structure structure)
     {
-        if (allStructures.Contains(structure)) return;
+        if (_allStructures.Contains(structure)) return;
         
-        allStructures.Add(structure);
+        _allStructures.Add(structure);
         
         switch (structure)
         {
@@ -68,9 +64,9 @@ public class StructureManager : MonoBehaviour
     
     public void UnregisterStructure(Structure structure)
     {
-        if (!allStructures.Contains(structure)) return;
+        if (!_allStructures.Contains(structure)) return;
         
-        allStructures.Remove(structure);
+        _allStructures.Remove(structure);
         
         switch (structure)
         {
@@ -89,235 +85,102 @@ public class StructureManager : MonoBehaviour
     
     private void RegisterTurret(Turret turret)
     {
-        if (turrets.Contains(turret)) return;
-        turrets.Add(turret);
+        if (_turrets.Contains(turret)) return;
+        _turrets.Add(turret);
     }
     
     private void UnregisterTurret(Turret turret)
     {
-        if (!turrets.Contains(turret)) return;
-        turrets.Remove(turret);
+        if (!_turrets.Contains(turret)) return;
+        _turrets.Remove(turret);
     }
 
     private void RegisterGenerator(Generator generator)
     {
-        if (generators.Contains(generator)) return;
-        generators.Add(generator);
+        if (_generators.Contains(generator)) return;
+        _generators.Add(generator);
     }
 
     private void UnregisterGenerator(Generator generator)
     {
-        if (!generators.Contains(generator)) return;
-        generators.Remove(generator);
+        if (!_generators.Contains(generator)) return;
+        _generators.Remove(generator);
     }
     
     private void RegisterBase(Base baseStructure)
     {
-        if (bases.Contains(baseStructure)) return;
-        bases.Add(baseStructure);
+        if (_bases.Contains(baseStructure)) return;
+        _bases.Add(baseStructure);
     }
     
     private void UnregisterBase(Base baseStructure)
     {
-        if (!bases.Contains(baseStructure)) return;
-        bases.Remove(baseStructure);
+        if (!_bases.Contains(baseStructure)) return;
+        _bases.Remove(baseStructure);
     }
     
     #endregion
     
     
-    
     #region Query Methods
 
-    public Turret GetNearestTurret(Vector3 position)
-    {
-        Turret nearest = null;
-        float closestDist = float.MaxValue;
-        
-        foreach (var turret in turrets)
-        {
-            if (!turret) continue;
-            
-            float dist = Vector3.Distance(position, turret.transform.position);
-            if (dist < closestDist)
-            {
-                closestDist = dist;
-                nearest = turret;
-            }
-        }
-        
-        return nearest;
-    }
+    public Turret GetNearestTurret(Vector3 position) => GetNearest(_turrets, position);
+    public Turret GetNearestTurretInRange(Vector3 position, float maxRange) => GetNearest(_turrets, position, maxRange);
+    public Generator GetNearestGeneratorInRange(Vector3 position, float maxRange) => GetNearest(_generators, position, maxRange);
+    public Base GetNearestBase(Vector3 position) => GetNearest(_bases, position);
+    public Structure GetNearestStructure(Vector3 position) => GetNearest(_allStructures, position);
     
+    public Structure GetWeakestStructureInRange(Vector3 position, float maxRange) => GetWeakest(_allStructures, maxRange, position);
+    public Base GetWeakestBase() => GetWeakest(_bases);
     
-    public Turret GetNearestTurretInRange(Vector3 position, float  maxRange)
-    {
-        Turret nearest = null;
-        float closestDist = float.MaxValue;
-        
-        foreach (var turret in turrets)
-        {
-            if (!turret) continue;
-            
-            float dist = Vector3.Distance(position, turret.transform.position);
-            if (dist > maxRange) continue;
-            
-            if (dist < closestDist)
-            {
-                closestDist = dist;
-                nearest = turret;
-            }
-        }
-        
-        return nearest;
-    }
+    #endregion
 
-    public Generator GetNearestGeneratorInRange(Vector3 position, float maxRange)
-    {
-        
-        Generator nearest = null;
-        float closestDist = float.MaxValue;
-        
-        foreach (var generator in generators)
-        {
-            if (!generator) continue;
-            
-            float dist = Vector3.Distance(position, generator.transform.position);
-            if (dist > maxRange) continue;
-            
-            if (dist < closestDist)
-            {
-                closestDist = dist;
-                nearest = generator;
-            }
-        }
-        
-        return nearest;
-    }
-    
-    public Base GetNearestBase(Vector3 position)
-    {
-        Base nearest = null;
-        float closestDist = float.MaxValue;
-        
-        foreach (var baseStructure in bases)
-        {
-            if (!baseStructure) continue;
-            
-            float dist = Vector3.Distance(position, baseStructure.transform.position);
-            if (dist < closestDist)
-            {
-                closestDist = dist;
-                nearest = baseStructure;
-            }
-        }
-        
-        return nearest;
-    }
-    
-    public Structure GetNearestStructure(Vector3 position)
-    {
-        Structure nearest = null;
-        float closestDist = float.MaxValue;
-        
-        foreach (var structure in allStructures)
-        {
-            if (!structure) continue;
-            
-            float dist = Vector3.Distance(position, structure.transform.position);
-            if (dist < closestDist)
-            {
-                closestDist = dist;
-                nearest = structure;
-            }
-        }
-        
-        return nearest;
-    }
-    
 
-    public IDamageable GetWeakestStructureInRange(Vector3 position, float maxRange)
+    #region Helpers
+    
+    private T GetNearest<T>(List<T> list, Vector3 position, float maxRange = float.MaxValue) where T : MonoBehaviour
     {
-        IDamageable weakest = null;
+        T nearest = null;
+        float closestDist = float.MaxValue;
+
+        foreach (var item in list)
+        {
+            if (!item) continue;
+
+            float dist = Vector3.Distance(position, item.transform.position);
+            if (dist > maxRange) continue;
+
+            if (dist < closestDist)
+            {
+                closestDist = dist;
+                nearest = item;
+            }
+        }
+
+        return nearest;
+    }
+    
+    private T GetWeakest<T>(List<T> list, float maxRange = float.MaxValue, Vector3? position = null) where T : Structure
+    {
+        T weakest = null;
         float lowestHealthPercent = float.MaxValue;
-        
-        foreach (var structure in allStructures)
+
+        foreach (var item in list)
         {
-            if (!(structure is IDamageable damageable)) continue;
-            if (!structure) continue;
-            
-            float dist = Vector3.Distance(position, structure.transform.position);
-            if (dist > maxRange) continue;
-            
-            float healthPercent = structure.CurrentHealth / structure.MaxHealth;
+            if (!item) continue;
+
+            if (position.HasValue && Vector3.Distance(position.Value, item.transform.position) > maxRange) continue;
+
+            float healthPercent = item.CurrentHealth / item.MaxHealth;
             if (healthPercent < lowestHealthPercent)
             {
                 lowestHealthPercent = healthPercent;
-                weakest = damageable;
+                weakest = item;
             }
         }
-        
-        return weakest;
-    }
-    
-    public Base GetWeakestBase()
-    {
-        Base weakest = null;
-        float lowestHealthPercent = float.MaxValue;
-        
-        foreach (var baseStructure in bases)
-        {
-            if (!baseStructure) continue;
-            
-            float healthPercent = baseStructure.CurrentHealth / baseStructure.MaxHealth;
-            if (healthPercent < lowestHealthPercent)
-            {
-                lowestHealthPercent = healthPercent;
-                weakest = baseStructure;
-            }
-        }
-        
-        return weakest;
-    }
-    
 
-    
-    
-    public List<Structure> GetStructuresInRange(Vector3 position, float range)
-    {
-        List<Structure> inRange = new List<Structure>();
-        
-        foreach (var structure in allStructures)
-        {
-            if (!structure) continue;
-            
-            float dist = Vector3.Distance(position, structure.transform.position);
-            if (dist <= range)
-            {
-                inRange.Add(structure);
-            }
-        }
-        
-        return inRange;
+        return weakest;
     }
-    
-    public List<Turret> GetTurretsInRange(Vector3 position, float range)
-    {
-        List<Turret> inRange = new List<Turret>();
-        
-        foreach (var turret in turrets)
-        {
-            if (!turret) continue;
-            
-            float dist = Vector3.Distance(position, turret.transform.position);
-            if (dist <= range)
-            {
-                inRange.Add(turret);
-            }
-        }
-        
-        return inRange;
-    }
-    
+
     #endregion
 }

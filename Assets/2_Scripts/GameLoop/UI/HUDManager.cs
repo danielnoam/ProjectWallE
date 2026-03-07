@@ -8,20 +8,20 @@ public class HUDManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI currentResourcesText;
     [SerializeField] private TextMeshProUGUI objectivesText;
 
-    
-    private void Start()
+
+    private void OnEnable()
     {
         ResourceManager.OnResourcesChanged += UpdateResourcesDisplay;
         LevelManager.OnTimeUpdated += OnTimeUpdated;
-        
-        UpdateResourcesDisplay(ResourceManager.Instance.CurrentResources);
     }
-    
+
     private void OnDisable()
     {
         ResourceManager.OnResourcesChanged -= UpdateResourcesDisplay;
         LevelManager.OnTimeUpdated -= OnTimeUpdated;
     }
+    
+    
 
     private void OnTimeUpdated(float timeRemaining)
     {

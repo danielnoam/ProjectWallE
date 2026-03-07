@@ -1,63 +1,48 @@
+
 using System;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class RadialMenuElement : MonoBehaviour
 {
-    [Header("Element Settings")]
-    [SerializeField] private float textRadiusOffset = 250f; 
-    [SerializeField] private float iconRadiusOffset = 50f;
-    public Color normalColor = Color.white;
-    public Color hoveredColor = Color.yellow;
-    
     [Header("References")]
     public Image iconImage;
     public Image backgroundImage;
-    public TextMeshProUGUI text;
-    
+    public string elementInfo;
 
-    
-    public event Action<RadialMenuElement> OnSelect;
-    
+    private Color _normalColor = Color.white;
+    private Color _hoveredColor = Color.yellow;
+    private readonly Color _disabledColor = new Color(0.4f, 0.4f, 0.4f, 0.5f);
     private bool _isHovered;
+    private bool _isDisabled;
 
-    public void PositionUIElements(float fillAmount)
+    public event Action<RadialMenuElement> OnSelect;
+
+    public void SetUp(Color normalColor, Color hoveredColor)
     {
-        float centerAngle = (fillAmount * 360f) / 2f;
-        float radians = centerAngle * Mathf.Deg2Rad;
-        
-        if (text)
-        {
-            Vector2 textPosition = new Vector2(
-                Mathf.Sin(radians) * textRadiusOffset,
-                Mathf.Cos(radians) * textRadiusOffset
-            );
-            text.rectTransform.anchoredPosition = textPosition;
-        }
-        
-        if (iconImage)
-        {
-            Vector2 iconPosition = new Vector2(
-                Mathf.Sin(radians) * iconRadiusOffset,
-                Mathf.Cos(radians) * iconRadiusOffset
-            );
-            iconImage.rectTransform.anchoredPosition = iconPosition;
-        }
+        _normalColor = normalColor;
+        _hoveredColor = hoveredColor;
+        if (backgroundImage) backgroundImage.color = normalColor;
+    }
+
+    public void SetDisabled(bool disabled)
+    {
+        _isDisabled = disabled;
+        if (backgroundImage) backgroundImage.color = _isDisabled ? _disabledColor : _normalColor;
     }
 
     public void SetHovered()
     {
         if (_isHovered) return;
         _isHovered = true;
-        backgroundImage.color = hoveredColor;
+        if (backgroundImage) backgroundImage.color = _isDisabled ? _disabledColor : _hoveredColor;
     }
-    
+
     public void SetNormal()
     {
         if (!_isHovered) return;
         _isHovered = false;
-        backgroundImage.color = normalColor;
+        if (backgroundImage) backgroundImage.color = _isDisabled ? _disabledColor : _normalColor;
     }
 
     public void Select()

@@ -1,27 +1,47 @@
 using System;
-using DNExtensions.Utilities.Button;
 using PrimeTween;
 using UnityEngine;
 
-[RequireComponent(typeof(ResourceGenerator))]
-public class Generator : Structure
+
+public class Generator : ResourceGenerator
 {
 
-    [Header("Generator Settings")]
+    [Header("Generator")]
     [SerializeField] private ShakeSettings pumpAnimationSettings;
     [SerializeField] private Transform[] pumpArray = Array.Empty<Transform>();
-    [SerializeField] private ResourceGenerator resourceGenerator;
-
     private Sequence _pumpAnimation;
 
 
     private void Update()
     {
-        StateInfo = $"Health: {currentHealth}/{startHealth}";
+        StateInfo = $"Health: {CurrentHealth}/{MaxHealth}";
+    }
+    
+    protected override void OnBuild()
+    {
+        StartPumpingAnimation();
+        StartGenerating();
     }
 
-    [Button]
-    private void StartPumping()
+    protected override void OnFix()
+    {
+        StartPumpingAnimation();
+        StartGenerating();
+    }
+
+    protected override void OnUpgrade()
+    {
+
+    }
+
+    protected override void OnBreak()
+    {
+        _pumpAnimation.Stop();
+        StopGenerating();
+        Destroy(gameObject);
+    }
+    
+    private void StartPumpingAnimation()
     {
         if (_pumpAnimation.isAlive)
         {
@@ -34,23 +54,5 @@ public class Generator : Structure
         {
             _pumpAnimation.Chain(Tween.PunchScale(pump, pumpAnimationSettings));
         }
-    }
-    
-    protected override void OnBuild()
-    {
-        StartPumping();
-        resourceGenerator.StartGenerating();
-    }
-
-    protected override void OnUpgrade()
-    {
-
-    }
-
-    protected override void OnBreak()
-    {
-        _pumpAnimation.Stop();
-        resourceGenerator.StopGenerating();
-        Destroy(gameObject);
     }
 }

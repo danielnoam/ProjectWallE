@@ -1,8 +1,9 @@
+using System.Collections.Generic;
 using DNExtensions.Utilities;
-using DNExtensions.Utilities.AudioEvent;
-using DNExtensions.Utilities.InlineSO;
+using DNExtensions.Utilities.AutoGet;
+using ProjectWallE.UI;
 using UnityEngine;
-
+using UnityEngine.InputSystem;
 
 [SelectionBase]
 public class PlayerStructureBuilder : MonoBehaviour
@@ -11,103 +12,179 @@ public class PlayerStructureBuilder : MonoBehaviour
     [SerializeField] private float buildRange = 100f;
     [SerializeField] private LayerMask buildableLayerMask;
     [SerializeField] private LayerMask blockBuildLayerMask;
-    [SerializeField] private KeyCode buildMenuKey = KeyCode.Mouse1;
-    
+    [SerializeField] private LayerMask structureLayerMask;
+
     [Header("References")]
-    [SerializeField] private Camera mainCamera;
-    [SerializeField] private LineRenderer lineRenderer;
-    [SerializeField] private RadialMenu<Structure> radialMenu;
-    [SerializeField] private Structure[] structuresArray;
+    [SerializeField, AutoGetScene] private Camera mainCamera;
+    [SerializeField, AutoGetScene] private StructureBuildMenu buildMenu;
+    [SerializeField, AutoGetScene] private StructureActionsMenu actionsMenu;
+    [SerializeField, PrefabSelector("Assets/Prefabs/Structures")] private Structure[] structuresArray;
 
     private Ray _buildRay;
-    public bool CanBuild { get; private set; }
-    
-    
-    private void OnValidate()
+    private bool _canBuild;
+    private bool _menuOpen;
+    private Structure _targetedStructure;
+
+    private void OnEnable()
     {
-        if (!mainCamera) mainCamera = Camera.main;
-        lineRenderer.SetPosition(0, transform.position);
-        lineRenderer.SetPosition(1, transform.position);
+        buildMenu.OnItemSelected += TryBuildStructure;
+        actionsMenu.OnItemSelected += OnStructureActionSelected;
     }
 
-    private void Awake()
+    private void OnDisable()
     {
-        radialMenu.SetupMenu(structuresArray, ConfigureStructureElement);
-        radialMenu.OnItemSelected += TryBuildStructure;
+        buildMenu.OnItemSelected -= TryBuildStructure;
+        actionsMenu.OnItemSelected -= OnStructureActionSelected;
     }
-    
-    private void OnDestroy()
-    {
-        radialMenu.OnItemSelected -= TryBuildStructure;
-    }
+
 
     private void Update()
     {
-        if (Input.GetKeyDown(buildMenuKey))
+        if (Mouse.current.rightButton.wasPressedThisFrame)
         {
-            radialMenu.OpenMenu();
+            OpenContextMenu();
         }
-        else if (Input.GetKeyUp(buildMenuKey))
+        else if (Mouse.current.rightButton.wasReleasedThisFrame)
         {
-            radialMenu.CloseMenu();
+            CloseMenus();
         }
-        
+
         CastBuildRay();
+    }
+
+    private void OpenContextMenu()
+    {
+        _menuOpen = true;
+
+        if (_targetedStructure)
+        {
+            actionsMenu.SetupMenu(BuildStructureActions(_targetedStructure), ConfigureActionElement);
+            actionsMenu.OpenMenu();
+        }
+        else
+        {
+            buildMenu.SetupMenu(structuresArray, ConfigureBuildElement);
+            buildMenu.OpenMenu();
+        }
+    }
+
+    private void CloseMenus()
+    {
+        buildMenu.CloseMenu();
+        actionsMenu.CloseMenu();
+        BuildPrompt.Instance?.Hide();
+        _menuOpen = false;
     }
 
     private void CastBuildRay()
     {
-        lineRenderer.SetPosition(0, transform.position.RemoveY(0.5f));
-        
         _buildRay = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-        if (Physics.Raycast(_buildRay, buildRange, blockBuildLayerMask))
+
+        if (Physics.Raycast(_buildRay, out RaycastHit structureHit, buildRange, structureLayerMask))
         {
-            lineRenderer.SetPosition(1, transform.position + _buildRay.direction * buildRange);
-            CanBuild = false;
+            if (structureHit.collider.TryGetComponent(out Structure structure))
+            {
+                _targetedStructure = structure;
+                _canBuild = false;
+                if (_menuOpen && _targetedStructure) BuildPrompt.Instance?.Show(_targetedStructure.TopPoint);
+            }
+
         }
-        else if (Physics.Raycast(_buildRay, out RaycastHit hit, buildRange, buildableLayerMask))
+        else if (Physics.Raycast(_buildRay, buildRange, blockBuildLayerMask))
         {
-            lineRenderer.SetPosition(1, hit.point);
-            CanBuild = true;
+            _targetedStructure = null;
+            _canBuild = false;
+            BuildPrompt.Instance?.Hide();
+        }
+        else if (Physics.Raycast(_buildRay, out RaycastHit groundHit, buildRange, buildableLayerMask))
+        {
+            _targetedStructure = null;
+            _canBuild = true;
+            if (_menuOpen) BuildPrompt.Instance?.Show(groundHit.point);
         }
         else
         {
-            lineRenderer.SetPosition(1, transform.position + _buildRay.direction * buildRange);
-            CanBuild = false;
+            _targetedStructure = null;
+            _canBuild = false;
+            BuildPrompt.Instance?.Hide();
         }
     }
-    
-    
 
-    private void ConfigureStructureElement(RadialMenuElement element, Structure structure)
+    private void ConfigureBuildElement(RadialMenuElement element, Structure structure)
     {
-        element.text.text = $"{structure.Label}\n Cost: {structure.BuildCost}";
-        element.iconImage.sprite = structure.Icon;
+        bool canAfford = ResourceManager.Instance.CanAfford(structure.BuildCost);
+        element.elementInfo = $"{structure.Label}\nCost: {structure.BuildCost}";
+        element.SetDisabled(!canAfford);
+
+        if (structure.Icon)
+        {
+            element.iconImage.sprite = structure.Icon;
+        }
+        else
+        {
+            element.iconImage.gameObject.SetActive(false);
+        }
     }
-    
+
+    private void ConfigureActionElement(RadialMenuElement element, StructureAction action)
+    {
+        element.elementInfo = action.label;
+        element.SetDisabled(!action.isAvailable);
+
+        if (action.icon)
+        {
+            element.iconImage.sprite = action.icon;
+        }
+        else
+        {
+            element.iconImage.gameObject.SetActive(false);
+        }
+    }
 
     private void TryBuildStructure(Structure structure)
     {
-        if (!CanBuild)
-        {
-            Debug.Log("Cannot build here");
-            return;
-        }
-        
-        if (!Physics.Raycast(_buildRay, out RaycastHit hit, buildRange, buildableLayerMask))
-        {
-            Debug.Log("No valid build surface found");
-            return;
-        }
-        
-        if (!ResourceManager.Instance.TrySpendResources(structure.BuildCost))
-        {
-            Debug.Log($"Not enough resources to build {structure.Label}");
-            return;
-        }
+        if (!_canBuild) return;
+        if (!Physics.Raycast(_buildRay, out RaycastHit hit, buildRange, buildableLayerMask)) return;
+        if (!ResourceManager.Instance.TrySpendResources(structure.BuildCost)) return;
 
-        StructureManager.Instance.DeployPod(structure, hit.point, hit.normal, transform.forward);
+        StructureManager.Instance?.DeployPod(structure, hit.point, transform.forward);
     }
 
+    private void OnStructureActionSelected(StructureAction action)
+    {
+        if (action.isAvailable)
+        {
+            action.onSelected?.Invoke();
+        }
+    }
 
+    private List<StructureAction> BuildStructureActions(Structure structure)
+    {
+        bool canUpgrade = structure.CanUpgrade();
+        bool canFix = structure.CurrentHealth < structure.MaxHealth;
+
+        string upgradeLabel = canUpgrade 
+            ? $"Upgrade {structure.currentUpgradeLevel} -> {structure.currentUpgradeLevel + 1}\n{structure.UpgradeCost}" 
+            : $"At Max Level\n {structure.currentUpgradeLevel}/{structure.currentUpgradeLevel}";
+    
+        string fixLabel = canFix 
+            ? $"Fix {(int)structure.FixCost}\n{structure.CurrentHealth}/{structure.MaxHealth}" 
+            : $"At Full Health\n{structure.CurrentHealth}/{structure.MaxHealth}";
+
+        return new List<StructureAction>
+        {
+            new StructureAction
+            {
+                label = upgradeLabel,
+                isAvailable = canUpgrade && ResourceManager.Instance.CanAfford(structure.UpgradeCost),
+                onSelected = structure.Upgrade
+            },
+            new StructureAction
+            {
+                label = fixLabel,
+                isAvailable = canFix && ResourceManager.Instance.CanAfford((int)structure.FixCost),
+                onSelected = structure.Fix
+            }
+        };
+    }
 }
