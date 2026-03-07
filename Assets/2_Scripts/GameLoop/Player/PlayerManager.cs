@@ -30,6 +30,9 @@ namespace ProjectWallE
         private IPlayerController _currentController;
         private IPlayerController _carController;
         private IPlayerController _robotController;
+
+        public bool canBuild => _currentController.canBuild;
+        public bool canShoot => _currentController.canShoot;
         
 
         void Awake()

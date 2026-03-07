@@ -5,11 +5,12 @@ namespace _2_Scripts
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(CarInput))]
+[RequireComponent(typeof(CarInput), typeof(CarBoost))]
 public class CarController : MonoBehaviour, IPlayerController
 {
     [SerializeField] private TireAndVisualTransform[] steeringTires;
     [SerializeField] private TireAndVisualTransform[] staticTires;
+    [SerializeField] private Transform boostPoint;
 
     [Header("Suspension Parameters")] 
     [SerializeField] private float groundHeight = 0.2f;
@@ -45,12 +46,6 @@ public class CarController : MonoBehaviour, IPlayerController
     [Header("Breaking Parameters")] 
     [SerializeField] private float brakeStrength;
     [SerializeField] private float engineBrakeStrength;
-    
-    [Header("Boost Settings")]
-    [SerializeField] private float boostAccelFactor;
-    [SerializeField] private float boostSpeedFactor;
-    [SerializeField] private float boostDuration;
-    [SerializeField] private float boostCooldown;
 
     [Header("Air Control Parameters")] 
     [SerializeField] private float airAlignmentStrength;
@@ -59,6 +54,7 @@ public class CarController : MonoBehaviour, IPlayerController
     [SerializeField] private float maxAirSteeringVelocity;
 
     private CarInput _carInput;
+    private CarBoost _carBoost;
     private LayerMask _groundLayer;
     private Rigidbody _playerRb;
     
@@ -74,11 +70,15 @@ public class CarController : MonoBehaviour, IPlayerController
     /// controls how much dv affects the gravity (bigger = less control)
     /// </summary>
     private float gravityControlFactor => gravityStrength * 0.25f;
+    
+    public bool canBuild {  get; private set; } = false;
+    public bool canShoot { get; private set; } = false;
 
 
     private void Awake()
     {
         _carInput = GetComponent<CarInput>();
+        _carBoost = GetComponent<CarBoost>();
         _allTires = GetAllTiresTransforms();
 
         foreach (var t in _allTires)
@@ -229,6 +229,9 @@ public class CarController : MonoBehaviour, IPlayerController
         if (_carInput.Acceleration > 0 || _carInput.BoostHeld) ApplyForwardAcceleration(carSpeed);
         else if (_carInput.Acceleration < 0) ApplyBackwardsAcceleration(carSpeed);
         else ApplyEngineBreaking(carSpeed);
+        
+        if(_carBoost.CanBoost(out float boostAccel, out float boostSpeedFactor)) 
+            ApplyBoost(carSpeed, boostAccel, boostSpeedFactor);
 
         //visuals
         RotateWheels(carSpeed, 0.5f);
@@ -236,23 +239,19 @@ public class CarController : MonoBehaviour, IPlayerController
 
     private void ApplyForwardAcceleration(float carSpeed)
     {
-        bool isBoost = _carInput.BoostHeld;
-        float maxSpeed = isBoost ? topForwardSpeed * boostSpeedFactor : topForwardSpeed;
-        if (carSpeed > maxSpeed) return;
+        if (carSpeed > topForwardSpeed) return;
 
         foreach (var tire in steeringTires)
         {
             if (!IsTireGrounded(tire.tireTransform, out var hit)) continue;
             
-            float normalizedSpeed = Mathf.Clamp01(Mathf.Abs(carSpeed) / maxSpeed);
+            float normalizedSpeed = Mathf.Clamp01(Mathf.Abs(carSpeed) / topForwardSpeed);
             
             float availableAcceleration = carSpeed >= 0
                 ? accelerationCurve.Evaluate(normalizedSpeed) * accelerationStrength
                 : brakeStrength;
-            
-            availableAcceleration *= isBoost ? boostAccelFactor : 1;
 
-            _playerRb.AddForceAtPosition(tire.tireTransform.forward * (availableAcceleration * _playerRb.mass) / steeringTires.Length,
+            _playerRb.AddForceAtPosition(tire.tireTransform.forward * (availableAcceleration * _playerRb.mass / steeringTires.Length),
                 tire.tireTransform.position);
         }
 
@@ -272,7 +271,7 @@ public class CarController : MonoBehaviour, IPlayerController
                 ? accelerationCurve.Evaluate(normalizedSpeed) * accelerationStrength
                 : brakeStrength;
 
-            _playerRb.AddForceAtPosition(-tire.tireTransform.forward * (availableAcceleration * _playerRb.mass) / steeringTires.Length,
+            _playerRb.AddForceAtPosition(-tire.tireTransform.forward * (availableAcceleration * _playerRb.mass / steeringTires.Length),
                 tire.tireTransform.position);
         }
     }
@@ -288,6 +287,13 @@ public class CarController : MonoBehaviour, IPlayerController
                 tire.tireTransform.position);
         }
 
+    }
+
+    private void ApplyBoost(float carSpeed, float boostAccel, float boostSpeedFactor)
+    {
+        if (carSpeed > topForwardSpeed * boostSpeedFactor) return;
+        
+        _playerRb.AddForce(transform.forward * (boostAccel * _playerRb.mass));
     }
 
     private void RotateWheels(float carSpeed, float wheelRadius)

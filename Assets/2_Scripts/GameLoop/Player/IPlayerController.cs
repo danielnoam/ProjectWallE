@@ -13,6 +13,8 @@ namespace ProjectWallE
     
     public interface IPlayerController
     {
+        bool canBuild {get;}
+        bool canShoot {get;}
         public void ApplyMovement();
         public void Initialize(PlayerReferences playerReferences);
     }

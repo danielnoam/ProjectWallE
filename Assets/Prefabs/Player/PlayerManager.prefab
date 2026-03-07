@@ -102,6 +102,7 @@ GameObject:
   - component: {fileID: 7324132098159540433}
   - component: {fileID: 2635220521126351491}
   - component: {fileID: 6607225680324455528}
+  - component: {fileID: 8828607242384971384}
   m_Layer: 0
   m_Name: Car
   m_TagString: Untagged
@@ -124,6 +125,7 @@ Transform:
   m_Children:
   - {fileID: 6988955274731622672}
   - {fileID: 3111835496907694697}
+  - {fileID: 3352623459842719466}
   m_Father: {fileID: 2207471271178187077}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &7324132098159540433
@@ -169,6 +171,7 @@ MonoBehaviour:
     visualTransform: {fileID: 2452485598096478041}
   - tireTransform: {fileID: 5027628266276025665}
     visualTransform: {fileID: 6550488882789729935}
+  boostPoint: {fileID: 3352623459842719466}
   groundHeight: 0.5
   suspensionStrength: 25
   suspensionDamping: 2
@@ -329,6 +332,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a4f4dc608b9d8748a574ac009603e4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.CarInput
+--- !u!114 &8828607242384971384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1220957186002310486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77c542fca3cb4d14eaa54ed2872752c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.CarBoost
+  boostAccel: 10
+  boostSpeedFactor: 2
+  fuelConsumption: 50
+  rechargeCooldown: 2
+  rechargeRate: 20
+  minFuelToStartBoost: 20
 --- !u!1 &2160678104528011609
 GameObject:
   m_ObjectHideFlags: 0
@@ -1235,6 +1256,37 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &7717407218151999399
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3352623459842719466}
+  m_Layer: 0
+  m_Name: BoostPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3352623459842719466
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7717407218151999399}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1816209766619863888}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8211247271939607707
 GameObject:
   m_ObjectHideFlags: 0

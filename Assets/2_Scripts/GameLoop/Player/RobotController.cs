@@ -56,6 +56,9 @@ namespace ProjectWallE
         /// controls how much dv affects the gravity (bigger = less control)
         /// </summary>
         private float gravityControlFactor => gravityStrength * 0.25f;
+        
+        public bool canBuild {  get; private set; } = true;
+        public bool canShoot { get; private set; } = true;
 
 
         void Awake()
@@ -74,6 +77,8 @@ namespace ProjectWallE
         {
             JumpBufferTimer();
         }
+        
+
         public void ApplyMovement()
         {
             ApplyGravity();
