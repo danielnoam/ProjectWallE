@@ -6183,6 +6183,7 @@ MonoBehaviour:
   firePoint: {fileID: 1246831070}
   projectileData: {fileID: 11400000, guid: b6fff52b19a3bf34fae6ef66121a0c95, type: 2}
   enemyLayerMask: {fileID: 11400000, guid: 2d607d7566d764844b32be4199186943, type: 2}
+  playerManager: {fileID: 2039097349}
 --- !u!114 &2039097347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6213,6 +6214,18 @@ MonoBehaviour:
   - {fileID: 7498951326900205619, guid: 22eee64180129c841a1ce897f19c4847, type: 3}
   - {fileID: 2308925685089836474, guid: eb9518b19b0f8d64fa00d3c4d128b9bf, type: 3}
   - {fileID: 4497719034383223877, guid: f8af469e485543e4bb4aedbcff5e5358, type: 3}
+  playerManager: {fileID: 2039097349}
+--- !u!114 &2039097349 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2369243402749369746, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+  m_PrefabInstance: {fileID: 2039097341}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 442167030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a6a9bcdc8d5a5844ae487dff7baf6e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.PlayerManager
 --- !u!1001 &2102922341
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,4 +1,6 @@
 using DNExtensions.Systems.Scriptables;
+using DNExtensions.Utilities.AutoGet;
+using ProjectWallE;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,6 +12,7 @@ public class PlayerShooter : MonoBehaviour
     [SerializeField] private Transform firePoint;
     [SerializeField] private ProjectileData projectileData;
     [SerializeField] private SOLayerMask enemyLayerMask;
+    [SerializeField, AutoGetSelf, HideInInspector] private PlayerManager playerManager;
     
     private float _nextTimeToFire;
     private Camera _mainCamera;
@@ -28,7 +31,7 @@ public class PlayerShooter : MonoBehaviour
             _nextTimeToFire -= Time.deltaTime;
         }
         
-        if (Mouse.current.leftButton.wasPressedThisFrame && _nextTimeToFire <= 0)
+        if (Mouse.current.leftButton.wasPressedThisFrame && _nextTimeToFire <= 0 && playerManager.canShoot)
         {
             ShootProjectile();
         }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.AutoGet;
+using ProjectWallE;
 using ProjectWallE.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -19,6 +20,7 @@ public class PlayerStructureBuilder : MonoBehaviour
     [SerializeField, AutoGetScene] private StructureBuildMenu buildMenu;
     [SerializeField, AutoGetScene] private StructureActionsMenu actionsMenu;
     [SerializeField, PrefabSelector("Assets/Prefabs/Structures")] private Structure[] structuresArray;
+    [SerializeField, AutoGetSelf, HideInInspector] private PlayerManager playerManager;
 
     private Ray _buildRay;
     private bool _canBuild;
@@ -40,6 +42,8 @@ public class PlayerStructureBuilder : MonoBehaviour
 
     private void Update()
     {
+        if (!playerManager.canBuild) return;
+        
         if (Mouse.current.rightButton.wasPressedThisFrame)
         {
             OpenContextMenu();
