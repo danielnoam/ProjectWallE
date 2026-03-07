@@ -1,4 +1,5 @@
 
+using DNExtensions.Systems.ObjectPooling;
 using DNExtensions.Utilities;
 using UnityEngine;
 
@@ -41,8 +42,7 @@ public class ProjectileData : ScriptableObject
 
     public Projectile Spawn(LayerMask hitLayers, Vector3 position, Vector3 direction, Vector3 targetPosition = default)
     {
-        
-        var projectile = Instantiate(prefab, position, Quaternion.LookRotation(direction));
+        var projectile = ObjectPooler.GetObjectFromPool(prefab, position, Quaternion.LookRotation(direction));
         projectile.Initialize(this, hitLayers, direction, targetPosition);
         
         return projectile;

@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PlayerBuilderRay
+  m_Name: Projectile_Heavy
   m_Shader: {fileID: -6465566751694194690, guid: 9af3b65ee745c994bafe9746c5d12abe, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -92,8 +92,8 @@ Material:
     - _Innerline: 0
     - _Innerline_Length: 0.659
     - _Intersection_Power: 25
-    - _Max: 0.03
-    - _Min: 0.01
+    - _Max: 5
+    - _Min: 2
     - _NoiseScale: 50
     - _NoiseStrength: 1
     - _Noise_Scale: 1
@@ -102,17 +102,17 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Scanlines_Offset: 0
-    - _Shades: 0.5
+    - _Shades: 16.71
     - _Size: 0
     - _Smudge_Strength: 0.002
     m_Colors:
-    - _Color: {r: 5.9921575, g: 3.3693163, b: 0, a: 1}
+    - _Color: {r: 0.7490196, g: 0, b: 0.25034228, a: 1}
     - _Color1: {r: 51.814297, g: 51.814297, b: 51.814297, a: 1}
     - _Color2: {r: 85.445015, g: 0, b: 0, a: 1}
     - _Dither_World_Position: {r: 0, g: 0, b: 0, a: 0}
     - _EdgeColor: {r: 0, g: 3.262745, b: 23.96863, a: 1}
     - _Edge_Color: {r: 1, g: 1, b: 1, a: 0}
-    - _Fresnel_Color: {r: 1, g: 0.63689715, b: 0, a: 1}
+    - _Fresnel_Color: {r: 1, g: 0, b: 0.04867935, a: 1}
     - _Hatching_Offset: {r: 0, g: 0, b: 0, a: 0}
     - _Hatching_Tiling: {r: 50, g: 50, b: 0, a: 0}
     - _Innerline_Color: {r: 1, g: 1, b: 1, a: 1}

@@ -304,7 +304,7 @@ public class CarController : MonoBehaviour, IPlayerController
         foreach (var tire in _allTires)
         {
             if (!IsTireGrounded(tire.tireTransform, out var hit)) continue;
-            tire.visualTransform.Rotate(Vector3.up, wheelSpeedDeg * Time.fixedDeltaTime, Space.Self);
+            tire.visualTransform.Rotate(Vector3.left, wheelSpeedDeg * Time.fixedDeltaTime, Space.Self);
         }
     }
 

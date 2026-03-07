@@ -1,4 +1,5 @@
 using DNExtensions.Systems.Scriptables;
+using DNExtensions.Utilities;
 using DNExtensions.Utilities.AutoGet;
 using ProjectWallE;
 using UnityEngine;
@@ -8,7 +9,8 @@ using UnityEngine.InputSystem;
 public class PlayerShooter : MonoBehaviour
 {
     [Header("Settings")]
-    [SerializeField] private float fireRate = 0.2f;
+    [SerializeField] private float fireRate = 0.1f;
+    [SerializeField] private Vector3 aimOffset = Vector3.zero;
     [SerializeField] private Transform firePoint;
     [SerializeField] private ProjectileData projectileData;
     [SerializeField] private SOLayerMask enemyLayerMask;
@@ -31,7 +33,7 @@ public class PlayerShooter : MonoBehaviour
             _nextTimeToFire -= Time.deltaTime;
         }
         
-        if (Mouse.current.leftButton.wasPressedThisFrame && _nextTimeToFire <= 0 && playerManager.canShoot)
+        if (Mouse.current.leftButton.isPressed && _nextTimeToFire <= 0 && playerManager.canShoot)
         {
             ShootProjectile();
         }
@@ -42,6 +44,6 @@ public class PlayerShooter : MonoBehaviour
         _nextTimeToFire = fireRate;
         Vector3 position = firePoint ? firePoint.position : transform.position;
         Vector3 direction = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)).direction;
-        projectileData?.Spawn(enemyLayerMask.Value, position, direction);
+        projectileData?.Spawn(enemyLayerMask.Value, position, direction.Add(aimOffset));
     }
 }

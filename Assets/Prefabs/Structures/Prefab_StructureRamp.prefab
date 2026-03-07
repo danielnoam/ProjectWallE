@@ -77,7 +77,7 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 5.5, y: 3.88, z: 5.5}
+  m_Extents: {x: 5.5, y: 3.88, z: 8.255}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1
@@ -102,7 +102,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 11.18, y: 6.5, z: 8.47}
+  m_Size: {x: 11.18, y: 6.5, z: 16.27}
   m_Center: {x: 0, y: 2.7, z: 0}
 --- !u!114 &4497719034383223877
 MonoBehaviour:
@@ -121,6 +121,7 @@ MonoBehaviour:
   topPoint: {x: 0, y: 6.3, z: 0}
   bottomPoint: {x: 0, y: 0.52, z: 0}
   gfx: {fileID: 2170286402575911496}
+  currentUpgradeLevel: 0
   levels:
   - rid: 4437626158574207055
   references:
@@ -178,23 +179,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 39e2a36d9eb154d39b77fc97095043cf, type: 3}
       propertyPath: m_LocalScale.y
-      value: 7.0499997
+      value: 5.7986245
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 39e2a36d9eb154d39b77fc97095043cf, type: 3}
       propertyPath: m_LocalScale.z
-      value: 10
+      value: 16.367
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 39e2a36d9eb154d39b77fc97095043cf, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.000025
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 39e2a36d9eb154d39b77fc97095043cf, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.1099999
+      value: -1.11
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 39e2a36d9eb154d39b77fc97095043cf, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.999978
+      value: -8.24
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 39e2a36d9eb154d39b77fc97095043cf, type: 3}
       propertyPath: m_LocalRotation.w
@@ -227,6 +228,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 39e2a36d9eb154d39b77fc97095043cf, type: 3}
       propertyPath: m_Name
       value: GM-Ramp
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 39e2a36d9eb154d39b77fc97095043cf, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
