@@ -8,24 +8,23 @@ using UnityEngine.InputSystem.Switch;
 namespace ProjectWallE
 {
 
-    public enum CurrentController
+    public enum PlayerControllerType
     {
         Robot, Car
     }
-    public class PlayerManager : MonoBehaviour
+    public class PlayerManager : MonoBehaviour, IDamageable, IPushable
     {
-        [SerializeField] Transform cameraTransform;
+        
         [SerializeField] LayerMask groundLayer;
         [SerializeField] private CarController carController;
         [SerializeField] private RobotController robotController;
-        [SerializeField] private CinemachineCamera carCamera;
-        [SerializeField] private CinemachineCamera robotCamera;
         
         private PlayerManagerInput _input;
         private Rigidbody _rigidbody;
+        private Transform _cameraTransform;
         
-        private CurrentController _currentControllerEnum;
-        private CurrentController _lastFrameCurrentControllerEnum;
+        private PlayerControllerType _playerControllerTypeEnum;
+        private PlayerControllerType _lastFramePlayerControllerTypeEnum;
         
         private IPlayerController _currentController;
         private IPlayerController _carController;
@@ -34,19 +33,28 @@ namespace ProjectWallE
         public bool canBuild => _currentController.canBuild;
         public bool canShoot => _currentController.canShoot;
         
+        public event Action<IDamageable> OnDeath;
+        public static event Action<PlayerControllerType> OnControllerChanged;
+        public static event Action OnBoostStart;
+        public static event Action OnBoostEnd; 
+        
 
         void Awake()
         {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            
             _input = GetComponent<PlayerManagerInput>();
             _rigidbody = GetComponent<Rigidbody>();
-            
+            if (Camera.main != null) _cameraTransform = Camera.main.transform;
+
             _carController = carController.GetComponent<CarController>();
             _robotController = robotController.GetComponent<RobotController>();
-            _currentControllerEnum = CurrentController.Robot;
+            _playerControllerTypeEnum = PlayerControllerType.Robot;
 
             PlayerReferences playerReferences = new PlayerReferences()
             {
-                cameraTransform = cameraTransform,
+                cameraTransform = _cameraTransform,
                 rigidBody = _rigidbody,
                 groundLayer = groundLayer
             };
@@ -57,7 +65,7 @@ namespace ProjectWallE
 
         private void Start()
         {
-            EnableController(_currentControllerEnum);
+            EnableController(_playerControllerTypeEnum);
         }
 
         private void Update()
@@ -71,46 +79,72 @@ namespace ProjectWallE
         {
             _currentController?.ApplyMovement();
         }
-        
+
+
+        #region Controller Switch
+
         private void SwitchController()
         {
-            _currentControllerEnum = _currentControllerEnum == CurrentController.Robot ? CurrentController.Car : CurrentController.Robot;
+            _playerControllerTypeEnum = _playerControllerTypeEnum == PlayerControllerType.Robot ? PlayerControllerType.Car : PlayerControllerType.Robot;
         }
 
         private void SwitchBehavior()
         {
-            if(_currentControllerEnum == _lastFrameCurrentControllerEnum) return;
+            if(_playerControllerTypeEnum == _lastFramePlayerControllerTypeEnum) return;
             ResetRotation();
-            EnableController(_currentControllerEnum);
-            _lastFrameCurrentControllerEnum = _currentControllerEnum;
+            EnableController(_playerControllerTypeEnum);
+            _lastFramePlayerControllerTypeEnum = _playerControllerTypeEnum;
         }
 
+        #endregion
+        
+        #region Event Callers
+
+        public static void InvokeOnBoostStart()
+        {
+            OnBoostStart?.Invoke();
+        }
+
+        public static void InvokeOnBoostEnd()
+        {
+            OnBoostEnd?.Invoke();
+        }
+        
+        #endregion
 
         #region Helpers
 
-        private void EnableController(CurrentController currentController)
+        private void EnableController(PlayerControllerType playerControllerType)
         {
-            bool isRobot = currentController == CurrentController.Robot;
+            bool isRobot = playerControllerType == PlayerControllerType.Robot;
             
             //controller
             _currentController = isRobot ? _robotController : _carController;
             robotController.gameObject.SetActive(isRobot);
             carController.gameObject.SetActive(!isRobot);
             
-            //camera
-            robotCamera.Priority.Value = isRobot ? 1 : 0;
-            carCamera.Priority.Value = isRobot ? 0 : 1;
+            OnControllerChanged?.Invoke(playerControllerType);
         }
 
         private void ResetRotation()
         {
             Vector3 rot = _rigidbody.rotation.eulerAngles;
-            rot.y = cameraTransform.rotation.eulerAngles.y;
+            rot.y = _cameraTransform.rotation.eulerAngles.y;
             _rigidbody.rotation = Quaternion.Euler(rot);
             _rigidbody.angularVelocity = Vector3.zero;
         }
 
         #endregion
+
         
+        public void TakeDamage(float damage, IDamageable attacker = null)
+        {
+            
+        }
+
+        public void Push(Vector3 direction, float force)
+        {
+            
+        }
     }
 }
