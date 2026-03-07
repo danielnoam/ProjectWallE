@@ -6,12 +6,7 @@ namespace ProjectWallE
     [RequireComponent(typeof(RobotInput))]
     public class RobotController : MonoBehaviour, IPlayerController
     {
-        private RobotInput _input;
-        
-        [SerializeField] Transform _groundRayPoint;
-        [SerializeField] private LayerMask groundLayer;
-        [SerializeField] private Rigidbody playerRB;
-        [SerializeField] private Transform cameraTransform;
+        [SerializeField] Transform groundRayPoint;
         
         [Header("Grounded Settings")]
         [SerializeField] private float groundHeight = 0.5f;
@@ -19,13 +14,17 @@ namespace ProjectWallE
         [SerializeField] private float springStrength;
         [SerializeField] private float springDamping;
         
+        [Header("Gravity Settings")]
+        [SerializeField] private float gravityStrength;
+        [SerializeField] private float terminalVelocity;
+        
         [Header("Locomotion Settings")]
         [SerializeField] private float moveAccel = 20f; // horizontal accel (m/s^2)
         [Tooltip("x axis is how much we are changing our direction (-1 is completely changing, 1 is not changing at all)" +
                  "y axis is the multiplier itself relative to the change")]
         [SerializeField] private AnimationCurve dirChangeAccelFactor;
         [SerializeField] private float maxMoveSpeed = 8f;
-        [SerializeField] private float forcePointBelowCOM = 0.2f; // meters below COM
+        [SerializeField] private float forcePointBelowCom = 0.2f; // meters below COM
         [SerializeField] private float groundMoveFactor = 1f;     // optionally reduce in air
         [SerializeField] private float airMoveFactor = 0.35f;
         
@@ -39,6 +38,11 @@ namespace ProjectWallE
         [SerializeField] private float yawStrength = 40f;
         [SerializeField] private float yawDamping = 8f;
         
+        private RobotInput _input;
+        private LayerMask _groundLayer;
+        private Rigidbody _playerRb;
+        private Transform _cameraTransform;
+        
         private bool _isGrounded = false;
         private bool _isJumpAvail = false;
         private bool _isJumping = false;
@@ -48,6 +52,13 @@ namespace ProjectWallE
         /// controls how much dv affects the acceleration (bigger = less control)
         /// </summary>
         private float accelControlFactor => moveAccel * 0.25f;
+        /// <summary>
+        /// controls how much dv affects the gravity (bigger = less control)
+        /// </summary>
+        private float gravityControlFactor => gravityStrength * 0.25f;
+        
+        public bool canBuild {  get; private set; } = true;
+        public bool canShoot { get; private set; } = true;
 
 
         void Awake()
@@ -55,12 +66,22 @@ namespace ProjectWallE
             _input = GetComponent<RobotInput>();
         }
 
+        public void Initialize(PlayerReferences playerReferences)
+        {
+            _playerRb = playerReferences.rigidBody;
+            _cameraTransform = playerReferences.cameraTransform;
+            _groundLayer = playerReferences.groundLayer;
+        }
+
         void Update()
         {
             JumpBufferTimer();
         }
+        
+
         public void ApplyMovement()
         {
+            ApplyGravity();
             UpdateJump();
             UpdateGroundHeight();
             UpdateLocomotion();
@@ -87,8 +108,8 @@ namespace ProjectWallE
         {
             if (input.sqrMagnitude < 0.01f) return Vector3.zero;
 
-            Vector3 camForward = cameraTransform.forward;
-            Vector3 camRight = cameraTransform.right;
+            Vector3 camForward = _cameraTransform.forward;
+            Vector3 camRight = _cameraTransform.right;
 
             // Flatten
             camForward.y = 0f;
@@ -104,7 +125,7 @@ namespace ProjectWallE
 
         private Vector3 ComputeMoveAcceleration(Vector3 moveDir, float control)
         {
-            Vector3 vel = playerRB.linearVelocity;
+            Vector3 vel = _playerRb.linearVelocity;
 
             Vector3 horizVel = new Vector3(vel.x, 0f, vel.z);
             Vector3 desiredHorizVel = moveDir * maxMoveSpeed;
@@ -120,19 +141,19 @@ namespace ProjectWallE
 
         private void ApplyMoveAccelAtOffset(Vector3 accel)
         {
-            Vector3 forcePoint = playerRB.worldCenterOfMass - transform.up * forcePointBelowCOM;
-            playerRB.AddForceAtPosition(accel, forcePoint, ForceMode.Acceleration);
+            Vector3 forcePoint = _playerRb.worldCenterOfMass - transform.up * forcePointBelowCom;
+            _playerRb.AddForceAtPosition(accel, forcePoint, ForceMode.Acceleration);
         }
 
         private void ApplyBrake(float control)
         {
-            Vector3 vel = playerRB.linearVelocity;
+            Vector3 vel = _playerRb.linearVelocity;
 
             Vector3 horizVel = new Vector3(vel.x, 0f, vel.z);
             Vector3 dv = -horizVel;
 
             Vector3 brakeAccel = Vector3.ClampMagnitude(dv * accelControlFactor, moveAccel);
-            playerRB.AddForce(brakeAccel * control, ForceMode.Acceleration);
+            _playerRb.AddForce(brakeAccel * control, ForceMode.Acceleration);
         }
         
         #endregion
@@ -154,20 +175,19 @@ namespace ProjectWallE
             _isJumpAvail = false;
             _isJumping = true;
             _isGrounded = false;
-
-            float gravity = Mathf.Abs(Physics.gravity.y);
+            
             float targetHeight = jumpHeight + groundOffset;
 
-            float desiredJumpVel = Mathf.Sqrt(2f * gravity * targetHeight);
+            float desiredJumpVel = Mathf.Sqrt(2f * gravityStrength * targetHeight);
 
-            float currentYVel = playerRB.linearVelocity.y;
+            float currentYVel = _playerRb.linearVelocity.y;
             float deltaV = desiredJumpVel - currentYVel;
 
             if (deltaV <= 0f)
                 return;
 
-            Vector3 forcePoint = playerRB.worldCenterOfMass - transform.up * forcePointBelowCOM;
-            playerRB.AddForceAtPosition(Vector3.up * deltaV, forcePoint, ForceMode.VelocityChange);
+            Vector3 forcePoint = _playerRb.worldCenterOfMass - transform.up * forcePointBelowCom;
+            _playerRb.AddForceAtPosition(Vector3.up * deltaV, forcePoint, ForceMode.VelocityChange);
         }
 
         //called in update
@@ -184,6 +204,22 @@ namespace ProjectWallE
         }
         
         #endregion
+
+        #region Gravity
+
+        private void ApplyGravity()
+        {
+            float verticalVel = _playerRb.linearVelocity.y;
+            float desiredVerticalVel = -terminalVelocity;
+
+            float dv = desiredVerticalVel - verticalVel;
+
+            float gravityForce = Mathf.Clamp(dv * gravityControlFactor, -gravityStrength, Mathf.Infinity);
+            
+            _playerRb.AddForce(Vector3.up * gravityForce, ForceMode.Acceleration);
+        }
+
+        #endregion
         
         #region Ground
 
@@ -193,12 +229,11 @@ namespace ProjectWallE
             
             float offset = hit.distance - groundHeight;
 
-            float yVel = playerRB.linearVelocity.y;
+            float yVel = _playerRb.linearVelocity.y;
+            
+            float suspensionAccel = gravityStrength + (-offset * springStrength) - (yVel * springDamping);
 
-            float gravityComp = -Physics.gravity.y;
-            float suspensionAccel = gravityComp + (-offset * springStrength) - (yVel * springDamping);
-
-            playerRB.AddForce(Vector3.up * suspensionAccel, ForceMode.Acceleration);
+            _playerRb.AddForce(Vector3.up * suspensionAccel, ForceMode.Acceleration);
         }
         
         //helpers
@@ -208,11 +243,11 @@ namespace ProjectWallE
             float dist = _isGrounded ? maxCheckHeight : groundHeight;
 
             bool groundedNow = Physics.Raycast(
-                _groundRayPoint.position,
+                groundRayPoint.position,
                 Vector3.down,
                 out hit,
                 dist,
-                groundLayer,
+                _groundLayer,
                 QueryTriggerInteraction.Ignore
             );
             
@@ -239,20 +274,20 @@ namespace ProjectWallE
 
             Vector3 uprightTorque = (tiltAxisWorld * uprightStrength) - (tiltAngVelWorld * uprightDamping);
 
-            playerRB.AddTorque(uprightTorque, ForceMode.Acceleration);
+            _playerRb.AddTorque(uprightTorque, ForceMode.Acceleration);
         }
 
         private Vector3 GetUprightCorrectionAxisWorld()
         {
             // Axis that would rotate current up toward world up
-            Vector3 currentUp = playerRB.transform.up;
+            Vector3 currentUp = _playerRb.transform.up;
             return Vector3.Cross(currentUp, Vector3.up);
         }
 
         private Vector3 GetTiltAngularVelocityWorld()
         {
             // Remove yaw component in local space, then return to world for damping torque
-            Vector3 angVelLocal = transform.InverseTransformDirection(playerRB.angularVelocity);
+            Vector3 angVelLocal = transform.InverseTransformDirection(_playerRb.angularVelocity);
             angVelLocal.y = 0f;
             return transform.TransformDirection(angVelLocal);
         }
@@ -272,12 +307,12 @@ namespace ProjectWallE
             float yawVelLocal = GetLocalYawAngularVelocity();
             float yawAccel = (yawErrorRad * yawStrength) - (yawVelLocal * yawDamping);
 
-            playerRB.AddRelativeTorque(0f, yawAccel, 0f, ForceMode.Acceleration);
+            _playerRb.AddRelativeTorque(0f, yawAccel, 0f, ForceMode.Acceleration);
         }
 
         private bool TryGetFlattenedCameraForward(out Vector3 camForwardFlat)
         {
-            camForwardFlat = cameraTransform.forward;
+            camForwardFlat = _cameraTransform.forward;
             camForwardFlat.y = 0f;
 
             if (camForwardFlat.sqrMagnitude < 0.0001f)
@@ -289,7 +324,7 @@ namespace ProjectWallE
 
         private Vector3 GetFlattenedForwardWorld()
         {
-            Vector3 forward = playerRB.transform.forward;
+            Vector3 forward = _playerRb.transform.forward;
             forward.y = 0f;
 
             // If we're basically vertical for some reason, avoid NaN normalize
@@ -308,7 +343,7 @@ namespace ProjectWallE
 
         private float GetLocalYawAngularVelocity()
         {
-            return transform.InverseTransformDirection(playerRB.angularVelocity).y;
+            return transform.InverseTransformDirection(_playerRb.angularVelocity).y;
         }
         
         #endregion

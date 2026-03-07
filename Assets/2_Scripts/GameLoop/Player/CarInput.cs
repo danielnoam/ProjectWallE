@@ -10,6 +10,7 @@ namespace ProjectWallE
         public float Acceleration { get; private set; }
         public float Steering { get; private set; }
         public bool HandBreakHeld { get; private set; }
+        public bool BoostHeld { get; private set; }
         private void OnEnable()
         {
             EnableInput();
@@ -51,6 +52,11 @@ namespace ProjectWallE
         public void OnHandbreak(InputAction.CallbackContext context)
         {
             HandBreakHeld = context.ReadValueAsButton();
+        }
+
+        public void OnBoost(InputAction.CallbackContext context)
+        {
+            BoostHeld = context.ReadValueAsButton();
         }
     }
 }

@@ -1043,6 +1043,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Boost"",
+                    ""type"": ""Button"",
+                    ""id"": ""5dd3a203-9ac9-4494-bc20-994c1599cadb"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1120,6 +1129,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Handbreak"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f3b3a3c8-3175-4f5b-bcbe-234499779fb2"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Boost"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1309,6 +1329,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_CarControls_AccelDecel = m_CarControls.FindAction("Accel/Decel", throwIfNotFound: true);
         m_CarControls_Steering = m_CarControls.FindAction("Steering", throwIfNotFound: true);
         m_CarControls_Handbreak = m_CarControls.FindAction("Handbreak", throwIfNotFound: true);
+        m_CarControls_Boost = m_CarControls.FindAction("Boost", throwIfNotFound: true);
         // RobotControls
         m_RobotControls = asset.FindActionMap("RobotControls", throwIfNotFound: true);
         m_RobotControls_Movement = m_RobotControls.FindAction("Movement", throwIfNotFound: true);
@@ -1842,6 +1863,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_CarControls_AccelDecel;
     private readonly InputAction m_CarControls_Steering;
     private readonly InputAction m_CarControls_Handbreak;
+    private readonly InputAction m_CarControls_Boost;
     /// <summary>
     /// Provides access to input actions defined in input action map "CarControls".
     /// </summary>
@@ -1865,6 +1887,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "CarControls/Handbreak".
         /// </summary>
         public InputAction @Handbreak => m_Wrapper.m_CarControls_Handbreak;
+        /// <summary>
+        /// Provides access to the underlying input action "CarControls/Boost".
+        /// </summary>
+        public InputAction @Boost => m_Wrapper.m_CarControls_Boost;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1900,6 +1926,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Handbreak.started += instance.OnHandbreak;
             @Handbreak.performed += instance.OnHandbreak;
             @Handbreak.canceled += instance.OnHandbreak;
+            @Boost.started += instance.OnBoost;
+            @Boost.performed += instance.OnBoost;
+            @Boost.canceled += instance.OnBoost;
         }
 
         /// <summary>
@@ -1920,6 +1949,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Handbreak.started -= instance.OnHandbreak;
             @Handbreak.performed -= instance.OnHandbreak;
             @Handbreak.canceled -= instance.OnHandbreak;
+            @Boost.started -= instance.OnBoost;
+            @Boost.performed -= instance.OnBoost;
+            @Boost.canceled -= instance.OnBoost;
         }
 
         /// <summary>
@@ -2296,6 +2328,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnHandbreak(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Boost" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBoost(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "RobotControls" which allows adding and removing callbacks.

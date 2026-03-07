@@ -15,6 +15,7 @@ namespace ProjectWallE
     public class PlayerManager : MonoBehaviour
     {
         [SerializeField] Transform cameraTransform;
+        [SerializeField] LayerMask groundLayer;
         [SerializeField] private CarController carController;
         [SerializeField] private RobotController robotController;
         [SerializeField] private CinemachineCamera carCamera;
@@ -29,7 +30,9 @@ namespace ProjectWallE
         private IPlayerController _currentController;
         private IPlayerController _carController;
         private IPlayerController _robotController;
-        
+
+        public bool canBuild => _currentController.canBuild;
+        public bool canShoot => _currentController.canShoot;
         
 
         void Awake()
@@ -40,6 +43,16 @@ namespace ProjectWallE
             _carController = carController.GetComponent<CarController>();
             _robotController = robotController.GetComponent<RobotController>();
             _currentControllerEnum = CurrentController.Robot;
+
+            PlayerReferences playerReferences = new PlayerReferences()
+            {
+                cameraTransform = cameraTransform,
+                rigidBody = _rigidbody,
+                groundLayer = groundLayer
+            };
+            
+            _carController.Initialize(playerReferences);
+            _robotController.Initialize(playerReferences);
         }
 
         private void Start()
@@ -51,6 +64,7 @@ namespace ProjectWallE
         {
             if (_input.SwitchPressed) SwitchController();
             SwitchBehavior();
+            
         }
 
         private void FixedUpdate()
