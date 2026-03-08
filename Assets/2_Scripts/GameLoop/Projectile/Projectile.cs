@@ -97,6 +97,11 @@ public class Projectile : MonoBehaviour, IPoolable
         }
 
 
+        if (_data.hitParticle)
+        {
+            var particle = ObjectPooler.GetObjectFromPool(_data.hitParticle, transform.position, Quaternion.LookRotation(-transform.forward));
+            particle?.Play();
+        }
 
         ReturnToPool();
     }

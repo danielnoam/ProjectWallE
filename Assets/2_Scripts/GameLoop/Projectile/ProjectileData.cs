@@ -39,6 +39,7 @@ public class ProjectileData : ScriptableObject
     
     [Header("Visuals")]
     [PrefabSelector("Assets/Prefabs")] public Projectile prefab;
+    [PrefabSelector("Assets/Prefabs")] public PoolableParticleSystem hitParticle;
 
     public Projectile Spawn(LayerMask hitLayers, Vector3 position, Vector3 direction, Vector3 targetPosition = default)
     {

@@ -1,4 +1,5 @@
 using System.Collections;
+using DNExtensions.Systems.ObjectPooling;
 using DNExtensions.Utilities.AutoGet;
 using DNExtensions.Utilities.CinemachineExtensions;
 using Unity.Cinemachine;
@@ -11,8 +12,11 @@ public class Pod : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private float arcHeight = 125f;
     [SerializeField] private float travelDuration = 3f;
-    [SerializeField] private float rotationSpeed = 15f;
+    [SerializeField] private float rotationSpeed = 300f;
     [SerializeField] private LayerMask collisionMask;
+    
+    [Header("Effects")]
+    [SerializeField] private PoolableParticleSystem collisionParticle;
     [SerializeField] private ImpulseSettings collisionImpulseSettings;
     [SerializeField, AutoGetSelf, HideInInspector] private CinemachineImpulseSource impulseSource;
     
@@ -97,6 +101,12 @@ public class Pod : MonoBehaviour
     private void Land(Vector3 impactPoint, Vector3 surfaceNormal)
     {
         impulseSource?.GenerateImpulse(collisionImpulseSettings);
+
+        if (collisionParticle)
+        {
+            var particle = ObjectPooler.GetObjectFromPool(collisionParticle, impactPoint, Quaternion.LookRotation(surfaceNormal));
+            particle.Play();
+        }
         
         var instance = Instantiate(_deployable as MonoBehaviour);
         ((IDeployable)instance).Deploy(impactPoint, surfaceNormal, _forward);
