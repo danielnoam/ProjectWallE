@@ -39,9 +39,15 @@ namespace UnityEditor.Splines
         SerializedProperty m_TerrainOffset;
         SerializedProperty m_SamplesPerUnit;
         SerializedProperty m_DeformStrength;
+        SerializedProperty m_PaintTerrainLayer;
+        SerializedProperty m_TerrainLayerIndex;
+        SerializedProperty m_PaintWidth;
+        SerializedProperty m_PaintSmoothingDistance;
+        SerializedProperty m_PaintStrength;
 
         static readonly GUIContent k_SplineToTerrainContent = new GUIContent(L10n.Tr("Spline to Terrain"), L10n.Tr("Snap spline points to terrain height."));
         static readonly GUIContent k_TerrainToSplineContent = new GUIContent(L10n.Tr("Terrain to Spline"), L10n.Tr("Deform terrain to match spline path."));
+        static readonly GUIContent k_PaintTerrainLayerContent = new GUIContent(L10n.Tr("Paint Terrain Layer"), L10n.Tr("Paint a terrain layer along the spline path."));
         static readonly GUIContent k_GeneralContent = new GUIContent(L10n.Tr("General"), L10n.Tr("General settings."));
 
         static readonly string k_SourceSplineContainer = L10n.Tr("Source Spline Container");
@@ -65,6 +71,11 @@ namespace UnityEditor.Splines
             m_TerrainOffset = serializedObject.FindProperty("m_TerrainOffset");
             m_SamplesPerUnit = serializedObject.FindProperty("m_SamplesPerUnit");
             m_DeformStrength = serializedObject.FindProperty("m_DeformStrength");
+            m_PaintTerrainLayer = serializedObject.FindProperty("m_PaintTerrainLayer");
+            m_TerrainLayerIndex = serializedObject.FindProperty("m_TerrainLayerIndex");
+            m_PaintWidth = serializedObject.FindProperty("m_PaintWidth");
+            m_PaintSmoothingDistance = serializedObject.FindProperty("m_PaintSmoothingDistance");
+            m_PaintStrength = serializedObject.FindProperty("m_PaintStrength");
 
             m_Components = new SplineToTerrain[targets.Length];
             for (int i = 0; i < targets.Length; i++)
@@ -222,6 +233,40 @@ namespace UnityEditor.Splines
                         m_SamplesPerUnit.floatValue = Mathf.Clamp(m_SamplesPerUnit.floatValue, 0.1f, 100f);
 
                     EditorGUILayout.PropertyField(m_DeformStrength);
+                }
+
+                EditorGUI.indentLevel--;
+            }
+
+            EditorGUILayout.Space(4);
+
+            // Paint Terrain Layer Section
+            m_PaintTerrainLayer.isExpanded = Foldout(m_PaintTerrainLayer.isExpanded, k_PaintTerrainLayerContent, true);
+
+            if (m_PaintTerrainLayer.isExpanded)
+            {
+                EditorGUI.indentLevel++;
+
+                EditorGUILayout.PropertyField(m_PaintTerrainLayer);
+
+                if (m_PaintTerrainLayer.boolValue)
+                {
+                    EditorGUI.BeginChangeCheck();
+                    EditorGUILayout.PropertyField(m_TerrainLayerIndex);
+                    if (EditorGUI.EndChangeCheck())
+                        m_TerrainLayerIndex.intValue = Mathf.Max(m_TerrainLayerIndex.intValue, 0);
+
+                    EditorGUI.BeginChangeCheck();
+                    EditorGUILayout.PropertyField(m_PaintWidth);
+                    if (EditorGUI.EndChangeCheck())
+                        m_PaintWidth.floatValue = Mathf.Max(m_PaintWidth.floatValue, 0.1f);
+
+                    EditorGUI.BeginChangeCheck();
+                    EditorGUILayout.PropertyField(m_PaintSmoothingDistance);
+                    if (EditorGUI.EndChangeCheck())
+                        m_PaintSmoothingDistance.floatValue = Mathf.Max(m_PaintSmoothingDistance.floatValue, 0f);
+
+                    EditorGUILayout.PropertyField(m_PaintStrength);
                 }
 
                 EditorGUI.indentLevel--;

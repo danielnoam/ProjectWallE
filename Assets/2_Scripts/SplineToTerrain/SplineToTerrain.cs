@@ -51,6 +51,23 @@ namespace UnityEngine.Splines
         [Range(0f, 1f)]
         float m_DeformStrength = 1f;
 
+        [Header("Paint Terrain Layer")]
+        [SerializeField, Tooltip("Paint a terrain layer along the spline path.")]
+        bool m_PaintTerrainLayer = false;
+
+        [SerializeField, Tooltip("Index of the terrain layer to paint.")]
+        int m_TerrainLayerIndex = 0;
+
+        [SerializeField, Tooltip("The width (in world units) where the layer is painted at full strength.")]
+        float m_PaintWidth = 5f;
+
+        [SerializeField, Tooltip("Additional distance (in world units) for smooth falloff beyond the paint width.")]
+        float m_PaintSmoothingDistance = 3f;
+
+        [SerializeField, Tooltip("Blend factor between the current layer weights and full paint. 0 = no change, 1 = full paint.")]
+        [Range(0f, 1f)]
+        float m_PaintStrength = 1f;
+
         float m_NextScheduledRebuild;
         bool m_RebuildRequested;
 
@@ -143,6 +160,41 @@ namespace UnityEngine.Splines
             set => m_DeformStrength = Mathf.Clamp01(value);
         }
 
+        /// <summary>Paint a terrain layer along the spline path.</summary>
+        public bool PaintTerrainLayer
+        {
+            get => m_PaintTerrainLayer;
+            set => m_PaintTerrainLayer = value;
+        }
+
+        /// <summary>Index of the terrain layer to paint.</summary>
+        public int TerrainLayerIndex
+        {
+            get => m_TerrainLayerIndex;
+            set => m_TerrainLayerIndex = Mathf.Max(value, 0);
+        }
+
+        /// <summary>The width where the layer is painted at full strength.</summary>
+        public float PaintWidth
+        {
+            get => m_PaintWidth;
+            set => m_PaintWidth = Mathf.Max(value, 0.1f);
+        }
+
+        /// <summary>Additional distance for smooth falloff beyond the paint width.</summary>
+        public float PaintSmoothingDistance
+        {
+            get => m_PaintSmoothingDistance;
+            set => m_PaintSmoothingDistance = Mathf.Max(value, 0f);
+        }
+
+        /// <summary>Blend factor between current layer weights and full paint.</summary>
+        public float PaintStrength
+        {
+            get => m_PaintStrength;
+            set => m_PaintStrength = Mathf.Clamp01(value);
+        }
+
         /// <summary>The main Spline to bridge with terrain.</summary>
         public Spline Spline => m_Container?.Spline;
 
@@ -221,6 +273,9 @@ namespace UnityEngine.Splines
 
             if (m_DeformTerrainToSpline)
                 DeformTerrainAlongSpline();
+
+            if (m_PaintTerrainLayer)
+                PaintTerrainLayerAlongSpline();
 
             m_NextScheduledRebuild = Time.time + 1f / m_RebuildFrequency;
             m_RebuildRequested = false;
@@ -351,6 +406,96 @@ namespace UnityEngine.Splines
             }
 
             terrainData.SetHeights(0, 0, heights);
+        }
+
+        void PaintTerrainLayerAlongSpline()
+        {
+            var spline = Spline;
+            if (spline == null)
+                return;
+
+            var terrainData = m_Terrain.terrainData;
+            int layerCount = terrainData.alphamapLayers;
+
+            if (m_TerrainLayerIndex < 0 || m_TerrainLayerIndex >= layerCount)
+            {
+                Debug.LogWarning($"SplineToTerrain: Layer index {m_TerrainLayerIndex} is out of range (terrain has {layerCount} layers).", this);
+                return;
+            }
+
+#if UNITY_EDITOR
+            UnityEditor.Undo.RegisterCompleteObjectUndo(terrainData, "Paint Terrain Layer Along Spline");
+#endif
+
+            int alphamapWidth = terrainData.alphamapWidth;
+            int alphamapHeight = terrainData.alphamapHeight;
+            float[,,] alphamaps = terrainData.GetAlphamaps(0, 0, alphamapWidth, alphamapHeight);
+
+            float splineLength = spline.GetLength();
+            int sampleCount = Mathf.Max(2, Mathf.CeilToInt(splineLength * m_SamplesPerUnit));
+            float totalInfluenceDistance = m_PaintWidth + m_PaintSmoothingDistance;
+
+            for (int i = 0; i < sampleCount; i++)
+            {
+                float t = i / (float)(sampleCount - 1);
+                var worldPoint = m_Container.transform.TransformPoint(spline.EvaluatePosition(t));
+
+                Vector3 terrainLocalPos = worldPoint - m_Terrain.transform.position;
+                float xNorm = terrainLocalPos.x / terrainData.size.x;
+                float zNorm = terrainLocalPos.z / terrainData.size.z;
+
+                int centerX = Mathf.RoundToInt(xNorm * (alphamapWidth - 1));
+                int centerZ = Mathf.RoundToInt(zNorm * (alphamapHeight - 1));
+
+                int radius = Mathf.CeilToInt((totalInfluenceDistance / terrainData.size.x) * alphamapWidth);
+
+                for (int x = -radius; x <= radius; x++)
+                {
+                    for (int z = -radius; z <= radius; z++)
+                    {
+                        int ax = centerX + x;
+                        int az = centerZ + z;
+
+                        if (ax < 0 || ax >= alphamapWidth || az < 0 || az >= alphamapHeight)
+                            continue;
+
+                        float xWorldDist = (x / (float)alphamapWidth) * terrainData.size.x;
+                        float zWorldDist = (z / (float)alphamapHeight) * terrainData.size.z;
+                        float worldDistance = Mathf.Sqrt(xWorldDist * xWorldDist + zWorldDist * zWorldDist);
+
+                        if (worldDistance > totalInfluenceDistance)
+                            continue;
+
+                        float falloff;
+                        if (worldDistance <= m_PaintWidth)
+                        {
+                            falloff = 1f;
+                        }
+                        else
+                        {
+                            float smoothingProgress = (worldDistance - m_PaintWidth) / m_PaintSmoothingDistance;
+                            falloff = 1f - (smoothingProgress * smoothingProgress * (3f - 2f * smoothingProgress));
+                        }
+
+                        float oldValue = alphamaps[az, ax, m_TerrainLayerIndex];
+                        float newValue = Mathf.Lerp(oldValue, 1f, falloff * m_PaintStrength);
+                        float remaining = 1f - newValue;
+                        float previousOthers = 1f - oldValue;
+
+                        alphamaps[az, ax, m_TerrainLayerIndex] = newValue;
+
+                        for (int l = 0; l < layerCount; l++)
+                        {
+                            if (l == m_TerrainLayerIndex) continue;
+                            alphamaps[az, ax, l] = previousOthers > 0f
+                                ? alphamaps[az, ax, l] * (remaining / previousOthers)
+                                : 0f;
+                        }
+                    }
+                }
+            }
+
+            terrainData.SetAlphamaps(0, 0, alphamaps);
         }
 
 #if UNITY_EDITOR
