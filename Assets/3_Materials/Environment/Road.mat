@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Rock
+  m_Name: Road
   m_Shader: {fileID: -6465566751694194690, guid: 1862a6367050f2b4a84d84a7b9be1a5d, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -56,7 +56,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _Ambient_Strength: 0.822
-    - _Falloff_Amount: 1.01
+    - _Falloff_Amount: 0.03
     - _Fresnel_Size: 0
     - _Lighting_Cutoff: 0
     - _QueueControl: 0
@@ -65,6 +65,6 @@ Material:
     m_Colors:
     - _Diffuse_Color: {r: 0.57861626, g: 0.57861626, b: 0.57861626, a: 1}
     - _Fresnel_Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Specular_Color: {r: 0.0754717, g: 0.0754717, b: 0.0754717, a: 1}
+    - _Specular_Color: {r: 0.3584906, g: 0.3584906, b: 0.3584906, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

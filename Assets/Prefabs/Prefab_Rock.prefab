@@ -56,24 +56,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: Prefab_Rock
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 573442b838fdcba4080f80f33b114fd4, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 573442b838fdcba4080f80f33b114fd4, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6476955130211829775}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 573442b838fdcba4080f80f33b114fd4, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2265282914829219904}
+      addedObject: {fileID: 8580880272615073277}
   m_SourcePrefab: {fileID: 100100000, guid: 573442b838fdcba4080f80f33b114fd4, type: 3}
 --- !u!1 &6730258244586908540 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 573442b838fdcba4080f80f33b114fd4, type: 3}
   m_PrefabInstance: {fileID: 5883891232852284973}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &6476955130211829775
-BoxCollider:
+--- !u!64 &8580880272615073277
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -90,22 +91,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.030791854, y: 0.040839296, z: 0.038092166}
-  m_Center: {x: 0.004038316, y: -0.002637952, z: 0.0017997638}
---- !u!208 &2265282914829219904
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6730258244586908540}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 0
-  m_Extents: {x: 0.02, y: 0.01, z: 0.02}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0.004, y: -0.003, z: 0.002}
-  m_TimeToStationary: 0.5
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4013275331872712965, guid: 573442b838fdcba4080f80f33b114fd4, type: 3}
