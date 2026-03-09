@@ -31,6 +31,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPushable
     protected IDamageable CurrentTarget;
 
     public event Action<IDamageable> OnDeath;
+    public event Action<float> OnDamaged;
 
     protected abstract void Initialize();
     protected abstract void UpdateMovement();
@@ -169,7 +170,11 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPushable
     
     public void TakeDamage(float damage, IDamageable attacker = null)
     {
+        if (_currentHealth <= 0) return;
+        
         _currentHealth -= damage;
+        OnDamaged?.Invoke(damage);
+        
         if (_currentHealth <= 0) Die();
     }
 
