@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ProjectWallE
@@ -7,6 +8,7 @@ namespace ProjectWallE
     public class RobotController : MonoBehaviour, IPlayerController
     {
         [SerializeField] Transform groundRayPoint;
+        [SerializeField] private List<Transform> wheelVisualTransforms;
         
         [Header("Grounded Settings")]
         [SerializeField] private float groundHeight = 0.5f;
@@ -42,11 +44,13 @@ namespace ProjectWallE
         private LayerMask _groundLayer;
         private Rigidbody _playerRb;
         private Transform _cameraTransform;
+        private List<Vector3> _wheelVisualStartPos;
         
         private bool _isGrounded = false;
         private bool _isJumpAvail = false;
         private bool _isJumping = false;
         private float _jumpTimer = 0f;
+        
         
         /// <summary>
         /// controls how much dv affects the acceleration (bigger = less control)
@@ -64,6 +68,12 @@ namespace ProjectWallE
         void Awake()
         {
             _input = GetComponent<RobotInput>();
+
+            _wheelVisualStartPos = new List<Vector3>();
+            foreach (var t in wheelVisualTransforms)
+            {
+                _wheelVisualStartPos.Add(t.localPosition);
+            }
         }
 
         public void Initialize(PlayerReferences playerReferences)
@@ -226,14 +236,22 @@ namespace ProjectWallE
         private void UpdateGroundHeight()
         {
             if (!IsGrounded(out RaycastHit hit) || _isJumping) return;
-            
+    
             float offset = hit.distance - groundHeight;
-
             float yVel = _playerRb.linearVelocity.y;
-            
             float suspensionAccel = gravityStrength + (-offset * springStrength) - (yVel * springDamping);
 
-            _playerRb.AddForce(Vector3.up * suspensionAccel, ForceMode.Acceleration);
+            _playerRb.AddForce(Vector3.up * suspensionAccel);
+
+            
+            for (int i = 0; i < wheelVisualTransforms.Count; i++)
+            {
+                Vector3 target = _wheelVisualStartPos[i] - Vector3.up * offset;
+
+                wheelVisualTransforms[i].localPosition = offset > 0 ? 
+                    Vector3.Lerp(wheelVisualTransforms[i].localPosition, target, 20f * Time.fixedDeltaTime) : 
+                    target;
+            }
         }
         
         //helpers
