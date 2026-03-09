@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.AutoGet;
+using ProjectWallE;
 using ProjectWallE.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -15,15 +17,26 @@ public class PlayerStructureBuilder : MonoBehaviour
     [SerializeField] private LayerMask structureLayerMask;
 
     [Header("References")]
-    [SerializeField, AutoGetScene] private Camera mainCamera;
     [SerializeField, AutoGetScene] private StructureBuildMenu buildMenu;
     [SerializeField, AutoGetScene] private StructureActionsMenu actionsMenu;
     [SerializeField, PrefabSelector("Assets/Prefabs/Structures")] private Structure[] structuresArray;
+    [SerializeField, AutoGetSelf, HideInInspector] private PlayerManager playerManager;
 
+    private Camera _mainCamera;
     private Ray _buildRay;
     private bool _canBuild;
     private bool _menuOpen;
     private Structure _targetedStructure;
+
+    private void OnValidate()
+    {
+        AutoGetSystem.Process(this);
+    }
+
+    private void Awake()
+    {
+        _mainCamera = Camera.main;
+    }
 
     private void OnEnable()
     {
@@ -40,6 +53,8 @@ public class PlayerStructureBuilder : MonoBehaviour
 
     private void Update()
     {
+        if (!playerManager.canBuild) return;
+        
         if (Mouse.current.rightButton.wasPressedThisFrame)
         {
             OpenContextMenu();
@@ -78,7 +93,7 @@ public class PlayerStructureBuilder : MonoBehaviour
 
     private void CastBuildRay()
     {
-        _buildRay = mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+        _buildRay = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 
         if (Physics.Raycast(_buildRay, out RaycastHit structureHit, buildRange, structureLayerMask) && structureHit.collider.TryGetComponent(out Structure structure))
         {

@@ -3,12 +3,8 @@ using UnityEngine.Splines;
 
 namespace UnityEditor.Splines
 {
-    /// <summary>
-    /// A utility class providing methods to handle and manage spline-to-terrain bridge operations.
-    /// Initializes event listeners on load to monitor and respond to object changes, duplication, and paste operations specific to splines.
-    /// </summary>
     [InitializeOnLoad]
-    public static class SplineToTerrainUtility
+    internal static class SplineToTerrainUtility
     {
         static SplineToTerrainUtility()
         {
@@ -22,13 +18,13 @@ namespace UnityEditor.Splines
         }
 
 #if UNITY_2022_2_OR_NEWER
-        static void OnPasteOrDuplicated(GameObject[] duplicates)
+        private static void OnPasteOrDuplicated(GameObject[] duplicates)
         {
             foreach (var duplicate in duplicates)
                 CheckForSplineToTerrainCreatedOrModified(duplicate);
         }
 
-        static void ObjectEventChangesPublished(ref ObjectChangeEventStream stream)
+        private static void ObjectEventChangesPublished(ref ObjectChangeEventStream stream)
         {
             for (int i = 0; i < stream.length; ++i)
             {
@@ -36,16 +32,16 @@ namespace UnityEditor.Splines
                 if (type == ObjectChangeKind.ChangeGameObjectStructure)
                 {
                     stream.GetChangeGameObjectStructureEvent(i, out var changeGameObjectStructure);
-                    
-#pragma warning disable CS0618 // Type or member is obsolete
+
+#pragma warning disable CS0618
                     if (EditorUtility.InstanceIDToObject(changeGameObjectStructure.instanceId) is GameObject go)
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore CS0618
                         CheckForSplineToTerrainAdded(go);
                 }
             }
         }
 #else
-        static void ObjectEventChangesPublished(ref ObjectChangeEventStream stream)
+        private static void ObjectEventChangesPublished(ref ObjectChangeEventStream stream)
         {
             for (int i = 0, c = stream.length; i < c; ++i)
             {
@@ -64,37 +60,31 @@ namespace UnityEditor.Splines
             }
         }
 
-        static void GameObjectCreatedOrStructureModified(int instanceId)
+        private static void GameObjectCreatedOrStructureModified(int instanceId)
         {
             if (EditorUtility.InstanceIDToObject(instanceId) is GameObject go)
                 CheckForSplineToTerrainCreatedOrModified(go);
         }
 #endif
 
-        static void CheckForSplineToTerrainAdded(GameObject go)
+        private static void CheckForSplineToTerrainAdded(GameObject go)
         {
             if (go.TryGetComponent<SplineToTerrain>(out var splineToTerrain))
                 splineToTerrain.SetSplineContainerOnGO();
 
-            var childCount = go.transform.childCount;
-            if (childCount > 0)
-            {
-                for (int childIndex = 0; childIndex < childCount; ++childIndex)
-                    CheckForSplineToTerrainAdded(go.transform.GetChild(childIndex).gameObject);
-            }
+            int childCount = go.transform.childCount;
+            for (int childIndex = 0; childIndex < childCount; ++childIndex)
+                CheckForSplineToTerrainAdded(go.transform.GetChild(childIndex).gameObject);
         }
 
-        static void CheckForSplineToTerrainCreatedOrModified(GameObject go)
+        private static void CheckForSplineToTerrainCreatedOrModified(GameObject go)
         {
             if (go.TryGetComponent<SplineToTerrain>(out var component))
                 component.Reset();
 
-            var childCount = go.transform.childCount;
-            if (childCount > 0)
-            {
-                for (int childIndex = 0; childIndex < childCount; ++childIndex)
-                    CheckForSplineToTerrainCreatedOrModified(go.transform.GetChild(childIndex).gameObject);
-            }
+            int childCount = go.transform.childCount;
+            for (int childIndex = 0; childIndex < childCount; ++childIndex)
+                CheckForSplineToTerrainCreatedOrModified(go.transform.GetChild(childIndex).gameObject);
         }
     }
 }

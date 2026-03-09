@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using DNExtensions.Utilities.AutoGet;
+using ProjectWallE;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -23,7 +24,7 @@ public class LevelManager : MonoBehaviour
     private float TimeRemaining => _levelActive ? (float)(timeline.duration - timeline.time) : 0f;
     
     
-    public PlayerStructureBuilder Player { get; private set; }
+    public PlayerManager Player { get; private set; }
     
     
 
@@ -63,7 +64,7 @@ public class LevelManager : MonoBehaviour
 
     private IEnumerator StartLevel()
     {
-        Player = FindFirstObjectByType<PlayerStructureBuilder>();
+        Player = FindFirstObjectByType<PlayerManager>();
         OnLevelInitializing?.Invoke();
         
         yield return new WaitForSeconds(3f);

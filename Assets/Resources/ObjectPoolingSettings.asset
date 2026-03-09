@@ -12,9 +12,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdca1178cff54263ba82b954a66b51ce, type: 3}
   m_Name: ObjectPoolingSettings
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.ObjectPooling.ObjectPoolingSettings
-  enabled: 0
+  enabled: 1
   instantiateAsFallback: 1
   destroyAsFallback: 1
   hidePoolHolders: 0
   showDebugMessages: 0
-  pools: []
+  pools:
+  - poolName: Projetile_Player
+    maxPoolSize: 15
+    prefab: {fileID: 7389837232072127272, guid: 3c09a670e7ef45449a66861350c5473d, type: 3}
+    dontDestroyOnLoad: 0
+    usePoolHolder: 1
+    recycleActiveObjects: 1
+    preWarmPool: 1
+    preWarmPoolSize: 15
+    scenesToPreWarm:
+    - sceneAsset: {fileID: 102900000, guid: 930919521036cc34b9023f5ac1d27770, type: 3}
+      sceneName: DanielScene
+      scenePath: Assets/1_Scenes/DanielScene.unity
+  - poolName: Particle_PodDrop
+    maxPoolSize: 5
+    prefab: {fileID: 5077321802440590743, guid: e6dd420ba061f104abb1af9566d0eb3d, type: 3}
+    dontDestroyOnLoad: 0
+    usePoolHolder: 1
+    recycleActiveObjects: 1
+    preWarmPool: 1
+    preWarmPoolSize: 3
+    scenesToPreWarm:
+    - sceneAsset: {fileID: 102900000, guid: 930919521036cc34b9023f5ac1d27770, type: 3}
+      sceneName: DanielScene
+      scenePath: Assets/1_Scenes/DanielScene.unity
+  - poolName: Particle_ProjectileHit
+    maxPoolSize: 10
+    prefab: {fileID: 1033013279332183554, guid: 9d833e0335f9b0548b713e0ce34d2739, type: 3}
+    dontDestroyOnLoad: 0
+    usePoolHolder: 1
+    recycleActiveObjects: 0
+    preWarmPool: 1
+    preWarmPoolSize: 1
+    scenesToPreWarm:
+    - sceneAsset: {fileID: 102900000, guid: 930919521036cc34b9023f5ac1d27770, type: 3}
+      sceneName: DanielScene
+      scenePath: Assets/1_Scenes/DanielScene.unity

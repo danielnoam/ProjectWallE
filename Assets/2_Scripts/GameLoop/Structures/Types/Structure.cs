@@ -43,6 +43,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     public float FixCost => (MaxHealth - CurrentHealth) * CurrentLevelData.fixCostPerHealthPoint;
     
     public event Action<IDamageable> OnDeath;
+    public event Action<float> OnDamaged;
 
     protected abstract void OnBuild();
     protected abstract void OnFix();
@@ -97,6 +98,8 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
         if (CurrentHealth <= 0 || damage <= 0) return;
 
         CurrentHealth -= damage;
+        OnDamaged?.Invoke(damage);
+        
         if (CurrentHealth <= 0)
         {
             Break();

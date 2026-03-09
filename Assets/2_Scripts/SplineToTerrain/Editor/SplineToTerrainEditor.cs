@@ -4,95 +4,103 @@ using UnityEngine.Splines;
 
 namespace UnityEditor.Splines
 {
-    /// <summary>
-    /// Helper scope for temporarily changing label width
-    /// </summary>
     internal class LabelWidthScope : System.IDisposable
     {
-        private readonly float m_PreviousLabelWidth;
+        private readonly float _previousLabelWidth;
 
         public LabelWidthScope(float labelWidth)
         {
-            m_PreviousLabelWidth = EditorGUIUtility.labelWidth;
+            _previousLabelWidth = EditorGUIUtility.labelWidth;
             EditorGUIUtility.labelWidth = labelWidth;
         }
 
         public void Dispose()
         {
-            EditorGUIUtility.labelWidth = m_PreviousLabelWidth;
+            EditorGUIUtility.labelWidth = _previousLabelWidth;
         }
     }
 
     [CustomEditor(typeof(SplineToTerrain))]
     [CanEditMultipleObjects]
-    class SplineToTerrainEditor : UnityEditor.Editor
+    internal class SplineToTerrainEditor : UnityEditor.Editor
     {
-        SerializedProperty m_Container;
-        SerializedProperty m_Terrain;
-        SerializedProperty m_RebuildOnSplineChange;
-        SerializedProperty m_RebuildFrequency;
-        SerializedProperty m_SnapSplineToTerrain;
-        SerializedProperty m_SplineHeightOffset;
-        SerializedProperty m_DeformTerrainToSpline;
-        SerializedProperty m_DeformWidth;
-        SerializedProperty m_SmoothingDistance;
-        SerializedProperty m_TerrainOffset;
-        SerializedProperty m_SamplesPerUnit;
-        SerializedProperty m_DeformStrength;
+        private SerializedProperty _container;
+        private SerializedProperty _terrain;
+        private SerializedProperty _rebuildOnSplineChange;
+        private SerializedProperty _rebuildFrequency;
+        private SerializedProperty _snapSplineToTerrain;
+        private SerializedProperty _splineHeightOffset;
+        private SerializedProperty _deformTerrainToSpline;
+        private SerializedProperty _deformWidth;
+        private SerializedProperty _smoothingDistance;
+        private SerializedProperty _terrainOffset;
+        private SerializedProperty _samplesPerUnit;
+        private SerializedProperty _deformStrength;
+        private SerializedProperty _paintTerrainLayer;
+        private SerializedProperty _terrainLayer;
+        private SerializedProperty _paintWidth;
+        private SerializedProperty _paintSmoothingDistance;
+        private SerializedProperty _paintStrength;
 
-        static readonly GUIContent k_SplineToTerrainContent = new GUIContent(L10n.Tr("Spline to Terrain"), L10n.Tr("Snap spline points to terrain height."));
-        static readonly GUIContent k_TerrainToSplineContent = new GUIContent(L10n.Tr("Terrain to Spline"), L10n.Tr("Deform terrain to match spline path."));
-        static readonly GUIContent k_GeneralContent = new GUIContent(L10n.Tr("General"), L10n.Tr("General settings."));
+        private static readonly GUIContent k_SplineToTerrainContent = new GUIContent(L10n.Tr("Spline to Terrain"), L10n.Tr("Snap spline points to terrain height."));
+        private static readonly GUIContent k_TerrainToSplineContent = new GUIContent(L10n.Tr("Terrain to Spline"), L10n.Tr("Deform terrain to match spline path."));
+        private static readonly GUIContent k_PaintTerrainLayerContent = new GUIContent(L10n.Tr("Paint Terrain Layer"), L10n.Tr("Paint a terrain layer along the spline path."));
+        private static readonly GUIContent k_GeneralContent = new GUIContent(L10n.Tr("General"), L10n.Tr("General settings."));
 
-        static readonly string k_SourceSplineContainer = L10n.Tr("Source Spline Container");
-        static readonly string k_TargetTerrain = L10n.Tr("Target Terrain");
-        static readonly string k_AutoRefreshGeneration = L10n.Tr("Auto Refresh Generation");
-        static readonly string k_Helpbox = L10n.Tr("Spline Container must be set.");
+        private static readonly string k_SourceSplineContainer = L10n.Tr("Source Spline Container");
+        private static readonly string k_TargetTerrain = L10n.Tr("Target Terrain");
+        private static readonly string k_AutoRefreshGeneration = L10n.Tr("Auto Refresh Generation");
+        private static readonly string k_Helpbox = L10n.Tr("Spline Container must be set.");
 
-        SplineToTerrain[] m_Components;
+        private SplineToTerrain[] _components;
 
-        void OnEnable()
+        private void OnEnable()
         {
-            m_Container = serializedObject.FindProperty("m_Container");
-            m_Terrain = serializedObject.FindProperty("m_Terrain");
-            m_RebuildOnSplineChange = serializedObject.FindProperty("m_RebuildOnSplineChange");
-            m_RebuildFrequency = serializedObject.FindProperty("m_RebuildFrequency");
-            m_SnapSplineToTerrain = serializedObject.FindProperty("m_SnapSplineToTerrain");
-            m_SplineHeightOffset = serializedObject.FindProperty("m_SplineHeightOffset");
-            m_DeformTerrainToSpline = serializedObject.FindProperty("m_DeformTerrainToSpline");
-            m_DeformWidth = serializedObject.FindProperty("m_DeformWidth");
-            m_SmoothingDistance = serializedObject.FindProperty("m_SmoothingDistance");
-            m_TerrainOffset = serializedObject.FindProperty("m_TerrainOffset");
-            m_SamplesPerUnit = serializedObject.FindProperty("m_SamplesPerUnit");
-            m_DeformStrength = serializedObject.FindProperty("m_DeformStrength");
+            _container = serializedObject.FindProperty("container");
+            _terrain = serializedObject.FindProperty("terrain");
+            _rebuildOnSplineChange = serializedObject.FindProperty("rebuildOnSplineChange");
+            _rebuildFrequency = serializedObject.FindProperty("rebuildFrequency");
+            _snapSplineToTerrain = serializedObject.FindProperty("snapSplineToTerrain");
+            _splineHeightOffset = serializedObject.FindProperty("splineHeightOffset");
+            _deformTerrainToSpline = serializedObject.FindProperty("deformTerrainToSpline");
+            _deformWidth = serializedObject.FindProperty("deformWidth");
+            _smoothingDistance = serializedObject.FindProperty("smoothingDistance");
+            _terrainOffset = serializedObject.FindProperty("terrainOffset");
+            _samplesPerUnit = serializedObject.FindProperty("samplesPerUnit");
+            _deformStrength = serializedObject.FindProperty("deformStrength");
+            _paintTerrainLayer = serializedObject.FindProperty("paintTerrainLayer");
+            _terrainLayer = serializedObject.FindProperty("terrainLayer");
+            _paintWidth = serializedObject.FindProperty("paintWidth");
+            _paintSmoothingDistance = serializedObject.FindProperty("paintSmoothingDistance");
+            _paintStrength = serializedObject.FindProperty("paintStrength");
 
-            m_Components = new SplineToTerrain[targets.Length];
+            _components = new SplineToTerrain[targets.Length];
             for (int i = 0; i < targets.Length; i++)
-                m_Components[i] = targets[i] as SplineToTerrain;
+                _components[i] = targets[i] as SplineToTerrain;
 
             EditorSplineUtility.AfterSplineWasModified += OnSplineModified;
         }
 
-        void OnDisable()
+        private void OnDisable()
         {
             EditorSplineUtility.AfterSplineWasModified -= OnSplineModified;
         }
 
-        void OnSplineModified(Spline spline)
+        private void OnSplineModified(Spline spline)
         {
             if (EditorApplication.isPlayingOrWillChangePlaymode)
                 return;
 
-            foreach (var component in m_Components)
+            foreach (var component in _components)
             {
                 if (component != null && component.Container != null && component.Container.Splines.Contains(spline))
                     component.Rebuild();
             }
         }
 
-        void SetRebuildOnSplineChange(bool value)
+        private void SetRebuildOnSplineChange(bool value)
         {
-            foreach (var component in m_Components)
+            foreach (var component in _components)
             {
                 if (component != null)
                 {
@@ -102,16 +110,16 @@ namespace UnityEditor.Splines
             }
         }
 
-        void Rebuild()
+        private void Rebuild()
         {
-            foreach (var component in m_Components)
+            foreach (var component in _components)
             {
                 if (component != null)
                     component.Rebuild();
             }
         }
 
-        bool Foldout(bool foldout, GUIContent content, bool toggleOnLabelClick)
+        private bool Foldout(bool foldout, GUIContent content, bool toggleOnLabelClick)
         {
             var style = new GUIStyle(EditorStyles.foldout)
             {
@@ -126,32 +134,31 @@ namespace UnityEditor.Splines
 
             EditorGUI.BeginChangeCheck();
 
-            // General Section
-            m_Container.isExpanded = Foldout(m_Container.isExpanded, k_GeneralContent, true);
+            _container.isExpanded = Foldout(_container.isExpanded, k_GeneralContent, true);
 
-            if (m_Container.isExpanded)
+            if (_container.isExpanded)
             {
                 EditorGUI.indentLevel++;
 
-                EditorGUILayout.PropertyField(m_Container, new GUIContent(k_SourceSplineContainer, m_Container.tooltip));
+                EditorGUILayout.PropertyField(_container, new GUIContent(k_SourceSplineContainer, _container.tooltip));
 
-                if (m_Container.objectReferenceValue == null)
+                if (_container.objectReferenceValue == null)
                     EditorGUILayout.HelpBox(k_Helpbox, MessageType.Warning);
 
-                EditorGUILayout.PropertyField(m_Terrain, new GUIContent(k_TargetTerrain, m_Terrain.tooltip));
+                EditorGUILayout.PropertyField(_terrain, new GUIContent(k_TargetTerrain, _terrain.tooltip));
 
                 EditorGUILayout.BeginHorizontal();
 
                 EditorGUI.BeginChangeCheck();
-                EditorGUILayout.PropertyField(m_RebuildOnSplineChange, new GUIContent(k_AutoRefreshGeneration, m_RebuildOnSplineChange.tooltip));
-                if (m_RebuildOnSplineChange.boolValue)
+                EditorGUILayout.PropertyField(_rebuildOnSplineChange, new GUIContent(k_AutoRefreshGeneration, _rebuildOnSplineChange.tooltip));
+                if (_rebuildOnSplineChange.boolValue)
                 {
-                    EditorGUI.BeginDisabledGroup(!m_RebuildOnSplineChange.boolValue);
+                    EditorGUI.BeginDisabledGroup(!_rebuildOnSplineChange.boolValue);
                     using (new EditorGUILayout.HorizontalScope())
                     {
                         GUILayout.Space(15);
                         using (new LabelWidthScope(80f))
-                            EditorGUILayout.PropertyField(m_RebuildFrequency, new GUIContent() { text = L10n.Tr("Frequency") });
+                            EditorGUILayout.PropertyField(_rebuildFrequency, new GUIContent() { text = L10n.Tr("Frequency") });
                     }
                     EditorGUI.EndDisabledGroup();
                 }
@@ -161,8 +168,8 @@ namespace UnityEditor.Splines
                         Rebuild();
                 }
 
-                if (EditorGUI.EndChangeCheck() && !m_RebuildOnSplineChange.boolValue)
-                    SetRebuildOnSplineChange(m_RebuildOnSplineChange.boolValue);
+                if (EditorGUI.EndChangeCheck() && !_rebuildOnSplineChange.boolValue)
+                    SetRebuildOnSplineChange(_rebuildOnSplineChange.boolValue);
 
                 EditorGUILayout.EndHorizontal();
 
@@ -171,21 +178,20 @@ namespace UnityEditor.Splines
 
             EditorGUILayout.Space(4);
 
-            // Spline to Terrain Section
-            m_SnapSplineToTerrain.isExpanded = Foldout(m_SnapSplineToTerrain.isExpanded, k_SplineToTerrainContent, true);
+            _snapSplineToTerrain.isExpanded = Foldout(_snapSplineToTerrain.isExpanded, k_SplineToTerrainContent, true);
 
-            if (m_SnapSplineToTerrain.isExpanded)
+            if (_snapSplineToTerrain.isExpanded)
             {
                 EditorGUI.indentLevel++;
 
-                EditorGUILayout.PropertyField(m_SnapSplineToTerrain);
+                EditorGUILayout.PropertyField(_snapSplineToTerrain);
 
-                if (m_SnapSplineToTerrain.boolValue)
+                if (_snapSplineToTerrain.boolValue)
                 {
                     EditorGUI.BeginChangeCheck();
-                    EditorGUILayout.PropertyField(m_SplineHeightOffset);
+                    EditorGUILayout.PropertyField(_splineHeightOffset);
                     if (EditorGUI.EndChangeCheck())
-                        m_SplineHeightOffset.floatValue = Mathf.Clamp(m_SplineHeightOffset.floatValue, -1000f, 1000f);
+                        _splineHeightOffset.floatValue = Mathf.Clamp(_splineHeightOffset.floatValue, -1000f, 1000f);
                 }
 
                 EditorGUI.indentLevel--;
@@ -193,35 +199,64 @@ namespace UnityEditor.Splines
 
             EditorGUILayout.Space(4);
 
-            // Terrain to Spline Section
-            m_DeformTerrainToSpline.isExpanded = Foldout(m_DeformTerrainToSpline.isExpanded, k_TerrainToSplineContent, true);
+            _deformTerrainToSpline.isExpanded = Foldout(_deformTerrainToSpline.isExpanded, k_TerrainToSplineContent, true);
 
-            if (m_DeformTerrainToSpline.isExpanded)
+            if (_deformTerrainToSpline.isExpanded)
             {
                 EditorGUI.indentLevel++;
 
-                EditorGUILayout.PropertyField(m_DeformTerrainToSpline);
+                EditorGUILayout.PropertyField(_deformTerrainToSpline);
 
-                if (m_DeformTerrainToSpline.boolValue)
+                if (_deformTerrainToSpline.boolValue)
                 {
                     EditorGUI.BeginChangeCheck();
-                    EditorGUILayout.PropertyField(m_DeformWidth);
+                    EditorGUILayout.PropertyField(_deformWidth);
                     if (EditorGUI.EndChangeCheck())
-                        m_DeformWidth.floatValue = Mathf.Max(m_DeformWidth.floatValue, 0.1f);
+                        _deformWidth.floatValue = Mathf.Max(_deformWidth.floatValue, 0.1f);
 
                     EditorGUI.BeginChangeCheck();
-                    EditorGUILayout.PropertyField(m_SmoothingDistance);
+                    EditorGUILayout.PropertyField(_smoothingDistance);
                     if (EditorGUI.EndChangeCheck())
-                        m_SmoothingDistance.floatValue = Mathf.Max(m_SmoothingDistance.floatValue, 0f);
+                        _smoothingDistance.floatValue = Mathf.Max(_smoothingDistance.floatValue, 0f);
 
-                    EditorGUILayout.PropertyField(m_TerrainOffset);
+                    EditorGUILayout.PropertyField(_terrainOffset);
 
                     EditorGUI.BeginChangeCheck();
-                    EditorGUILayout.PropertyField(m_SamplesPerUnit);
+                    EditorGUILayout.PropertyField(_samplesPerUnit);
                     if (EditorGUI.EndChangeCheck())
-                        m_SamplesPerUnit.floatValue = Mathf.Clamp(m_SamplesPerUnit.floatValue, 0.1f, 100f);
+                        _samplesPerUnit.floatValue = Mathf.Clamp(_samplesPerUnit.floatValue, 0.1f, 100f);
 
-                    EditorGUILayout.PropertyField(m_DeformStrength);
+                    EditorGUILayout.PropertyField(_deformStrength);
+                }
+
+                EditorGUI.indentLevel--;
+            }
+
+            EditorGUILayout.Space(4);
+
+            _paintTerrainLayer.isExpanded = Foldout(_paintTerrainLayer.isExpanded, k_PaintTerrainLayerContent, true);
+
+            if (_paintTerrainLayer.isExpanded)
+            {
+                EditorGUI.indentLevel++;
+
+                EditorGUILayout.PropertyField(_paintTerrainLayer);
+
+                if (_paintTerrainLayer.boolValue)
+                {
+                    EditorGUILayout.PropertyField(_terrainLayer);
+
+                    EditorGUI.BeginChangeCheck();
+                    EditorGUILayout.PropertyField(_paintWidth);
+                    if (EditorGUI.EndChangeCheck())
+                        _paintWidth.floatValue = Mathf.Max(_paintWidth.floatValue, 0.1f);
+
+                    EditorGUI.BeginChangeCheck();
+                    EditorGUILayout.PropertyField(_paintSmoothingDistance);
+                    if (EditorGUI.EndChangeCheck())
+                        _paintSmoothingDistance.floatValue = Mathf.Max(_paintSmoothingDistance.floatValue, 0f);
+
+                    EditorGUILayout.PropertyField(_paintStrength);
                 }
 
                 EditorGUI.indentLevel--;

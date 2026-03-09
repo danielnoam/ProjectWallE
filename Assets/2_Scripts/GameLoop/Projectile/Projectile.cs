@@ -1,10 +1,10 @@
 using System;
+using DNExtensions.Systems.ObjectPooling;
 using DNExtensions.Utilities.AutoGet;
 using UnityEngine;
 
-public class Projectile : MonoBehaviour
+public class Projectile : MonoBehaviour, IPoolable
 {
-
     [SerializeField, AutoGetSelf] private Rigidbody rigidBody;
     private IDamageable _owner;
     private ProjectileData _data;
@@ -28,7 +28,7 @@ public class Projectile : MonoBehaviour
         _lifetimeTimer += Time.deltaTime;
         if (_lifetimeTimer >= _maxLifetime)
         {
-            Destroy(gameObject);
+            ReturnToPool();
         }
     }
 
@@ -97,8 +97,13 @@ public class Projectile : MonoBehaviour
         }
 
 
+        if (_data.hitParticle)
+        {
+            var particle = ObjectPooler.GetObjectFromPool(_data.hitParticle, transform.position, Quaternion.LookRotation(-transform.forward));
+            particle?.Play();
+        }
 
-        Destroy(gameObject);
+        ReturnToPool();
     }
 
     private void MoveLinear()
@@ -121,6 +126,11 @@ public class Projectile : MonoBehaviour
         
         _arcVelocity = toTarget / travelTime - Physics.gravity * travelTime / 2f;
     }
+    
+    private void ReturnToPool()
+    {
+        ObjectPooler.ReturnObjectToPool(this);
+    }
 
     
     public void Initialize(ProjectileData data, LayerMask hitLayers, Vector3 direction, Vector3 targetPosition)
@@ -135,5 +145,22 @@ public class Projectile : MonoBehaviour
         if (_data.movementType == ProjectileMovementType.Arc) InitializeArc();
 
         _isInitialized = true;
+    }
+
+    public void OnPoolGet()
+    {
+        
+    }
+
+    public void OnPoolReturn()
+    {
+        _isInitialized = false;
+        _hitSomething = false;
+        _lifetimeTimer = 0;
+    }
+
+    public void OnPoolRecycle()
+    {
+       
     }
 }

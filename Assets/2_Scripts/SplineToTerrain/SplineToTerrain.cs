@@ -1,177 +1,208 @@
-using System;
 using UnityEngine;
 using UnityEngine.Splines;
 
 namespace UnityEngine.Splines
 {
     /// <summary>
-    /// A component for bridging splines with terrain by adjusting spline points to terrain height
-    /// and deforming terrain to match the spline path.
+    /// Bridges a SplineContainer with a Terrain — snapping spline knots to terrain height,
+    /// deforming terrain to match the spline path, and painting terrain layers along it.
     /// </summary>
     [AddComponentMenu("Splines/Spline To Terrain")]
     [ExecuteAlways]
     public class SplineToTerrain : MonoBehaviour
     {
         [SerializeField, Tooltip("The Spline to bridge with terrain.")]
-        SplineContainer m_Container;
+        private SplineContainer container;
 
         [SerializeField, Tooltip("The terrain to interact with. If null, will search for nearest terrain.")]
-        Terrain m_Terrain;
+        private Terrain terrain;
 
         [SerializeField, Tooltip("Enable to automatically update when the spline is modified.")]
-        bool m_RebuildOnSplineChange = true;
+        private bool rebuildOnSplineChange = true;
 
         [SerializeField, Tooltip("The maximum number of times per-second that updates will occur.")]
-        int m_RebuildFrequency = 30;
+        private int rebuildFrequency = 30;
 
         [Header("Spline to Terrain")]
         [SerializeField, Tooltip("Snap spline knot positions to terrain height.")]
-        bool m_SnapSplineToTerrain = true;
+        private bool snapSplineToTerrain = true;
 
         [SerializeField, Tooltip("Additional vertical offset applied to snapped spline points.")]
-        float m_SplineHeightOffset = 0f;
+        private float splineHeightOffset = 0f;
 
         [Header("Terrain to Spline")]
         [SerializeField, Tooltip("Deform terrain to match the spline path.")]
-        bool m_DeformTerrainToSpline = false;
+        private bool deformTerrainToSpline = false;
 
         [SerializeField, Tooltip("The width (in world units) where terrain fully matches spline height.")]
-        float m_DeformWidth = 5f;
+        private float deformWidth = 5f;
 
         [SerializeField, Tooltip("Additional distance (in world units) for smooth falloff beyond the width.")]
-        float m_SmoothingDistance = 3f;
+        private float smoothingDistance = 3f;
 
-        [SerializeField, Tooltip("Offset applied to the target terrain height (X=horizontal offset along spline, Y=vertical, Z=horizontal perpendicular to spline).")]
-        Vector3 m_TerrainOffset = Vector3.zero;
+        [SerializeField, Tooltip("Offset applied to the target terrain height (X=along spline, Y=vertical, Z=perpendicular to spline).")]
+        private Vector3 terrainOffset = Vector3.zero;
 
         [SerializeField, Tooltip("How many terrain samples per world unit along the spline.")]
-        float m_SamplesPerUnit = 2f;
+        private float samplesPerUnit = 2f;
 
-        [SerializeField, Tooltip("Blend factor between original terrain and target height. 0 = no change, 1 = full deformation.")]
-        [Range(0f, 1f)]
-        float m_DeformStrength = 1f;
+        [SerializeField, Range(0f, 1f), Tooltip("Blend factor between original terrain and target height. 0 = no change, 1 = full deformation.")]
+        private float deformStrength = 1f;
 
-        float m_NextScheduledRebuild;
-        bool m_RebuildRequested;
+        [Header("Paint Terrain Layer")]
+        [SerializeField, Tooltip("Paint a terrain layer along the spline path.")]
+        private bool paintTerrainLayer = false;
 
-        /// <summary>The SplineContainer to bridge with terrain.</summary>
+        [SerializeField, Tooltip("The terrain layer to paint along the spline.")]
+        private TerrainLayer terrainLayer = null;
+
+        [SerializeField, Tooltip("The width (in world units) where the layer is painted at full strength.")]
+        private float paintWidth = 5f;
+
+        [SerializeField, Tooltip("Additional distance (in world units) for smooth falloff beyond the paint width.")]
+        private float paintSmoothingDistance = 3f;
+
+        [SerializeField, Range(0f, 1f), Tooltip("Blend factor between the current layer weights and full paint. 0 = no change, 1 = full paint.")]
+        private float paintStrength = 1f;
+
+        private float _nextScheduledRebuild;
+        private bool _rebuildRequested;
+
         public SplineContainer Container
         {
-            get => m_Container;
-            set => m_Container = value;
+            get => container;
+            set => container = value;
         }
 
-        /// <summary>The terrain to interact with.</summary>
         public Terrain Terrain
         {
-            get => m_Terrain;
-            set => m_Terrain = value;
+            get => terrain;
+            set => terrain = value;
         }
 
-        /// <summary>Enable to automatically update when the spline is modified.</summary>
         public bool RebuildOnSplineChange
         {
-            get => m_RebuildOnSplineChange;
+            get => rebuildOnSplineChange;
             set
             {
-                m_RebuildOnSplineChange = value;
+                rebuildOnSplineChange = value;
                 if (!value)
-                    m_RebuildRequested = value;
+                    _rebuildRequested = false;
             }
         }
 
-        /// <summary>The maximum number of times per-second that updates will occur.</summary>
         public int RebuildFrequency
         {
-            get => m_RebuildFrequency;
-            set => m_RebuildFrequency = Mathf.Max(value, 1);
+            get => rebuildFrequency;
+            set => rebuildFrequency = Mathf.Max(value, 1);
         }
 
-        /// <summary>Snap spline knot positions to terrain height.</summary>
         public bool SnapSplineToTerrain
         {
-            get => m_SnapSplineToTerrain;
-            set => m_SnapSplineToTerrain = value;
+            get => snapSplineToTerrain;
+            set => snapSplineToTerrain = value;
         }
 
-        /// <summary>Additional vertical offset applied to snapped spline points.</summary>
         public float SplineHeightOffset
         {
-            get => m_SplineHeightOffset;
-            set => m_SplineHeightOffset = value;
+            get => splineHeightOffset;
+            set => splineHeightOffset = value;
         }
 
-        /// <summary>Deform terrain to match the spline path.</summary>
         public bool DeformTerrainToSpline
         {
-            get => m_DeformTerrainToSpline;
-            set => m_DeformTerrainToSpline = value;
+            get => deformTerrainToSpline;
+            set => deformTerrainToSpline = value;
         }
 
-        /// <summary>The width where terrain fully matches spline height.</summary>
         public float DeformWidth
         {
-            get => m_DeformWidth;
-            set => m_DeformWidth = Mathf.Max(value, 0.1f);
+            get => deformWidth;
+            set => deformWidth = Mathf.Max(value, 0.1f);
         }
 
-        /// <summary>Additional distance for smooth falloff beyond the width.</summary>
         public float SmoothingDistance
         {
-            get => m_SmoothingDistance;
-            set => m_SmoothingDistance = Mathf.Max(value, 0f);
+            get => smoothingDistance;
+            set => smoothingDistance = Mathf.Max(value, 0f);
         }
 
-        /// <summary>Offset applied to the target terrain height.</summary>
         public Vector3 TerrainOffset
         {
-            get => m_TerrainOffset;
-            set => m_TerrainOffset = value;
+            get => terrainOffset;
+            set => terrainOffset = value;
         }
 
-        /// <summary>How many terrain samples per world unit along the spline.</summary>
         public float SamplesPerUnit
         {
-            get => m_SamplesPerUnit;
-            set => m_SamplesPerUnit = Mathf.Max(value, 0.1f);
+            get => samplesPerUnit;
+            set => samplesPerUnit = Mathf.Max(value, 0.1f);
         }
 
-        /// <summary>Blend factor between original terrain and target height.</summary>
         public float DeformStrength
         {
-            get => m_DeformStrength;
-            set => m_DeformStrength = Mathf.Clamp01(value);
+            get => deformStrength;
+            set => deformStrength = Mathf.Clamp01(value);
         }
 
-        /// <summary>The main Spline to bridge with terrain.</summary>
-        public Spline Spline => m_Container?.Spline;
-
-        void OnEnable()
+        public bool PaintTerrainLayer
         {
-            if (m_Terrain == null)
-                m_Terrain = FindNearestTerrain();
+            get => paintTerrainLayer;
+            set => paintTerrainLayer = value;
+        }
+
+        public TerrainLayer TerrainLayer
+        {
+            get => terrainLayer;
+            set => terrainLayer = value;
+        }
+
+        public float PaintWidth
+        {
+            get => paintWidth;
+            set => paintWidth = Mathf.Max(value, 0.1f);
+        }
+
+        public float PaintSmoothingDistance
+        {
+            get => paintSmoothingDistance;
+            set => paintSmoothingDistance = Mathf.Max(value, 0f);
+        }
+
+        public float PaintStrength
+        {
+            get => paintStrength;
+            set => paintStrength = Mathf.Clamp01(value);
+        }
+
+        public Spline Spline => container?.Spline;
+
+        private void OnEnable()
+        {
+            if (terrain == null)
+                terrain = FindNearestTerrain();
 
             Spline.Changed += OnSplineChanged;
         }
 
-        void OnDisable()
+        private void OnDisable()
         {
             Spline.Changed -= OnSplineChanged;
         }
 
-        void Update()
+        private void Update()
         {
-            if (m_RebuildRequested && m_RebuildOnSplineChange && Time.time > m_NextScheduledRebuild)
+            if (_rebuildRequested && rebuildOnSplineChange && Time.time > _nextScheduledRebuild)
                 Rebuild();
         }
 
-        void OnSplineChanged(Spline spline, int knotIndex, SplineModification modificationType)
+        private void OnSplineChanged(Spline spline, int knotIndex, SplineModification modificationType)
         {
-            if (m_RebuildOnSplineChange)
-                m_RebuildRequested = true;
+            if (rebuildOnSplineChange)
+                _rebuildRequested = true;
         }
 
-        Terrain FindNearestTerrain()
+        private Terrain FindNearestTerrain()
         {
             var terrains = Terrain.activeTerrains;
             if (terrains.Length == 0)
@@ -193,40 +224,40 @@ namespace UnityEngine.Splines
             return nearest;
         }
 
-        bool IsNullOrEmptyContainer()
+        private bool IsNullOrEmptyContainer()
         {
-            return m_Container == null || m_Container.Splines == null || m_Container.Splines.Count == 0;
+            return container == null || container.Splines == null || container.Splines.Count == 0;
         }
 
-        /// <summary>
-        /// Triggers the rebuild of the spline-terrain bridge.
-        /// </summary>
         public void Rebuild()
         {
             if (IsNullOrEmptyContainer())
                 return;
 
-            if (m_Terrain == null)
+            if (terrain == null)
             {
-                m_Terrain = FindNearestTerrain();
-                if (m_Terrain == null)
+                terrain = FindNearestTerrain();
+                if (terrain == null)
                 {
                     Debug.LogWarning("SplineToTerrain: No terrain found.", this);
                     return;
                 }
             }
 
-            if (m_SnapSplineToTerrain)
+            if (snapSplineToTerrain)
                 SnapSplinePointsToTerrain();
 
-            if (m_DeformTerrainToSpline)
+            if (deformTerrainToSpline)
                 DeformTerrainAlongSpline();
 
-            m_NextScheduledRebuild = Time.time + 1f / m_RebuildFrequency;
-            m_RebuildRequested = false;
+            if (paintTerrainLayer)
+                PaintTerrainLayerAlongSpline();
+
+            _nextScheduledRebuild = Time.time + 1f / rebuildFrequency;
+            _rebuildRequested = false;
         }
 
-        void SnapSplinePointsToTerrain()
+        private void SnapSplinePointsToTerrain()
         {
             var spline = Spline;
             if (spline == null)
@@ -235,27 +266,26 @@ namespace UnityEngine.Splines
             for (int i = 0; i < spline.Count; i++)
             {
                 var knot = spline[i];
-                var worldPos = m_Container.transform.TransformPoint(knot.Position);
-                
-                float terrainHeight = m_Terrain.SampleHeight(worldPos) + m_Terrain.transform.position.y;
-                worldPos.y = terrainHeight + m_SplineHeightOffset;
+                var worldPos = container.transform.TransformPoint(knot.Position);
 
-                var localPos = m_Container.transform.InverseTransformPoint(worldPos);
+                float terrainHeight = terrain.SampleHeight(worldPos) + terrain.transform.position.y;
+                worldPos.y = terrainHeight + splineHeightOffset;
+
+                var localPos = container.transform.InverseTransformPoint(worldPos);
                 knot.Position = localPos;
                 spline[i] = knot;
             }
         }
 
-        void DeformTerrainAlongSpline()
+        private void DeformTerrainAlongSpline()
         {
             var spline = Spline;
             if (spline == null)
                 return;
 
-            var terrainData = m_Terrain.terrainData;
-            
+            var terrainData = terrain.terrainData;
+
 #if UNITY_EDITOR
-            // Record undo for terrain data before modification
             UnityEditor.Undo.RegisterCompleteObjectUndo(terrainData, "Deform Terrain to Spline");
 #endif
 
@@ -264,48 +294,31 @@ namespace UnityEngine.Splines
             float[,] heights = terrainData.GetHeights(0, 0, heightmapWidth, heightmapHeight);
 
             float splineLength = spline.GetLength();
-            int sampleCount = Mathf.Max(2, Mathf.CeilToInt(splineLength * m_SamplesPerUnit));
+            int sampleCount = Mathf.Max(2, Mathf.CeilToInt(splineLength * samplesPerUnit));
+            float totalInfluenceDistance = deformWidth + smoothingDistance;
 
-            // Total influence distance = full deform width + smoothing distance
-            float totalInfluenceDistance = m_DeformWidth + m_SmoothingDistance;
-
-            // Sample points along the spline
             for (int i = 0; i < sampleCount; i++)
             {
                 float t = i / (float)(sampleCount - 1);
-                var splinePoint = spline.EvaluatePosition(t);
-                var worldSplinePoint = m_Container.transform.TransformPoint(splinePoint);
+                var worldSplinePoint = container.transform.TransformPoint(spline.EvaluatePosition(t));
 
-                // Get spline tangent for offset calculation
-                var splineTangent = spline.EvaluateTangent(t);
-                var worldTangent = m_Container.transform.TransformDirection(splineTangent).normalized;
-                
-                // Calculate perpendicular (right) vector for Z offset
-                var worldUp = Vector3.up;
-                var worldRight = Vector3.Cross(worldUp, worldTangent).normalized;
+                var worldTangent = container.transform.TransformDirection(spline.EvaluateTangent(t)).normalized;
+                var worldRight = Vector3.Cross(Vector3.up, worldTangent).normalized;
 
-                // Apply offset: X along spline, Y vertical, Z perpendicular to spline
-                Vector3 offsetVector = worldTangent * m_TerrainOffset.x + 
-                                      Vector3.up * m_TerrainOffset.y + 
-                                      worldRight * m_TerrainOffset.z;
-                
-                worldSplinePoint += offsetVector;
+                worldSplinePoint += worldTangent * terrainOffset.x +
+                                    Vector3.up * terrainOffset.y +
+                                    worldRight * terrainOffset.z;
 
-                // Convert world position to terrain heightmap coordinates
-                Vector3 terrainLocalPos = worldSplinePoint - m_Terrain.transform.position;
+                Vector3 terrainLocalPos = worldSplinePoint - terrain.transform.position;
                 float xNormalized = terrainLocalPos.x / terrainData.size.x;
                 float zNormalized = terrainLocalPos.z / terrainData.size.z;
 
                 int centerX = Mathf.RoundToInt(xNormalized * (heightmapWidth - 1));
                 int centerZ = Mathf.RoundToInt(zNormalized * (heightmapHeight - 1));
 
-                // Calculate influence radius in heightmap coordinates
-                float influenceInHeightmapUnits = (totalInfluenceDistance / terrainData.size.x) * heightmapWidth;
-                int radius = Mathf.CeilToInt(influenceInHeightmapUnits);
-
+                int radius = Mathf.CeilToInt((totalInfluenceDistance / terrainData.size.x) * heightmapWidth);
                 float targetHeight = terrainLocalPos.y / terrainData.size.y;
 
-                // Deform terrain in a circular area around the point
                 for (int x = -radius; x <= radius; x++)
                 {
                     for (int z = -radius; z <= radius; z++)
@@ -313,11 +326,10 @@ namespace UnityEngine.Splines
                         int heightmapX = centerX + x;
                         int heightmapZ = centerZ + z;
 
-                        if (heightmapX < 0 || heightmapX >= heightmapWidth || 
+                        if (heightmapX < 0 || heightmapX >= heightmapWidth ||
                             heightmapZ < 0 || heightmapZ >= heightmapHeight)
                             continue;
 
-                        // Calculate distance in world units
                         float xWorldDist = (x / (float)heightmapWidth) * terrainData.size.x;
                         float zWorldDist = (z / (float)heightmapHeight) * terrainData.size.z;
                         float worldDistance = Mathf.Sqrt(xWorldDist * xWorldDist + zWorldDist * zWorldDist);
@@ -326,26 +338,19 @@ namespace UnityEngine.Splines
                             continue;
 
                         float falloff;
-                        
-                        if (worldDistance <= m_DeformWidth)
+                        if (worldDistance <= deformWidth)
                         {
-                            // Inside the core width - full deformation
                             falloff = 1f;
                         }
                         else
                         {
-                            // In the smoothing zone - gradual falloff
-                            float smoothingProgress = (worldDistance - m_DeformWidth) / m_SmoothingDistance;
-                            // Use smoothstep for natural falloff
-                            falloff = 1f - (smoothingProgress * smoothingProgress * (3f - 2f * smoothingProgress));
+                            // Smoothstep falloff in the blending zone
+                            float t2 = (worldDistance - deformWidth) / smoothingDistance;
+                            falloff = 1f - (t2 * t2 * (3f - 2f * t2));
                         }
 
                         float currentHeight = heights[heightmapZ, heightmapX];
-                        
-                        // Apply deformation bidirectionally (can raise OR lower terrain)
-                        float newHeight = Mathf.Lerp(currentHeight, targetHeight, falloff * m_DeformStrength);
-                        
-                        heights[heightmapZ, heightmapX] = newHeight;
+                        heights[heightmapZ, heightmapX] = Mathf.Lerp(currentHeight, targetHeight, falloff * deformStrength);
                     }
                 }
             }
@@ -353,24 +358,126 @@ namespace UnityEngine.Splines
             terrainData.SetHeights(0, 0, heights);
         }
 
-#if UNITY_EDITOR
-        void OnValidate()
+        private void PaintTerrainLayerAlongSpline()
         {
-            if (!UnityEditor.EditorApplication.isPlaying)
-                Rebuild();
+            var spline = Spline;
+            if (spline == null)
+                return;
+
+            if (terrainLayer == null)
+            {
+                Debug.LogWarning("SplineToTerrain: No terrain layer assigned.", this);
+                return;
+            }
+
+            var terrainData = terrain.terrainData;
+            var terrainLayers = terrainData.terrainLayers;
+
+            int layerIndex = -1;
+            for (int i = 0; i < terrainLayers.Length; i++)
+            {
+                if (terrainLayers[i] == terrainLayer)
+                {
+                    layerIndex = i;
+                    break;
+                }
+            }
+
+            if (layerIndex == -1)
+            {
+                Debug.LogWarning($"SplineToTerrain: Layer '{terrainLayer.name}' is not present on the target terrain.", this);
+                return;
+            }
+
+#if UNITY_EDITOR
+            UnityEditor.Undo.RegisterCompleteObjectUndo(terrainData, "Paint Terrain Layer Along Spline");
+#endif
+
+            int alphamapWidth = terrainData.alphamapWidth;
+            int alphamapHeight = terrainData.alphamapHeight;
+            float[,,] alphamaps = terrainData.GetAlphamaps(0, 0, alphamapWidth, alphamapHeight);
+            int layerCount = terrainData.alphamapLayers;
+
+            float splineLength = spline.GetLength();
+            int sampleCount = Mathf.Max(2, Mathf.CeilToInt(splineLength * samplesPerUnit));
+            float totalInfluenceDistance = paintWidth + paintSmoothingDistance;
+
+            for (int i = 0; i < sampleCount; i++)
+            {
+                float t = i / (float)(sampleCount - 1);
+                var worldPoint = container.transform.TransformPoint(spline.EvaluatePosition(t));
+
+                Vector3 terrainLocalPos = worldPoint - terrain.transform.position;
+                float xNorm = terrainLocalPos.x / terrainData.size.x;
+                float zNorm = terrainLocalPos.z / terrainData.size.z;
+
+                int centerX = Mathf.RoundToInt(xNorm * (alphamapWidth - 1));
+                int centerZ = Mathf.RoundToInt(zNorm * (alphamapHeight - 1));
+
+                int radius = Mathf.CeilToInt((totalInfluenceDistance / terrainData.size.x) * alphamapWidth);
+
+                for (int x = -radius; x <= radius; x++)
+                {
+                    for (int z = -radius; z <= radius; z++)
+                    {
+                        int ax = centerX + x;
+                        int az = centerZ + z;
+
+                        if (ax < 0 || ax >= alphamapWidth || az < 0 || az >= alphamapHeight)
+                            continue;
+
+                        float xWorldDist = (x / (float)alphamapWidth) * terrainData.size.x;
+                        float zWorldDist = (z / (float)alphamapHeight) * terrainData.size.z;
+                        float worldDistance = Mathf.Sqrt(xWorldDist * xWorldDist + zWorldDist * zWorldDist);
+
+                        if (worldDistance > totalInfluenceDistance)
+                            continue;
+
+                        float falloff;
+                        if (worldDistance <= paintWidth)
+                        {
+                            falloff = 1f;
+                        }
+                        else
+                        {
+                            float t2 = (worldDistance - paintWidth) / paintSmoothingDistance;
+                            falloff = 1f - (t2 * t2 * (3f - 2f * t2));
+                        }
+
+                        float oldValue = alphamaps[az, ax, layerIndex];
+                        float newValue = Mathf.Lerp(oldValue, 1f, falloff * paintStrength);
+                        float remaining = 1f - newValue;
+                        float previousOthers = 1f - oldValue;
+
+                        alphamaps[az, ax, layerIndex] = newValue;
+
+                        for (int l = 0; l < layerCount; l++)
+                        {
+                            if (l == layerIndex) continue;
+                            alphamaps[az, ax, l] = previousOthers > 0f
+                                ? alphamaps[az, ax, l] * (remaining / previousOthers)
+                                : 0f;
+                        }
+                    }
+                }
+            }
+
+            terrainData.SetAlphamaps(0, 0, alphamaps);
         }
+
+#if UNITY_EDITOR
 
         internal void SetSplineContainerOnGO()
         {
-            if (m_Container == null && TryGetComponent<SplineContainer>(out var container))
-                m_Container = container;
+            if (this.container == null && TryGetComponent<SplineContainer>(out var container))
+                this.container = container;
         }
 
         internal void Reset()
         {
             SetSplineContainerOnGO();
-            if (m_Terrain == null)
-                m_Terrain = FindNearestTerrain();
+            if (terrain == null)
+                terrain = FindNearestTerrain();
             Rebuild();
         }
 #endif

@@ -1,5 +1,5 @@
 using System;
-using DNExtensions.Utilities;
+using DNExtensions.Systems.ObjectPooling;
 using DNExtensions.Utilities.Button;
 using UnityEngine;
 
@@ -10,19 +10,29 @@ public class ResourceNode : MonoBehaviour, IDamageable
     [SerializeField] private float maxHealth = 50;
     [SerializeField] private int resourceAmount = 100;
     
-    [SerializeField, ReadOnly] private float currentHealth;
+    [Header("Effects")]
+    [SerializeField] private PoolableParticleSystem destroyEffect;
+    [SerializeField] private Transform destroyEffectPosition;
+    
+    private float _currentHealth;
 
     public event Action<IDamageable> OnDeath;
+    public event Action<float> OnDamaged;
 
     private void Awake()
     {
-        currentHealth = maxHealth;
+        _currentHealth = maxHealth;
     }
 
 
     [Button]
     private void DestroySelf()
     {
+        if (destroyEffect)
+        {
+            var effect = ObjectPooler.GetObjectFromPool(destroyEffect, destroyEffectPosition.position);
+            effect?.Play();
+        }
         OnDeath?.Invoke(this);
         ResourceManager.Instance?.AddResources(resourceAmount);
         Destroy(gameObject);
@@ -30,19 +40,17 @@ public class ResourceNode : MonoBehaviour, IDamageable
 
     public void TakeDamage(float damage, IDamageable attacker = null)
     {
-        if (currentHealth <= 0) return;
+        if (_currentHealth <= 0) return;
         
-        currentHealth -= damage;
-        if (currentHealth <= 0)
+        _currentHealth -= damage;
+        OnDamaged?.Invoke(damage);
+        
+        if (_currentHealth <= 0)
         {
             DestroySelf();
         }
     }
-
-    public void Push(Vector3 direction, float force)
-    {
-        
-    }
+    
 
 
 #if UNITY_EDITOR
@@ -52,7 +60,7 @@ public class ResourceNode : MonoBehaviour, IDamageable
 
         UnityEditor.Handles.Label(
             transform.position + Vector3.up * 2.5f,
-            $"Health: {currentHealth}/{maxHealth}",
+            $"Health: {_currentHealth}/{maxHealth}",
             new GUIStyle()
             {
                 normal = new GUIStyleState() { textColor = Color.white },
@@ -61,6 +69,5 @@ public class ResourceNode : MonoBehaviour, IDamageable
                 alignment = TextAnchor.MiddleCenter
             });
     }
-    
 #endif
 }

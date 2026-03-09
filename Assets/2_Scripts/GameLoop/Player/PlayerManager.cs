@@ -34,6 +34,7 @@ namespace ProjectWallE
         public bool canShoot => _currentController.canShoot;
         
         public event Action<IDamageable> OnDeath;
+        public event Action<float> OnDamaged;
         public static event Action<PlayerControllerType> OnControllerChanged;
         public static event Action OnBoostStart;
         public static event Action OnBoostEnd; 
