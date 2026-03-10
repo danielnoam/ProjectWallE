@@ -28,8 +28,9 @@ public class RadialMenu<T> : MonoBehaviour where T : class
     private RadialMenuElement _hoveredElement;
     private Vector2 _accumulatedMouseDelta;
     private int _currentSegmentIndex = -1;
+    private bool _isOpen;
+    
 
-    public bool IsOpen { get; private set; }
     public event Action<T> OnItemSelected;
 
     private void Awake()
@@ -39,8 +40,7 @@ public class RadialMenu<T> : MonoBehaviour where T : class
 
     private void Update()
     {
-        if (IsOpen)
-            SelectionInputHandling();
+        if (_isOpen) SelectionInputHandling();
     }
 
     private void OnDestroy()
@@ -166,7 +166,7 @@ public class RadialMenu<T> : MonoBehaviour where T : class
         canvasGroup.alpha = 0f;
         canvasGroup.blocksRaycasts = false;
         canvasGroup.interactable = false;
-        IsOpen = false;
+        _isOpen = false;
     }
 
     public void OpenMenu()
@@ -174,6 +174,6 @@ public class RadialMenu<T> : MonoBehaviour where T : class
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
         canvasGroup.interactable = true;
-        IsOpen = true;
+        _isOpen = true;
     }
 }

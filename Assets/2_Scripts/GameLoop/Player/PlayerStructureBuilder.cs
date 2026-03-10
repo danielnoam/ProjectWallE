@@ -15,18 +15,23 @@ public class PlayerStructureBuilder : MonoBehaviour
     [SerializeField] private LayerMask buildableLayerMask;
     [SerializeField] private LayerMask blockBuildLayerMask;
     [SerializeField] private LayerMask structureLayerMask;
-
-    [Header("References")]
-    [SerializeField, AutoGetScene] private StructureBuildMenu buildMenu;
-    [SerializeField, AutoGetScene] private StructureActionsMenu actionsMenu;
     [SerializeField, PrefabSelector("Assets/Prefabs/Structures")] private Structure[] structuresArray;
+    
+    
     [SerializeField, AutoGetSelf, HideInInspector] private PlayerManager playerManager;
+    [SerializeField, AutoGetScene, HideInInspector] private StructureBuildMenu buildMenu;
+    [SerializeField, AutoGetScene, HideInInspector] private StructureActionsMenu actionsMenu;
 
     private Camera _mainCamera;
     private Ray _buildRay;
     private bool _canBuild;
     private bool _menuOpen;
     private Structure _targetedStructure;
+
+    public static event Action<Structure[]> BuildMenuRequested;
+    public static event Action<List<StructureAction>> ActionsMenuRequested;
+    public static event Action MenuCloseRequested;
+    
 
     private void OnValidate()
     {
@@ -42,19 +47,23 @@ public class PlayerStructureBuilder : MonoBehaviour
     {
         buildMenu.OnItemSelected += TryBuildStructure;
         actionsMenu.OnItemSelected += OnStructureActionSelected;
+        playerManager.OnDeath += OnDeath;
+        PlayerManager.OnControllerChanged += OnControllerChanged;
     }
+    
 
     private void OnDisable()
     {
         buildMenu.OnItemSelected -= TryBuildStructure;
         actionsMenu.OnItemSelected -= OnStructureActionSelected;
+        playerManager.OnDeath -= OnDeath;
+        PlayerManager.OnControllerChanged -= OnControllerChanged;
     }
-
 
     private void Update()
     {
         if (!playerManager.canBuild) return;
-        
+
         if (Mouse.current.rightButton.wasPressedThisFrame)
         {
             OpenContextMenu();
@@ -66,6 +75,22 @@ public class PlayerStructureBuilder : MonoBehaviour
 
         CastBuildRay();
     }
+    
+    private void OnDeath(IDamageable damageable)
+    {
+        CloseMenus();
+    }
+    
+    private void OnControllerChanged(PlayerControllerType controllerType)
+    {
+        CloseMenus();
+    }
+    
+    private void OnStructureActionSelected(StructureAction action)
+    {
+        if (!action.isAvailable) return;
+        action.onSelected?.Invoke();
+    }
 
     private void OpenContextMenu()
     {
@@ -73,20 +98,17 @@ public class PlayerStructureBuilder : MonoBehaviour
 
         if (_targetedStructure)
         {
-            actionsMenu.SetupMenu(BuildStructureActions(_targetedStructure), ConfigureActionElement);
-            actionsMenu.OpenMenu();
+            ActionsMenuRequested?.Invoke(BuildStructureActions(_targetedStructure));
         }
         else
         {
-            buildMenu.SetupMenu(structuresArray, ConfigureBuildElement);
-            buildMenu.OpenMenu();
+            BuildMenuRequested?.Invoke(structuresArray);
         }
     }
 
     private void CloseMenus()
     {
-        buildMenu.CloseMenu();
-        actionsMenu.CloseMenu();
+        MenuCloseRequested?.Invoke();
         BuildPrompt.Instance?.Hide();
         _menuOpen = false;
     }
@@ -120,7 +142,7 @@ public class PlayerStructureBuilder : MonoBehaviour
             UpdateBuildPrompt(null);
         }
     }
-    
+
     private void UpdateBuildPrompt(Vector3? position)
     {
         if (position.HasValue)
@@ -132,7 +154,6 @@ public class PlayerStructureBuilder : MonoBehaviour
             BuildPrompt.Instance?.Hide();
         }
     }
-    
 
     private void TryBuildStructure(Structure structure)
     {
@@ -142,57 +163,19 @@ public class PlayerStructureBuilder : MonoBehaviour
 
         StructureManager.Instance?.DeployPod(structure, hit.point, transform.forward);
     }
-
-    private void OnStructureActionSelected(StructureAction action)
-    {
-        if (action.isAvailable)
-        {
-            action.onSelected?.Invoke();
-        }
-    }
     
-    private void ConfigureBuildElement(RadialMenuElement element, Structure structure)
-    {
-        bool canAfford = ResourceManager.Instance.CanAfford(structure.BuildCost);
-        element.elementInfo = $"{structure.Label}\nCost: {structure.BuildCost}";
-        element.SetDisabled(!canAfford);
-
-        if (structure.Icon)
-        {
-            element.iconImage.sprite = structure.Icon;
-        }
-        else
-        {
-            element.iconImage.gameObject.SetActive(false);
-        }
-    }
-
-    private void ConfigureActionElement(RadialMenuElement element, StructureAction action)
-    {
-        element.elementInfo = action.label;
-        element.SetDisabled(!action.isAvailable);
-
-        if (action.icon)
-        {
-            element.iconImage.sprite = action.icon;
-        }
-        else
-        {
-            element.iconImage.gameObject.SetActive(false);
-        }
-    }
 
     private List<StructureAction> BuildStructureActions(Structure structure)
     {
         bool canUpgrade = structure.CanUpgrade();
         bool canFix = structure.CurrentHealth < structure.MaxHealth;
 
-        string upgradeLabel = canUpgrade 
-            ? $"Upgrade {structure.currentUpgradeLevel} -> {structure.currentUpgradeLevel + 1}\n{structure.UpgradeCost}" 
+        string upgradeLabel = canUpgrade
+            ? $"Upgrade {structure.currentUpgradeLevel} -> {structure.currentUpgradeLevel + 1}\n{structure.UpgradeCost}"
             : $"At Max Level\n {structure.currentUpgradeLevel}/{structure.currentUpgradeLevel}";
-    
-        string fixLabel = canFix 
-            ? $"Fix {(int)structure.FixCost}\n{(int)structure.CurrentHealth}/{(int)structure.MaxHealth}" 
+
+        string fixLabel = canFix
+            ? $"Fix {(int)structure.FixCost}\n{(int)structure.CurrentHealth}/{(int)structure.MaxHealth}"
             : $"At Full Health\n{(int)structure.CurrentHealth}/{(int)structure.MaxHealth}";
 
         return new List<StructureAction>
