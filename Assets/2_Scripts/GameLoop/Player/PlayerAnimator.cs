@@ -13,7 +13,7 @@ namespace ProjectWallE
         [SerializeField] private AnimatorStateField switchToRobot;
         
         [SerializeField, AutoGetSelf, HideInInspector] private Animator animator;
-        [SerializeField, AutoGetSelf, HideInInspector] private PlayerManager player;
+        [SerializeField, AutoGetParent, HideInInspector] private PlayerManager player;
 
 
         private void OnValidate()
