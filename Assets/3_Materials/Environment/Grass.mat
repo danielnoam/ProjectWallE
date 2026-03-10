@@ -26,7 +26,7 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _ALPHATEST_ON
-  - _COLOR_TYPE_BOTTOM_COLOR
+  - _COLOR_TYPE_TERRAIN
   - _MOVEMENT_BOTH
   - _RECEIVE_SHADOWS_OFF
   m_InvalidKeywords: []
@@ -130,7 +130,7 @@ Material:
     - _Blend_Color_By_Height: 0
     - _Blend_Height: 0
     - _BumpScale: 1
-    - _COLOR_TYPE: 1
+    - _COLOR_TYPE: 0
     - _CastShadows: 0
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
@@ -145,7 +145,7 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _Height_Blend: 0.35
-    - _Height_Color_Blend: 0.24
+    - _Height_Color_Blend: 5.33
     - _MOVEMENT: 3
     - _Metallic: 0
     - _OcclusionStrength: 1
@@ -163,13 +163,13 @@ Material:
     - _Sway_Speed: 0.2
     - _Sway_Strength: 0.1
     - _TerrainSize: 100
-    - _Terrain_Size: 500
+    - _Terrain_Size: 1000
     - _Wave_Speed: 0.1
     - _Wave_Strength: 0.01
-    - _Wind_Height: 0.35
+    - _Wind_Height: 0.3
     - _Wind_Noise_Scale: 200
     - _Wind_Noise_Speed: 0.2
-    - _Wind_Speed: 0.05
+    - _Wind_Speed: 0.218
     - _WorkflowMode: 1
     - _XRMotionVectorsPass: 1
     - _ZTest: 4
@@ -185,7 +185,7 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _Terrain_Offset: {r: 0, g: 0, b: 0, a: 0}
-    - _Top_Color: {r: 0.003921569, g: 0.31764707, b: 0.1137255, a: 1}
+    - _Top_Color: {r: 0.18867922, g: 1, b: 0, a: 1}
     - _Top_Color_Multiplier: {r: 0, g: 0.24313727, b: 0.06666667, a: 1}
     - _Wind_Noise_Constrast: {r: 0.2, g: 1, b: 0, a: 0}
     - _Wind_Noise_Scale: {r: 500, g: 500, b: 0, a: 0}

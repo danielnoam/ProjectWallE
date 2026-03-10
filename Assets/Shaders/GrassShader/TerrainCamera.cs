@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TerrainCamera : MonoBehaviour
 {
-        [SerializeField] private  Camera cam;
+        [SerializeField] private Camera cam;
         [SerializeField] private Terrain terrain;
 
         
@@ -19,7 +19,7 @@ public class TerrainCamera : MonoBehaviour
                 
                 cam.transform.position = new Vector3(
                         terrainPosition.x + terrainSize.x / 2f,
-                        terrainPosition.y + 250f,
+                        terrainPosition.y + 350f,
                         terrainPosition.z + terrainSize.z / 2f
                 );
                 

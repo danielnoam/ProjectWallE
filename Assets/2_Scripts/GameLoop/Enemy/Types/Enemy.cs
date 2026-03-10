@@ -122,7 +122,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPushable
             case TargetPriority.NearestBase:
                 return StructureManager.Instance?.GetNearestBase(transform.position);
             case TargetPriority.Player:
-                return LevelManager.Instance?.Player as IDamageable;
+                return LevelManager.Instance?.Player;
             case TargetPriority.NearestTurretInRange:
                 return StructureManager.Instance?.GetNearestTurretInRange(transform.position, targetFindRange);
             case TargetPriority.WeakestStructureInRange:
@@ -130,7 +130,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPushable
             case TargetPriority.PlayerInRange:
                 var player = LevelManager.Instance?.Player;
                 if (!player) return null;
-                return Vector3.Distance(transform.position, (player as Component).transform.position) <= targetFindRange ? player as IDamageable : null;
+                return Vector3.Distance(transform.position, player.transform.position) <= targetFindRange ? player as IDamageable : null;
             case TargetPriority.NearestGeneratorInRange:
                 return StructureManager.Instance?.GetNearestGeneratorInRange(transform.position, targetFindRange);
             case TargetPriority.NearestStructure:

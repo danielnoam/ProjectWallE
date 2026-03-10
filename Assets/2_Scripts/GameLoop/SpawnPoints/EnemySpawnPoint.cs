@@ -14,7 +14,7 @@ public class EnemySpawnPoint : BaseSpawnPoint
     {
         if (Application.isPlaying || gameObject.scene.name == null) return;
         
-        gameObject.name = $"EnemySpawnPoint({(isActive ? "Active" : "NotActive")})";
+        gameObject.name = $"EnemySpawnPoint({(isActive ? "Active" : "Not Active")})";
     }
     
 
