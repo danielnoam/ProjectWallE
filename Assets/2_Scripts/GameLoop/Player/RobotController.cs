@@ -30,6 +30,12 @@ namespace ProjectWallE
         [SerializeField] private float groundMoveFactor = 1f;     // optionally reduce in air
         [SerializeField] private float airMoveFactor = 0.35f;
         
+        [Header("Slope Settings")]
+        [SerializeField] private float maxWalkableSlopeAngle = 45f;
+        [SerializeField] private float slopeSlideAccel = 8f;
+        [SerializeField] private float maxSlopeSlideSpeed = 6f;
+        [SerializeField] private float slopeSlideMoveFactor = 0.1f;
+        
         [Header("Jump Settings")]
         [SerializeField] private float jumpHeight = 3f;
         [SerializeField] private float jumpBuffer = 0.2f;
@@ -47,9 +53,15 @@ namespace ProjectWallE
         private List<Vector3> _wheelVisualStartPos;
         
         private bool _isGrounded = false;
+        
         private bool _isJumpAvail = false;
         private bool _isJumping = false;
         private float _jumpTimer = 0f;
+        
+        private float _lastGroundDistance;
+        private bool _hadGroundHitLastFrame;
+        
+        private bool _isSlopeSliding = false;
         
         
         /// <summary>
@@ -91,30 +103,64 @@ namespace ProjectWallE
 
         public void ApplyMovement()
         {
+            bool isGrounded = IsGrounded(out RaycastHit hit);
             ApplyGravity();
-            UpdateJump();
-            UpdateGroundHeight();
-            UpdateWheelVisual();
-            UpdateLocomotion();
+            UpdateJump(isGrounded, hit);
+            UpdateGroundHeight(isGrounded, hit);
+            UpdateWheelVisual(isGrounded, hit);
+            UpdateLocomotion(hit);
             UpdateRotation();
         }
         
 
         #region Locomotion
 
-        private void UpdateLocomotion()
+        private void UpdateLocomotion(RaycastHit hit)
         {
+            _isSlopeSliding = false;
             Vector3 moveDir = GetCameraRelativeDirection(_input.Movement);
-            float control = _isGrounded ? groundMoveFactor : airMoveFactor;
-
-            Vector3 desiredAccel = ComputeMoveAcceleration(moveDir, control);
-
+            if (_isGrounded)
+            {
+                bool isWalkable = IsSlopeWalkable(hit);
+                if (!isWalkable)
+                {
+                    ApplySlopeSlide(hit);
+                    _isSlopeSliding = true;
+                }
+                moveDir = GetSurfaceAlignedMoveDirection(moveDir, hit);
+            }
+            float control =_isSlopeSliding ? slopeSlideMoveFactor :
+                _isGrounded ? groundMoveFactor : airMoveFactor;
+            Vector3 accel = ComputeMoveAcceleration(moveDir, control, hit);
+            
             if (moveDir.sqrMagnitude > 0.0001f)
-                ApplyMoveAccelAtOffset(desiredAccel);
-            else
-                ApplyBrake(control);
+                ApplyMoveAccelAtOffset(accel);
+            else if (!_isSlopeSliding)
+                ApplyBrake(control, hit);
         }
         
+        private void ApplyMoveAccelAtOffset(Vector3 accel)
+        {
+            Vector3 forcePoint = _playerRb.worldCenterOfMass - transform.up * forcePointBelowCom;
+            _playerRb.AddForceAtPosition(accel, forcePoint, ForceMode.Acceleration);
+        }
+
+        private void ApplyBrake(float control, RaycastHit hit)
+        {
+            Vector3 vel = _playerRb.linearVelocity;
+
+            Vector3 moveVel = _isGrounded
+                ? Vector3.ProjectOnPlane(vel, hit.normal)
+                : new Vector3(vel.x, 0f, vel.z);
+
+            Vector3 dv = -moveVel;
+
+            Vector3 brakeAccel = Vector3.ClampMagnitude(dv * accelControlFactor, moveAccel);
+            _playerRb.AddForce(brakeAccel * control, ForceMode.Acceleration);
+        }
+
+        #region Helpers
+
         private Vector3 GetCameraRelativeDirection(Vector2 input)
         {
             if (input.sqrMagnitude < 0.01f) return Vector3.zero;
@@ -133,47 +179,87 @@ namespace ProjectWallE
 
             return moveDir.normalized;
         }
+        
+        private Vector3 GetSurfaceAlignedMoveDirection(Vector3 moveDir, RaycastHit hit)
+        {
+            if (!_isGrounded || moveDir.sqrMagnitude < 0.0001f)
+                return moveDir;
 
-        private Vector3 ComputeMoveAcceleration(Vector3 moveDir, float control)
+            Vector3 slopeMoveDir = Vector3.ProjectOnPlane(moveDir, hit.normal);
+
+            if (slopeMoveDir.sqrMagnitude < 0.0001f)
+                return Vector3.zero;
+
+            return slopeMoveDir.normalized;
+        }
+
+        private Vector3 ComputeMoveAcceleration(Vector3 moveDir, float control, RaycastHit hit)
         {
             Vector3 vel = _playerRb.linearVelocity;
 
-            Vector3 horizVel = new Vector3(vel.x, 0f, vel.z);
-            Vector3 desiredHorizVel = moveDir * maxMoveSpeed;
+            Vector3 currentMoveVel = vel;
+            if (_isGrounded)
+                currentMoveVel = Vector3.ProjectOnPlane(vel, hit.normal);
+            else
+                currentMoveVel = new Vector3(vel.x, 0f, vel.z);
 
-            Vector3 dv = desiredHorizVel - horizVel;
+            Vector3 desiredMoveVel = moveDir * maxMoveSpeed;
+            Vector3 dv = desiredMoveVel - currentMoveVel;
 
-            float dirChangeFactor = Vector3.Dot(desiredHorizVel.normalized, horizVel.normalized);
+            float dirChangeFactor = 0f;
+            if (desiredMoveVel.sqrMagnitude > 0.0001f && currentMoveVel.sqrMagnitude > 0.0001f)
+                dirChangeFactor = Vector3.Dot(desiredMoveVel.normalized, currentMoveVel.normalized);
+
             float accelCap = dirChangeAccelFactor.Evaluate(dirChangeFactor) * moveAccel;
 
             Vector3 accel = Vector3.ClampMagnitude(dv * accelControlFactor, accelCap);
             return accel * control;
         }
 
-        private void ApplyMoveAccelAtOffset(Vector3 accel)
+        #endregion
+
+        #region Slope
+
+        private void ApplySlopeSlide(RaycastHit hit)
         {
-            Vector3 forcePoint = _playerRb.worldCenterOfMass - transform.up * forcePointBelowCom;
-            _playerRb.AddForceAtPosition(accel, forcePoint, ForceMode.Acceleration);
+            Vector3 slideDir = GetSlopeDownDirection(hit);
+            if (slideDir.sqrMagnitude < 0.0001f) return;
+
+            float currentSlideSpeed = Vector3.Dot(_playerRb.linearVelocity, slideDir);
+            float dv = maxSlopeSlideSpeed - currentSlideSpeed;
+
+            float slideAccel = Mathf.Clamp(dv * accelControlFactor, 0f, slopeSlideAccel);
+
+            _playerRb.AddForce(slideDir * slideAccel, ForceMode.Acceleration);
+        }
+        private float GetSlopeAngle(RaycastHit hit)
+        {
+            return Vector3.Angle(hit.normal, Vector3.up);
         }
 
-        private void ApplyBrake(float control)
+        private bool IsSlopeWalkable(RaycastHit hit)
         {
-            Vector3 vel = _playerRb.linearVelocity;
-
-            Vector3 horizVel = new Vector3(vel.x, 0f, vel.z);
-            Vector3 dv = -horizVel;
-
-            Vector3 brakeAccel = Vector3.ClampMagnitude(dv * accelControlFactor, moveAccel);
-            _playerRb.AddForce(brakeAccel * control, ForceMode.Acceleration);
+            return GetSlopeAngle(hit) <= maxWalkableSlopeAngle;
         }
+
+        private Vector3 GetSlopeDownDirection(RaycastHit hit)
+        {
+            Vector3 downSlope = Vector3.ProjectOnPlane(Vector3.down, hit.normal);
+
+            if (downSlope.sqrMagnitude < 0.0001f)
+                return Vector3.zero;
+
+            return downSlope.normalized;
+        }
+
+        #endregion
         
         #endregion
         
         #region Jumping
 
-        private void UpdateJump()
+        private void UpdateJump(bool isGrounded, RaycastHit hit)
         {
-            bool isGrounded = IsGrounded(out RaycastHit hit);
             _isJumping = _isJumping && isGrounded;
             if(!_isJumpAvail || !isGrounded || _isJumping) return;
             
@@ -236,22 +322,32 @@ namespace ProjectWallE
         
         #region Ground
 
-        private void UpdateGroundHeight()
+        private void UpdateGroundHeight(bool isGrounded, RaycastHit hit)
         {
-            if (!IsGrounded(out RaycastHit hit) || _isJumping) return;
-    
+            if (!isGrounded || _isJumping)
+            {
+                _hadGroundHitLastFrame = false;
+                return;
+            }
+
             float offset = hit.distance - groundHeight;
-            float yVel = _playerRb.linearVelocity.y;
-            float suspensionAccel = (-offset * springStrength) - (yVel * springDamping);
-            
-            _playerRb.AddForce(Vector3.up * suspensionAccel);
+
+            float springVel = 0f;
+            if (_hadGroundHitLastFrame)
+                springVel = (hit.distance - _lastGroundDistance) / Time.fixedDeltaTime;
+
+            float suspensionAccel = (-offset * springStrength) - (springVel * springDamping);
+
+            _playerRb.AddForce(Vector3.up * suspensionAccel, ForceMode.Acceleration);
+
+            _lastGroundDistance = hit.distance;
+            _hadGroundHitLastFrame = true;
         }
         
         //visuals
 
-        private void UpdateWheelVisual()
+        private void UpdateWheelVisual(bool isGrounded, RaycastHit hit)
         {
-            bool isGrounded = IsGrounded(out RaycastHit hit);
             float offset = isGrounded ? hit.distance - groundHeight : 0f;
             
             for (int i = 0; i < wheelVisualTransforms.Count; i++)
