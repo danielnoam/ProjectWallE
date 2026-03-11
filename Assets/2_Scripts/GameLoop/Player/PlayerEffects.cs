@@ -2,6 +2,7 @@ using System;
 using DNExtensions.Utilities.AutoGet;
 using DNExtensions.Utilities.CustomFields;
 using UnityEngine;
+using UnityEngine.VFX;
 
 namespace ProjectWallE
 {
@@ -9,7 +10,7 @@ namespace ProjectWallE
     {
         
         [Header("Particle")]
-        [SerializeField] private ParticleSystem[] carBoostParticles;
+        [SerializeField] private VisualEffect[] carBoostEffects;
         [SerializeField] private ParticleSystem[] carDirtParticles;
         [SerializeField] private ParticleSystem[] robotDirtParticles;
         
@@ -45,13 +46,13 @@ namespace ProjectWallE
 
         private void OnBoostStart()
         {
-            ToggleEffect(carBoostParticles, true);
+            ToggleEffect(carBoostEffects, true);
         }
 
         
         private void OnBoostEnd()
         {
-            ToggleEffect(carBoostParticles,false);
+            ToggleEffect(carBoostEffects,false);
         }
 
         private void OnControllerChanged(PlayerControllerType type)
@@ -62,20 +63,20 @@ namespace ProjectWallE
             {
                 case PlayerControllerType.Car:
                     animator.Play(switchToCar.StateName);
-                    ToggleEffect(robotDirtParticles, false);
+                    ToggleParticle(robotDirtParticles, false);
                     break;
                 case PlayerControllerType.Robot:
                     animator.Play(switchToRobot.StateName);
-                    ToggleEffect(carDirtParticles, false);
+                    ToggleParticle(carDirtParticles, false);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
             
-            ToggleEffect(carBoostParticles, false);
+            ToggleEffect(carBoostEffects, false);
         }
 
-        private void ToggleEffect(ParticleSystem[] particleSystems, bool state)
+        private void ToggleParticle(ParticleSystem[] particleSystems, bool state)
         {
             if (particleSystems == null || particleSystems.Length == 0) return;
             
@@ -91,6 +92,27 @@ namespace ProjectWallE
                 foreach (var particle in particleSystems)
                 {
                     particle?.Stop();
+                }
+            }
+
+        }
+        
+        private void ToggleEffect(VisualEffect[] effects, bool state)
+        {
+            if (effects == null || effects.Length == 0) return;
+
+            if (state)
+            {
+                foreach (var effect in effects)
+                {
+                    effect?.Play();
+                }
+            }
+            else
+            {
+                foreach (var effect in effects)
+                {
+                    effect?.Stop();
                 }
             }
 

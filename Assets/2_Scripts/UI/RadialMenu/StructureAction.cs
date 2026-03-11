@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class StructureAction
 {
-    public string label;
-    public Sprite icon;
-    public bool isAvailable;
-    public Action onSelected;
+    public string Label;
+    public Sprite Icon;
+    public bool IsAvailable;
+    public Action OnSelected;
 }

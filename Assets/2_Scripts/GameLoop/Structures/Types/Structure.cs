@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using DNExtensions.Utilities.Button;
 using PrimeTween;
 using UnityEditor;
@@ -22,6 +23,8 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     [Header("Structure")]
     [SerializeField] private string label = "Structure";
     [SerializeField] private Sprite icon;
+    [SerializeField] private Sprite upgradeIcon;
+    [SerializeField] private Sprite fixIcon;
     [SerializeField] protected Vector3 topPoint = Vector3.up;
     [SerializeField] protected Vector3 bottomPoint = Vector3.down;
     [SerializeField] protected Transform gfx;
@@ -147,6 +150,38 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
         CurrentHealth = CurrentLevelData.maxHealth;
         PlayUpgradeEffect();
         OnUpgrade();
+    }
+    
+    public List<StructureAction> GetActions()
+    {
+        bool canUpgrade = CanUpgrade();
+        bool canFix = CurrentHealth < MaxHealth;
+
+        string upgradeLabel = canUpgrade
+            ? $"Upgrade {currentUpgradeLevel} -> {currentUpgradeLevel + 1}\n{UpgradeCost}"
+            : $"At Max Level\n{currentUpgradeLevel}/{currentUpgradeLevel}";
+
+        string fixLabel = canFix
+            ? $"Fix {(int)FixCost}\n{(int)CurrentHealth}/{(int)MaxHealth}"
+            : $"At Full Health\n{(int)CurrentHealth}/{(int)MaxHealth}";
+
+        return new List<StructureAction>
+        {
+            new StructureAction
+            {
+                Label = $"{label}\n{upgradeLabel}",
+                Icon = upgradeIcon,
+                IsAvailable = canUpgrade && ResourceManager.Instance.CanAfford(UpgradeCost),
+                OnSelected = Upgrade
+            },
+            new StructureAction
+            {
+                Label = $"{label}\n{fixLabel}",
+                Icon = fixIcon,
+                IsAvailable = canFix && ResourceManager.Instance.CanAfford((int)FixCost),
+                OnSelected = Fix
+            }
+        };
     }
     
 

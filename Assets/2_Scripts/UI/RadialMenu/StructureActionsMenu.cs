@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 
 public class StructureActionsMenu : RadialMenu<StructureAction>
 {
@@ -14,20 +13,26 @@ public class StructureActionsMenu : RadialMenu<StructureAction>
         PlayerStructureBuilder.MenuCloseRequested -= CloseMenu;
     }
 
-    private void HandleOpen(List<StructureAction> actions)
+    private void HandleOpen(Structure structure)
     {
-        SetupMenu(actions, ConfigureElement);
+        if (!structure) return;
+        SetupMenu(structure.GetActions(), ConfigureElement);
         OpenMenu();
     }
 
     private void ConfigureElement(RadialMenuElement element, StructureAction action)
     {
-        element.elementInfo = action.label;
-        element.SetDisabled(!action.isAvailable);
+        element.elementInfo = action.Label;
+        element.iconImage.sprite = action.Icon;
+        element.SetDisabled(!action.IsAvailable);
 
-        if (action.icon)
-            element.iconImage.sprite = action.icon;
+        if (action.Icon)
+        {
+            element.iconImage.sprite = action.Icon;
+        }
         else
+        {
             element.iconImage.gameObject.SetActive(false);
+        }
     }
 }

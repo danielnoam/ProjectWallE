@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.AutoGet;
 using ProjectWallE;
@@ -27,9 +26,11 @@ public class PlayerStructureBuilder : MonoBehaviour
     private bool _canBuild;
     private bool _menuOpen;
     private Structure _targetedStructure;
+    private Structure _lastMenuStructure;
+    private bool _lastMenuWasBuildMenu;
 
     public static event Action<Structure[]> BuildMenuRequested;
-    public static event Action<List<StructureAction>> ActionsMenuRequested;
+    public static event Action<Structure> ActionsMenuRequested;
     public static event Action MenuCloseRequested;
     
 
@@ -88,22 +89,14 @@ public class PlayerStructureBuilder : MonoBehaviour
     
     private void OnStructureActionSelected(StructureAction action)
     {
-        if (!action.isAvailable) return;
-        action.onSelected?.Invoke();
+        if (!action.IsAvailable) return;
+        action.OnSelected?.Invoke();
     }
 
     private void OpenContextMenu()
     {
         _menuOpen = true;
-
-        if (_targetedStructure)
-        {
-            ActionsMenuRequested?.Invoke(BuildStructureActions(_targetedStructure));
-        }
-        else
-        {
-            BuildMenuRequested?.Invoke(structuresArray);
-        }
+        RefreshOpenMenu();
     }
 
     private void CloseMenus()
@@ -111,6 +104,8 @@ public class PlayerStructureBuilder : MonoBehaviour
         MenuCloseRequested?.Invoke();
         BuildPrompt.Instance?.Hide();
         _menuOpen = false;
+        _lastMenuStructure = null;
+        _lastMenuWasBuildMenu = false;
     }
 
     private void CastBuildRay()
@@ -141,6 +136,34 @@ public class PlayerStructureBuilder : MonoBehaviour
             _canBuild = false;
             UpdateBuildPrompt(null);
         }
+        
+        if (_menuOpen) RefreshOpenMenu();
+    }
+    
+    private void RefreshOpenMenu()
+    {
+        bool isBuildMenu = !_targetedStructure;
+
+        if (!isBuildMenu)
+        {
+            if (_lastMenuWasBuildMenu || _lastMenuStructure != _targetedStructure)
+            {
+                if (_lastMenuWasBuildMenu) MenuCloseRequested?.Invoke();
+                ActionsMenuRequested?.Invoke(_targetedStructure);
+                _lastMenuStructure = _targetedStructure;
+                _lastMenuWasBuildMenu = false;
+            }
+        }
+        else
+        {
+            if (!_lastMenuWasBuildMenu)
+            {
+                if (_lastMenuStructure) MenuCloseRequested?.Invoke();
+                BuildMenuRequested?.Invoke(structuresArray);
+                _lastMenuStructure = null;
+                _lastMenuWasBuildMenu = true;
+            }
+        }
     }
 
     private void UpdateBuildPrompt(Vector3? position)
@@ -162,36 +185,5 @@ public class PlayerStructureBuilder : MonoBehaviour
         if (!ResourceManager.Instance.TrySpendResources(structure.BuildCost)) return;
 
         StructureManager.Instance?.DeployPod(structure, hit.point, transform.forward);
-    }
-    
-
-    private List<StructureAction> BuildStructureActions(Structure structure)
-    {
-        bool canUpgrade = structure.CanUpgrade();
-        bool canFix = structure.CurrentHealth < structure.MaxHealth;
-
-        string upgradeLabel = canUpgrade
-            ? $"Upgrade {structure.currentUpgradeLevel} -> {structure.currentUpgradeLevel + 1}\n{structure.UpgradeCost}"
-            : $"At Max Level\n {structure.currentUpgradeLevel}/{structure.currentUpgradeLevel}";
-
-        string fixLabel = canFix
-            ? $"Fix {(int)structure.FixCost}\n{(int)structure.CurrentHealth}/{(int)structure.MaxHealth}"
-            : $"At Full Health\n{(int)structure.CurrentHealth}/{(int)structure.MaxHealth}";
-
-        return new List<StructureAction>
-        {
-            new StructureAction
-            {
-                label = upgradeLabel,
-                isAvailable = canUpgrade && ResourceManager.Instance.CanAfford(structure.UpgradeCost),
-                onSelected = structure.Upgrade
-            },
-            new StructureAction
-            {
-                label = fixLabel,
-                isAvailable = canFix && ResourceManager.Instance.CanAfford((int)structure.FixCost),
-                onSelected = structure.Fix
-            }
-        };
     }
 }
