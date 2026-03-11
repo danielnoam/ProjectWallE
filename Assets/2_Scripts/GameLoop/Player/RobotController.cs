@@ -94,6 +94,7 @@ namespace ProjectWallE
             ApplyGravity();
             UpdateJump();
             UpdateGroundHeight();
+            UpdateWheelVisual();
             UpdateLocomotion();
             UpdateRotation();
         }
@@ -219,6 +220,8 @@ namespace ProjectWallE
 
         private void ApplyGravity()
         {
+            if (_isGrounded) return;
+            
             float verticalVel = _playerRb.linearVelocity.y;
             float desiredVerticalVel = -terminalVelocity;
 
@@ -239,17 +242,24 @@ namespace ProjectWallE
     
             float offset = hit.distance - groundHeight;
             float yVel = _playerRb.linearVelocity.y;
-            float suspensionAccel = gravityStrength + (-offset * springStrength) - (yVel * springDamping);
-
+            float suspensionAccel = (-offset * springStrength) - (yVel * springDamping);
+            
             _playerRb.AddForce(Vector3.up * suspensionAccel);
+        }
+        
+        //visuals
 
+        private void UpdateWheelVisual()
+        {
+            bool isGrounded = IsGrounded(out RaycastHit hit);
+            float offset = isGrounded ? hit.distance - groundHeight : 0f;
             
             for (int i = 0; i < wheelVisualTransforms.Count; i++)
             {
                 Vector3 target = _wheelVisualStartPos[i] - Vector3.up * offset;
 
-                wheelVisualTransforms[i].localPosition = offset > 0 ? 
-                    Vector3.Lerp(wheelVisualTransforms[i].localPosition, target, 20f * Time.fixedDeltaTime) : 
+                wheelVisualTransforms[i].localPosition = offset > 0 || !isGrounded? 
+                    Vector3.Lerp(wheelVisualTransforms[i].localPosition, target, 15f * Time.fixedDeltaTime) : 
                     target;
             }
         }
