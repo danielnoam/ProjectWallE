@@ -1,3 +1,4 @@
+using System;
 using DNExtensions.Systems.Scriptables;
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.AutoGet;
@@ -19,6 +20,8 @@ public class PlayerShooter : MonoBehaviour
     private float _nextTimeToFire;
     private Camera _mainCamera;
     
+    
+    public event Action OnShoot;
     
     
     private void Awake()
@@ -45,5 +48,6 @@ public class PlayerShooter : MonoBehaviour
         Vector3 position = firePoint ? firePoint.position : transform.position;
         Vector3 direction = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)).direction;
         projectileData?.Spawn(enemyLayerMask.Value, position, direction.Add(aimOffset));
+        OnShoot?.Invoke();
     }
 }

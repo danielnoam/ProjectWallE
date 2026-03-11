@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +7,11 @@ using Object = UnityEngine.Object;
 
 namespace DNExtensions.Utilities
 {
+    /// <summary>
+    /// Custom property drawer for PrefabSelector attribute with dropdown selection and validation.
+    /// </summary>
     [CustomPropertyDrawer(typeof(PrefabSelectorAttribute))]
-    public class PrefabSelectorDrawer : PropertyDrawer
+    internal class PrefabSelectorDrawer : PropertyDrawer
     {
         private static readonly Dictionary<string, AssetInfo<GameObject>[]> PrefabCache = new Dictionary<string, AssetInfo<GameObject>[]>();
         
@@ -229,4 +231,3 @@ namespace DNExtensions.Utilities
         }
     }
 }
-#endif

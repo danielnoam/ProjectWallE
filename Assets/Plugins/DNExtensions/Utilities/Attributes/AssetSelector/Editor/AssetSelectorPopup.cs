@@ -1,4 +1,3 @@
-﻿#if UNITY_EDITOR
 using System;
 using System.Linq;
 using UnityEditor;
@@ -11,7 +10,7 @@ namespace DNExtensions.Utilities
     /// Generic popup window for selecting Unity assets with search and keyboard navigation.
     /// </summary>
     /// <typeparam name="T">Type of Unity asset to select</typeparam>
-    public class AssetSelectorPopup<T> : EditorWindow where T : Object
+    internal class AssetSelectorPopup<T> : EditorWindow where T : Object
     {
         private AssetInfo<T>[] _allAssets;
         private AssetInfo<T>[] _filteredAssets;
@@ -277,4 +276,3 @@ namespace DNExtensions.Utilities
         }
     }
 }
-#endif

@@ -1,4 +1,5 @@
 using System;
+using DNExtensions.Systems.AudioLibrary;
 using DNExtensions.Utilities.AutoGet;
 using DNExtensions.Utilities.CustomFields;
 using UnityEngine;
@@ -13,6 +14,8 @@ namespace ProjectWallE
         [SerializeField] private VisualEffect[] carBoostEffects;
         [SerializeField] private ParticleSystem[] carDirtParticles;
         [SerializeField] private ParticleSystem[] robotDirtParticles;
+        [SerializeField] private VisualEffect[] wheelsAirReleaseEffects;
+        [SerializeField] private VisualEffect muzzleFlashEffect;
         
         [Header("Animations")]
         [SerializeField] private AnimatorStateField switchToCar;
@@ -20,6 +23,7 @@ namespace ProjectWallE
         
         [SerializeField, AutoGetSelf, HideInInspector] private Animator animator;
         [SerializeField, AutoGetParent, HideInInspector] private PlayerManager player;
+        [SerializeField, AutoGetParent, HideInInspector] private PlayerShooter shooter;
 
 
         private void OnValidate()
@@ -33,6 +37,7 @@ namespace ProjectWallE
             PlayerManager.OnControllerChanged += OnControllerChanged;
             PlayerManager.OnBoostStart += OnBoostStart;
             PlayerManager.OnBoostEnd += OnBoostEnd;
+            if (shooter) shooter.OnShoot += PlayMuzzleFlash;
         }
         
 
@@ -41,6 +46,7 @@ namespace ProjectWallE
             PlayerManager.OnControllerChanged -= OnControllerChanged;
             PlayerManager.OnBoostStart -= OnBoostStart;
             PlayerManager.OnBoostEnd -= OnBoostEnd;
+            if (shooter) shooter.OnShoot -= PlayMuzzleFlash;
         }
         
 
@@ -115,8 +121,28 @@ namespace ProjectWallE
                     effect?.Stop();
                 }
             }
-
         }
+        
+        private void PlayMuzzleFlash()
+        {
+            muzzleFlashEffect?.Play();
+        }
+        
+        public void EnableWheelsAirRelease()
+        {
+           ToggleEffect(wheelsAirReleaseEffects, true);
+        }
+        
+        public void DisableWheelsAirRelease()
+        {
+            ToggleEffect(wheelsAirReleaseEffects, false);
+        }
+
+        public void PlaySound(string id)
+        {
+            AudioLibrary.PlayAtPosition(id, transform);
+        }
+        
         
     }
 }
