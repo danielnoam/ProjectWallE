@@ -108,12 +108,10 @@ namespace ProjectWallE
             if (_isBoosting && !wasBoosting)
             {
                 PlayerManager.InvokeOnBoostStart();
-                Debug.Log("Zoom Zoom");
             }
             else if (!_isBoosting && wasBoosting)
             {
                 PlayerManager.InvokeOnBoostEnd();
-                Debug.Log("Slow poke looking ahh");
             }
         }
 
