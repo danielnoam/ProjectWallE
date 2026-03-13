@@ -265,7 +265,6 @@ MonoBehaviour:
   structureLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  mainCamera: {fileID: 1974857018489863729}
   buildMenu: {fileID: 0}
   actionsMenu: {fileID: 0}
   structuresArray:
@@ -287,6 +286,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerShooter
   fireRate: 0.2
+  aimOffset: {x: 0, y: 0, z: 0}
   firePoint: {fileID: 0}
   projectileData: {fileID: 11400000, guid: 8ffdf2f42528d434f91c7d9b565e08fd, type: 2}
   enemyLayerMask: {fileID: 11400000, guid: 2d607d7566d764844b32be4199186943, type: 2}

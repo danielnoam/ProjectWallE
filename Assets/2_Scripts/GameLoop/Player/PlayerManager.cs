@@ -14,10 +14,7 @@ namespace ProjectWallE
     }
     public class PlayerManager : MonoBehaviour, IDamageable, IPushable
     {
-        
         [SerializeField] LayerMask groundLayer;
-        [SerializeField] private CarController carController;
-        [SerializeField] private RobotController robotController;
         
         private PlayerManagerInput _input;
         private Rigidbody _rigidbody;
@@ -29,17 +26,17 @@ namespace ProjectWallE
         private IPlayerController _currentController;
         private IPlayerController _carController;
         private IPlayerController _robotController;
-
+        
+        public CarController carController => _carController as CarController;
+        public RobotController robotController => _robotController as RobotController;
         public bool canBuild => _currentController.canBuild;
         public bool canShoot => _currentController.canShoot;
+        public Vector3 velocity => _rigidbody.linearVelocity;
         
         public event Action<IDamageable> OnDeath;
         public event Action<float> OnDamaged;
-        public static event Action<PlayerControllerType> OnControllerChanged;
-        public static event Action OnBoostStart;
-        public static event Action OnBoostEnd; 
+        public event Action<PlayerControllerType> OnControllerChanged;
         
-
         void Awake()
         {
             Cursor.lockState = CursorLockMode.Locked;
@@ -49,8 +46,8 @@ namespace ProjectWallE
             _rigidbody = GetComponent<Rigidbody>();
             if (Camera.main != null) _cameraTransform = Camera.main.transform;
 
-            _carController = carController.GetComponent<CarController>();
-            _robotController = robotController.GetComponent<RobotController>();
+            _carController = GetComponentInChildren<CarController>();
+            _robotController = GetComponentInChildren<RobotController>();
             _playerControllerTypeEnum = PlayerControllerType.Robot;
 
             PlayerReferences playerReferences = new PlayerReferences()
@@ -98,20 +95,6 @@ namespace ProjectWallE
         }
 
         #endregion
-        
-        #region Event Callers
-
-        public static void InvokeOnBoostStart()
-        {
-            OnBoostStart?.Invoke();
-        }
-
-        public static void InvokeOnBoostEnd()
-        {
-            OnBoostEnd?.Invoke();
-        }
-        
-        #endregion
 
         #region Helpers
 
@@ -121,8 +104,8 @@ namespace ProjectWallE
             
             //controller
             _currentController = isRobot ? _robotController : _carController;
-            robotController.gameObject.SetActive(isRobot);
-            carController.gameObject.SetActive(!isRobot);
+            _robotController.gameObject.SetActive(isRobot);
+            _carController.gameObject.SetActive(!isRobot);
             
             OnControllerChanged?.Invoke(playerControllerType);
         }

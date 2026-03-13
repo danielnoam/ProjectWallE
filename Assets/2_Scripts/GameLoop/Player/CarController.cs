@@ -1,3 +1,4 @@
+using System;
 using ProjectWallE;
 
 namespace _2_Scripts
@@ -54,7 +55,6 @@ public class CarController : MonoBehaviour, IPlayerController
     [SerializeField] private float maxAirSteeringVelocity;
 
     private CarInput _carInput;
-    private CarBoost _carBoost;
     private LayerMask _groundLayer;
     private Rigidbody _playerRb;
     
@@ -71,14 +71,14 @@ public class CarController : MonoBehaviour, IPlayerController
     /// </summary>
     private float gravityControlFactor => gravityStrength * 0.25f;
     
+    public CarBoost carBoost { get; private set; }
     public bool canBuild {  get; private set; } = false;
     public bool canShoot { get; private set; } = false;
-
-
+    
     private void Awake()
     {
         _carInput = GetComponent<CarInput>();
-        _carBoost = GetComponent<CarBoost>();
+        carBoost = GetComponent<CarBoost>();
         _allTires = GetAllTiresTransforms();
 
         foreach (var t in _allTires)
@@ -94,7 +94,7 @@ public class CarController : MonoBehaviour, IPlayerController
     public void ApplyMovement()
     {
         ApplyGravity();
-        ApplySuspension();
+        ApplySuspensionPerTiresType(_allTires);
         ApplyTireRotation();
         ApplyTireFriction();
         ApplyAirControl();
@@ -102,11 +102,6 @@ public class CarController : MonoBehaviour, IPlayerController
     }
 
     #region Suspension
-
-    private void ApplySuspension()
-    {
-        ApplySuspensionPerTiresType(_allTires);
-    }
 
     private void ApplySuspensionPerTiresType(List<TireAndVisualTransform> tires)
     {
@@ -165,6 +160,15 @@ public class CarController : MonoBehaviour, IPlayerController
 
     private void ApplyTireFriction()
     {
+        ApplyTireFrictionModifiers();
+
+        ApplyFrictionPerTiresType(steeringTires, steeringTiresFrictionCurve);
+        ApplyFrictionPerTiresType(staticTires, staticTiresFrictionCurve);
+    }
+
+
+    private void ApplyTireFrictionModifiers()
+    {
         //air blend
         _groundedRatio = GetGroundedRatio(out _);
         float planted = Mathf.Pow(_groundedRatio, partialGroundGripPower);
@@ -174,11 +178,7 @@ public class CarController : MonoBehaviour, IPlayerController
         float targetHb = _carInput.HandBreakHeld ? 1f : 0f;
         float rate = (targetHb > _handbrake01) ? handbrakeBlendIn : handbrakeBlendOut;
         _handbrake01 = Mathf.Lerp(_handbrake01, targetHb, rate * Time.fixedDeltaTime);
-
-        ApplyFrictionPerTiresType(steeringTires, steeringTiresFrictionCurve);
-        ApplyFrictionPerTiresType(staticTires, staticTiresFrictionCurve);
     }
-
     private void ApplyFrictionPerTiresType(TireAndVisualTransform[] tires, AnimationCurve frictionCurve)
     {
         foreach (TireAndVisualTransform tire in tires)
@@ -230,7 +230,7 @@ public class CarController : MonoBehaviour, IPlayerController
         else if (_carInput.Acceleration < 0) ApplyBackwardsAcceleration(carSpeed);
         else ApplyEngineBreaking(carSpeed);
         
-        if(_carBoost.CanBoost(out float boostAccel, out float boostSpeedFactor)) 
+        if(carBoost.CanBoost(out float boostAccel, out float boostSpeedFactor)) 
             ApplyBoost(carSpeed, boostAccel, boostSpeedFactor);
 
         //visuals
