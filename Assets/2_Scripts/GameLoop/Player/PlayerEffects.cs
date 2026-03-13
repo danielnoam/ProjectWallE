@@ -21,6 +21,10 @@ namespace ProjectWallE
         [SerializeField] private AnimatorStateField switchToCar;
         [SerializeField] private AnimatorStateField switchToRobot;
         
+        [Header("Fullscreen")]
+        [SerializeField] private MaterialPropertyTweener lowHealthEffect;
+        [SerializeField] private MaterialPropertyTweener speedLinesEffect;
+        
         [SerializeField, AutoGetSelf, HideInInspector] private Animator animator;
         [SerializeField, AutoGetParent, HideInInspector] private PlayerManager player;
         [SerializeField, AutoGetParent, HideInInspector] private PlayerShooter shooter;
@@ -53,12 +57,14 @@ namespace ProjectWallE
         private void OnBoostStart()
         {
             ToggleEffect(carBoostEffects, true);
+            speedLinesEffect?.Show();
         }
 
         
         private void OnBoostEnd()
         {
             ToggleEffect(carBoostEffects,false);
+            speedLinesEffect?.Hide();
         }
 
         private void OnControllerChanged(PlayerControllerType type)

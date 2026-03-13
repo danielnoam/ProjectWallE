@@ -334,6 +334,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c81aca1a2774ba49a48b76420616b88, type: 3}
+--- !u!4 &148454595 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -5849142571366490629, guid: e52f8b427d6061341988baf63e42d520, type: 3}
+  m_PrefabInstance: {fileID: 292334989}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &163256023
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1130,26 +1135,6 @@ PrefabInstance:
 --- !u!4 &292334990 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e52f8b427d6061341988baf63e42d520, type: 3}
-  m_PrefabInstance: {fileID: 292334989}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &292334991 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4273423901062548415, guid: e52f8b427d6061341988baf63e42d520, type: 3}
-  m_PrefabInstance: {fileID: 292334989}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &292334992 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -4313854156168971215, guid: e52f8b427d6061341988baf63e42d520, type: 3}
-  m_PrefabInstance: {fileID: 292334989}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &292334993 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 789006046418176089, guid: e52f8b427d6061341988baf63e42d520, type: 3}
-  m_PrefabInstance: {fileID: 292334989}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &292334994 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 191047603475942430, guid: e52f8b427d6061341988baf63e42d520, type: 3}
   m_PrefabInstance: {fileID: 292334989}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &318212032
@@ -2040,6 +2025,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6209758667840909766, guid: 03562562983c65b41bd9414fb68cb1b6, type: 3}
   m_PrefabInstance: {fileID: 465888292}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &487443670 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -6047886482851762441, guid: e52f8b427d6061341988baf63e42d520, type: 3}
+  m_PrefabInstance: {fileID: 292334989}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &493350888
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2123,8 +2113,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 516747228}
-  - component: {fileID: 516747230}
   - component: {fileID: 516747229}
+  - component: {fileID: 516747230}
+  - component: {fileID: 516747233}
+  - component: {fileID: 516747232}
   m_Layer: 9
   m_Name: Visuals
   m_TagString: Untagged
@@ -2213,9 +2205,47 @@ MonoBehaviour:
     stateName: Switch To Robot
     stateHash: -1799443727
     assigned: 1
+  lowHealthEffect: {fileID: 516747232}
+  speedLinesEffect: {fileID: 516747233}
   animator: {fileID: 516747229}
   player: {fileID: 2039097349}
   shooter: {fileID: 2039097346}
+--- !u!114 &516747232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 516747227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 286c0a9b65940bc46a4af2e3e8df3264, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FullscreenVignetteController
+  material: {fileID: 2100000, guid: 6e808c978bf70bc488a47a310c10d16d, type: 2}
+  propertyName: _Visibility
+  showValue: 1
+  hideValue: 0
+  duration: 0.5
+  ease: 4
+--- !u!114 &516747233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 516747227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 286c0a9b65940bc46a4af2e3e8df3264, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FullscreenVignetteController
+  material: {fileID: 2100000, guid: 11a4b36f82c657b429a3edb70f119268, type: 2}
+  propertyName: _Visibility
+  showValue: 1
+  hideValue: 0
+  duration: 0.5
+  ease: 4
 --- !u!1 &534876687
 GameObject:
   m_ObjectHideFlags: 0
@@ -7465,6 +7495,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 779677588487833707, guid: e52f8b427d6061341988baf63e42d520, type: 3}
   m_PrefabInstance: {fileID: 292334989}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1759619618 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1612987643070652071, guid: e52f8b427d6061341988baf63e42d520, type: 3}
+  m_PrefabInstance: {fileID: 292334989}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1785625021
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8747,11 +8782,11 @@ PrefabInstance:
     - target: {fileID: 2635220521126351491, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
       propertyPath: staticTires.Array.data[0].visualTransform
       value: 
-      objectReference: {fileID: 292334994}
+      objectReference: {fileID: 148454595}
     - target: {fileID: 2635220521126351491, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
       propertyPath: staticTires.Array.data[1].visualTransform
       value: 
-      objectReference: {fileID: 292334993}
+      objectReference: {fileID: 1759619618}
     - target: {fileID: 2635220521126351491, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
       propertyPath: steeringTires.Array.data[0].tireTransform
       value: 
@@ -8763,11 +8798,11 @@ PrefabInstance:
     - target: {fileID: 2635220521126351491, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
       propertyPath: steeringTires.Array.data[0].visualTransform
       value: 
-      objectReference: {fileID: 292334992}
+      objectReference: {fileID: 487443670}
     - target: {fileID: 2635220521126351491, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
       propertyPath: steeringTires.Array.data[1].visualTransform
       value: 
-      objectReference: {fileID: 292334991}
+      objectReference: {fileID: 2118638935}
     - target: {fileID: 2821246693688897465, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
       propertyPath: m_Layer
       value: 9
@@ -9258,6 +9293,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2f26c8a2368452843ba0feea67232f54, type: 3}
+--- !u!4 &2118638935 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -1542139657005021423, guid: e52f8b427d6061341988baf63e42d520, type: 3}
+  m_PrefabInstance: {fileID: 292334989}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2141432729 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6209758667840909766, guid: 80e1d062e1fe4e94e9b8724bec8f7688, type: 3}

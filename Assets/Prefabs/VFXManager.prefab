@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 8434494797635188864}
   - component: {fileID: 408791700882370861}
   - component: {fileID: 5289649589199521043}
-  - component: {fileID: 3391964455548038316}
   m_Layer: 0
   m_Name: VFXManager
   m_TagString: Untagged
@@ -107,21 +106,6 @@ MonoBehaviour:
   effectsSequences:
   - {fileID: 11400000, guid: 2cf701e889338b54b9338039b720f844, type: 2}
   - {fileID: 11400000, guid: 661c164b035891047885f26f16312cc4, type: 2}
---- !u!114 &3391964455548038316
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3619729040768234111}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 286c0a9b65940bc46a4af2e3e8df3264, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FullscreenVignetteController
-  material: {fileID: 2100000, guid: 6e808c978bf70bc488a47a310c10d16d, type: 2}
-  duration: 0.5
-  ease: 4
 --- !u!1 &7620994784586449836
 GameObject:
   m_ObjectHideFlags: 0
