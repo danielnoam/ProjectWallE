@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9616d1e4bad49f1bc525bc4810b87e1, type: 3}
   m_Name: ContinuousEnemySpawnEvent
   m_EditorClassIdentifier: Assembly-CSharp::ContinuousEnemySpawnEvent
-  enemiesPerWave: 1
-  spawnInterval: 3
+  enemiesPerWave: 3
+  spawnInterval: 1
 --- !u!114 &-2831747386146784124
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -225,8 +225,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9616d1e4bad49f1bc525bc4810b87e1, type: 3}
   m_Name: ContinuousEnemySpawnEvent(Clone)(Clone)
   m_EditorClassIdentifier: Assembly-CSharp::ContinuousEnemySpawnEvent
-  enemiesPerWave: 1
-  spawnInterval: 2
+  enemiesPerWave: 3
+  spawnInterval: 1
 --- !u!114 &4826244771618395407
 MonoBehaviour:
   m_ObjectHideFlags: 1
