@@ -49,7 +49,7 @@ public class PlayerStructureBuilder : MonoBehaviour
         buildMenu.OnItemSelected += TryBuildStructure;
         actionsMenu.OnItemSelected += OnStructureActionSelected;
         playerManager.OnDeath += OnDeath;
-        PlayerManager.OnControllerChanged += OnControllerChanged;
+        playerManager.OnControllerChanged += OnControllerChanged;
     }
     
 
@@ -58,7 +58,7 @@ public class PlayerStructureBuilder : MonoBehaviour
         buildMenu.OnItemSelected -= TryBuildStructure;
         actionsMenu.OnItemSelected -= OnStructureActionSelected;
         playerManager.OnDeath -= OnDeath;
-        PlayerManager.OnControllerChanged -= OnControllerChanged;
+        playerManager.OnControllerChanged -= OnControllerChanged;
     }
 
     private void Update()

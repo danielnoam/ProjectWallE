@@ -15,21 +15,26 @@ namespace ProjectWallE
         [SerializeField] private ParticleSystem[] carDirtParticles;
         [SerializeField] private ParticleSystem[] robotDirtParticles;
         [SerializeField] private VisualEffect[] wheelsAirReleaseEffects;
-        [SerializeField] private VisualEffect muzzleFlashEffect;
+        [SerializeField] private VisualEffect[] muzzleFlashEffects;
         
         [Header("Animations")]
         [SerializeField] private AnimatorStateField switchToCar;
         [SerializeField] private AnimatorStateField switchToRobot;
         
-        [Header("Fullscreen")]
+        [Header("SpeedLines")]
+        [SerializeField] private float heighSpeedMagnitude = 20f;
+        
+        [Header("References")]
         [SerializeField] private MaterialPropertyTweener lowHealthEffect;
         [SerializeField] private MaterialPropertyTweener speedLinesEffect;
-        
         [SerializeField, AutoGetSelf, HideInInspector] private Animator animator;
         [SerializeField, AutoGetParent, HideInInspector] private PlayerManager player;
         [SerializeField, AutoGetParent, HideInInspector] private PlayerShooter shooter;
+        [SerializeField, AutoGetScene, HideInInspector] private CarBoost boost;
 
 
+        private bool _speedLinesActive;
+        
         private void OnValidate()
         {
             AutoGetSystem.Process(this);
@@ -38,33 +43,65 @@ namespace ProjectWallE
 
         private void OnEnable()
         {
-            PlayerManager.OnControllerChanged += OnControllerChanged;
-            PlayerManager.OnBoostStart += OnBoostStart;
-            PlayerManager.OnBoostEnd += OnBoostEnd;
-            if (shooter) shooter.OnShoot += PlayMuzzleFlash;
+            if (player)
+            {
+                player.OnControllerChanged += OnControllerChanged;
+                player.OnDamaged += OnDamaged;
+                if (boost)
+                {
+                    boost.OnBoostStart += OnBoostStart;
+                    boost.OnBoostEnd += OnBoostEnd;
+                }
+                if (shooter) shooter.OnShoot += PlayMuzzleFlash;
+            }
+
+
+        }
+        
+        private void OnDisable()
+        {
+            if (player)
+            {
+                player.OnControllerChanged -= OnControllerChanged;
+                player.OnDamaged -= OnDamaged;
+                if (boost)
+                {
+                    boost.OnBoostStart -= OnBoostStart;
+                    boost.OnBoostEnd -= OnBoostEnd;
+                }
+                
+                if (shooter) shooter.OnShoot -= PlayMuzzleFlash;
+            }
         }
         
 
-        private void OnDisable()
+        private void Update()
         {
-            PlayerManager.OnControllerChanged -= OnControllerChanged;
-            PlayerManager.OnBoostStart -= OnBoostStart;
-            PlayerManager.OnBoostEnd -= OnBoostEnd;
-            if (shooter) shooter.OnShoot -= PlayMuzzleFlash;
+            if (player && speedLinesEffect)
+            {
+                if (player.velocity.magnitude > heighSpeedMagnitude && !_speedLinesActive)
+                {
+                    speedLinesEffect.Show();
+                    _speedLinesActive = true;
+                }
+                else if (player.velocity.magnitude <= heighSpeedMagnitude && _speedLinesActive)
+                {
+                    speedLinesEffect.Hide();
+                    _speedLinesActive = false;
+                }
+            }
         }
-        
+
 
         private void OnBoostStart()
         {
             ToggleEffect(carBoostEffects, true);
-            speedLinesEffect?.Show();
         }
 
         
         private void OnBoostEnd()
         {
             ToggleEffect(carBoostEffects,false);
-            speedLinesEffect?.Hide();
         }
 
         private void OnControllerChanged(PlayerControllerType type)
@@ -86,6 +123,11 @@ namespace ProjectWallE
             }
             
             ToggleEffect(carBoostEffects, false);
+        }
+        
+        private void OnDamaged(float damage)
+        {
+            lowHealthEffect?.Punch();
         }
 
         private void ToggleParticle(ParticleSystem[] particleSystems, bool state)
@@ -131,19 +173,17 @@ namespace ProjectWallE
         
         private void PlayMuzzleFlash()
         {
-            muzzleFlashEffect?.Play();
+            ToggleEffect(muzzleFlashEffects, true);
         }
         
         public void EnableWheelsAirRelease()
         {
            ToggleEffect(wheelsAirReleaseEffects, true);
-           Debug.Log("Enable");
         }
         
         public void DisableWheelsAirRelease()
         {
             ToggleEffect(wheelsAirReleaseEffects, false);
-            Debug.Log("Disable");
         }
 
         public void PlaySound(string id)

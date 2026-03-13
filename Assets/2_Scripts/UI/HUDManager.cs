@@ -1,5 +1,8 @@
 using System;
 using DNExtensions.Systems.Shapes;
+using DNExtensions.Utilities;
+using DNExtensions.Utilities.AutoGet;
+using ProjectWallE;
 using TMPro;
 using UnityEngine;
 
@@ -12,19 +15,58 @@ public class HUDManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI fuelText;
     [SerializeField] private SDFRectangle healthBar;
     [SerializeField] private TextMeshProUGUI healthText;
+    [SerializeField, AutoGetScene, HideInInspector] private PlayerManager player;
 
+
+    private void OnValidate()
+    {
+        AutoGetSystem.Process(this);
+    }
 
     private void OnEnable()
     {
         ResourceManager.OnResourcesChanged += UpdateResourcesDisplay;
         LevelManager.OnTimeUpdated += OnTimeUpdated;
+        
+        if (player)
+        {
+            player.OnControllerChanged += OnControllerChanged;
+            var car = player.GetComponentInChildren<CarBoost>();
+            if (car) car.OnFuelChange += UpdateFuelBar;
+        }
     }
+    
 
     private void OnDisable()
     {
         ResourceManager.OnResourcesChanged -= UpdateResourcesDisplay;
         LevelManager.OnTimeUpdated -= OnTimeUpdated;
+        
+        if (player)
+        {
+            player.OnControllerChanged -= OnControllerChanged;
+            var car = player.GetComponentInChildren<CarBoost>();
+            if (car) car.OnFuelChange -= UpdateFuelBar;
+        }
     }
+    
+    private void OnControllerChanged(PlayerControllerType controllerType)
+    {
+        switch (controllerType)
+        {
+            case PlayerControllerType.Robot:
+                fuelBar.color = Color.black;
+                fuelText.color = fuelText.color.SetAlpha(0.2f);
+                break;
+            case PlayerControllerType.Car:
+                fuelBar.color = Color.white;
+                fuelText.color = fuelText.color.SetAlpha(1f);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(controllerType), controllerType, null);
+        }
+    }
+
     
 
     private void OnTimeUpdated(float timeRemaining)
@@ -46,16 +88,16 @@ public class HUDManager : MonoBehaviour
         objectivesText.text = objectives;
     }
     
-    private void UpdateFuelBar(float fillAmount)
+    private void UpdateFuelBar(float currentFuel, float maxFuel)
     {
-        if (fuelBar) fuelBar.fillAmount = fillAmount;
-        fuelText.text = $"Fuel: {fillAmount:P0}";
+        if (fuelBar) fuelBar.fillAmount = currentFuel / maxFuel;
+        if (fuelText) fuelText.text = $"Fuel: {currentFuel:N0}/{maxFuel}";
     }
     
-    private void UpdateHealthBar(float fillAmount)
+    private void UpdateHealthBar(float currentHealth, float maxHealth)
     {
-        if (healthBar) healthBar.fillAmount = fillAmount;
-        healthText.text = $"Health: {fillAmount:P0}";
+        if (healthBar) healthBar.fillAmount = currentHealth / maxHealth;
+        if (healthText) healthText.text = $"Health: {currentHealth:N0}/{maxHealth}";
     }
     
 }

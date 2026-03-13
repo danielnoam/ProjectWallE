@@ -6,16 +6,20 @@ public class MaterialPropertyTweener : MonoBehaviour
 {
     [SerializeField] private Material material;
     [SerializeField] private string propertyName = "_Visibility";
+    
+    [Header("Animate")]
     [SerializeField] private float showValue = 1f;
     [SerializeField] private float hideValue;
     [SerializeField] private float duration = 0.5f;
     [SerializeField] private Ease ease = Ease.InOutSine;
+    
+    [Header("Punch")]
+    [SerializeField] private int punchCount = 1;
+    [SerializeField] private float punchDuration = 0.25f;
+    [SerializeField] private Ease punchEase = Ease.Linear;
 
     private int _propertyId;
-    private Tween _tween;
-
-    [Button] public void Show() => Animate(showValue);
-    [Button] public void Hide() => Animate(hideValue);
+    private Sequence _sequence;
 
     private void Awake()
     {
@@ -25,13 +29,27 @@ public class MaterialPropertyTweener : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (_tween.isAlive) _tween.Stop();
+        if (_sequence.isAlive) _sequence.Stop();
         material.SetFloat(_propertyId, hideValue);
     }
 
     private void Animate(float target)
     {
-        if (_tween.isAlive) _tween.Stop();
-        _tween = Tween.MaterialProperty(material, _propertyId, target, duration, ease);
+        if (_sequence.isAlive) _sequence.Stop();
+        _sequence = Sequence.Create(Tween.MaterialProperty(material, _propertyId, target, duration, ease));
     }
+
+    [Button]
+    public void Punch()
+    {
+        if (_sequence.isAlive) _sequence.Stop();
+        
+        _sequence = Sequence.Create(cycles: punchCount);
+        _sequence.Group(Tween.MaterialProperty(material, _propertyId, showValue, punchDuration * 0.5f, punchEase));
+        _sequence.Chain(Tween.MaterialProperty(material, _propertyId, hideValue, punchDuration * 0.5f, punchEase));
+    }
+    
+    [Button] public void Show() => Animate(showValue);
+    [Button] public void Hide() => Animate(hideValue);
+    
 }
