@@ -137,11 +137,13 @@ namespace ProjectWallE
         public void EnableWheelsAirRelease()
         {
            ToggleEffect(wheelsAirReleaseEffects, true);
+           Debug.Log("Enable");
         }
         
         public void DisableWheelsAirRelease()
         {
             ToggleEffect(wheelsAirReleaseEffects, false);
+            Debug.Log("Disable");
         }
 
         public void PlaySound(string id)

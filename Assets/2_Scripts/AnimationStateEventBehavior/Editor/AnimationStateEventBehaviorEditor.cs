@@ -30,7 +30,16 @@ public class AnimationStateEventBehaviorEditor : Editor
     
     public override void OnInspectorGUI()
     {
-        DrawDefaultInspector();
+        SerializedObject so = serializedObject;
+        so.Update();
+
+        EditorGUILayout.PropertyField(so.FindProperty("eventName"));
+        EditorGUILayout.PropertyField(so.FindProperty("triggerAt"));
+
+        if ((AnimationStateEventBehavior.TriggerAt)so.FindProperty("triggerAt").enumValueIndex == AnimationStateEventBehavior.TriggerAt.During)
+            EditorGUILayout.PropertyField(so.FindProperty("triggerTime"));
+
+        so.ApplyModifiedProperties();
         
         if (_isPreviewing && Selection.activeGameObject != _previewTarget)
         {
@@ -68,7 +77,7 @@ public class AnimationStateEventBehaviorEditor : Editor
         }
         else
         {
-            EditorGUILayout.HelpBox(errorMessage, MessageType.Error);
+            EditorGUILayout.HelpBox(errorMessage, MessageType.Info);
         }
     }
 

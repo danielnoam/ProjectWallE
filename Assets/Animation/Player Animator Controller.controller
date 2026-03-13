@@ -29,6 +29,21 @@ AnimatorStateMachine:
   m_ExitPosition: {x: 800, y: 120, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: -3169874289226330576}
+--- !u!114 &-7575216953852922015
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b95f5955dbf5f5c47a8e6d8a6bb295a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimationStateEventBehavior
+  eventName: DisableWheelAirRelease
+  triggerAt: 1
+  triggerTime: 1
 --- !u!1109 &-6993127058195168910
 AnimatorTransition:
   m_ObjectHideFlags: 1
@@ -43,6 +58,21 @@ AnimatorTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 1
+--- !u!114 &-3758001695842481129
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b95f5955dbf5f5c47a8e6d8a6bb295a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimationStateEventBehavior
+  eventName: DisableWheelAirRelease
+  triggerAt: 1
+  triggerTime: 1
 --- !u!1102 &-3169874289226330576
 AnimatorState:
   serializedVersion: 6
@@ -103,7 +133,8 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
-  - {fileID: 8447862670496931717}
+  - {fileID: 8538659476098447052}
+  - {fileID: -3758001695842481129}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -129,7 +160,9 @@ AnimatorState:
   m_Speed: 2.5
   m_CycleOffset: 0
   m_Transitions: []
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: 6955718971949025041}
+  - {fileID: -7575216953852922015}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -144,7 +177,7 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!114 &8447862670496931717
+--- !u!114 &6955718971949025041
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -156,5 +189,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b95f5955dbf5f5c47a8e6d8a6bb295a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AnimationStateEventBehavior
-  eventName: SwitchToRobot
+  eventName: EnableWheelAirRelease
+  triggerAt: 1
+  triggerTime: 0
+--- !u!114 &8538659476098447052
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b95f5955dbf5f5c47a8e6d8a6bb295a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimationStateEventBehavior
+  eventName: EnableWheelAirRelease
+  triggerAt: 1
   triggerTime: 0
