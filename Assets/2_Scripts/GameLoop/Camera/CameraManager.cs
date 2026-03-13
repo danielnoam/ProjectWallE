@@ -11,21 +11,27 @@ namespace ProjectWallE
         
         private CinemachineInputAxisController _robotInputAxisController;
         private CinemachineInputAxisController _carInputAxisController;
+        
+        private PlayerManager _playerManager;
 
         private void Awake()
         {
             _robotInputAxisController = robotCamera.GetComponent<CinemachineInputAxisController>();
             _carInputAxisController = carCamera.GetComponent<CinemachineInputAxisController>();
+            
+            _playerManager = FindFirstObjectByType<PlayerManager>();
         }
 
         private void OnEnable()
         {
-            PlayerManager.OnControllerChanged += OnControllerSwitch;
+            if (_playerManager == null) return;
+            _playerManager.OnControllerChanged += OnControllerSwitch;
         }
         
         private void OnDisable()
-        {
-            PlayerManager.OnControllerChanged -= OnControllerSwitch;
+        {           
+            if (_playerManager == null) return;
+            _playerManager.OnControllerChanged -= OnControllerSwitch;
         }
         
         private void OnControllerSwitch(PlayerControllerType controllerType)

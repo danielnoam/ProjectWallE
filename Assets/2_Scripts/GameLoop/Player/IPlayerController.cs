@@ -17,5 +17,7 @@ namespace ProjectWallE
         bool canShoot {get;}
         public void ApplyMovement();
         public void Initialize(PlayerReferences playerReferences);
+
+        public GameObject gameObject { get; }
     }
 }

@@ -1,11 +1,10 @@
+using System;
 using UnityEngine;
 
 namespace ProjectWallE
 {
     public class CarBoost : MonoBehaviour
     {
-        private float _currentFuel = FuelCapacity;
-
         [Header("Boost Settings")]
         [SerializeField] private float boostAccel = 1.5f;
         [SerializeField] private float boostSpeedFactor = 1.25f;
@@ -17,12 +16,18 @@ namespace ProjectWallE
         [SerializeField] private float minFuelToStartBoost = 10f;
 
         private const float FuelCapacity = 100f;
-
+        
+        private float _currentFuel = FuelCapacity;
+        
         private float _lastBoostTime;
         private float _disableTime;
         private bool _isBoosting;
 
         private CarInput _carInput;
+        
+        public event Action OnBoostStart;
+        public event Action OnBoostEnd; 
+        public event Action<float, float> OnFuelChange;
 
         private void Awake()
         {
@@ -37,8 +42,7 @@ namespace ProjectWallE
             _isBoosting = false;
 
             if (!wasBoosting) return;
-            PlayerManager.InvokeOnBoostEnd();
-            Debug.Log("Slow poke looking ahh");
+            OnBoostEnd?.Invoke();
         }
 
         private void OnEnable()
@@ -52,15 +56,13 @@ namespace ProjectWallE
 
             if (rechargeDuration > 0f)
             {
-                _currentFuel += rechargeDuration * rechargeRate;
-                _currentFuel = Mathf.Clamp(_currentFuel, 0f, FuelCapacity);
+                AddFuel(rechargeDuration * rechargeRate);
             }
         }
 
         private void Update()
         {
             HandleFuel();
-            _currentFuel = Mathf.Clamp(_currentFuel, 0f, FuelCapacity);
         }
 
         public bool CanBoost(out float boostAccel, out float boostSpeedFactor)
@@ -107,17 +109,17 @@ namespace ProjectWallE
             //events
             if (_isBoosting && !wasBoosting)
             {
-                PlayerManager.InvokeOnBoostStart();
+                OnBoostStart?.Invoke();
             }
             else if (!_isBoosting && wasBoosting)
             {
-                PlayerManager.InvokeOnBoostEnd();
+                OnBoostEnd?.Invoke();
             }
         }
 
         private void UseFuel()
         {
-            _currentFuel -= fuelConsumption * Time.deltaTime;
+            AddFuel(-fuelConsumption * Time.deltaTime);
             _lastBoostTime = Time.time;
         }
 
@@ -126,7 +128,13 @@ namespace ProjectWallE
             if (_currentFuel >= FuelCapacity)
                 return;
 
-            _currentFuel += rechargeRate * Time.deltaTime;
+            AddFuel(rechargeRate * Time.deltaTime);
+        }
+
+        private void AddFuel(float addedFuel)
+        {
+            _currentFuel = Mathf.Clamp(_currentFuel + addedFuel, 0, FuelCapacity);
+            OnFuelChange?.Invoke(_currentFuel, FuelCapacity);
         }
     }
 }
