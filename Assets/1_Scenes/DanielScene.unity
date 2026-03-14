@@ -2213,11 +2213,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 516747228}
-  - component: {fileID: 516747229}
   - component: {fileID: 516747233}
+  - component: {fileID: 516747235}
   - component: {fileID: 516747232}
-  - component: {fileID: 516747230}
+  - component: {fileID: 516747229}
   - component: {fileID: 516747234}
+  - component: {fileID: 516747230}
   m_Layer: 9
   m_Name: Visuals
   m_TagString: Untagged
@@ -2308,9 +2309,13 @@ MonoBehaviour:
     stateName: Switch To Robot
     stateHash: -1799443727
     assigned: 1
-  heighSpeedMagnitude: 23
+  heighSpeedMagnitudeRange:
+    minValue: 16
+    maxValue: 30
+  speedLinesSizeRange: {x: 1, y: 0.85}
   lowHealthEffect: {fileID: 516747232}
-  speedLinesEffect: {fileID: 516747233}
+  speedLinesVisibility: {fileID: 516747233}
+  speedLinesSize: {fileID: 516747235}
   animator: {fileID: 516747229}
   player: {fileID: 2039097349}
   shooter: {fileID: 2039097346}
@@ -2402,6 +2407,27 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &516747235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 516747227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 286c0a9b65940bc46a4af2e3e8df3264, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FullscreenVignetteController
+  material: {fileID: 2100000, guid: 11a4b36f82c657b429a3edb70f119268, type: 2}
+  propertyName: _Mask_Size
+  showValue: 1
+  hideValue: 0
+  duration: 0.1
+  ease: 4
+  punchCount: 1
+  punchDuration: 0.25
+  punchEase: 1
 --- !u!1 &534876687
 GameObject:
   m_ObjectHideFlags: 0

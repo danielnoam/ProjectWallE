@@ -1,3 +1,5 @@
+using ProjectWallE.GameLoop.Player;
+using RadialMenu;
 
 public class StructureActionsMenu : RadialMenu<StructureAction>
 {

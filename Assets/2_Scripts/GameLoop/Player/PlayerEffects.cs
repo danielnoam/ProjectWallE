@@ -1,15 +1,15 @@
 using System;
 using DNExtensions.Systems.AudioLibrary;
+using DNExtensions.Utilities;
 using DNExtensions.Utilities.AutoGet;
 using DNExtensions.Utilities.CustomFields;
 using UnityEngine;
 using UnityEngine.VFX;
 
-namespace ProjectWallE
+namespace ProjectWallE.GameLoop.Player
 {
     public class PlayerEffects : MonoBehaviour
     {
-        
         [Header("Particle")]
         [SerializeField] private VisualEffect[] carBoostEffects;
         [SerializeField] private ParticleSystem[] carDirtParticles;
@@ -22,11 +22,13 @@ namespace ProjectWallE
         [SerializeField] private AnimatorStateField switchToRobot;
         
         [Header("SpeedLines")]
-        [SerializeField] private float heighSpeedMagnitude = 20f;
+        [SerializeField, MinMaxRange(0f, 50f)] private RangedFloat heighSpeedMagnitudeRange = new RangedFloat(20f,30f);
+        [SerializeField, MinMaxRange(0f, 1f)] private Vector2 speedLinesSizeRange = new Vector2(1f, 0.8f);
         
         [Header("References")]
         [SerializeField] private MaterialPropertyTweener lowHealthEffect;
-        [SerializeField] private MaterialPropertyTweener speedLinesEffect;
+        [SerializeField] private MaterialPropertyTweener speedLinesVisibility;
+        [SerializeField] private MaterialPropertyTweener speedLinesSize;
         [SerializeField, AutoGetSelf, HideInInspector] private Animator animator;
         [SerializeField, AutoGetParent, HideInInspector] private PlayerManager player;
         [SerializeField, AutoGetParent, HideInInspector] private PlayerShooter shooter;
@@ -77,18 +79,27 @@ namespace ProjectWallE
 
         private void Update()
         {
-            if (player && speedLinesEffect)
+            UpdateSpeedLines();
+        }
+
+        private void UpdateSpeedLines()
+        {
+            if (player && speedLinesSize)
             {
-                if (player.velocity.magnitude > heighSpeedMagnitude && !_speedLinesActive)
+                if (player.velocity.magnitude > heighSpeedMagnitudeRange.minValue && !_speedLinesActive)
                 {
-                    speedLinesEffect.Show();
+                    speedLinesVisibility.Show();
                     _speedLinesActive = true;
                 }
-                else if (player.velocity.magnitude <= heighSpeedMagnitude && _speedLinesActive)
+                else if (player.velocity.magnitude <= heighSpeedMagnitudeRange.minValue && _speedLinesActive)
                 {
-                    speedLinesEffect.Hide();
-                    _speedLinesActive = false;
+                    speedLinesVisibility.Hide();
+                    _speedLinesActive = false;  
                 }
+
+                var t = Mathf.InverseLerp(heighSpeedMagnitudeRange.minValue, heighSpeedMagnitudeRange.maxValue, player.velocity.magnitude);
+                var size = Mathf.Lerp(speedLinesSizeRange.x, speedLinesSizeRange.y, t);
+                speedLinesSize.SetValue(size);
             }
         }
 
@@ -190,7 +201,5 @@ namespace ProjectWallE
         {
             AudioLibrary.PlayAtPosition(id, transform);
         }
-        
-        
     }
 }

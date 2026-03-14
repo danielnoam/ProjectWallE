@@ -38,6 +38,11 @@ public class MaterialPropertyTweener : MonoBehaviour
         if (_sequence.isAlive) _sequence.Stop();
         _sequence = Sequence.Create(Tween.MaterialProperty(material, _propertyId, target, duration, ease));
     }
+    public void SetValue(float value)
+    {
+        if (_sequence.isAlive) _sequence.Stop();
+        material.SetFloat(_propertyId, value);
+    }
 
     [Button]
     public void Punch()

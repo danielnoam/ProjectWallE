@@ -1,4 +1,7 @@
 
+using ProjectWallE.GameLoop.Player;
+using RadialMenu;
+
 public class StructureBuildMenu : RadialMenu<Structure>
 {
     private void OnEnable()
