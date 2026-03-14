@@ -11,6 +11,8 @@ namespace _2_Scripts
         [SerializeField] private Tire[] steeringTires;
         [SerializeField] private Tire[] staticTires;
         [SerializeField] private Transform boostPoint;
+        
+        [HideInInspector][SerializeField] private CarBoost carBoost;
 
         [Header("Suspension Parameters")]
         [SerializeField] private float groundHeight = 0.2f;
@@ -72,14 +74,20 @@ namespace _2_Scripts
         /// </summary>
         private float gravityControlFactor => gravityStrength * 0.25f;
 
-        public CarBoost carBoost { get; private set; }
+        public CarBoost CarBoost => carBoost;
         public bool canBuild { get; private set; } = false;
         public bool canShoot { get; private set; } = false;
+
+
+        private void OnValidate()
+        {
+            if(carBoost == null)
+                carBoost = GetComponent<CarBoost>();
+        }
 
         private void Awake()
         {
             _carInput = GetComponent<CarInput>();
-            carBoost = GetComponent<CarBoost>();
             _allTires = GetAllTiresTransforms();
 
             foreach (var tire in _allTires)
@@ -250,7 +258,7 @@ namespace _2_Scripts
             else
                 ApplyEngineBreaking(carSpeed);
 
-            if (carBoost.CanBoost(out float boostAccel, out float boostSpeedFactor))
+            if (CarBoost.CanBoost(out float boostAccel, out float boostSpeedFactor))
                 ApplyBoost(carSpeed, boostAccel, boostSpeedFactor);
 
             RotateWheels(carSpeed, 0.5f);

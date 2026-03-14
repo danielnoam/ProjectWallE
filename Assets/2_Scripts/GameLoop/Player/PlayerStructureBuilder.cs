@@ -53,7 +53,7 @@ public class PlayerStructureBuilder : MonoBehaviour
 
     private void Update()
     {
-        if (!playerManager.canBuild) return;
+        if (!playerManager.CanBuild) return;
         
         if (Mouse.current.rightButton.wasPressedThisFrame)
         {
