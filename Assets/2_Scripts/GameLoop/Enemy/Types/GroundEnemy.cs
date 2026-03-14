@@ -8,12 +8,7 @@ public class GroundEnemy : Enemy
 {
     [SerializeField, AutoGetSelf, HideInInspector] private NavMeshAgent navMeshAgent;
     [SerializeField, AutoGetSelf, HideInInspector] private Rigidbody rigidBody;
-
-    protected override void Initialize()
-    {
-       
-    }
-
+    
     protected override void UpdateMovement()
     {
         if (!IsTargetValid(CurrentTarget, out _))

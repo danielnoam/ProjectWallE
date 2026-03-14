@@ -45,24 +45,30 @@ namespace ProjectWallE.GameLoop.Player
 
         private void OnEnable()
         {
-            buildMenu.OnItemSelected += TryBuildStructure;
-            actionsMenu.OnItemSelected += OnStructureActionSelected;
-            playerManager.OnDeath += OnDeath;
-            playerManager.OnControllerChanged += OnControllerChanged;
+            if (buildMenu) buildMenu.OnItemSelected += TryBuildStructure;
+            if (actionsMenu) actionsMenu.OnItemSelected += OnStructureActionSelected;
+            if (playerManager)
+            {
+                playerManager.OnDeath += OnDeath;
+                playerManager.OnControllerChanged += OnControllerChanged;
+            }
         }
 
 
         private void OnDisable()
         {
-            buildMenu.OnItemSelected -= TryBuildStructure;
-            actionsMenu.OnItemSelected -= OnStructureActionSelected;
-            playerManager.OnDeath -= OnDeath;
-            playerManager.OnControllerChanged -= OnControllerChanged;
+            if (buildMenu) buildMenu.OnItemSelected -= TryBuildStructure;
+            if (actionsMenu) actionsMenu.OnItemSelected -= OnStructureActionSelected;
+            if (playerManager)
+            {
+                playerManager.OnDeath -= OnDeath;
+                playerManager.OnControllerChanged -= OnControllerChanged;
+            }
         }
 
         private void Update()
         {
-            if (!playerManager.CanBuild) return;
+            if (!playerManager || !playerManager.CanBuild) return;
 
             if (Mouse.current.rightButton.wasPressedThisFrame)
             {

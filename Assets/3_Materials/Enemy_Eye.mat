@@ -41,7 +41,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Hatching_Texture:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 5fd216e117a7dca4ba6238547fa6354c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -82,10 +82,10 @@ Material:
     - _EdgeWidth: 0.05
     - _Edge_Threshold: 0.226
     - _FadeSpeed: 0
-    - _Fresnel: 1
+    - _Fresnel: 0
     - _Fresnel_Power: 1
     - _Glitch_Strength: 0
-    - _Hatching: 0
+    - _Hatching: 1
     - _Hatching_Speed: 2.5
     - _Hatching_Strength: 0.35
     - _INTERSECTION: 1
@@ -114,7 +114,7 @@ Material:
     - _Edge_Color: {r: 1, g: 1, b: 1, a: 0}
     - _Fresnel_Color: {r: 1, g: 0, b: 0.021698475, a: 1}
     - _Hatching_Offset: {r: 0, g: 0, b: 0, a: 0}
-    - _Hatching_Tiling: {r: 50, g: 50, b: 0, a: 0}
+    - _Hatching_Tiling: {r: 25, g: 25, b: 0, a: 0}
     - _Innerline_Color: {r: 1, g: 1, b: 1, a: 1}
     - _Intersection_Color: {r: 1, g: 1, b: 1, a: 0}
     - _Main_Color: {r: 0, g: 0, b: 0, a: 0}

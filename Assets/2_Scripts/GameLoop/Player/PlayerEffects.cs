@@ -1,8 +1,6 @@
-using System;
 using DNExtensions.Systems.AudioLibrary;
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.AutoGet;
-using DNExtensions.Utilities.CustomFields;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -17,10 +15,6 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField] private VisualEffect[] wheelsAirReleaseEffects;
         [SerializeField] private VisualEffect[] muzzleFlashEffects;
         
-        [Header("Animations")]
-        [SerializeField] private AnimatorStateField switchToCar;
-        [SerializeField] private AnimatorStateField switchToRobot;
-        
         [Header("SpeedLines")]
         [SerializeField, MinMaxRange(0f, 50f)] private RangedFloat heighSpeedMagnitudeRange = new RangedFloat(20f,30f);
         [SerializeField, MinMaxRange(0f, 1f)] private Vector2 speedLinesSizeRange = new Vector2(1f, 0.8f);
@@ -29,7 +23,6 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField] private MaterialPropertyTweener lowHealthEffect;
         [SerializeField] private MaterialPropertyTweener speedLinesVisibility;
         [SerializeField] private MaterialPropertyTweener speedLinesSize;
-        [SerializeField, AutoGetSelf, HideInInspector] private Animator animator;
         [SerializeField, AutoGetParent, HideInInspector] private PlayerManager player;
         [SerializeField, AutoGetParent, HideInInspector] private PlayerShooter shooter;
         [SerializeField, AutoGetScene, HideInInspector] private CarBoost boost;
@@ -56,8 +49,6 @@ namespace ProjectWallE.GameLoop.Player
                 }
                 if (shooter) shooter.OnShoot += PlayMuzzleFlash;
             }
-
-
         }
         
         private void OnDisable()
@@ -117,22 +108,6 @@ namespace ProjectWallE.GameLoop.Player
 
         private void OnControllerChanged(PlayerControllerType type)
         {
-            if (!animator) return;
-            
-            switch (type)
-            {
-                case PlayerControllerType.Car:
-                    animator.Play(switchToCar.StateName);
-                    ToggleParticle(robotDirtParticles, false);
-                    break;
-                case PlayerControllerType.Robot:
-                    animator.Play(switchToRobot.StateName);
-                    ToggleParticle(carDirtParticles, false);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
-            }
-            
             ToggleEffect(carBoostEffects, false);
         }
         

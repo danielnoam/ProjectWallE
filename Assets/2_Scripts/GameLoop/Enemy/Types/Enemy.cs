@@ -32,11 +32,15 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPushable
 
     public event Action<IDamageable> OnDeath;
     public event Action<float> OnDamaged;
-
-    protected abstract void Initialize();
+    
     protected abstract void UpdateMovement();
     protected abstract void SetDestination();
     protected abstract void OnPush(Vector3 direction, float force);
+    
+    protected virtual void Initialize()
+    {
+        
+    }
 
     
     private void OnDestroy()
