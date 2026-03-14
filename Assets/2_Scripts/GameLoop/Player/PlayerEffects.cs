@@ -86,18 +86,18 @@ namespace ProjectWallE.GameLoop.Player
         {
             if (player && speedLinesSize)
             {
-                if (player.velocity.magnitude > heighSpeedMagnitudeRange.minValue && !_speedLinesActive)
+                if (player.Velocity.magnitude > heighSpeedMagnitudeRange.minValue && !_speedLinesActive)
                 {
                     speedLinesVisibility.Show();
                     _speedLinesActive = true;
                 }
-                else if (player.velocity.magnitude <= heighSpeedMagnitudeRange.minValue && _speedLinesActive)
+                else if (player.Velocity.magnitude <= heighSpeedMagnitudeRange.minValue && _speedLinesActive)
                 {
                     speedLinesVisibility.Hide();
                     _speedLinesActive = false;  
                 }
 
-                var t = Mathf.InverseLerp(heighSpeedMagnitudeRange.minValue, heighSpeedMagnitudeRange.maxValue, player.velocity.magnitude);
+                var t = Mathf.InverseLerp(heighSpeedMagnitudeRange.minValue, heighSpeedMagnitudeRange.maxValue, player.Velocity.magnitude);
                 var size = Mathf.Lerp(speedLinesSizeRange.x, speedLinesSizeRange.y, t);
                 speedLinesSize.SetValue(size);
             }

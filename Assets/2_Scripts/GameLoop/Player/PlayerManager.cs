@@ -16,6 +16,9 @@ namespace ProjectWallE
     {
         [SerializeField] LayerMask groundLayer;
         
+        [HideInInspector][SerializeField] CarController carController;
+        [HideInInspector][SerializeField] RobotController robotController;
+        
         private PlayerManagerInput _input;
         private Rigidbody _rigidbody;
         private Transform _cameraTransform;
@@ -24,30 +27,33 @@ namespace ProjectWallE
         private PlayerControllerType _lastFramePlayerControllerTypeEnum;
         
         private IPlayerController _currentController;
-        private IPlayerController _carController;
-        private IPlayerController _robotController;
-        
-        public CarController carController => _carController as CarController;
-        public RobotController robotController => _robotController as RobotController;
-        public bool canBuild => _currentController.canBuild;
-        public bool canShoot => _currentController.canShoot;
-        public Vector3 velocity => _rigidbody.linearVelocity;
+
+        public CarController CarController => carController;
+        public RobotController RobotController => robotController;
+        public bool CanBuild => _currentController.canBuild;
+        public bool CanShoot => _currentController.canShoot;
+        public Vector3 Velocity => _rigidbody.linearVelocity;
         
         public event Action<IDamageable> OnDeath;
         public event Action<float> OnDamaged;
         public event Action<PlayerControllerType> OnControllerChanged;
-        
+
+        private void OnValidate()
+        {
+            if (carController == null)
+                carController = GetComponentInChildren<CarController>();
+            if(robotController == null)
+                robotController = GetComponentInChildren<RobotController>();
+        }
+
         void Awake()
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            
+
             _input = GetComponent<PlayerManagerInput>();
             _rigidbody = GetComponent<Rigidbody>();
             if (Camera.main != null) _cameraTransform = Camera.main.transform;
-
-            _carController = GetComponentInChildren<CarController>();
-            _robotController = GetComponentInChildren<RobotController>();
             _playerControllerTypeEnum = PlayerControllerType.Robot;
 
             PlayerReferences playerReferences = new PlayerReferences()
@@ -56,9 +62,9 @@ namespace ProjectWallE
                 rigidBody = _rigidbody,
                 groundLayer = groundLayer
             };
-            
-            _carController.Initialize(playerReferences);
-            _robotController.Initialize(playerReferences);
+
+            carController.Initialize(playerReferences);
+            robotController.Initialize(playerReferences);
         }
 
         private void Start()
@@ -103,9 +109,9 @@ namespace ProjectWallE
             bool isRobot = playerControllerType == PlayerControllerType.Robot;
             
             //controller
-            _currentController = isRobot ? _robotController : _carController;
-            _robotController.gameObject.SetActive(isRobot);
-            _carController.gameObject.SetActive(!isRobot);
+            _currentController = isRobot ? robotController : carController;
+            robotController.gameObject.SetActive(isRobot);
+            carController.gameObject.SetActive(!isRobot);
             
             OnControllerChanged?.Invoke(playerControllerType);
         }
