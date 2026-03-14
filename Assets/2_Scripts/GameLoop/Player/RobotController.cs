@@ -75,10 +75,14 @@ namespace ProjectWallE
         
         public bool canBuild {  get; private set; } = true;
         public bool canShoot { get; private set; } = true;
+        
 
-
-        void Awake()
+        public void Initialize(PlayerReferences playerReferences)
         {
+            _playerRb = playerReferences.rigidBody;
+            _cameraTransform = playerReferences.cameraTransform;
+            _groundLayer = playerReferences.groundLayer;
+            
             _input = GetComponent<RobotInput>();
 
             _wheelVisualStartPos = new List<Vector3>();
@@ -88,11 +92,14 @@ namespace ProjectWallE
             }
         }
 
-        public void Initialize(PlayerReferences playerReferences)
+        public void OnEnter()
         {
-            _playerRb = playerReferences.rigidBody;
-            _cameraTransform = playerReferences.cameraTransform;
-            _groundLayer = playerReferences.groundLayer;
+            
+        }
+
+        public void OnExit()
+        {
+            
         }
 
         void Update()

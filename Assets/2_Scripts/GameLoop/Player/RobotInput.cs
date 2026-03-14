@@ -13,6 +13,11 @@ namespace ProjectWallE
         public bool JumpHeld { get; private set; }
         public bool JumpReleased { get; private set; }
 
+        void Awake()
+        {
+            Input = new InputSystem_Actions();
+        }
+
         private void OnEnable()
         {
             EnableInput();
@@ -25,7 +30,6 @@ namespace ProjectWallE
         
         void EnableInput()
         {
-            Input = new InputSystem_Actions();
             Input.Enable();
 
             Input.RobotControls.Enable();
@@ -34,11 +38,10 @@ namespace ProjectWallE
     
         void DisableInput()
         {
-            Input.RobotControls.Disable();
-            Input.RobotControls.RemoveCallbacks(this);
+            Input?.RobotControls.Disable();
+            Input?.RobotControls.RemoveCallbacks(this);
         
-            Input.Dispose();
-            Input = null;
+            Input?.Disable();
         }
 
         void LateUpdate()

@@ -1728,6 +1728,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 623665577e14e0140ae1f5e042b3b5a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarController
+--- !u!4 &1549198249 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2452485598096478041, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+  m_PrefabInstance: {fileID: 5281606887408493550}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1592309857
 GameObject:
   m_ObjectHideFlags: 0
@@ -2290,6 +2295,16 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 30, y: -90, z: 0}
+--- !u!4 &1839200545 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6550488882789729935, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+  m_PrefabInstance: {fileID: 5281606887408493550}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1885065428 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3397541803766488705, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+  m_PrefabInstance: {fileID: 5281606887408493550}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1912653142
 GameObject:
   m_ObjectHideFlags: 0
@@ -2402,6 +2417,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 30, y: -90, z: 0}
+--- !u!4 &1968707525 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7065038916138971032, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+  m_PrefabInstance: {fileID: 5281606887408493550}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2089575080 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2207471271178187077, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
@@ -2536,6 +2556,34 @@ PrefabInstance:
       propertyPath: robotController
       value: 
       objectReference: {fileID: 927692080}
+    - target: {fileID: 2635220521126351491, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: visuals.staticTires.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2635220521126351491, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: visuals.tireVisuals.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2635220521126351491, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: visuals.steeringTires.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2635220521126351491, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: visuals.staticTires.Array.data[0].visualTransform
+      value: 
+      objectReference: {fileID: 1549198249}
+    - target: {fileID: 2635220521126351491, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: visuals.staticTires.Array.data[1].visualTransform
+      value: 
+      objectReference: {fileID: 1839200545}
+    - target: {fileID: 2635220521126351491, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: visuals.steeringTires.Array.data[0].visualTransform
+      value: 
+      objectReference: {fileID: 1968707525}
+    - target: {fileID: 2635220521126351491, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: visuals.steeringTires.Array.data[1].visualTransform
+      value: 
+      objectReference: {fileID: 1885065428}
     - target: {fileID: 5821086676760150823, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
       propertyPath: m_Name
       value: PlayerManager

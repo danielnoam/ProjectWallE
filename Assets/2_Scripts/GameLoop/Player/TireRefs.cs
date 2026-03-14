@@ -7,9 +7,6 @@ namespace _2_Scripts
     public class Tire
     {
         public Transform tireTransform;
-        public Transform visualTransform;
-
-        private Vector3 _visualStartPosition;
 
         [HideInInspector] public bool isGroundedExact;
         public RaycastHit exactGroundHit;
@@ -19,16 +16,48 @@ namespace _2_Scripts
 
         [HideInInspector] public bool isMoving;
 
-        public Vector3 VisualStartPosition => _visualStartPosition;
-
         public void Initialize()
         {
-            if (visualTransform != null)
-                _visualStartPosition = visualTransform.localPosition;
-
             isGroundedExact = false;
             isGroundedExtended = false;
             isMoving = false;
+        }
+    }
+
+    [Serializable]
+    public class TireVisual
+    {
+        public Transform visualTransform;
+
+        [NonSerialized] public float spinX;
+        [NonSerialized] public float steerY;
+
+        private Vector3 _visualStartPosition;
+        private Vector3 _visualStartRotation;
+
+        public Vector3 VisualStartPosition => _visualStartPosition;
+        public Vector3 VisualStartRotation => _visualStartRotation;
+
+        public void Initialize()
+        {
+            if (visualTransform == null) return;
+
+            _visualStartPosition = visualTransform.localPosition;
+            _visualStartRotation = visualTransform.localEulerAngles;
+
+            spinX = 0f;
+            steerY = 0f;
+        }
+
+        public void ResetVisual()
+        {
+            if (visualTransform == null) return;
+
+            visualTransform.localPosition = _visualStartPosition;
+            visualTransform.localEulerAngles = _visualStartRotation;
+
+            spinX = 0f;
+            steerY = 0f;
         }
     }
 }

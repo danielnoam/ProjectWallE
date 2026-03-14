@@ -65,6 +65,9 @@ namespace ProjectWallE
 
             carController.Initialize(playerReferences);
             robotController.Initialize(playerReferences);
+            carController.gameObject.SetActive(false);
+            robotController.gameObject.SetActive(false);
+            
         }
 
         private void Start()
@@ -95,7 +98,7 @@ namespace ProjectWallE
         private void SwitchBehavior()
         {
             if(_playerControllerTypeEnum == _lastFramePlayerControllerTypeEnum) return;
-            ResetRotation();
+            ResetRbRotation();
             EnableController(_playerControllerTypeEnum);
             _lastFramePlayerControllerTypeEnum = _playerControllerTypeEnum;
         }
@@ -109,14 +112,16 @@ namespace ProjectWallE
             bool isRobot = playerControllerType == PlayerControllerType.Robot;
             
             //controller
+            _currentController?.OnExit();
+            _currentController?.gameObject.SetActive(false);
             _currentController = isRobot ? robotController : carController;
-            robotController.gameObject.SetActive(isRobot);
-            carController.gameObject.SetActive(!isRobot);
+            _currentController.gameObject.SetActive(true);
+            _currentController.OnEnter();
             
             OnControllerChanged?.Invoke(playerControllerType);
         }
 
-        private void ResetRotation()
+        private void ResetRbRotation()
         {
             Vector3 rot = _rigidbody.rotation.eulerAngles;
             rot.y = _cameraTransform.rotation.eulerAngles.y;
