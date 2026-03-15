@@ -32,6 +32,7 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField] private MaterialPropertyTweener speedLinesSize;
         [SerializeField] private AudioSource airReleaseAudioSource;
         [SerializeField] private AudioSource boostAudioSource;
+        [SerializeField] private AudioSource changeStateAudioSource;
         [SerializeField, AutoGetParent, HideInInspector] private PlayerManager player;
         [SerializeField, AutoGetParent, HideInInspector] private PlayerShooter shooter;
 
@@ -118,7 +119,7 @@ namespace ProjectWallE.GameLoop.Player
         private void OnControllerChanged(PlayerControllerType type)
         {
             ToggleEffect(carBoostEffects, false);
-            AudioLibrary.PlayAtPosition(changeStateSoundId, transform.position);
+            AudioLibrary.PlayOnSource(changeStateSoundId, changeStateAudioSource);
         }
         
         private void OnHealthChanged(float currentHealth, float maxHealth)
@@ -181,7 +182,7 @@ namespace ProjectWallE.GameLoop.Player
         private void PlayMuzzleFlash()
         {
             ToggleEffect(muzzleFlashEffects, true);
-            AudioLibrary.Play(shootSoundId);
+            AudioLibrary.PlayAtPosition(shootSoundId, transform.position);
         }
         
         public void EnableWheelsAirRelease()

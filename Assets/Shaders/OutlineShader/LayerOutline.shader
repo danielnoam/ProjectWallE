@@ -8,7 +8,7 @@ Shader "Hidden/ProjectWallE/LayerOutline"
         _DepthThreshold ("Depth Threshold", Float) = 1.5
         _NormalThreshold ("Normal Threshold", Float) = 0.4
         _ColorThreshold ("Color Threshold", Float) = 0.3
-        _OutlineColor ("Outline Color", Color) = (0, 0, 0, 1)
+        [HDR]_OutlineColor ("Outline Color", Color) = (0, 0, 0, 1)
         _OutlineWidth ("Outline Width", Float) = 1
     }
 
@@ -68,7 +68,7 @@ Shader "Hidden/ProjectWallE/LayerOutline"
                 float diff = abs(center - right) + abs(center - up);
                 diff += abs(left - center) + abs(down - center);
 
-                return step(_DepthThreshold, diff);
+                return smoothstep(_DepthThreshold * 0.8, _DepthThreshold * 1.2, diff);
             }
 
             float NormalEdge(float2 uv, float2 offset)
@@ -85,7 +85,7 @@ Shader "Hidden/ProjectWallE/LayerOutline"
                 diff += 1.0 - dot(center, up);
                 diff += 1.0 - dot(center, down);
 
-                return step(_NormalThreshold, diff * 0.25);
+                return smoothstep(_NormalThreshold * 0.8, _NormalThreshold * 1.2, diff * 0.25);
             }
 
             float ColorEdge(float2 uv, float2 offset)
@@ -102,7 +102,7 @@ Shader "Hidden/ProjectWallE/LayerOutline"
                 diff += distance(center, up);
                 diff += distance(center, down);
 
-                return step(_ColorThreshold, diff * 0.25);
+                return smoothstep(_ColorThreshold * 0.8, _ColorThreshold * 1.2, diff * 0.25);
             }
 
             float4 Frag(Varyings input) : SV_Target

@@ -23,7 +23,7 @@ namespace ProjectWallE.Shaders.OutlineShader
         [Range(0f, 5f)] public float colorThreshold = 0.1f;
         
         [Header("Appearance")]
-        public Color outlineColor = Color.black;
+        [ColorUsage(true,true)]public Color outlineColor = Color.black;
         [Range(0.5f, 5f)] public float outlineWidth = 1f;
     }
 

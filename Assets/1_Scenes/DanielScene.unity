@@ -1732,6 +1732,11 @@ MonoBehaviour:
   colorMapResolution: 256
   layerSettings:
   - enabled: 1
+    layer: {fileID: 8574412962073106934, guid: 5fb97fe77c322b147892b32cfe10a933, type: 2}
+    modifierStack:
+    - {fileID: 1108723828}
+    - {fileID: 1498571314}
+  - enabled: 1
     layer: {fileID: 8574412962073106934, guid: a2048cdaae8b1074a9a68f02b82a3381, type: 2}
     modifierStack:
     - {fileID: 701934968}
@@ -1740,6 +1745,10 @@ MonoBehaviour:
     modifierStack:
     - {fileID: 1108439419}
     - {fileID: 219442757}
+  - enabled: 1
+    layer: {fileID: 8574412962073106934, guid: f8399860a884c92459159948b257743d, type: 2}
+    modifierStack:
+    - {fileID: 1651246485}
   - enabled: 1
     layer: {fileID: 8574412962073106934, guid: b68e87ec7f195f14796044211bf38e19, type: 2}
     modifierStack:
@@ -2102,6 +2111,7 @@ Transform:
   m_Children:
   - {fileID: 213928574}
   - {fileID: 539811532}
+  - {fileID: 1467090413}
   m_Father: {fileID: 2039097342}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &419871552
@@ -2652,12 +2662,13 @@ MonoBehaviour:
   boostSoundId: Boost
   airReleaseSoundId: AirRelease
   changeStateSoundId: ChangeState
-  shootSoundId: 
+  shootSoundId: Shoot
   lowHealthEffect: {fileID: 516747232}
   speedLinesVisibility: {fileID: 516747233}
   speedLinesSize: {fileID: 516747235}
   airReleaseAudioSource: {fileID: 213928575}
   boostAudioSource: {fileID: 539811533}
+  changeStateAudioSource: {fileID: 1467090414}
   player: {fileID: 2039097349}
   shooter: {fileID: 2039097346}
 --- !u!114 &516747232
@@ -5566,6 +5577,27 @@ MonoBehaviour:
   minMax: {x: 6.102763, y: 90}
   minFalloff: 10
   maxFalloff: 10
+--- !u!114 &1108723828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e07d49e90874d70b9937cb753327a2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: sc.terrain.painter.runtime::sc.terrain.proceduralpainter.Noise
+  enabled: 1
+  label: Noise
+  blendMode: 0
+  opacity: 100
+  passIndex: 4
+  noiseType: 0
+  noiseScale: 50
+  noiseOffset: {x: 0, y: 0}
+  levels: {x: 0.26666662, y: 0.6818182}
 --- !u!1001 &1115909451
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7277,6 +7309,135 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1453998861}
   m_CullTransparentMesh: 1
+--- !u!1 &1467090412
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1467090413}
+  - component: {fileID: 1467090414}
+  m_Layer: 9
+  m_Name: StateChangeAS
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1467090413
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1467090412}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 404572497}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &1467090414
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1467090412}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1484038710
 GameObject:
   m_ObjectHideFlags: 0
@@ -7406,6 +7567,27 @@ MonoBehaviour:
     FrequencyGain: 1
     Duration: 1
     m_NoiseOffsets: {x: 0, y: 0, z: 0}
+--- !u!114 &1498571314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1d046e3917e4d8580903c69758b6558, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: sc.terrain.painter.runtime::sc.terrain.proceduralpainter.Height
+  enabled: 1
+  label: Height
+  blendMode: 0
+  opacity: 100
+  passIndex: 0
+  min: 94
+  minFalloff: 1
+  max: 2000
+  maxFalloff: 1
 --- !u!1 &1538142517
 GameObject:
   m_ObjectHideFlags: 0
@@ -7837,6 +8019,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 343ca8c4be67baa46a6405c8f52eebc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureSpawnPoint
+--- !u!114 &1651246485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4595e05301824e9284b1b12ad3f356dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: sc.terrain.painter.runtime::sc.terrain.proceduralpainter.TextureMask
+  enabled: 1
+  label: Texture Mask
+  blendMode: 0
+  opacity: 100
+  passIndex: 3
+  texture: {fileID: 2800000, guid: e0f4386ce0e6f11438069791cf2fdd41, type: 3}
+  channel: 2
+  spanTerrains: 0
+  tiling: 1
 --- !u!1001 &1656276267
 PrefabInstance:
   m_ObjectHideFlags: 0

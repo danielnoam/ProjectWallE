@@ -42,11 +42,11 @@ public abstract class Turret : Structure
     protected abstract Quaternion GetAimRotation(Vector3 targetPosition);
     protected abstract bool CanFire(Vector3 targetPosition);
 
-    private void OnDestroy()
+    protected override void OnDestroy()
     {
+        base.OnDestroy();
         if (_attackSequence.isAlive) _attackSequence.Stop();
-        if (_currentTarget != null)
-            _currentTarget.OnDeath -= OnTargetDeath;
+        if (_currentTarget != null) _currentTarget.OnDeath -= OnTargetDeath;
     }
 
     private void Update()

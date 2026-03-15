@@ -29,9 +29,7 @@ public class FlyingEnemy : Enemy
 
     protected override void Initialize()
     {
-        rigidBody.useGravity = false;
-        rigidBody.linearDamping = 4f;
-        rigidBody.angularDamping = 10f;
+        base.Initialize();
         rigidBody.constraints = RigidbodyConstraints.FreezeRotation;
 
         _separationFrameOffset = _frameOffsetCounter % SeparationCheckInterval;

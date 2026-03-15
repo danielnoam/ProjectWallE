@@ -89,9 +89,9 @@ MonoBehaviour:
   - {fileID: -2150769587562243004}
   - {fileID: -4434623983243107451}
   - {fileID: -1983433968388261668}
-  - {fileID: 4126539813256152135}
   - {fileID: 259596348579256433}
-  m_RendererFeatureMap: ad6b866f10d7b46c449ca39374ee26e285e35d9efb0c75c2dc38c67e506d79e447c4a3c8186a443971180eee80459a03
+  - {fileID: 4126539813256152135}
+  m_RendererFeatureMap: ad6b866f10d7b46c449ca39374ee26e285e35d9efb0c75c2dc38c67e506d79e471180eee80459a0347c4a3c8186a4439
   m_UseNativeRenderPass: 1
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
@@ -137,15 +137,15 @@ MonoBehaviour:
     layerMask:
       serializedVersion: 2
       m_Bits: 832
+    injectionPoint: 550
     useDepth: 0
-    useNormals: 1
-    useColor: 0
     depthThreshold: 0.1
+    useNormals: 1
     normalThreshold: 0.04
+    useColor: 0
     colorThreshold: 0.01
     outlineColor: {r: 0, g: 0, b: 0, a: 1}
     outlineWidth: 1
-    injectionPoint: 550
 --- !u!114 &4126539813256152135
 MonoBehaviour:
   m_ObjectHideFlags: 0

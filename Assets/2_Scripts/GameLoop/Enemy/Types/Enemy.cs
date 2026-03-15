@@ -40,7 +40,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPushable, IPoolable
 
     protected virtual void Initialize()
     {
-        
+        _currentHealth = maxHealth;
+        UpdateTarget();
+        EnemyManager.Instance?.RegisterEnemy(this);
     }
     
     private void OnDestroy()
@@ -51,10 +53,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPushable, IPoolable
     
     private void Start()
     {
-        _currentHealth = maxHealth;
         Initialize();
-        UpdateTarget();
-        EnemyManager.Instance.RegisterEnemy(this);
     }
 
     private void Update()
@@ -188,10 +187,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPushable, IPoolable
     
     public void OnPoolGet()
     {
-        _currentHealth = maxHealth;
         Initialize();
-        UpdateTarget();
-        EnemyManager.Instance?.RegisterEnemy(this);
     }
 
     public void OnPoolReturn()

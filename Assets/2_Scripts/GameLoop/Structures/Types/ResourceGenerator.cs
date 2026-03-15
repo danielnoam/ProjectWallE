@@ -48,7 +48,7 @@ public abstract class ResourceGenerator : Structure
         while (_generating)
         {
             yield return new WaitForSeconds(CurrentBaseLevelData.generationInterval);
-            ResourceManager.Instance.AddResources(CurrentBaseLevelData.resourcesPerInterval);
+            ResourceManager.Instance?.AddResources(CurrentBaseLevelData.resourcesPerInterval);
         }
     }
 }

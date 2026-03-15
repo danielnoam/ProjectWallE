@@ -61,8 +61,17 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
         }
 
     }
-    
-    private void OnDestroy()
+
+    private void Awake()
+    {
+        // initialize if in test scene and not in game
+        if (!StructureManager.Instance)
+        {
+            Build();
+        }
+    }
+
+    protected virtual void OnDestroy()
     {
         StructureManager.Instance?.UnregisterStructure(this);
     }
