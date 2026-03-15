@@ -59,7 +59,7 @@ namespace ProjectWallE.GameLoop.Player
             _nextTimeToFire = fireRate;
             Vector3 position = firePoint ? firePoint.position : transform.position;
             Vector3 direction = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)).direction;
-            projectileData?.Spawn(enemyLayerMask.Value, position, direction.Add(aimOffset));
+            projectileData?.Spawn(enemyLayerMask.Value, position, direction.Add(aimOffset), default, playerManager);
             OnShoot?.Invoke();
         }
     }

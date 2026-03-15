@@ -149,9 +149,10 @@ public class Projectile : MonoBehaviour, IPoolable
     }
 
     
-    public void Initialize(ProjectileData data, LayerMask hitLayers, Vector3 direction, Vector3 targetPosition)
+    public void Initialize(ProjectileData data, LayerMask hitLayers, Vector3 direction, Vector3 targetPosition, IDamageable owner)
     {
         _data = data;
+        _owner = owner;
         _hitLayers = hitLayers;
         _maxLifetime = data.maxLifetime;
         _startPosition = transform.position;
@@ -173,6 +174,14 @@ public class Projectile : MonoBehaviour, IPoolable
         _isInitialized = false;
         _hitSomething = false;
         _lifetimeTimer = 0;
+        
+        _data = null;
+        _owner = null;
+        _hitLayers = -1;
+        _maxLifetime = 0;
+        _startPosition = Vector3.zero;
+        _targetPosition = Vector3.zero;
+        _direction = Vector3.zero;
     }
 
     public void OnPoolRecycle()

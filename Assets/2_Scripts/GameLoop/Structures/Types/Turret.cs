@@ -88,7 +88,7 @@ public abstract class Turret : Structure
     private void Fire(Vector3 targetPosition)
     {
         var direction = (targetPosition - firePoint.position).normalized;
-        CurrentTurretLevelData.projectileData?.Spawn(hitLayers.Value, firePoint.position, direction, targetPosition);
+        CurrentTurretLevelData.projectileData?.Spawn(hitLayers.Value, firePoint.position, direction, targetPosition, this);
     }
 
     protected override void OnBuild()

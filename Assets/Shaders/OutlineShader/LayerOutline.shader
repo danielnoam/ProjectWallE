@@ -10,6 +10,11 @@ Shader "Hidden/ProjectWallE/LayerOutline"
         _ColorThreshold ("Color Threshold", Float) = 0.3
         [HDR]_OutlineColor ("Outline Color", Color) = (0, 0, 0, 1)
         _OutlineWidth ("Outline Width", Float) = 1
+
+        _UseDistanceFade ("Use Distance Fade", Float) = 0
+        _InvertDistanceFade ("Invert Distance Fade", Float) = 0
+        _DistanceFadeStart ("Distance Fade Start", Float) = 5
+        _DistanceFadeEnd ("Distance Fade End", Float) = 15
     }
 
     SubShader
@@ -50,6 +55,11 @@ Shader "Hidden/ProjectWallE/LayerOutline"
             float _ColorThreshold;
             float4 _OutlineColor;
             float _OutlineWidth;
+
+            float _UseDistanceFade;
+            float _InvertDistanceFade;
+            float _DistanceFadeStart;
+            float _DistanceFadeEnd;
 
             float SampleDepthLinear(float2 uv)
             {
@@ -105,6 +115,17 @@ Shader "Hidden/ProjectWallE/LayerOutline"
                 return smoothstep(_ColorThreshold * 0.8, _ColorThreshold * 1.2, diff * 0.25);
             }
 
+            float3 ReconstructWorldPos(float2 uv)
+            {
+                float depth = SampleSceneDepth(uv);
+                float3 posNDC = float3(uv * 2.0 - 1.0, depth);
+                #if UNITY_UV_STARTS_AT_TOP
+                posNDC.y = -posNDC.y;
+                #endif
+                float4 posWS = mul(UNITY_MATRIX_I_VP, float4(posNDC, 1.0));
+                return posWS.xyz / posWS.w;
+            }
+
             float4 Frag(Varyings input) : SV_Target
             {
                 float2 uv = input.texcoord;
@@ -121,7 +142,17 @@ Shader "Hidden/ProjectWallE/LayerOutline"
                 if (_UseColor > 0.5)
                     edge = max(edge, ColorEdge(uv, offset));
 
-                return float4(_OutlineColor.rgb, _OutlineColor.a * edge);
+                float distanceFade = 1.0;
+                if (_UseDistanceFade > 0.5)
+                {
+                    float3 worldPos = ReconstructWorldPos(uv);
+                    float dist = distance(worldPos, _WorldSpaceCameraPos.xyz);
+                    distanceFade = saturate((dist - _DistanceFadeStart) / max(_DistanceFadeEnd - _DistanceFadeStart, 0.001));
+                    if (_InvertDistanceFade > 0.5)
+                        distanceFade = 1.0 - distanceFade;
+                }
+
+                return float4(_OutlineColor.rgb, _OutlineColor.a * edge * distanceFade);
             }
 
             ENDHLSL

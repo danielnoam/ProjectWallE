@@ -32,7 +32,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b00045f12942b46c698459096c89274e, type: 3}
   m_Name: Fog
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.FullScreenPassRendererFeature
-  m_Active: 1
+  m_Active: 0
   injectionPoint: 550
   fetchColorBuffer: 1
   requirements: 0
@@ -87,11 +87,12 @@ MonoBehaviour:
   m_RendererFeatures:
   - {fileID: 7833122117494664109}
   - {fileID: -2150769587562243004}
+  - {fileID: 6968234730444701834}
   - {fileID: -4434623983243107451}
   - {fileID: -1983433968388261668}
   - {fileID: 259596348579256433}
   - {fileID: 4126539813256152135}
-  m_RendererFeatureMap: ad6b866f10d7b46c449ca39374ee26e285e35d9efb0c75c2dc38c67e506d79e471180eee80459a0347c4a3c8186a4439
+  m_RendererFeatureMap: ad6b866f10d7b46c449ca39374ee26e28a40b26b9124b46085e35d9efb0c75c2dc38c67e506d79e471180eee80459a0347c4a3c8186a4439
   m_UseNativeRenderPass: 1
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
@@ -146,6 +147,10 @@ MonoBehaviour:
     colorThreshold: 0.01
     outlineColor: {r: 0, g: 0, b: 0, a: 1}
     outlineWidth: 1
+    useDistanceFade: 1
+    invertDistanceFade: 1
+    fadeStartDistance: 5
+    fadeEndDistance: 100
 --- !u!114 &4126539813256152135
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,6 +171,22 @@ MonoBehaviour:
   passIndex: 0
   bindDepthStencilAttachment: 0
   m_Version: 1
+--- !u!114 &6968234730444701834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a8a626e4a363604d8b1a959cc4ab28f, type: 3}
+  m_Name: FullScreenFogRendererFeature
+  m_EditorClassIdentifier: Meryuhi.Effects.Fog.Runtime::Meryuhi.Rendering.FullScreenFogRendererFeature
+  m_Active: 1
+  _injectionPoint: 450
+  _renderCamera: 3
+  _shader: {fileID: -6465566751694194690, guid: a1b07ed697d67f145899e797afa7e6d3, type: 3}
 --- !u!114 &7833122117494664109
 MonoBehaviour:
   m_ObjectHideFlags: 0

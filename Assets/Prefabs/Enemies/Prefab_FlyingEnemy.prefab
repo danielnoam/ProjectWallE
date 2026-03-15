@@ -923,8 +923,8 @@ Rigidbody:
   m_GameObject: {fileID: 6471506668328617800}
   serializedVersion: 5
   m_Mass: 1
-  m_LinearDamping: 2
-  m_AngularDamping: 5
+  m_LinearDamping: 1
+  m_AngularDamping: 4
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -955,7 +955,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FlyingEnemy
   maxHealth: 100
   targetFindRange: 20
-  targetPriorities: 01000000030000000200000006000000
+  attackResponse: 1
+  targetPriorities: 010000000300000006000000
   attackCooldown: 0.2
   firePoint: {fileID: 7429042783596894845}
   projectileData: {fileID: 11400000, guid: 5aa17da338669a14eba6994821f7b4a8, type: 2}

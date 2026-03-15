@@ -25,6 +25,12 @@ namespace ProjectWallE.Shaders.OutlineShader
         [Header("Appearance")]
         [ColorUsage(true,true)]public Color outlineColor = Color.black;
         [Range(0.5f, 5f)] public float outlineWidth = 1f;
+
+        [Header("Distance Fade")]
+        public bool useDistanceFade;
+        public bool invertDistanceFade = true;
+        [Min(0f)] public float fadeStartDistance = 50f;
+        [Min(0f)] public float fadeEndDistance = 55f;
     }
 
     public sealed class LayerOutlineFeature : ScriptableRendererFeature
@@ -88,6 +94,10 @@ namespace ProjectWallE.Shaders.OutlineShader
             _outlineMaterial.SetFloat(ShaderIds.ColorThreshold, settings.colorThreshold);
             _outlineMaterial.SetColor(ShaderIds.OutlineColor, settings.outlineColor);
             _outlineMaterial.SetFloat(ShaderIds.OutlineWidth, settings.outlineWidth);
+            _outlineMaterial.SetFloat(ShaderIds.UseDistanceFade, settings.useDistanceFade ? 1f : 0f);
+            _outlineMaterial.SetFloat(ShaderIds.InvertDistanceFade, settings.invertDistanceFade ? 1f : 0f);
+            _outlineMaterial.SetFloat(ShaderIds.DistanceFadeStart, settings.fadeStartDistance);
+            _outlineMaterial.SetFloat(ShaderIds.DistanceFadeEnd, settings.fadeEndDistance);
         }
 
         protected override void Dispose(bool disposing)
@@ -108,6 +118,10 @@ namespace ProjectWallE.Shaders.OutlineShader
         internal static readonly int OutlineColor = Shader.PropertyToID("_OutlineColor");
         internal static readonly int OutlineWidth = Shader.PropertyToID("_OutlineWidth");
         internal static readonly int BlitTexture = Shader.PropertyToID("_BlitTexture");
+        internal static readonly int UseDistanceFade = Shader.PropertyToID("_UseDistanceFade");
+        internal static readonly int InvertDistanceFade = Shader.PropertyToID("_InvertDistanceFade");
+        internal static readonly int DistanceFadeStart = Shader.PropertyToID("_DistanceFadeStart");
+        internal static readonly int DistanceFadeEnd = Shader.PropertyToID("_DistanceFadeEnd");
     }
 
     internal sealed class StencilWritePass : ScriptableRenderPass
@@ -147,7 +161,6 @@ namespace ProjectWallE.Shaders.OutlineShader
             stencilState.readMask = 255;
             stencilState.writeMask = 255;
 
-            // Disable color writes so objects aren't drawn twice
             var blendState = BlendState.defaultValue;
             blendState.blendState0 = new RenderTargetBlendState { writeMask = 0 };
 
@@ -237,14 +250,12 @@ namespace ProjectWallE.Shaders.OutlineShader
             if (!cameraColor.IsValid())
                 return;
 
-            // Create a temp copy of the screen to sample from during the outline pass
             var desc = cameraData.cameraTargetDescriptor;
             desc.msaaSamples = 1;
             desc.depthBufferBits = 0;
             var copiedColor = UniversalRenderer.CreateRenderGraphTexture(
                 renderGraph, desc, "_OutlineSourceTex", false);
 
-            // Pass 1: copy camera color to temp texture
             using (var copyBuilder = renderGraph.AddRasterRenderPass<CopyPassData>("LayerOutline_CopyColor", out var copyData))
             {
                 copyData.Source = cameraColor;
@@ -259,7 +270,6 @@ namespace ProjectWallE.Shaders.OutlineShader
                 });
             }
 
-            // Pass 2: draw fullscreen outline with stencil test
             using var outlineBuilder = renderGraph.AddRasterRenderPass<OutlinePassData>("LayerOutline_Draw", out var outlineData);
 
             outlineData.Source = copiedColor;

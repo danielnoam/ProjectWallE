@@ -2,15 +2,33 @@ using System;
 using DNExtensions.Systems.ObjectPooling;
 using DNExtensions.Systems.Scriptables;
 using DNExtensions.Utilities;
+using ProjectWallE;
 using UnityEngine;
 
 public enum TargetPriority
 {
-    Player, PlayerInRange, NearestBase, NearestTurretInRange,
-    NearestGeneratorInRange, WeakestStructureInRange, NearestStructure,
+    Player,
+    PlayerInRange,
+    NearestBase,
+    NearestTurretInRange,
+    NearestGeneratorInRange,
+    WeakestStructureInRange,
+    NearestStructure,
 }
 
-public enum EnemyState { MovingToTarget, Idle }
+public enum AttackResponse
+{
+    None,
+    RetaliatePlayer,
+    RetaliateTurret,
+    RetaliateAll,
+}
+
+public enum EnemyState
+{
+    MovingToTarget, 
+    Idle
+}
 
 [SelectionBase]
 public abstract class Enemy : MonoBehaviour, IDamageable, IPushable, IPoolable
@@ -18,7 +36,10 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPushable, IPoolable
     [Header("Settings")]
     [SerializeField] protected float maxHealth = 100f;
     [SerializeField] protected float targetFindRange = 20f;
-    [SerializeField] protected TargetPriority[] targetPriorities = new[] { TargetPriority.NearestBase };
+    [Tooltip("What should the enemy do when being attacked")]
+    [SerializeField] protected AttackResponse attackResponse = AttackResponse.RetaliatePlayer;
+    [Tooltip("Order of priority for finding targets. If multiple targets are in range, the first one in this list will be chosen")]
+    [SerializeField] protected TargetPriority[] targetPriorities = { TargetPriority.NearestBase };
 
     [Header("Attack")]
     [SerializeField] protected float attackCooldown = 1f;
@@ -34,6 +55,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPushable, IPoolable
 
     public event Action<IDamageable> OnDeath;
     public event Action<float> OnDamaged;
+    
+    
+    
     
     protected abstract void UpdateMovement();
     protected abstract void SetDestination();
@@ -163,6 +187,26 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPushable, IPoolable
     {
         return IsTargetValid(CurrentTarget, out var component) && Vector3.Distance(transform.position, component.transform.position) <= targetFindRange;
     }
+    
+    private bool ShouldRetaliate(IDamageable attacker)
+    {
+        switch (attackResponse)
+        {
+            case AttackResponse.RetaliatePlayer: return attacker is PlayerManager;
+            case AttackResponse.RetaliateTurret: return attacker is Turret;
+            case AttackResponse.RetaliateAll:    return true;
+            case AttackResponse.None:
+            default:                             return false;
+        }
+    }
+
+    private void ForceTarget(IDamageable target)
+    {
+        if (CurrentTarget != null) CurrentTarget.OnDeath -= OnTargetDeath;
+        CurrentTarget = target;
+        CurrentTarget.OnDeath += OnTargetDeath;
+        OnTargetChanged();
+    }
 
     
     protected bool IsTargetValid(IDamageable target, out Component targetComponent)
@@ -174,10 +218,15 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPushable, IPoolable
     public void TakeDamage(float damage, IDamageable attacker = null)
     {
         if (_currentHealth <= 0) return;
-        
+
         _currentHealth -= damage;
         OnDamaged?.Invoke(damage);
         
+        if (attacker != null && attacker != CurrentTarget && ShouldRetaliate(attacker))
+        {
+            ForceTarget(attacker);
+        }
+
         if (_currentHealth <= 0) Die();
     }
 
