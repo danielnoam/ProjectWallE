@@ -2482,6 +2482,25 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6209758667840909766, guid: 03562562983c65b41bd9414fb68cb1b6, type: 3}
   m_PrefabInstance: {fileID: 465888292}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &477241883 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3619729040768234111, guid: 9bfc0dcb2f72aca4798ff07763cb47d0, type: 3}
+  m_PrefabInstance: {fileID: 2373811961441140127}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &477241888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 477241883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4e4b5b3996032e4681cda701e89f62f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::Mirza.AERO.VolumetricFogController
+  material: {fileID: 2100000, guid: fedf334cf2cc1b44d9ae7b524decb528, type: 2}
+  additionalLightCountBase: 0
 --- !u!4 &487443670 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -6047886482851762441, guid: e52f8b427d6061341988baf63e42d520, type: 3}
@@ -10718,7 +10737,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3619729040768234111, guid: 9bfc0dcb2f72aca4798ff07763cb47d0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 477241888}
   m_SourcePrefab: {fileID: 100100000, guid: 9bfc0dcb2f72aca4798ff07763cb47d0, type: 3}
 --- !u!1001 &2393842328187125039
 PrefabInstance:
