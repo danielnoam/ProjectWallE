@@ -11,12 +11,6 @@ public class Base : ResourceGenerator
     [SerializeField] private TransformEffector obelisk;
     
     
-    private void Update()
-    {
-        StateInfo = $"Health: {CurrentHealth}/{MaxHealth}";
-    }
-    
-
     protected override void OnBuild()
     {
         StartGenerating();

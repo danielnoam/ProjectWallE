@@ -82,7 +82,7 @@ public abstract class Turret : Structure
             }
         }
 
-        StateInfo = $"State: {_currentState} \nHealth: {CurrentHealth}/{MaxHealth}";
+        StateInfo = $"Health: {CurrentHealth:N0}/{MaxHealth}\nState: {_currentState}";
     }
 
     private void Fire(Vector3 targetPosition)
@@ -191,7 +191,8 @@ public abstract class Turret : Structure
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, CurrentTurretLevelData.detectionRadius, hitLayers.Value);
         foreach (var hitCollider in hitColliders)
         {
-            if (hitCollider.TryGetComponent<Enemy>(out var enemy))
+            var enemy = hitCollider.GetComponentInParent<Enemy>();
+            if (enemy)
             {
                 StartAttackingTarget(enemy);
                 return true;

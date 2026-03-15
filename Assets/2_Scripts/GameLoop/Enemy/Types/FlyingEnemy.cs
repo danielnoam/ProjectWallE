@@ -142,6 +142,7 @@ public class FlyingEnemy : Enemy
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * Time.deltaTime);
     }
 
+#if UNITY_EDITOR
     protected override void OnDrawGizmosSelected()
     {
         base.OnDrawGizmosSelected();
@@ -157,4 +158,6 @@ public class FlyingEnemy : Enemy
             Gizmos.DrawLine(transform.position, transform.position + Vector3.down * obstacleCheckDistance);
         }
     }
+#endif
+
 }

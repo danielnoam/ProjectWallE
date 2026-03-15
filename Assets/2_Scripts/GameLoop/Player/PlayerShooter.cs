@@ -37,10 +37,21 @@ namespace ProjectWallE.GameLoop.Player
                 _nextTimeToFire -= Time.deltaTime;
             }
 
-            if (Mouse.current.leftButton.isPressed && _nextTimeToFire <= 0 && playerManager.CanShoot)
+            if (playerManager)
             {
-                ShootProjectile();
+                if (Mouse.current.leftButton.isPressed && _nextTimeToFire <= 0 && playerManager.CanShoot)
+                {
+                    ShootProjectile();
+                }
             }
+            else
+            {
+                if (Mouse.current.leftButton.isPressed && _nextTimeToFire <= 0)
+                {
+                    ShootProjectile();
+                }
+            }
+
         }
 
         private void ShootProjectile()

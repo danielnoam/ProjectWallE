@@ -104,6 +104,38 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
         OnDeath?.Invoke(this);
         OnBreak();
     }
+    
+    private bool CanUpgrade() 
+    {
+        return currentUpgradeLevel < Levels.Length;
+    }
+    
+    [Button(ButtonPlayMode.OnlyWhenPlaying)]
+    private void Fix()
+    {
+        if (!ResourceManager.Instance.TrySpendResources((int)FixCost)) return;
+
+        CurrentHealth = MaxHealth;
+        OnFix();
+    }
+
+    [Button(ButtonPlayMode.OnlyWhenPlaying)]
+    private void Upgrade()
+    {
+        if (!CanUpgrade())
+        {
+            Debug.Log("Can't upgrade");
+            return;
+        }
+
+        if (!ResourceManager.Instance.TrySpendResources(UpgradeCost)) return;
+
+        currentUpgradeLevel++;
+        CurrentHealth = CurrentLevelData.maxHealth;
+        PlayUpgradeEffect();
+        OnUpgrade();
+    }
+
 
     public void TakeDamage(float damage, IDamageable attacker = null)
     {
@@ -128,37 +160,6 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
         transform.position = impactPoint - yawRotation * bottomPoint;
         transform.rotation = yawRotation;
         Build();
-    }
-    
-    public bool CanUpgrade() 
-    {
-        return currentUpgradeLevel < Levels.Length;
-    }
-    
-    [Button(ButtonPlayMode.OnlyWhenPlaying)]
-    public void Fix()
-    {
-        if (!ResourceManager.Instance.TrySpendResources((int)FixCost)) return;
-
-        CurrentHealth = MaxHealth;
-        OnFix();
-    }
-
-    [Button(ButtonPlayMode.OnlyWhenPlaying)]
-    public void Upgrade()
-    {
-        if (!CanUpgrade())
-        {
-            Debug.Log("Can't upgrade");
-            return;
-        }
-
-        if (!ResourceManager.Instance.TrySpendResources(UpgradeCost)) return;
-
-        currentUpgradeLevel++;
-        CurrentHealth = CurrentLevelData.maxHealth;
-        PlayUpgradeEffect();
-        OnUpgrade();
     }
     
     public List<StructureAction> GetActions()
@@ -198,7 +199,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     protected virtual void OnDrawGizmos()
     {
         Handles.Label(
-            transform.position + Vector3.up * 2.5f,
+            transform.position + topPoint,
             $"{StateInfo}",
             new GUIStyle()
             {
@@ -211,6 +212,8 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
 
     protected virtual void OnDrawGizmosSelected()
     {
+        if (Application.isPlaying) return;
+        
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position + bottomPoint, 0.05f);
         Gizmos.DrawLine(transform.position, transform.position + bottomPoint);

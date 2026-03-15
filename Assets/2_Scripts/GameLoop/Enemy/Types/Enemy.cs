@@ -22,6 +22,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPushable, IPoolable
 
     [Header("Attack")]
     [SerializeField] protected float attackCooldown = 1f;
+    [SerializeField] protected Transform firePoint;
     [SerializeField, SOSelector("Assets/Data")] protected ProjectileData projectileData;
     [SerializeField, SOSelector("Assets/Data")] protected SOLayerMask hitLayers;
 
@@ -154,7 +155,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPushable, IPoolable
         if (IsTargetValid(CurrentTarget, out var targetComponent))
         {
             var direction = (targetComponent.transform.position - transform.position).normalized;
-            projectileData?.Spawn(hitLayers.Value, transform.position, direction, targetComponent.transform.position);
+            projectileData?.Spawn(hitLayers.Value, firePoint.position, direction, targetComponent.transform.position);
         }
     }
     
@@ -212,7 +213,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPushable, IPoolable
         string targetName = (CurrentTarget is Component t && t) ? t.name : "None";
         UnityEditor.Handles.Label(
             transform.position + Vector3.up * 2.5f,
-            $"Health: {_currentHealth}/{maxHealth}\nState: {State}\nTarget: {targetName}",
+            $"Health: {_currentHealth:N1}/{maxHealth}\nState: {State}\nTarget: {targetName}",
             new GUIStyle()
             {
                 normal = new GUIStyleState() { textColor = Color.red },

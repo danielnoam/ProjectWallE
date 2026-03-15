@@ -26,11 +26,12 @@ public class ProjectileData : ScriptableObject
 
     [Header("Settings")]
     public float maxLifetime = 10f;
-    public float pushStrength = 25f;
     public ProjectileDamageType damageType = ProjectileDamageType.Single;
     [ShowIf("damageType", ProjectileDamageType.Single)] public float damage = 20f;
+    [ShowIf("damageType", ProjectileDamageType.Single)] public float pushStrength = 25f;
     [ShowIf("damageType", ProjectileDamageType.AreaOfEffect)] public float aoeRadius = 5f;
-    [ShowIf("damageType", ProjectileDamageType.AreaOfEffect), MinMaxRange(0, 100)] public RangedFloat damageRange = 5f;
+    [ShowIf("damageType", ProjectileDamageType.AreaOfEffect), MinMaxRange(0, 100)] public RangedFloat damageRange = new RangedFloat(0,5);
+    [ShowIf("damageType", ProjectileDamageType.AreaOfEffect), MinMaxRange(0, 100)] public RangedFloat pushRange = new RangedFloat(0,25);
 
     
     [Header("Movement")]

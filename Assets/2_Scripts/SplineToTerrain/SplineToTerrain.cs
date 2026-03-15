@@ -467,13 +467,13 @@ namespace UnityEngine.Splines
 
 #if UNITY_EDITOR
 
-        internal void SetSplineContainerOnGO()
+        public void SetSplineContainerOnGO()
         {
             if (this.container == null && TryGetComponent<SplineContainer>(out var container))
                 this.container = container;
         }
 
-        internal void Reset()
+        public void Reset()
         {
             SetSplineContainerOnGO();
             if (terrain == null)

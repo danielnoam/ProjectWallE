@@ -13,13 +13,16 @@ MonoBehaviour:
   m_Name: ProjectileData_Heavy
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileData
   maxLifetime: 10
-  pushStrength: 55
   damageType: 1
   damage: 35
-  aoeRadius: 25
+  pushStrength: 55
+  aoeRadius: 10
   damageRange:
     minValue: 5
-    maxValue: 50
+    maxValue: 35
+  pushRange:
+    minValue: 0
+    maxValue: 25
   movementType: 1
   speed: 30
   prefab: {fileID: 8338543337846540916, guid: 5bd177565f170f8498a68ad83c8892d2, type: 3}

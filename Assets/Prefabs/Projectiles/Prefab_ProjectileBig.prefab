@@ -99,6 +99,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 384959451291909024, guid: 5425335353371274f8723840ae7ff71e, type: 3}
+      propertyPath: col
+      value: 
+      objectReference: {fileID: 7038113638137251332}
+    - target: {fileID: 384959451291909024, guid: 5425335353371274f8723840ae7ff71e, type: 3}
       propertyPath: rayCheckDistance
       value: 1
       objectReference: {fileID: 0}
@@ -191,7 +195,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

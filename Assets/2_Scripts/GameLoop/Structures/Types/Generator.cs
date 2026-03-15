@@ -11,11 +11,6 @@ public class Generator : ResourceGenerator
     [SerializeField] private AnimatorStateField idleState;
     
 
-
-    private void Update()
-    {
-        StateInfo = $"Health: {CurrentHealth}/{MaxHealth}";
-    }
     
     protected override void OnBuild()
     {

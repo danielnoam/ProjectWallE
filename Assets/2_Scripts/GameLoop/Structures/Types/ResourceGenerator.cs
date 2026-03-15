@@ -21,6 +21,11 @@ public abstract class ResourceGenerator : Structure
     private ResourceGeneratorLevelData CurrentBaseLevelData => (ResourceGeneratorLevelData)Levels[currentUpgradeLevel - 1];
     protected override StructureLevelData[] Levels => levels;
 
+    private void Update()
+    {
+        StateInfo = $"Health: {CurrentHealth:N0}/{MaxHealth}";
+    }
+    
     protected void StartGenerating()
     {
         if (_generating) return;

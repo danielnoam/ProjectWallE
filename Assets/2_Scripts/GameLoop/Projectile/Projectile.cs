@@ -8,6 +8,8 @@ using UnityEngine;
 public class Projectile : MonoBehaviour, IPoolable
 {
     [SerializeField, AutoGetSelf] private Rigidbody rigidBody;
+    [SerializeField, AutoGetSelf] private Collider col;
+    
     private IDamageable _owner;
     private ProjectileData _data;
     private float _maxLifetime;
@@ -50,24 +52,24 @@ public class Projectile : MonoBehaviour, IPoolable
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision other)
     {
         if (_hitSomething || !_isInitialized) return;
         if (((1 << other.gameObject.layer) & _hitLayers) == 0) return;
-
+        
         _hitSomething = true;
 
         switch (_data.damageType)
         {
             case ProjectileDamageType.Single:
                 
-                var damageable = other.GetComponentInParent<IDamageable>();
+                var damageable = other.transform.GetComponentInParent<IDamageable>();
                 if (damageable != null)
                 {
                     damageable.TakeDamage(_data.damage, _owner);
                 }
         
-                var pushable = other.GetComponentInParent<IPushable>();
+                var pushable = other.transform.GetComponentInParent<IPushable>();
                 if (pushable != null)
                 {
                     Vector3 pushDirection = (other.transform.position - transform.position).normalized;
@@ -88,6 +90,7 @@ public class Projectile : MonoBehaviour, IPoolable
                     float distance = Vector3.Distance(transform.position, damagedObject.transform.position);
                     float normalizedDistance = distance / _data.aoeRadius;
                     float damage = _data.damageRange.Lerp(1 - normalizedDistance);
+                    float push = _data.pushRange.Lerp(1 - normalizedDistance);
                     
                     if (aoeHit != null)
                     {
@@ -98,7 +101,7 @@ public class Projectile : MonoBehaviour, IPoolable
                     if (aoePush != null)
                     {
                         Vector3 pushDirection = (damagedObject.transform.position - transform.position).normalized;
-                        aoePush.Push(pushDirection, _data.pushStrength);
+                        aoePush.Push(pushDirection, push);
                     }
                 }
                 
@@ -110,28 +113,28 @@ public class Projectile : MonoBehaviour, IPoolable
 
         if (_data.hitParticle)
         {
-            var particle = ObjectPooler.GetObjectFromPool(_data.hitParticle, transform.position, Quaternion.LookRotation(-transform.forward));
+            Vector3 hitNormal = other.contacts[0].normal;
+            var particle = ObjectPooler.GetObjectFromPool(_data.hitParticle, transform.position, Quaternion.LookRotation(hitNormal));
             particle?.Play();
         }
-        
         AudioLibrary.PlayAtPosition(_data.collisionSFX, transform.position);
-
         ReturnToPool();
     }
 
     private void MoveLinear()
     {
-        rigidBody.position += _direction * (_data.speed * Time.fixedDeltaTime);
-        rigidBody.rotation = Quaternion.LookRotation(_direction);
+        Vector3 newPos = rigidBody.position + _direction * (_data.speed * Time.fixedDeltaTime);
+        rigidBody.MovePosition(newPos);
+        rigidBody.MoveRotation(Quaternion.LookRotation(_direction));
     }
 
     private void MoveArc()
     {
         _arcVelocity += Physics.gravity * Time.fixedDeltaTime;
-        rigidBody.position += _arcVelocity * Time.fixedDeltaTime;
-        rigidBody.rotation = Quaternion.LookRotation(_arcVelocity.normalized);
+        Vector3 newPos = rigidBody.position + _arcVelocity * Time.fixedDeltaTime;
+        rigidBody.MovePosition(newPos);
+        rigidBody.MoveRotation(Quaternion.LookRotation(_arcVelocity.normalized));
     }
-    
     private void InitializeArc()
     {
         Vector3 toTarget = _targetPosition - _startPosition;
