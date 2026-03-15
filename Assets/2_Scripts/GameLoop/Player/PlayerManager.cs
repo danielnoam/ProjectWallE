@@ -14,11 +14,13 @@ namespace ProjectWallE
     }
     public class PlayerManager : MonoBehaviour, IDamageable, IPushable
     {
+        [SerializeField, Min(10f)] private float maxHealth = 100f;
         [SerializeField] LayerMask groundLayer;
         
         [HideInInspector][SerializeField] CarController carController;
         [HideInInspector][SerializeField] RobotController robotController;
         
+        private float _currentHealth;
         private PlayerManagerInput _input;
         private Rigidbody _rigidbody;
         private Transform _cameraTransform;
@@ -37,6 +39,7 @@ namespace ProjectWallE
         public event Action<IDamageable> OnDeath;
         public event Action<float> OnDamaged;
         public event Action<PlayerControllerType> OnControllerChanged;
+        public event Action<float, float> OnHealthChanged;
 
         private void OnValidate()
         {
@@ -65,6 +68,8 @@ namespace ProjectWallE
 
             carController.Initialize(playerReferences);
             robotController.Initialize(playerReferences);
+            
+            _currentHealth = maxHealth;
         }
 
         private void Start()
@@ -129,7 +134,19 @@ namespace ProjectWallE
         
         public void TakeDamage(float damage, IDamageable attacker = null)
         {
+            if (damage <= 0 || _currentHealth <= 0) return;
             
+            _currentHealth -= damage;
+            
+            OnDamaged?.Invoke(damage);
+            
+            if (_currentHealth <= 0)
+            {
+                _currentHealth = 0;
+                OnDeath?.Invoke(attacker);
+            }
+            
+            OnHealthChanged?.Invoke(_currentHealth, maxHealth);
         }
 
         public void Push(Vector3 direction, float force)

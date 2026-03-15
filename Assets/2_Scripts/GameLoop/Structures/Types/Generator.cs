@@ -1,15 +1,15 @@
-using System;
-using PrimeTween;
+
+using DNExtensions.Utilities.CustomFields;
 using UnityEngine;
 
 
 public class Generator : ResourceGenerator
 {
 
-    [Header("Generator")]
-    [SerializeField] private ShakeSettings pumpAnimationSettings;
-    [SerializeField] private Transform[] pumpArray = Array.Empty<Transform>();
-    private Sequence _pumpAnimation;
+    [Header("Animation")]
+    [SerializeField] private AnimatorStateField pumpingState;
+    [SerializeField] private AnimatorStateField idleState;
+    
 
 
     private void Update()
@@ -36,23 +36,17 @@ public class Generator : ResourceGenerator
 
     protected override void OnBreak()
     {
-        _pumpAnimation.Stop();
+        StopPumpingAnimation();
         StopGenerating();
-        Destroy(gameObject);
     }
     
     private void StartPumpingAnimation()
     {
-        if (_pumpAnimation.isAlive)
-        {
-            _pumpAnimation.Stop();
-        }
-        
-        _pumpAnimation = Sequence.Create(cycles: -1);
-
-        foreach (var pump in pumpArray)
-        {
-            _pumpAnimation.Chain(Tween.PunchScale(pump, pumpAnimationSettings));
-        }
+        pumpingState.Animator?.Play(pumpingState.StateName);
+    }
+    
+    private void StopPumpingAnimation()
+    {
+        idleState.Animator?.Play(idleState.StateName);
     }
 }

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using DNExtensions.Systems.AudioLibrary;
 using DNExtensions.Systems.ObjectPooling;
 using DNExtensions.Utilities.AutoGet;
 using UnityEngine;
@@ -19,6 +21,7 @@ public class Projectile : MonoBehaviour, IPoolable
     private Vector3 _startPosition;
     private Vector3 _targetPosition;
     private Vector3 _arcVelocity;
+    private readonly HashSet<IDamageable> _alreadyHit = new();
 
 
     private void Update()
@@ -58,12 +61,14 @@ public class Projectile : MonoBehaviour, IPoolable
         {
             case ProjectileDamageType.Single:
                 
-                if (other.TryGetComponent<IDamageable>(out var damageable))
+                var damageable = other.GetComponentInParent<IDamageable>();
+                if (damageable != null)
                 {
                     damageable.TakeDamage(_data.damage, _owner);
                 }
         
-                if (other.TryGetComponent<IPushable>(out var pushable))
+                var pushable = other.GetComponentInParent<IPushable>();
+                if (pushable != null)
                 {
                     Vector3 pushDirection = (other.transform.position - transform.position).normalized;
                     pushable.Push(pushDirection, _data.pushStrength);
@@ -73,18 +78,24 @@ public class Projectile : MonoBehaviour, IPoolable
             case ProjectileDamageType.AreaOfEffect:
                 
                 Collider[] damagedObjects = Physics.OverlapSphere(transform.position, _data.aoeRadius, _hitLayers);
+                _alreadyHit.Clear();
+                
                 foreach (var damagedObject in damagedObjects)
                 {
+                    var aoeHit = damagedObject.GetComponentInParent<IDamageable>();
+                    if (aoeHit != null && !_alreadyHit.Add(aoeHit)) continue;
+                    
                     float distance = Vector3.Distance(transform.position, damagedObject.transform.position);
                     float normalizedDistance = distance / _data.aoeRadius;
                     float damage = _data.damageRange.Lerp(1 - normalizedDistance);
                     
-                    if (damagedObject.TryGetComponent<IDamageable>(out var aoeHit))
+                    if (aoeHit != null)
                     {
-                        aoeHit .TakeDamage(damage, _owner);
+                        aoeHit.TakeDamage(damage, _owner);
                     }
 
-                    if (damagedObject.TryGetComponent<IPushable>(out var aoePush))
+                    var aoePush = damagedObject.GetComponentInParent<IPushable>();
+                    if (aoePush != null)
                     {
                         Vector3 pushDirection = (damagedObject.transform.position - transform.position).normalized;
                         aoePush.Push(pushDirection, _data.pushStrength);
@@ -102,6 +113,8 @@ public class Projectile : MonoBehaviour, IPoolable
             var particle = ObjectPooler.GetObjectFromPool(_data.hitParticle, transform.position, Quaternion.LookRotation(-transform.forward));
             particle?.Play();
         }
+        
+        AudioLibrary.PlayAtPosition(_data.collisionSFX, transform.position);
 
         ReturnToPool();
     }

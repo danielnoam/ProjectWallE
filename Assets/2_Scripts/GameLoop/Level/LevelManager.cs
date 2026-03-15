@@ -6,8 +6,7 @@ using UnityEngine;
 using UnityEngine.Playables;
 
 [RequireComponent(typeof(PlayableDirector))]
-[RequireComponent(typeof(LevelEventReceiver))]
-public class LevelManager : MonoBehaviour
+public class LevelManager : MonoBehaviour, INotificationReceiver
 {
     public static LevelManager Instance { get; private set; }
     
@@ -18,15 +17,22 @@ public class LevelManager : MonoBehaviour
     public static event Action<float> OnTimeUpdated;
     
     
+    [Header("Settings")]
+    [Tooltip("Time before the time line starts")]
+    [SerializeField] private float initializeDelay = 4f;
     [SerializeField, AutoGetSelf, HideInInspector] private PlayableDirector timeline;
-
+    [SerializeField, AutoGetScene, HideInInspector] private PlayerManager player;
+    
+    
     private bool _levelActive;
+    
     private float TimeRemaining => _levelActive ? (float)(timeline.duration - timeline.time) : 0f;
-    
-    
-    public PlayerManager Player { get; private set; }
-    
-    
+    public PlayerManager Player => player;
+
+    private void OnValidate()
+    {
+        AutoGetSystem.Process(this);
+    }
 
     private void Awake()
     {
@@ -64,10 +70,9 @@ public class LevelManager : MonoBehaviour
 
     private IEnumerator StartLevel()
     {
-        Player = FindFirstObjectByType<PlayerManager>();
         OnLevelInitializing?.Invoke();
         
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(initializeDelay);
         
         _levelActive = true;
         timeline.Play();
@@ -77,15 +82,17 @@ public class LevelManager : MonoBehaviour
 
     private void OnTimelineStopped(PlayableDirector director)
     {
-        if (director == timeline && _levelActive)
-        {
-            CompleteLevel();
-        }
+        if (!_levelActive) return;
+        
+        CompleteLevel();
     }
 
     private void CompleteLevel()
     {
+        if (!_levelActive) return;
+        
         _levelActive = false;
+        timeline.Stop();
         OnLevelCompleted?.Invoke();
     }
 
@@ -96,5 +103,15 @@ public class LevelManager : MonoBehaviour
         _levelActive = false;
         timeline.Stop();
         OnLevelFailed?.Invoke();
+    }
+
+    public void OnNotify(Playable origin, INotification notification, object context)
+    {
+        if (!Application.isPlaying) return;
+        
+        if (notification is BaseLevelEventMarker marker)
+        {
+            marker.Execute(origin.GetGraph().GetResolver());
+        }
     }
 }

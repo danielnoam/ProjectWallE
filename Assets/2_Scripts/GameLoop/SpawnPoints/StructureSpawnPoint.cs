@@ -22,15 +22,15 @@ public class StructureSpawnPoint : BaseSpawnPoint
         {
             gameObject.name = "StructureSpawnPoint";
         }
-        
-
     }
+    
+    private void SpawnStartStructure() => SpawnStructure(structurePrefab);
     
     protected override void OnLevelInitializing()
     {
         if (spawnAtStart)
         {
-            SpawnStructure(structurePrefab);
+            Invoke(nameof(SpawnStartStructure), Random.Range(0f,0.5f));
         }
     }
     

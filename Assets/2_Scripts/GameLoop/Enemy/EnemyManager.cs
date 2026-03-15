@@ -2,6 +2,12 @@ using System.Collections.Generic;
 using DNExtensions.Utilities;
 using UnityEngine;
 
+public enum SpawnPosition
+{
+    Random,
+    Specific
+}
+
 public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager Instance { get; private set; }
@@ -25,6 +31,28 @@ public class EnemyManager : MonoBehaviour
         }
         Instance = this;
     }
+    
+    public Enemy GetNearestEnemy(Vector3 position)
+    {
+        Enemy nearest = null;
+        float closestDist = float.MaxValue;
+        
+        foreach (var enemy in _activeEnemies)
+        {
+            if (!enemy) continue;
+            
+            float dist = Vector3.Distance(position, enemy.transform.position);
+            if (dist < closestDist)
+            {
+                closestDist = dist;
+                nearest = enemy;
+            }
+        }
+        
+        return nearest;
+    }
+    
+    #region Spawning
 
     private void SpawnEnemy(Enemy enemy, EnemySpawnPoint spawnPoint)
     {
@@ -35,7 +63,7 @@ public class EnemyManager : MonoBehaviour
         Instantiate(enemy, spawnPosition, Quaternion.identity);
     }
     
-    public void TrySpawnEnemyWave(int enemiesToSpawn)
+    public void SpawnEnemyWaveRandomPosition(int enemiesToSpawn)
     {
         if (_enemySpawnPoints.Count == 0 || _activeEnemies.Count >= maxEnemies) return;
         
@@ -49,6 +77,25 @@ public class EnemyManager : MonoBehaviour
             SpawnEnemy(enemy, spawnPoint);
         }
     }
+    
+    public void SpawnEnemyWaveSpecificPosition(int enemiesToSpawn, EnemySpawnPoint spawnPoint)
+    {
+        if (!spawnPoint || _activeEnemies.Count >= maxEnemies) return;
+
+        for (int i = 0; i < enemiesToSpawn; i++)
+        {
+            if (_activeEnemies.Count >= maxEnemies) return;
+
+            var enemy = enemyTypes.GetRandomItem();
+            SpawnEnemy(enemy, spawnPoint);
+        }
+    }
+    
+
+    #endregion
+    
+
+    #region Registration
 
     public void RegisterEnemy(Enemy enemy)
     {
@@ -80,25 +127,6 @@ public class EnemyManager : MonoBehaviour
         _enemySpawnPoints.RemoveAt(index);
         _enemySpawnPoints.NormalizeChances();
     }
-    
-    
-    public Enemy GetNearestEnemy(Vector3 position)
-    {
-        Enemy nearest = null;
-        float closestDist = float.MaxValue;
-        
-        foreach (var enemy in _activeEnemies)
-        {
-            if (!enemy) continue;
-            
-            float dist = Vector3.Distance(position, enemy.transform.position);
-            if (dist < closestDist)
-            {
-                closestDist = dist;
-                nearest = enemy;
-            }
-        }
-        
-        return nearest;
-    }
+
+    #endregion
 }

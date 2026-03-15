@@ -15,20 +15,29 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField] private VisualEffect[] wheelsAirReleaseEffects;
         [SerializeField] private VisualEffect[] muzzleFlashEffects;
         
-        [Header("SpeedLines")]
+        [Header("Screen Effects")]
         [SerializeField, MinMaxRange(0f, 50f)] private RangedFloat heighSpeedMagnitudeRange = new RangedFloat(20f,30f);
         [SerializeField, MinMaxRange(0f, 1f)] private Vector2 speedLinesSizeRange = new Vector2(1f, 0.8f);
+        [SerializeField, Range(0f,1f)] private float lowHealthThreshold = 0.3f;
+        
+        [Header("SFX")]
+        [SerializeField, AudioLibraryID] private string boostSoundId;
+        [SerializeField, AudioLibraryID] private string airReleaseSoundId;
+        [SerializeField, AudioLibraryID] private string changeStateSoundId;
+        [SerializeField, AudioLibraryID] private string shootSoundId;
         
         [Header("References")]
         [SerializeField] private MaterialPropertyTweener lowHealthEffect;
         [SerializeField] private MaterialPropertyTweener speedLinesVisibility;
         [SerializeField] private MaterialPropertyTweener speedLinesSize;
+        [SerializeField] private AudioSource airReleaseAudioSource;
+        [SerializeField] private AudioSource boostAudioSource;
         [SerializeField, AutoGetParent, HideInInspector] private PlayerManager player;
         [SerializeField, AutoGetParent, HideInInspector] private PlayerShooter shooter;
-        [SerializeField, AutoGetScene, HideInInspector] private CarBoost boost;
 
 
         private bool _speedLinesActive;
+        private bool _lowHealthActive;
         
         private void OnValidate()
         {
@@ -41,11 +50,11 @@ namespace ProjectWallE.GameLoop.Player
             if (player)
             {
                 player.OnControllerChanged += OnControllerChanged;
-                player.OnDamaged += OnDamaged;
-                if (boost)
+                player.OnHealthChanged += OnHealthChanged;
+                if (player.CarController.CarBoost)
                 {
-                    boost.OnBoostStart += OnBoostStart;
-                    boost.OnBoostEnd += OnBoostEnd;
+                    player.CarController.CarBoost.OnBoostStart += OnBoostStart;
+                    player.CarController.CarBoost.OnBoostEnd += OnBoostEnd;
                 }
                 if (shooter) shooter.OnShoot += PlayMuzzleFlash;
             }
@@ -56,11 +65,11 @@ namespace ProjectWallE.GameLoop.Player
             if (player)
             {
                 player.OnControllerChanged -= OnControllerChanged;
-                player.OnDamaged -= OnDamaged;
-                if (boost)
+                player.OnHealthChanged -= OnHealthChanged;
+                if (player.CarController.CarBoost)
                 {
-                    boost.OnBoostStart -= OnBoostStart;
-                    boost.OnBoostEnd -= OnBoostEnd;
+                    player.CarController.CarBoost.OnBoostStart -= OnBoostStart;
+                    player.CarController.CarBoost.OnBoostEnd -= OnBoostEnd;
                 }
                 
                 if (shooter) shooter.OnShoot -= PlayMuzzleFlash;
@@ -93,27 +102,39 @@ namespace ProjectWallE.GameLoop.Player
                 speedLinesSize.SetValue(size);
             }
         }
-
-
+        
         private void OnBoostStart()
         {
             ToggleEffect(carBoostEffects, true);
+            AudioLibrary.PlayOnSource(boostSoundId, boostAudioSource);
         }
-
         
         private void OnBoostEnd()
         {
             ToggleEffect(carBoostEffects,false);
+            boostAudioSource?.Stop();
         }
 
         private void OnControllerChanged(PlayerControllerType type)
         {
             ToggleEffect(carBoostEffects, false);
+            AudioLibrary.PlayAtPosition(changeStateSoundId, transform.position);
         }
         
-        private void OnDamaged(float damage)
+        private void OnHealthChanged(float currentHealth, float maxHealth)
         {
-            lowHealthEffect?.Punch();
+            var percentage = currentHealth / maxHealth;
+            
+            if (!_lowHealthActive && percentage < lowHealthThreshold)
+            {
+                lowHealthEffect?.Show();
+                _lowHealthActive = true;
+            } 
+            else if (_lowHealthActive && percentage >= lowHealthThreshold)
+            {
+                lowHealthEffect?.Hide();
+                _lowHealthActive = false;
+            }
         }
 
         private void ToggleParticle(ParticleSystem[] particleSystems, bool state)
@@ -160,21 +181,19 @@ namespace ProjectWallE.GameLoop.Player
         private void PlayMuzzleFlash()
         {
             ToggleEffect(muzzleFlashEffects, true);
+            AudioLibrary.Play(shootSoundId);
         }
         
         public void EnableWheelsAirRelease()
         {
            ToggleEffect(wheelsAirReleaseEffects, true);
+           AudioLibrary.PlayOnSource(airReleaseSoundId, airReleaseAudioSource);
         }
         
         public void DisableWheelsAirRelease()
         {
             ToggleEffect(wheelsAirReleaseEffects, false);
-        }
-
-        public void PlaySound(string id)
-        {
-            AudioLibrary.PlayAtPosition(id, transform);
+            airReleaseAudioSource?.Stop();
         }
     }
 }

@@ -15,12 +15,13 @@ MonoBehaviour:
   maxLifetime: 10
   pushStrength: 0
   damageType: 0
-  damage: 10
+  damage: 5
   aoeRadius: 5
   damageRange:
     minValue: 1
     maxValue: 100
   movementType: 0
   speed: 85
-  prefab: {fileID: 8338543337846540916, guid: b7e733788d8349740be10577745e8a28, type: 3}
+  prefab: {fileID: 8338543337846540916, guid: 63924ffbc4055854e89c01d29a67c183, type: 3}
   hitParticle: {fileID: 8195002406593029198, guid: 9d833e0335f9b0548b713e0ce34d2739, type: 3}
+  collisionSFX: ProjectileCollision

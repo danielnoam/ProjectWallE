@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b00045f12942b46c698459096c89274e, type: 3}
-  m_Name: Speed Lines
+  m_Name: SpeedLines
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.FullScreenPassRendererFeature
   m_Active: 1
   injectionPoint: 550
@@ -87,11 +87,11 @@ MonoBehaviour:
   m_RendererFeatures:
   - {fileID: 7833122117494664109}
   - {fileID: -2150769587562243004}
-  - {fileID: 4296741069671190061}
   - {fileID: -4434623983243107451}
   - {fileID: -1983433968388261668}
   - {fileID: 4126539813256152135}
-  m_RendererFeatureMap: ad6b866f10d7b46c449ca39374ee26e22d4e95dd3c17a13b85e35d9efb0c75c2dc38c67e506d79e447c4a3c8186a4439
+  - {fileID: 259596348579256433}
+  m_RendererFeatureMap: ad6b866f10d7b46c449ca39374ee26e285e35d9efb0c75c2dc38c67e506d79e447c4a3c8186a443971180eee80459a03
   m_UseNativeRenderPass: 1
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
@@ -120,6 +120,32 @@ MonoBehaviour:
   m_DepthTextureFormat: 0
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 0
+--- !u!114 &259596348579256433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97cffa6c1c7b3244c861c7c36ccd27ea, type: 3}
+  m_Name: LayerOutlineFeature
+  m_EditorClassIdentifier: Assembly-CSharp::DNExtensions.Rendering.LayerOutlineFeature
+  m_Active: 1
+  settings:
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 832
+    useDepth: 0
+    useNormals: 1
+    useColor: 0
+    depthThreshold: 0.1
+    normalThreshold: 0.04
+    colorThreshold: 0.01
+    outlineColor: {r: 0, g: 0, b: 0, a: 1}
+    outlineWidth: 1
+    injectionPoint: 550
 --- !u!114 &4126539813256152135
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,26 +166,6 @@ MonoBehaviour:
   passIndex: 0
   bindDepthStencilAttachment: 0
   m_Version: 1
---- !u!114 &4296741069671190061
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b00045f12942b46c698459096c89274e, type: 3}
-  m_Name: OutlineGraph
-  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.FullScreenPassRendererFeature
-  m_Active: 0
-  injectionPoint: 600
-  fetchColorBuffer: 1
-  requirements: 7
-  passMaterial: {fileID: 2100000, guid: 5ac26a9e42a16ac439f068b54bd9dac2, type: 2}
-  passIndex: 0
-  bindDepthStencilAttachment: 0
-  m_Version: 1
 --- !u!114 &7833122117494664109
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -172,16 +178,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f62c9c65cf3354c93be831c8bc075510, type: 3}
   m_Name: ScreenSpaceAmbientOcclusion
   m_EditorClassIdentifier: 
-  m_Active: 0
+  m_Active: 1
   m_Settings:
     AOMethod: 0
     Downsample: 0
     AfterOpaque: 0
     Source: 1
     NormalSamples: 1
-    Intensity: 0.4
+    Intensity: 1
     DirectLightingStrength: 0.25
-    Radius: 0.3
+    Radius: 1
     Samples: 1
     BlurQuality: 0
     Falloff: 100

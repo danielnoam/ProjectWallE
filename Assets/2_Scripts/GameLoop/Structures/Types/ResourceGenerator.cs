@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using DNExtensions.Utilities;
 using UnityEngine;
 
 
@@ -16,23 +15,26 @@ public abstract class ResourceGenerator : Structure
 {
     [Header("Resource Generator")]
     [SerializeReference, DrawSerializeReference] private ResourceGeneratorLevelData[] levels = Array.Empty<ResourceGeneratorLevelData>();
-    [SerializeField, ReadOnly] private bool generating;
     
-    
+    private bool _generating;
     private Coroutine _generationCoroutine;
     private ResourceGeneratorLevelData CurrentBaseLevelData => (ResourceGeneratorLevelData)Levels[currentUpgradeLevel - 1];
     protected override StructureLevelData[] Levels => levels;
 
     protected void StartGenerating()
     {
-        if (_generationCoroutine != null) return;
+        if (_generating) return;
+        
+        _generating = true;
+        
+        if (_generationCoroutine != null) StopCoroutine(_generationCoroutine);
         _generationCoroutine = StartCoroutine(GenerateResources());
     }
 
 
     protected void StopGenerating()
     {
-        generating = false;
+        _generating = false;
         
         if (_generationCoroutine != null)
         {
@@ -43,8 +45,7 @@ public abstract class ResourceGenerator : Structure
 
     private IEnumerator GenerateResources()
     {
-        generating = true;
-        while (generating)
+        while (_generating)
         {
             yield return new WaitForSeconds(CurrentBaseLevelData.generationInterval);
             ResourceManager.Instance.AddResources(CurrentBaseLevelData.resourcesPerInterval);

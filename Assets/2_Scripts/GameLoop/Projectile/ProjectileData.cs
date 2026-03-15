@@ -1,4 +1,4 @@
-
+using DNExtensions.Systems.AudioLibrary;
 using DNExtensions.Systems.ObjectPooling;
 using DNExtensions.Utilities;
 using UnityEngine;
@@ -37,14 +37,15 @@ public class ProjectileData : ScriptableObject
     public ProjectileMovementType movementType = ProjectileMovementType.Linear;
     public float speed = 55f;
     
-    [Header("Visuals")]
+    [Header("Effects")]
     [PrefabSelector("Assets/Prefabs")] public Projectile prefab;
     [PrefabSelector("Assets/Prefabs")] public PoolableParticleSystem hitParticle;
+    [SerializeField, AudioLibraryID] public string collisionSFX;
 
     public Projectile Spawn(LayerMask hitLayers, Vector3 position, Vector3 direction, Vector3 targetPosition = default)
     {
         var projectile = ObjectPooler.GetObjectFromPool(prefab, position, Quaternion.LookRotation(direction));
-        projectile.Initialize(this, hitLayers, direction, targetPosition);
+        projectile?.Initialize(this, hitLayers, direction, targetPosition);
         
         return projectile;
     }

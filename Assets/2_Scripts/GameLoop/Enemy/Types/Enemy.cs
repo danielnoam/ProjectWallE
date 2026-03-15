@@ -1,4 +1,5 @@
 using System;
+using DNExtensions.Systems.ObjectPooling;
 using DNExtensions.Systems.Scriptables;
 using DNExtensions.Utilities;
 using UnityEngine;
@@ -12,7 +13,7 @@ public enum TargetPriority
 public enum EnemyState { MovingToTarget, Idle }
 
 [SelectionBase]
-public abstract class Enemy : MonoBehaviour, IDamageable, IPushable
+public abstract class Enemy : MonoBehaviour, IDamageable, IPushable, IPoolable
 {
     [Header("Settings")]
     [SerializeField] protected float maxHealth = 100f;
@@ -36,12 +37,11 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPushable
     protected abstract void UpdateMovement();
     protected abstract void SetDestination();
     protected abstract void OnPush(Vector3 direction, float force);
-    
+
     protected virtual void Initialize()
     {
         
     }
-
     
     private void OnDestroy()
     {
@@ -52,9 +52,9 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPushable
     private void Start()
     {
         _currentHealth = maxHealth;
+        Initialize();
         UpdateTarget();
         EnemyManager.Instance.RegisterEnemy(this);
-        Initialize();
     }
 
     private void Update()
@@ -101,8 +101,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPushable
 
     private void UpdateTarget()
     {
-        if (CurrentTarget != null)
-            CurrentTarget.OnDeath -= OnTargetDeath;
+        if (CurrentTarget != null) CurrentTarget.OnDeath -= OnTargetDeath;
 
         foreach (var priority in targetPriorities)
         {
@@ -148,7 +147,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPushable
     private void Die()
     {
         OnDeath?.Invoke(this);
-        Destroy(gameObject);
+        Destroy(gameObject);   // ReturnToPool
     }
 
     private void AttackTarget()
@@ -185,6 +184,29 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPushable
     public void Push(Vector3 direction, float force)
     {
         OnPush(direction, force);
+    }
+    
+    public void OnPoolGet()
+    {
+        _currentHealth = maxHealth;
+        Initialize();
+        UpdateTarget();
+        EnemyManager.Instance?.RegisterEnemy(this);
+    }
+
+    public void OnPoolReturn()
+    {
+        EnemyManager.Instance?.UnregisterEnemy(this);
+        _currentHealth = maxHealth;
+        _attackTimer = 0f;
+        State = EnemyState.Idle;
+        if (CurrentTarget != null) CurrentTarget.OnDeath -= OnTargetDeath;
+        CurrentTarget = null;
+    }
+
+    public void OnPoolRecycle()
+    {
+        
     }
 
 #if UNITY_EDITOR

@@ -1,4 +1,5 @@
 using System.Collections;
+using DNExtensions.Systems.AudioLibrary;
 using DNExtensions.Systems.ObjectPooling;
 using DNExtensions.Utilities.AutoGet;
 using DNExtensions.Utilities.CinemachineExtensions;
@@ -18,6 +19,7 @@ public class Pod : MonoBehaviour
     [Header("Effects")]
     [SerializeField] private PoolableParticleSystem collisionParticle;
     [SerializeField] private ImpulseSettings collisionImpulseSettings;
+    [SerializeField, AudioLibraryID] private string collisionSfx;
     [SerializeField, AutoGetSelf, HideInInspector] private CinemachineImpulseSource impulseSource;
     
     private Vector3 _startPosition;
@@ -101,6 +103,7 @@ public class Pod : MonoBehaviour
     private void Land(Vector3 impactPoint, Vector3 surfaceNormal)
     {
         impulseSource?.GenerateImpulse(collisionImpulseSettings);
+        AudioLibrary.PlayAtPosition(collisionSfx, transform.position);
 
         if (collisionParticle)
         {

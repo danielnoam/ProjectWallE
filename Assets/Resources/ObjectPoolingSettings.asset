@@ -30,6 +30,18 @@ MonoBehaviour:
     - sceneAsset: {fileID: 102900000, guid: 930919521036cc34b9023f5ac1d27770, type: 3}
       sceneName: DanielScene
       scenePath: Assets/1_Scenes/DanielScene.unity
+  - poolName: Particle_Small
+    maxPoolSize: 25
+    prefab: {fileID: 7389837232072127272, guid: 63924ffbc4055854e89c01d29a67c183, type: 3}
+    dontDestroyOnLoad: 0
+    usePoolHolder: 1
+    recycleActiveObjects: 0
+    preWarmPool: 1
+    preWarmPoolSize: 1
+    scenesToPreWarm:
+    - sceneAsset: {fileID: 102900000, guid: 930919521036cc34b9023f5ac1d27770, type: 3}
+      sceneName: DanielScene
+      scenePath: Assets/1_Scenes/DanielScene.unity
   - poolName: Particle_PodDrop
     maxPoolSize: 5
     prefab: {fileID: 5077321802440590743, guid: e6dd420ba061f104abb1af9566d0eb3d, type: 3}

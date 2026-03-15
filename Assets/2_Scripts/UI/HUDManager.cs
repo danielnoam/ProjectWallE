@@ -17,9 +17,7 @@ namespace ProjectWallE.UI
         [SerializeField] private TextMeshProUGUI fuelText;
         [SerializeField] private SDFRectangle healthBar;
         [SerializeField] private TextMeshProUGUI healthText;
-
-        [SerializeField, AutoGetScene, HideInInspector]
-        private PlayerManager player;
+        [SerializeField, AutoGetScene, HideInInspector] private PlayerManager player;
 
 
         private void OnValidate()
@@ -30,29 +28,63 @@ namespace ProjectWallE.UI
         private void OnEnable()
         {
             ResourceManager.OnResourcesChanged += UpdateResourcesDisplay;
+            LevelManager.OnLevelInitializing += OnLevelInitializing;
+            LevelManager.OnLevelStarted += OnLevelStarted;
             LevelManager.OnTimeUpdated += OnTimeUpdated;
+            LevelManager.OnLevelCompleted += OnLevelCompleted;
+            LevelManager.OnLevelFailed += OnLevelFailed;
 
             if (player)
             {
                 player.OnControllerChanged += OnControllerChanged;
-                var car = player.GetComponentInChildren<CarBoost>();
-                if (car) car.OnFuelChange += UpdateFuelBar;
+                player.OnHealthChanged += UpdateHealthBar;
+                player.CarController.CarBoost.OnFuelChange += UpdateFuelBar;
             }
         }
+        
 
 
         private void OnDisable()
         {
             ResourceManager.OnResourcesChanged -= UpdateResourcesDisplay;
+            LevelManager.OnLevelInitializing -= OnLevelInitializing;
+            LevelManager.OnLevelStarted -= OnLevelStarted;
             LevelManager.OnTimeUpdated -= OnTimeUpdated;
+            LevelManager.OnLevelCompleted -= OnLevelCompleted;
+            LevelManager.OnLevelFailed -= OnLevelFailed;
 
             if (player)
             {
                 player.OnControllerChanged -= OnControllerChanged;
-                var car = player.GetComponentInChildren<CarBoost>();
-                if (car) car.OnFuelChange -= UpdateFuelBar;
+                player.OnHealthChanged -= UpdateHealthBar;
+                player.CarController.CarBoost.OnFuelChange -= UpdateFuelBar;
             }
         }
+        
+        private void OnLevelInitializing()
+        {
+            objectivesText.text = ""; 
+            currentResourcesText.color = currentResourcesText.color.SetAlpha(0f);
+        }
+        
+        private void OnLevelStarted()
+        {
+            currentResourcesText.color = currentResourcesText.color.SetAlpha(1f);
+        }
+
+
+        private void OnLevelFailed()
+        {
+            UpdateObjectiveDisplay("Fail");
+            currentResourcesText.color = currentResourcesText.color.SetAlpha(0f);
+        }
+
+        private void OnLevelCompleted()
+        {
+            UpdateObjectiveDisplay("Success");  
+            currentResourcesText.color = currentResourcesText.color.SetAlpha(0f);
+        }
+
 
         private void OnControllerChanged(PlayerControllerType controllerType)
         {
@@ -70,14 +102,13 @@ namespace ProjectWallE.UI
                     throw new ArgumentOutOfRangeException(nameof(controllerType), controllerType, null);
             }
         }
-
-
+        
 
         private void OnTimeUpdated(float timeRemaining)
         {
             TimeSpan timeSpan = TimeSpan.FromSeconds(timeRemaining);
             string objectives = $"Survive:\n{timeSpan.Minutes:D2}:{timeSpan.Seconds:D2}";
-            UpdateObjectivesDisplay(objectives);
+            UpdateObjectiveDisplay(objectives);
         }
 
         private void UpdateResourcesDisplay(int currentResources)
@@ -86,7 +117,7 @@ namespace ProjectWallE.UI
             currentResourcesText.text = $"Resources: {currentResources}";
         }
 
-        private void UpdateObjectivesDisplay(string objectives)
+        private void UpdateObjectiveDisplay(string objectives)
         {
             if (!objectivesText) return;
             objectivesText.text = objectives;
