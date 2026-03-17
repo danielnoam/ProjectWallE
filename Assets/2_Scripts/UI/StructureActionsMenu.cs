@@ -1,18 +1,35 @@
+using System;
+using DNExtensions.Utilities.AutoGet;
+using ProjectWallE;
 using ProjectWallE.GameLoop.Player;
 using RadialMenu;
+using UnityEngine;
 
 public class StructureActionsMenu : RadialMenu<StructureAction>
 {
+    [SerializeField, AutoGetScene, HideInInspector] private PlayerManager player;
+
+    private void OnValidate()
+    {
+        AutoGetSystem.Process(this);
+    }
+
     private void OnEnable()
     {
-        PlayerStructureBuilder.ActionsMenuRequested += HandleOpen;
-        PlayerStructureBuilder.MenuCloseRequested += CloseMenu;
+        if (player)
+        {
+            player.StructureBuilder.ActionsMenuRequested += HandleOpen;
+            player.StructureBuilder.MenuCloseRequested += CloseMenu;
+        }
     }
 
     private void OnDisable()
     {
-        PlayerStructureBuilder.ActionsMenuRequested -= HandleOpen;
-        PlayerStructureBuilder.MenuCloseRequested -= CloseMenu;
+        if (player)
+        {
+            player.StructureBuilder.ActionsMenuRequested -= HandleOpen;
+            player.StructureBuilder.MenuCloseRequested -= CloseMenu;
+        }
     }
 
     private void HandleOpen(Structure structure)

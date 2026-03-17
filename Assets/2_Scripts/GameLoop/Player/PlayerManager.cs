@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 using _2_Scripts;
-using Unity.Cinemachine;
+using ProjectWallE.GameLoop.Player;
 using UnityEngine;
-using UnityEngine.InputSystem.Switch;
 
 namespace ProjectWallE
 {
@@ -19,9 +17,11 @@ namespace ProjectWallE
         
         [HideInInspector][SerializeField] CarController carController;
         [HideInInspector][SerializeField] RobotController robotController;
+        [HideInInspector][SerializeField] PlayerStructureBuilder structureBuilder;
         
         private float _currentHealth;
         private PlayerManagerInput _input;
+        
         private Rigidbody _rigidbody;
         private Transform _cameraTransform;
         
@@ -32,6 +32,7 @@ namespace ProjectWallE
 
         public CarController CarController => carController;
         public RobotController RobotController => robotController;
+        public PlayerStructureBuilder StructureBuilder => structureBuilder;
         public bool CanBuild => _currentController.canBuild;
         public bool CanShoot => _currentController.canShoot;
         public Vector3 Velocity => _rigidbody.linearVelocity;
@@ -47,6 +48,8 @@ namespace ProjectWallE
                 carController = GetComponentInChildren<CarController>();
             if(robotController == null)
                 robotController = GetComponentInChildren<RobotController>();
+            if(structureBuilder == null)
+                structureBuilder = GetComponentInChildren<PlayerStructureBuilder>();
         }
 
         void Awake()
@@ -56,8 +59,7 @@ namespace ProjectWallE
 
             _input = GetComponent<PlayerManagerInput>();
             _rigidbody = GetComponent<Rigidbody>();
-            if (Camera.main != null) _cameraTransform = Camera.main.transform;
-            _playerControllerTypeEnum = PlayerControllerType.Robot;
+            if (Camera.main) _cameraTransform = Camera.main.transform;
 
             PlayerReferences playerReferences = new PlayerReferences()
             {
@@ -71,10 +73,11 @@ namespace ProjectWallE
             
             _currentHealth = maxHealth;
         }
+        
 
         private void Start()
         {
-            EnableController(_playerControllerTypeEnum);
+            EnableController(PlayerControllerType.Robot);
         }
 
         private void Update()

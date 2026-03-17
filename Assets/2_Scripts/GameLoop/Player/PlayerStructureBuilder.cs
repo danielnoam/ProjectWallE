@@ -23,14 +23,15 @@ namespace ProjectWallE.GameLoop.Player
         private Camera _mainCamera;
         private Ray _buildRay;
         private bool _canBuild;
+        private bool _structureStatusVisible;
         private bool _menuOpen;
         private Structure _targetedStructure;
         private Structure _lastMenuStructure;
         private bool _lastMenuWasBuildMenu;
 
-        public static event Action<Structure[]> BuildMenuRequested;
-        public static event Action<Structure> ActionsMenuRequested;
-        public static event Action MenuCloseRequested;
+        public event Action<Structure[]> BuildMenuRequested;
+        public event Action<Structure> ActionsMenuRequested;
+        public event Action MenuCloseRequested;
 
 
         private void OnValidate()
@@ -117,33 +118,48 @@ namespace ProjectWallE.GameLoop.Player
         {
             _buildRay = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 
-            if (Physics.Raycast(_buildRay, out RaycastHit structureHit, buildRange, structureLayerMask) &&
-                structureHit.collider.TryGetComponent(out Structure structure))
+            if (Physics.Raycast(_buildRay, out RaycastHit structureHit, buildRange, structureLayerMask) && structureHit.collider.TryGetComponent(out Structure structure))
             {
                 _targetedStructure = structure;
                 _canBuild = false;
                 UpdateBuildPrompt(_menuOpen ? structure.TopPoint : null);
+                UpdateStructureStatusVisibility(structure);
             }
             else if (Physics.Raycast(_buildRay, buildRange, blockBuildLayerMask))
             {
                 _targetedStructure = null;
                 _canBuild = false;
                 UpdateBuildPrompt(null);
+                UpdateStructureStatusVisibility(null);
             }
             else if (Physics.Raycast(_buildRay, out RaycastHit groundHit, buildRange, buildableLayerMask))
             {
                 _targetedStructure = null;
                 _canBuild = true;
                 UpdateBuildPrompt(_menuOpen ? groundHit.point : null);
+                UpdateStructureStatusVisibility(null);
             }
             else
             {
                 _targetedStructure = null;
                 _canBuild = false;
                 UpdateBuildPrompt(null);
+                UpdateStructureStatusVisibility(null);
             }
 
             if (_menuOpen) RefreshOpenMenu();
+        }
+
+        private static void UpdateStructureStatusVisibility(Structure structure)
+        {
+            if (structure)
+            {
+                StructureStatus.Instance?.Show(structure);
+            }
+            else
+            {
+                StructureStatus.Instance?.Hide();
+            }
         }
 
         private void RefreshOpenMenu()

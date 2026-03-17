@@ -9,7 +9,6 @@ namespace ProjectWallE.UI
     public class BuildPrompt : MonoBehaviour
     {
         public static BuildPrompt Instance { get; private set; }
-
         
         [Header("Settings")]
         [SerializeField] private Vector3 offset;

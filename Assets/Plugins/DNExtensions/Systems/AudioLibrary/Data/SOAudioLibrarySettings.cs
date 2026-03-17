@@ -32,6 +32,7 @@ namespace DNExtensions.Systems.AudioLibrary
 
 
         [SerializeField] private bool enabled = true;
+        [Tooltip("If the pool should be limited")]
         [SerializeField] private OptionalField<int> limitPoolSize = new OptionalField<int>(30, true);
         [Tooltip("If the pool should be pre-created and how many audio sources to create at startup")]
         [SerializeField] private OptionalField<int> preWarm = new OptionalField<int>(15, true);
