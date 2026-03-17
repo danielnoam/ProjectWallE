@@ -40,6 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8574883881445243624}
+  - component: {fileID: 8362893084184174779}
   - component: {fileID: 2448601663206975914}
   - component: {fileID: 4480499691948768094}
   - component: {fileID: 8909220601765990049}
@@ -68,6 +69,19 @@ Transform:
   - {fileID: 1234027512125546189}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8362893084184174779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6471506668328617800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06535a561c25490abaa0eb30b94e8fdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RadarTarget
+  blipColor: 1
 --- !u!54 &2448601663206975914
 Rigidbody:
   m_ObjectHideFlags: 0

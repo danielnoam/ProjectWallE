@@ -41,6 +41,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 69911270091919848}
+  - component: {fileID: -6891724181451812259}
   - component: {fileID: 4832250491942188457}
   - component: {fileID: 5067021678384517133}
   - component: {fileID: 6487620541022002554}
@@ -67,6 +68,19 @@ Transform:
   - {fileID: 6592863634933569427}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-6891724181451812259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3747161382905212349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06535a561c25490abaa0eb30b94e8fdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RadarTarget
+  blipColor: 2
 --- !u!135 &4832250491942188457
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -121,7 +135,7 @@ MonoBehaviour:
   upgradeIcon: {fileID: 21300000, guid: 2a7332bdc5467fe4e84ca21fdc48ecaa, type: 3}
   fixIcon: {fileID: 21300000, guid: c523318af4a1ca943932d905d83eed0b, type: 3}
   topPoint: {x: 0, y: 9.7, z: 0}
-  bottomPoint: {x: 0, y: -2.1, z: 0}
+  bottomPoint: {x: 0, y: -2.24, z: 0}
   gfx: {fileID: 6592863634933569427}
   currentUpgradeLevel: 0
   levels:
@@ -152,7 +166,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 11d0b4ca14fdff8419fcf81ae14b4217, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.32
+      value: 0.86
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 11d0b4ca14fdff8419fcf81ae14b4217, type: 3}
       propertyPath: m_LocalPosition.z
@@ -303,8 +317,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d323b82d633143bb86158863cf217c76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.Utilities.TransformEffector
+  localPosition: 1
   positionEffect:
     rid: 6000860786616172619
+  localRotation: 1
   rotationEffect:
     rid: 6000860786616172620
   scaleEffect:
@@ -368,8 +384,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d323b82d633143bb86158863cf217c76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.Utilities.TransformEffector
+  localPosition: 1
   positionEffect:
     rid: 6000860786616172619
+  localRotation: 1
   rotationEffect:
     rid: 6000860786616172620
   scaleEffect:
@@ -406,8 +424,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d323b82d633143bb86158863cf217c76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.Utilities.TransformEffector
+  localPosition: 1
   positionEffect:
     rid: 6000860786616172619
+  localRotation: 1
   rotationEffect:
     rid: 6000860786616172620
   scaleEffect:
@@ -444,8 +464,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d323b82d633143bb86158863cf217c76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.Utilities.TransformEffector
+  localPosition: 1
   positionEffect:
     rid: -2
+  localRotation: 1
   rotationEffect:
     rid: 6000860928407764994
   scaleEffect:
@@ -476,8 +498,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d323b82d633143bb86158863cf217c76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.Utilities.TransformEffector
+  localPosition: 1
   positionEffect:
     rid: 6000860928407765075
+  localRotation: 1
   rotationEffect:
     rid: -2
   scaleEffect:
@@ -539,8 +563,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d323b82d633143bb86158863cf217c76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.Utilities.TransformEffector
+  localPosition: 1
   positionEffect:
     rid: 6000860786616172619
+  localRotation: 1
   rotationEffect:
     rid: 6000860786616172620
   scaleEffect:
@@ -599,8 +625,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d323b82d633143bb86158863cf217c76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.Utilities.TransformEffector
+  localPosition: 1
   positionEffect:
     rid: -2
+  localRotation: 1
   rotationEffect:
     rid: 6000860786616172620
   scaleEffect:

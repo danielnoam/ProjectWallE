@@ -2,7 +2,6 @@ using System;
 using DNExtensions.Systems.Shapes;
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.AutoGet;
-using ProjectWallE;
 using TMPro;
 using UnityEngine;
 
@@ -17,6 +16,7 @@ namespace ProjectWallE.UI
         [SerializeField] private TextMeshProUGUI fuelText;
         [SerializeField] private SDFRectangle healthBar;
         [SerializeField] private TextMeshProUGUI healthText;
+        [SerializeField, AutoGetChildren] private RadarSystem radarSystem;
         [SerializeField, AutoGetScene, HideInInspector] private PlayerManager player;
 
 
@@ -39,6 +39,8 @@ namespace ProjectWallE.UI
                 player.OnControllerChanged += OnControllerChanged;
                 player.OnHealthChanged += UpdateHealthBar;
                 player.CarController.CarBoost.OnFuelChange += UpdateFuelBar;
+                radarSystem.worldCenter.SetTransform(player.transform);
+                if (Camera.main) radarSystem.rotationTarget.Value = Camera.main.transform;
             }
         }
         

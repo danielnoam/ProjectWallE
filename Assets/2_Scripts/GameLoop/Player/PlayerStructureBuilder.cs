@@ -109,6 +109,7 @@ namespace ProjectWallE.GameLoop.Player
         {
             MenuCloseRequested?.Invoke();
             BuildPrompt.Instance?.Hide();
+            UpdateStructureStatusVisibility(null);
             _menuOpen = false;
             _lastMenuStructure = null;
             _lastMenuWasBuildMenu = false;

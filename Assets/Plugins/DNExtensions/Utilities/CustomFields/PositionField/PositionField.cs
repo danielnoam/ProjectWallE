@@ -12,8 +12,7 @@ namespace DNExtensions.Utilities.CustomFields
         public Vector3 Position => positionTransform ? positionTransform.position : positionVector;
 
         public Transform Transform => positionTransform;
-
-#if UNITY_EDITOR
+        
         public void SetTransform(Transform newTransform)
         {
             positionTransform = newTransform;
@@ -22,16 +21,5 @@ namespace DNExtensions.Utilities.CustomFields
                 positionVector = newTransform.position;
             }
         }
-
-        public void SetVector(Vector3 newVector)
-        {
-            positionVector = newVector;
-        }
-
-        public Vector3 GetVector()
-        {
-            return positionVector;
-        }
-#endif
     }
 }
