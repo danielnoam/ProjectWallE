@@ -1493,6 +1493,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 91.161}
+--- !u!4 &1082290193 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 541050710698178620, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+  m_PrefabInstance: {fileID: 5281606887408493550}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1179261437
 GameObject:
   m_ObjectHideFlags: 0
@@ -2508,6 +2513,10 @@ PrefabInstance:
       propertyPath: maxSlopeSlideSpeed
       value: 15
       objectReference: {fileID: 0}
+    - target: {fileID: 1860573053989788979, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: visuals.wheelVisual.visualTransform
+      value: 
+      objectReference: {fileID: 1082290193}
     - target: {fileID: 2207471271178187077, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
       propertyPath: m_LocalPosition.x
       value: -8.535
