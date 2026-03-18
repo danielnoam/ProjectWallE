@@ -1369,17 +1369,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &927692080 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1860573053989788979, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
-  m_PrefabInstance: {fileID: 5281606887408493550}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 830060e31abac274bae31a6c5402f78f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.RobotController
 --- !u!1 &1007937794
 GameObject:
   m_ObjectHideFlags: 0
@@ -1717,17 +1706,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 15, y: -90, z: 0}
---- !u!114 &1359124914 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2635220521126351491, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
-  m_PrefabInstance: {fileID: 5281606887408493550}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 623665577e14e0140ae1f5e042b3b5a3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CarController
 --- !u!1 &1592309857
 GameObject:
   m_ObjectHideFlags: 0
@@ -2480,14 +2458,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1860573053989788979, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
-      propertyPath: slopeSlideAccel
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 1860573053989788979, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
-      propertyPath: maxSlopeSlideSpeed
-      value: 15
-      objectReference: {fileID: 0}
     - target: {fileID: 2207471271178187077, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
       propertyPath: m_LocalPosition.x
       value: -8.535
@@ -2528,14 +2498,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2369243402749369746, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
-      propertyPath: carController
+    - target: {fileID: 2737165017878004224, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: buildMenu
       value: 
-      objectReference: {fileID: 1359124914}
-    - target: {fileID: 2369243402749369746, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
-      propertyPath: robotController
+      objectReference: {fileID: 0}
+    - target: {fileID: 2737165017878004224, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: actionsMenu
       value: 
-      objectReference: {fileID: 927692080}
+      objectReference: {fileID: 0}
     - target: {fileID: 5821086676760150823, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
       propertyPath: m_Name
       value: PlayerManager

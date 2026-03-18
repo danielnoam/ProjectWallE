@@ -8,8 +8,11 @@ namespace _2_Scripts
     [RequireComponent(typeof(CarInput), typeof(CarBoost))]
     public class CarController : MonoBehaviour, IPlayerController
     {
+        [Tooltip("Make sure this array and the corresponding steeringTires array in CarControllerVisuals are in the same order")]
         [SerializeField] private Tire[] steeringTires;
+        [Tooltip("Make sure this array and the corresponding staticTires array in CarControllerVisuals are in the same order")]
         [SerializeField] private Tire[] staticTires;
+        [SerializeField] private CarControllerVisuals visuals;
         [SerializeField] private Transform boostPoint;
         
         [HideInInspector][SerializeField] private CarBoost carBoost;
@@ -60,7 +63,6 @@ namespace _2_Scripts
         private Rigidbody _playerRb;
 
         private List<Tire> _allTires;
-        private readonly Dictionary<Transform, float> _tireNormalForces = new();
         
         private const float ExtendedGroundCheckExtraDistance = 0.1f;
 
@@ -85,22 +87,30 @@ namespace _2_Scripts
                 carBoost = GetComponent<CarBoost>();
         }
 
-        private void Awake()
-        {
-            _carInput = GetComponent<CarInput>();
-            _allTires = GetAllTiresTransforms();
-
-            foreach (var tire in _allTires)
-            {
-                _tireNormalForces[tire.tireTransform] = 0f;
-                tire.Initialize();
-            }
-        }
-
         public void Initialize(PlayerReferences playerReferences)
         {
             _playerRb = playerReferences.rigidBody;
             _groundLayer = playerReferences.groundLayer;
+            
+            _carInput = GetComponent<CarInput>();
+            _allTires = GetAllTires();
+            visuals.GetAllTireVisuals();
+
+            foreach (var tire in _allTires)
+            {
+                tire.Initialize();
+            }
+            visuals.Initialize();
+        }
+
+        public void OnEnter()
+        {
+            
+        }
+
+        public void OnExit()
+        {
+            
         }
 
         public void ApplyMovement()
@@ -119,41 +129,36 @@ namespace _2_Scripts
 
         private void ApplySuspensionPerTiresType(List<Tire> tires)
         {
+            int i = 0;
             foreach (var tire in tires)
             {
-                if (!tire.isGroundedExact)
+                if (tire.isGroundedExact)
                 {
-                    _tireNormalForces[tire.tireTransform] = 0f;
-                    tire.visualTransform.localPosition = Vector3.Lerp(
-                        tire.visualTransform.localPosition,
-                        tire.VisualStartPosition,
-                        5f * Time.fixedDeltaTime);
+                    RaycastHit hit = tire.exactGroundHit;
 
-                    continue;
+                    float offset = hit.distance - groundHeight;
+                    Vector3 springDir = tire.tireTransform.up;
+
+                    Vector3 pointVel = _playerRb.GetPointVelocity(tire.tireTransform.position);
+                    float velAlongSpring = Vector3.Dot(pointVel, springDir);
+
+                    float suspensionForce =
+                        (-offset * suspensionStrength) -
+                        (velAlongSpring * suspensionDamping);
+
+                    _playerRb.AddForceAtPosition(
+                        springDir * (suspensionForce * _playerRb.mass),
+                        tire.tireTransform.position,
+                        ForceMode.Force);
+
+                    visuals.UpdateTireSuspensionVisuals(true, i, offset);
+                }
+                else
+                {
+                    visuals.UpdateTireSuspensionVisuals(false, i, 0f);
                 }
 
-                RaycastHit hit = tire.exactGroundHit;
-
-                float offset = hit.distance - groundHeight;
-                Vector3 springDir = tire.tireTransform.up;
-
-                Vector3 pointVel = _playerRb.GetPointVelocity(tire.tireTransform.position);
-                float velAlongSpring = Vector3.Dot(pointVel, springDir);
-
-                float suspensionForce =
-                    (-offset * suspensionStrength) -
-                    (velAlongSpring * suspensionDamping);
-
-                _playerRb.AddForceAtPosition(
-                    springDir * (suspensionForce * _playerRb.mass),
-                    tire.tireTransform.position,
-                    ForceMode.Force);
-
-                _tireNormalForces[tire.tireTransform] = suspensionForce;
-
-                Vector3 localPos = tire.visualTransform.localPosition;
-                localPos.y = tire.VisualStartPosition.y - offset;
-                tire.visualTransform.localPosition = localPos;
+                i++;
             }
         }
 
@@ -180,6 +185,7 @@ namespace _2_Scripts
 
             foreach (var tire in steeringTires)
                 tire.tireTransform.localRotation = rot;
+            visuals.SteerWheels(_currentSteering);
         }
 
         private void ApplyTireFriction()
@@ -261,7 +267,10 @@ namespace _2_Scripts
             if (CarBoost.CanBoost(out float boostAccel, out float boostSpeedFactor))
                 ApplyBoost(carSpeed, boostAccel, boostSpeedFactor);
 
-            RotateWheels(carSpeed, 0.5f);
+            for (int i = 0; i < _allTires.Count; i++)
+            {
+                visuals.RotateWheels(carSpeed, 0.5f, _allTires[i].isGroundedExtended, i);
+            }
         }
 
         private void ApplyForwardAcceleration(float carSpeed)
@@ -321,19 +330,6 @@ namespace _2_Scripts
             if (carSpeed > topForwardSpeed * boostSpeedFactor) return;
 
             _playerRb.AddForce(transform.forward * (boostAccel * _playerRb.mass));
-        }
-
-        private void RotateWheels(float carSpeed, float wheelRadius)
-        {
-            float wheelSpeedRad = carSpeed / wheelRadius;
-            float wheelSpeedDeg = wheelSpeedRad * Mathf.Rad2Deg;
-
-            foreach (var tire in _allTires)
-            {
-                if (!tire.isGroundedExtended) continue;
-
-                tire.visualTransform.Rotate(Vector3.left, wheelSpeedDeg * Time.fixedDeltaTime, Space.Self);
-            }
         }
 
         #endregion
@@ -431,7 +427,7 @@ namespace _2_Scripts
             return false;
         }
 
-        private List<Tire> GetAllTiresTransforms()
+        private List<Tire> GetAllTires()
         {
             var allTires = new List<Tire>();
 

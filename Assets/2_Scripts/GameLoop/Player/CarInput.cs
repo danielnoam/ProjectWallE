@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,6 +12,12 @@ namespace ProjectWallE
         public float Steering { get; private set; }
         public bool HandBreakHeld { get; private set; }
         public bool BoostHeld { get; private set; }
+
+        private void Awake()
+        {
+            Input = new InputSystem_Actions();
+        }
+
         private void OnEnable()
         {
             EnableInput();
@@ -23,7 +30,6 @@ namespace ProjectWallE
         
         void EnableInput()
         {
-            Input = new InputSystem_Actions();
             Input.Enable();
 
             Input.CarControls.Enable();
@@ -32,11 +38,10 @@ namespace ProjectWallE
     
         void DisableInput()
         {
-            Input.CarControls.Disable();
-            Input.CarControls.RemoveCallbacks(this);
+            Input?.CarControls.Disable();
+            Input?.CarControls.RemoveCallbacks(this);
         
-            Input.Dispose();
-            Input = null;
+            Input?.Disable();
         }
         
         public void OnAccelDecel(InputAction.CallbackContext context)
