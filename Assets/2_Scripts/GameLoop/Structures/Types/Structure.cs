@@ -25,6 +25,8 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     [SerializeField] private Sprite icon;
     [SerializeField] private Sprite upgradeIcon;
     [SerializeField] private Sprite fixIcon;
+    [SerializeField] private Sprite demolishIcon;
+    [SerializeField] private bool canDemolish;
     [SerializeField] protected Vector3 topPoint = Vector3.up;
     [SerializeField] protected Vector3 bottomPoint = Vector3.down;
     [SerializeField] protected Transform gfx;
@@ -110,6 +112,11 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
         return currentUpgradeLevel < Levels.Length;
     }
     
+    private void Demolish()
+    {
+        Destroy(gameObject);
+    }
+    
     [Button(ButtonPlayMode.OnlyWhenPlaying)]
     private void Fix()
     {
@@ -174,6 +181,8 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
         string fixLabel = canFix
             ? $"Fix {(int)FixCost}\n{(int)CurrentHealth}/{(int)MaxHealth}"
             : $"At Full Health\n{(int)CurrentHealth}/{(int)MaxHealth}";
+        
+        string demolishLabel = $"Demolish";
 
         return new List<StructureAction>
         {
@@ -190,7 +199,14 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
                 Icon = fixIcon,
                 IsAvailable = canFix && ResourceManager.Instance.CanAfford((int)FixCost),
                 OnSelected = Fix
-            }
+            },
+            new StructureAction
+            {
+            Label = $"{label}\n{demolishLabel}",
+            Icon = demolishIcon,
+            IsAvailable = canDemolish,
+            OnSelected = Demolish
+        }
         };
     }
     

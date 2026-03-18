@@ -384,8 +384,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GroundEnemy
   maxHealth: 200
   targetFindRange: 50
-  attackResponse: 1
-  targetPriorities: 050000000100000006000000
+  attackResponse: 3
+  targetPriorities: 030000000600000001000000
   attackCooldown: 2
   firePoint: {fileID: 8925620038691902775}
   projectileData: {fileID: 11400000, guid: c32a03d395cada347bd4ebe76d2ed779, type: 2}
@@ -624,8 +624,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.59, y: 1.26, z: 3.07}
-  m_Center: {x: 0, y: 0.58, z: 0}
+  m_Size: {x: 2.46, y: 1.38, z: 3.07}
+  m_Center: {x: 0, y: 0.83, z: 0}
 --- !u!1001 &4544463063355473646
 PrefabInstance:
   m_ObjectHideFlags: 0

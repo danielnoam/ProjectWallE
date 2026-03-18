@@ -133,6 +133,8 @@ MonoBehaviour:
   icon: {fileID: 0}
   upgradeIcon: {fileID: 21300000, guid: 2a7332bdc5467fe4e84ca21fdc48ecaa, type: 3}
   fixIcon: {fileID: 21300000, guid: c523318af4a1ca943932d905d83eed0b, type: 3}
+  demolishIcon: {fileID: 0}
+  canDemolish: 1
   topPoint: {x: 0, y: 2.19, z: 0}
   bottomPoint: {x: 0, y: -0.66, z: 0}
   gfx: {fileID: 6756884417540177175}
@@ -172,7 +174,7 @@ MonoBehaviour:
     - rid: 4437626158574207052
       type: {class: TurretLevelData, ns: , asm: Assembly-CSharp}
       data:
-        maxHealth: 200
+        maxHealth: 300
         cost: 200
         fixCostPerHealthPoint: 0.5
         detectionRadius: 25

@@ -3,7 +3,9 @@ using System.Collections;
 using DNExtensions.Utilities.AutoGet;
 using ProjectWallE;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(PlayableDirector))]
 public class LevelManager : MonoBehaviour, INotificationReceiver
@@ -43,6 +45,14 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
         }
         Instance = this;
     }
+    
+    private void OnDestroy()
+    {
+        if (timeline)
+        {
+            timeline.stopped -= OnTimelineStopped;
+        }
+    }
 
     private void Start()
     {
@@ -52,20 +62,16 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
             StartCoroutine(StartLevel());
         }
     }
-
-    private void OnDestroy()
-    {
-        if (timeline)
-        {
-            timeline.stopped -= OnTimelineStopped;
-        }
-    }
-
+    
     private void Update()
     {
-        if (!_levelActive) return;
+
+        if (Keyboard.current.f1Key.wasPressedThisFrame)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
         
-        OnTimeUpdated?.Invoke(TimeRemaining);
+        if (_levelActive) OnTimeUpdated?.Invoke(TimeRemaining);
     }
 
     private IEnumerator StartLevel()
