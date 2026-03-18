@@ -100,7 +100,7 @@ namespace _2_Scripts
             {
                 tire.Initialize();
             }
-            visuals.Initialize();
+            visuals.Initialize(transform);
         }
 
         public void OnEnter()
@@ -110,7 +110,7 @@ namespace _2_Scripts
 
         public void OnExit()
         {
-            
+            visuals?.ResetVisuals();
         }
 
         public void ApplyMovement()

@@ -10,39 +10,37 @@ namespace ProjectWallE
     {
         [Tooltip("Make sure this array and the corresponding steeringTires array in CarController are in the same order")]
         [SerializeField] private TireVisual[] steeringTires;
-
         [Tooltip("Make sure this array and the corresponding staticTires array in CarController are in the same order")]
         [SerializeField] private TireVisual[] staticTires;
-
         [SerializeField] private float suspensionReturnSpeed = 5f;
 
         private readonly List<TireVisual> _allTireVisuals = new List<TireVisual>();
+        private Transform _carTransform;
 
         public void UpdateTireSuspensionVisuals(bool isTireGrounded, int index, float offset)
         {
             if (!IsValidIndex(index)) return;
-            if (_allTireVisuals[index].visualTransform == null) return;
+            if (_allTireVisuals[index].visTransform == null) return;
 
             if (!isTireGrounded)
             {
-                _allTireVisuals[index].visualTransform.localPosition = Vector3.Lerp(
-                    _allTireVisuals[index].visualTransform.localPosition,
-                    _allTireVisuals[index].VisualStartPosition,
+                _allTireVisuals[index].visTransform.localPosition = Vector3.Lerp(
+                    _allTireVisuals[index].visTransform.localPosition,
+                    _allTireVisuals[index].StartLocalPosition,
                     suspensionReturnSpeed * Time.fixedDeltaTime);
 
                 return;
             }
 
-            Vector3 localPos = _allTireVisuals[index].visualTransform.localPosition;
-            localPos.y = _allTireVisuals[index].VisualStartPosition.y - offset;
-            _allTireVisuals[index].visualTransform.localPosition = localPos;
+            _allTireVisuals[index].visTransform.localPosition =
+                _allTireVisuals[index].StartLocalPosition + (-Vector3.up * offset);
         }
 
         public void RotateWheels(float carSpeed, float wheelRadius, bool isTireGrounded, int index)
         {
             if (!IsValidIndex(index)) return;
             if (!isTireGrounded) return;
-            if (_allTireVisuals[index].visualTransform == null) return;
+            if (_allTireVisuals[index].visTransform == null) return;
             if (wheelRadius <= 0.0001f) return;
 
             float wheelSpeedRad = carSpeed / wheelRadius;
@@ -56,7 +54,7 @@ namespace ProjectWallE
         {
             foreach (var visual in steeringTires)
             {
-                if (visual.visualTransform == null) continue;
+                if (visual.visTransform == null) continue;
 
                 visual.steerY = rotation;
                 ApplyVisualRotation(visual);
@@ -65,10 +63,10 @@ namespace ProjectWallE
 
         #region Helpers
 
-        public void Initialize()
+        public void Initialize(Transform carTransform)
         {
             GetAllTireVisuals();
-
+            _carTransform = carTransform;
             foreach (var visual in _allTireVisuals)
             {
                 visual.Initialize();
@@ -96,11 +94,11 @@ namespace ProjectWallE
 
         private void ApplyVisualRotation(TireVisual tireVisual)
         {
-            Vector3 angles = tireVisual.VisualStartRotation;
+            Vector3 angles = tireVisual.StartLocalRotation;
             angles.x += tireVisual.spinX;
             angles.y += tireVisual.steerY;
 
-            tireVisual.visualTransform.localRotation = Quaternion.Euler(angles);
+            tireVisual.visTransform.localRotation = Quaternion.Euler(angles);
         }
 
         private bool IsValidIndex(int index)

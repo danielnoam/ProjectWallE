@@ -23,25 +23,25 @@ namespace ProjectWallE
 
         public void UpdateSuspensionVisual(bool isGrounded, float offset)
         {
-            if (wheelVisual == null || wheelVisual.visualTransform == null)
+            if (wheelVisual == null || wheelVisual.visTransform == null)
                 return;
 
             if (!isGrounded)
             {
-                wheelVisual.visualTransform.localPosition = Vector3.Lerp(
-                    wheelVisual.visualTransform.localPosition,
-                    wheelVisual.VisualStartPosition,
+                wheelVisual.visTransform.localPosition = Vector3.Lerp(
+                    wheelVisual.visTransform.localPosition,
+                    wheelVisual.StartLocalPosition,
                     suspensionReturnSpeed * Time.fixedDeltaTime);
 
                 return;
             }
 
-            Vector3 target = wheelVisual.VisualStartPosition;
+            Vector3 target = wheelVisual.StartLocalPosition;
             target.y -= offset;
 
-            wheelVisual.visualTransform.localPosition = offset > 0f
+            wheelVisual.visTransform.localPosition = offset > 0f
                 ? Vector3.Lerp(
-                    wheelVisual.visualTransform.localPosition,
+                    wheelVisual.visTransform.localPosition,
                     target,
                     suspensionReturnSpeed * Time.fixedDeltaTime)
                 : target;

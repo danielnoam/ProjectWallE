@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _2_Scripts
 {
@@ -27,23 +28,25 @@ namespace _2_Scripts
     [Serializable]
     public class TireVisual
     {
-        public Transform visualTransform;
+        public Transform visTransform;
 
         [NonSerialized] public float spinX;
         [NonSerialized] public float steerY;
 
-        private Vector3 _visualStartPosition;
-        private Vector3 _visualStartRotation;
+        private Vector3 _startLocalPosition;
+        private Vector3 _startLocalRotation;
+        
 
-        public Vector3 VisualStartPosition => _visualStartPosition;
-        public Vector3 VisualStartRotation => _visualStartRotation;
+        public Vector3 StartLocalPosition => _startLocalPosition;
+        public Vector3 StartLocalRotation => _startLocalRotation;
+       
 
         public void Initialize()
         {
-            if (visualTransform == null) return;
+            if (visTransform == null) return;
 
-            _visualStartPosition = visualTransform.localPosition;
-            _visualStartRotation = visualTransform.localEulerAngles;
+            _startLocalPosition = visTransform.localPosition;
+            _startLocalRotation = visTransform.localEulerAngles;
 
             spinX = 0f;
             steerY = 0f;
@@ -51,10 +54,10 @@ namespace _2_Scripts
 
         public void ResetVisual()
         {
-            if (visualTransform == null) return;
+            if (visTransform == null) return;
 
-            visualTransform.localPosition = _visualStartPosition;
-            visualTransform.localEulerAngles = _visualStartRotation;
+            visTransform.localPosition = _startLocalPosition;
+            visTransform.localEulerAngles = _startLocalRotation;
 
             spinX = 0f;
             steerY = 0f;
