@@ -16,6 +16,7 @@ namespace ProjectWallE.UI
         [SerializeField] private TextMeshProUGUI fuelText;
         [SerializeField] private SDFRectangle healthBar;
         [SerializeField] private TextMeshProUGUI healthText;
+        [SerializeField] private GameObject crosshair;
         [SerializeField, AutoGetChildren] private RadarSystem radarSystem;
         [SerializeField, AutoGetScene, HideInInspector] private PlayerManager player;
 
@@ -95,10 +96,12 @@ namespace ProjectWallE.UI
                 case PlayerControllerType.Robot:
                     fuelBar.color = Color.black;
                     fuelText.color = fuelText.color.SetAlpha(0.2f);
+                    crosshair.gameObject.SetActive(true);
                     break;
                 case PlayerControllerType.Car:
                     fuelBar.color = Color.white;
                     fuelText.color = fuelText.color.SetAlpha(1f);
+                    crosshair.gameObject.SetActive(false);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(controllerType), controllerType, null);

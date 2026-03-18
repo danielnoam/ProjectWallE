@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 4480499691948768094}
   - component: {fileID: 8909220601765990049}
   - component: {fileID: 622395889724703068}
+  - component: {fileID: 279998989523714228}
   m_Layer: 8
   m_Name: Prefab_GroundEnemyWallE
   m_TagString: Untagged
@@ -175,6 +176,27 @@ MonoBehaviour:
   hitLayers: {fileID: 11400000, guid: b3e3f0ea33464b048aaf56518036cb00, type: 2}
   navMeshAgent: {fileID: 8909220601765990049}
   rigidBody: {fileID: 2448601663206975914}
+--- !u!114 &279998989523714228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6471506668328617800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bd4d8cac5474fc3bec89d9a1f771b46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.EnemyEffects
+  damagedSoundId: 
+  punchStrength: 1
+  punchDuration: 0.15
+  punchEase: 1
+  punchCycles: 1
+  excludedRenderers:
+  - {fileID: 8458789910437888696}
+  - {fileID: 1470778290151176988}
+  enemy: {fileID: 622395889724703068}
 --- !u!1 &9070794248794423676
 GameObject:
   m_ObjectHideFlags: 0
@@ -339,6 +361,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 7600245967628824845}
   m_SourcePrefab: {fileID: 100100000, guid: 35ea43580c3aa6b4ca9ae7e68f4272e5, type: 3}
+--- !u!23 &1470778290151176988 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2787259231041272878, guid: 35ea43580c3aa6b4ca9ae7e68f4272e5, type: 3}
+  m_PrefabInstance: {fileID: 3658915827697420082}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3840917313222664409 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 35ea43580c3aa6b4ca9ae7e68f4272e5, type: 3}
@@ -370,3 +397,8 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.2, y: 1, z: 1.46}
   m_Center: {x: 0, y: 0.37, z: 0}
+--- !u!23 &8458789910437888696 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -4060914168323471990, guid: 35ea43580c3aa6b4ca9ae7e68f4272e5, type: 3}
+  m_PrefabInstance: {fileID: 3658915827697420082}
+  m_PrefabAsset: {fileID: 0}

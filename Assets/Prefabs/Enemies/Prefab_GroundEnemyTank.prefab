@@ -283,6 +283,7 @@ GameObject:
   - component: {fileID: 2448601663206975914}
   - component: {fileID: 8909220601765990049}
   - component: {fileID: 622395889724703068}
+  - component: {fileID: -2465843605254733409}
   m_Layer: 8
   m_Name: Prefab_GroundEnemyTank
   m_TagString: Untagged
@@ -391,6 +392,29 @@ MonoBehaviour:
   hitLayers: {fileID: 11400000, guid: b3e3f0ea33464b048aaf56518036cb00, type: 2}
   navMeshAgent: {fileID: 8909220601765990049}
   rigidBody: {fileID: 2448601663206975914}
+--- !u!114 &-2465843605254733409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6471506668328617800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bd4d8cac5474fc3bec89d9a1f771b46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.EnemyEffects
+  damagedSoundId: 
+  punchStrength: 1
+  punchDuration: 0.15
+  punchEase: 1
+  punchCycles: 1
+  excludedRenderers:
+  - {fileID: 1011513757739430324}
+  - {fileID: 1476290043710275920}
+  - {fileID: 7176270749816723202}
+  - {fileID: 7379486276780723963}
+  enemy: {fileID: 622395889724703068}
 --- !u!1 &6719073531406608010
 GameObject:
   m_ObjectHideFlags: 0
@@ -739,8 +763,28 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: df15f20dde9794642b3cf6f528a5476a, type: 3}
+--- !u!23 &1011513757739430324 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -5685597221486784678, guid: df15f20dde9794642b3cf6f528a5476a, type: 3}
+  m_PrefabInstance: {fileID: 4544463063355473646}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &1476290043710275920 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3129431012931780542, guid: df15f20dde9794642b3cf6f528a5476a, type: 3}
+  m_PrefabInstance: {fileID: 4544463063355473646}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4079017067893938437 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: df15f20dde9794642b3cf6f528a5476a, type: 3}
+  m_PrefabInstance: {fileID: 4544463063355473646}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &7176270749816723202 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6667035186241579500, guid: df15f20dde9794642b3cf6f528a5476a, type: 3}
+  m_PrefabInstance: {fileID: 4544463063355473646}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &7379486276780723963 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -2776435361594920939, guid: df15f20dde9794642b3cf6f528a5476a, type: 3}
   m_PrefabInstance: {fileID: 4544463063355473646}
   m_PrefabAsset: {fileID: 0}

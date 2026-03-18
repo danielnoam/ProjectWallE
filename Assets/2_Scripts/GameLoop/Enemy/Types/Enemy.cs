@@ -55,6 +55,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPushable, IPoolable
 
     public event Action<IDamageable> OnDeath;
     public event Action<float> OnDamaged;
+    public event Action OnAttack;
     
     
     
@@ -180,6 +181,7 @@ public abstract class Enemy : MonoBehaviour, IDamageable, IPushable, IPoolable
         {
             var direction = (targetComponent.transform.position - transform.position).normalized;
             projectileData?.Spawn(hitLayers.Value, firePoint.position, direction, targetComponent.transform.position);
+            OnAttack?.Invoke();
         }
     }
     

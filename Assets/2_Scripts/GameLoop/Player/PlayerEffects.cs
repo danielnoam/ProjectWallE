@@ -30,6 +30,7 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField] private MaterialPropertyTweener lowHealthEffect;
         [SerializeField] private MaterialPropertyTweener speedLinesVisibility;
         [SerializeField] private MaterialPropertyTweener speedLinesSize;
+        [SerializeField] private MaterialPropertyTweener emission;
         [SerializeField] private AudioSource airReleaseAudioSource;
         [SerializeField] private AudioSource boostAudioSource;
         [SerializeField] private AudioSource changeStateAudioSource;
@@ -52,6 +53,7 @@ namespace ProjectWallE.GameLoop.Player
             {
                 player.OnControllerChanged += OnControllerChanged;
                 player.OnHealthChanged += OnHealthChanged;
+                player.OnDamaged += OnDamaged;
                 if (player.CarController.CarBoost)
                 {
                     player.CarController.CarBoost.OnBoostStart += OnBoostStart;
@@ -67,6 +69,7 @@ namespace ProjectWallE.GameLoop.Player
             {
                 player.OnControllerChanged -= OnControllerChanged;
                 player.OnHealthChanged -= OnHealthChanged;
+                player.OnDamaged -= OnDamaged;
                 if (player.CarController.CarBoost)
                 {
                     player.CarController.CarBoost.OnBoostStart -= OnBoostStart;
@@ -103,6 +106,12 @@ namespace ProjectWallE.GameLoop.Player
                 speedLinesSize.SetValue(size);
             }
         }
+        
+        private void OnDamaged(float damage)
+        {
+            emission?.Punch();
+        }
+
         
         private void OnBoostStart()
         {

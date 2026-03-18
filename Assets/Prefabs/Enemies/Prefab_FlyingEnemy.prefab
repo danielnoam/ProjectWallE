@@ -891,6 +891,7 @@ GameObject:
   - component: {fileID: 5663768101188873445}
   - component: {fileID: 2448601663206975914}
   - component: {fileID: -4769723865369596212}
+  - component: {fileID: 3903955066819552047}
   m_Layer: 8
   m_Name: Prefab_FlyingEnemy
   m_TagString: Untagged
@@ -988,6 +989,24 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 840
   rigidBody: {fileID: 2448601663206975914}
+--- !u!114 &3903955066819552047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6471506668328617800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bd4d8cac5474fc3bec89d9a1f771b46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.EnemyEffects
+  damagedSoundId: 
+  punchStrength: 1
+  punchDuration: 0.15
+  punchEase: 1
+  punchCycles: 1
+  enemy: {fileID: -4769723865369596212}
 --- !u!1 &6719073531406608010
 GameObject:
   m_ObjectHideFlags: 0
