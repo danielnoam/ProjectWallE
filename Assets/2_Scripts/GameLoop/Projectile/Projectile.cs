@@ -33,7 +33,7 @@ public class Projectile : MonoBehaviour, IPoolable
         _lifetimeTimer += Time.deltaTime;
         if (_lifetimeTimer >= _maxLifetime)
         {
-            ReturnToPool();
+            ObjectPooler.ReturnObjectToPool(this);
         }
     }
 
@@ -118,7 +118,7 @@ public class Projectile : MonoBehaviour, IPoolable
             particle?.Play();
         }
         AudioLibrary.PlayAtPosition(_data.collisionSFX, transform.position);
-        ReturnToPool();
+        ObjectPooler.ReturnObjectToPool(this);
     }
 
     private void MoveLinear()
@@ -143,9 +143,19 @@ public class Projectile : MonoBehaviour, IPoolable
         _arcVelocity = toTarget / travelTime - Physics.gravity * travelTime / 2f;
     }
     
-    private void ReturnToPool()
+    private void ResetData()
     {
-        ObjectPooler.ReturnObjectToPool(this);
+        _isInitialized = false;
+        _hitSomething = false;
+        _lifetimeTimer = 0;
+        
+        _data = null;
+        _owner = null;
+        _hitLayers = -1;
+        _maxLifetime = 0;
+        _startPosition = Vector3.zero;
+        _targetPosition = Vector3.zero;
+        _direction = Vector3.zero;
     }
 
     
@@ -166,22 +176,12 @@ public class Projectile : MonoBehaviour, IPoolable
 
     public void OnPoolGet()
     {
-        
+        ResetData();
     }
 
     public void OnPoolReturn()
     {
-        _isInitialized = false;
-        _hitSomething = false;
-        _lifetimeTimer = 0;
         
-        _data = null;
-        _owner = null;
-        _hitLayers = -1;
-        _maxLifetime = 0;
-        _startPosition = Vector3.zero;
-        _targetPosition = Vector3.zero;
-        _direction = Vector3.zero;
     }
 
     public void OnPoolRecycle()
