@@ -1726,6 +1726,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 15, y: -90, z: 0}
+--- !u!4 &1463673009 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8449382769147926206, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+  m_PrefabInstance: {fileID: 5281606887408493550}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1498618842 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3476467583809506216, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
@@ -2483,10 +2488,46 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 809513574024408617, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: m_Height
+      value: 2.68
+      objectReference: {fileID: 0}
+    - target: {fileID: 809513574024408617, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: m_Center.y
+      value: 0.36
+      objectReference: {fileID: 0}
+    - target: {fileID: 1860573053989788979, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: groundHeight
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1860573053989788979, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: visuals.swivelTurnSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1860573053989788979, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: visuals.wheelVisuals.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1860573053989788979, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
       propertyPath: visuals.wheelVisual.visTransform
       value: 
       objectReference: {fileID: 1032570273}
+    - target: {fileID: 1860573053989788979, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: visuals.swivelVisual.visTransform
+      value: 
+      objectReference: {fileID: 1463673009}
+    - target: {fileID: 1860573053989788979, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: visuals.suspensionVisual.visTransform
+      value: 
+      objectReference: {fileID: 1032570273}
+    - target: {fileID: 1860573053989788979, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: visuals.wheelVisuals.Array.data[0].visTransform
+      value: 
+      objectReference: {fileID: 345926890}
+    - target: {fileID: 1860573053989788979, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: visuals.wheelVisuals.Array.data[1].visTransform
+      value: 
+      objectReference: {fileID: 1498618842}
     - target: {fileID: 2207471271178187077, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
       propertyPath: m_LocalPosition.x
       value: -8.535
@@ -2543,6 +2584,10 @@ PrefabInstance:
       propertyPath: visuals.steeringTires.Array.data[1].visTransform
       value: 
       objectReference: {fileID: 1139485402}
+    - target: {fileID: 4045004396600311935, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.916
+      objectReference: {fileID: 0}
     - target: {fileID: 5821086676760150823, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
       propertyPath: m_Name
       value: PlayerManager

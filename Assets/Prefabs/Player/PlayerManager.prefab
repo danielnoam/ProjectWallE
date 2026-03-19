@@ -734,9 +734,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.RobotController
   groundRayPoint: {fileID: 4045004396600311935}
   visuals:
-    wheelVisual:
+    suspensionVisual:
       visTransform: {fileID: 0}
+    swivelVisual:
+      visTransform: {fileID: 0}
+    wheelVisuals: []
     suspensionReturnSpeed: 15
+    swivelTurnSpeed: 15
     wheelRadius: 15
   groundHeight: 0.35
   maxCheckHeight: 1.25

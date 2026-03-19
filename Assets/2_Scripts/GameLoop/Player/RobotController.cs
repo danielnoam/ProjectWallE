@@ -60,8 +60,9 @@ namespace ProjectWallE
         private bool _hadGroundHitLastFrame;
 
         private bool _isSlopeSliding = false;
-
-        private float _yawDeltaThisStep;
+        
+        private Vector3 _cachedMoveDirWorld;
+        private bool _hasMovementInput;
 
         /// <summary>
         /// controls how much dv affects the acceleration (bigger = less control)
@@ -100,6 +101,13 @@ namespace ProjectWallE
         {
             JumpBufferTimer();
         }
+        
+        private void LateUpdate()
+        {
+            if (visuals == null) return;
+
+            visuals.UpdateSwivelVisual(_hasMovementInput ? _cachedMoveDirWorld : Vector3.zero);
+        }
 
         public void ApplyMovement()
         {
@@ -110,15 +118,16 @@ namespace ProjectWallE
             UpdateGroundHeight(isGrounded, hit);
             UpdateLocomotion(hit);
             UpdateRotation();
-            UpdateWheelVisuals(isGrounded, hit);
+            UpdateVisuals(isGrounded, hit);
         }
         
-        private void UpdateWheelVisuals(bool isGrounded, RaycastHit hit)
+        private void UpdateVisuals(bool isGrounded, RaycastHit hit)
         {
             float offset = isGrounded ? hit.distance - groundHeight : 0f;
             visuals?.UpdateSuspensionVisual(isGrounded, offset);
-            Vector3 moveDir = GetCameraRelativeDirection(_input.Movement);
-            visuals?.UpdateSwivelVisual(moveDir, _yawDeltaThisStep);
+
+            _cachedMoveDirWorld = GetCameraRelativeDirection(_input.Movement);
+            _hasMovementInput = _cachedMoveDirWorld.sqrMagnitude > 0.0001f;
         }
 
         #region Locomotion
@@ -368,14 +377,6 @@ namespace ProjectWallE
         {
             ApplyUprightSpringTorque();
             ApplyCameraYawTorqueIfValid();
-            
-            UpdateYawDelta();
-        }
-        
-        private void UpdateYawDelta()
-        {
-            float yawVelWorld = Vector3.Dot(_playerRb.angularVelocity, Vector3.up);
-            _yawDeltaThisStep = yawVelWorld * Mathf.Rad2Deg * Time.fixedDeltaTime;
         }
 
         private void ApplyUprightSpringTorque()
