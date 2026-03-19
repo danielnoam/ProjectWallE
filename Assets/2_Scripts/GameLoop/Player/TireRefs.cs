@@ -24,7 +24,7 @@ namespace _2_Scripts
             isMoving = false;
         }
     }
-
+    
     [Serializable]
     public class TireVisual
     {
@@ -34,19 +34,17 @@ namespace _2_Scripts
         [NonSerialized] public float steerY;
 
         private Vector3 _startLocalPosition;
-        private Vector3 _startLocalRotation;
-        
+        private Quaternion _startLocalRotation;
 
         public Vector3 StartLocalPosition => _startLocalPosition;
-        public Vector3 StartLocalRotation => _startLocalRotation;
-       
+        public Quaternion StartLocalRotation => _startLocalRotation;
 
         public void Initialize()
         {
             if (visTransform == null) return;
 
             _startLocalPosition = visTransform.localPosition;
-            _startLocalRotation = visTransform.localEulerAngles;
+            _startLocalRotation = visTransform.localRotation;
 
             spinX = 0f;
             steerY = 0f;
@@ -57,7 +55,7 @@ namespace _2_Scripts
             if (visTransform == null) return;
 
             visTransform.localPosition = _startLocalPosition;
-            visTransform.localEulerAngles = _startLocalRotation;
+            visTransform.localRotation = _startLocalRotation;
 
             spinX = 0f;
             steerY = 0f;

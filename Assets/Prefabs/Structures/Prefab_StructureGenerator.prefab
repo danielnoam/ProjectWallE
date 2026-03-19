@@ -125,6 +125,8 @@ MonoBehaviour:
   icon: {fileID: 0}
   upgradeIcon: {fileID: 21300000, guid: 2a7332bdc5467fe4e84ca21fdc48ecaa, type: 3}
   fixIcon: {fileID: 21300000, guid: c523318af4a1ca943932d905d83eed0b, type: 3}
+  demolishIcon: {fileID: 0}
+  canDemolish: 1
   topPoint: {x: 0, y: 2.56, z: 0}
   bottomPoint: {x: 0, y: -0.75, z: 0}
   gfx: {fileID: 2170286402575911496}
@@ -160,7 +162,7 @@ MonoBehaviour:
     - rid: 4437626180964712525
       type: {class: ResourceGeneratorLevelData, ns: , asm: Assembly-CSharp}
       data:
-        maxHealth: 100
+        maxHealth: 200
         cost: 100
         fixCostPerHealthPoint: 1
         generationInterval: 1
@@ -213,11 +215,11 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2, y: 3, z: 2}
+  m_Size: {x: 3, y: 4.45, z: 3}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &5344626430254912182
 PrefabInstance:

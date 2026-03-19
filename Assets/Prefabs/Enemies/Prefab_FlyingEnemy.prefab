@@ -969,9 +969,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FlyingEnemy
   maxHealth: 100
-  targetFindRange: 20
+  targetFindRange: 75
   attackResponse: 1
-  targetPriorities: 010000000300000006000000
+  targetPriorities: 0100000006000000
   attackCooldown: 0.2
   firePoint: {fileID: 7429042783596894845}
   projectileData: {fileID: 11400000, guid: 5aa17da338669a14eba6994821f7b4a8, type: 2}
@@ -1006,6 +1006,7 @@ MonoBehaviour:
   punchDuration: 0.15
   punchEase: 1
   punchCycles: 1
+  excludedRenderers: []
   enemy: {fileID: -4769723865369596212}
 --- !u!1 &6719073531406608010
 GameObject:

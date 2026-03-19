@@ -191,13 +191,15 @@ namespace ProjectWallE.GameLoop.Player
 
         private void UpdateBuildPrompt(Vector3? position)
         {
+            if (!BuildPrompt.Instance) return;
+            
             if (position.HasValue)
             {
-                BuildPrompt.Instance?.Show(position.Value);
+                BuildPrompt.Instance.Show(position.Value);
             }
             else
             {
-                BuildPrompt.Instance?.Hide();
+                BuildPrompt.Instance.Hide();
             }
         }
 

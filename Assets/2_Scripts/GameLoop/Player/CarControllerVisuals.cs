@@ -32,8 +32,13 @@ namespace ProjectWallE
                 return;
             }
 
-            _allTireVisuals[index].visTransform.localPosition =
-                _allTireVisuals[index].StartLocalPosition + (-Vector3.up * offset);
+            TireVisual tireVisual = _allTireVisuals[index];
+
+            Vector3 localSuspensionDir =
+                Quaternion.Inverse(tireVisual.StartLocalRotation) * (-_carTransform.up);
+
+            tireVisual.visTransform.localPosition =
+                tireVisual.StartLocalPosition + localSuspensionDir * offset;
         }
 
         public void RotateWheels(float carSpeed, float wheelRadius, bool isTireGrounded, int index)
@@ -94,11 +99,11 @@ namespace ProjectWallE
 
         private void ApplyVisualRotation(TireVisual tireVisual)
         {
-            Vector3 angles = tireVisual.StartLocalRotation;
-            angles.x += tireVisual.spinX;
-            angles.y += tireVisual.steerY;
+            Quaternion steerRotation = Quaternion.AngleAxis(tireVisual.steerY, Vector3.up);
+            Quaternion spinRotation = Quaternion.AngleAxis(tireVisual.spinX, Vector3.right);
 
-            tireVisual.visTransform.localRotation = Quaternion.Euler(angles);
+            tireVisual.visTransform.localRotation =
+                tireVisual.StartLocalRotation * steerRotation * spinRotation;
         }
 
         private bool IsValidIndex(int index)

@@ -26,7 +26,7 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _FOAM_NOISE_GRADIENT_NOISE
-  - _MOVEMENT_SWELL
+  - _MOVEMENT_NON
   m_InvalidKeywords:
   - _FOAM_FULL
   m_LightmapFlags: 4
@@ -58,7 +58,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Depth: 10
+    - _Depth: 150
     - _Depth_Sample_Offset: 0
     - _FOAM: 1
     - _FOAM_NOISE: 0
@@ -67,7 +67,7 @@ Material:
     - _Foam_Distance: 0.24
     - _Foam_Scale: 3
     - _Foam_Speed: 1
-    - _MOVEMENT: 2
+    - _MOVEMENT: 0
     - _Normal_Strength: 41.6
     - _QueueControl: 0
     - _QueueOffset: 0
@@ -82,10 +82,10 @@ Material:
     - _Wave_Strength: 0.05
     m_Colors:
     - _Base_Color: {r: 0, g: 0.62825316, b: 0.8, a: 0.5019608}
-    - _Deep_Color: {r: 0, g: 0.3452653, b: 0.5597484, a: 0.827451}
+    - _Deep_Color: {r: 0, g: 0.34526527, b: 0.5597484, a: 1}
     - _Foam_Color: {r: 1, g: 1, b: 1, a: 0.5019608}
     - _Foam_Velocity: {r: 0.01, g: 0.01, b: 0, a: 0}
     - _Refraction_Scale: {r: 2, g: 1, b: 0, a: 0}
-    - _Surface_Color: {r: 0.16037712, g: 0.6796252, b: 1, a: 0.06666667}
+    - _Surface_Color: {r: 0.16037709, g: 0.6796252, b: 1, a: 0.57254905}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
