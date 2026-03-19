@@ -35,9 +35,11 @@ namespace _2_Scripts
 
         private Vector3 _startLocalPosition;
         private Quaternion _startLocalRotation;
+        private Vector3 _startWorldPosition;
 
         public Vector3 StartLocalPosition => _startLocalPosition;
         public Quaternion StartLocalRotation => _startLocalRotation;
+        public Vector3 StartWorldPosition => _startWorldPosition;
 
         public void Initialize()
         {
@@ -45,6 +47,7 @@ namespace _2_Scripts
 
             _startLocalPosition = visTransform.localPosition;
             _startLocalRotation = visTransform.localRotation;
+            _startWorldPosition = visTransform.position;
 
             spinX = 0f;
             steerY = 0f;

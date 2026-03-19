@@ -20,25 +20,25 @@ namespace ProjectWallE
         public void UpdateTireSuspensionVisuals(bool isTireGrounded, int index, float offset)
         {
             if (!IsValidIndex(index)) return;
-            if (_allTireVisuals[index].visTransform == null) return;
+
+            TireVisual tireVisual = _allTireVisuals[index];
+            if (tireVisual.visTransform == null) return;
 
             if (!isTireGrounded)
             {
-                _allTireVisuals[index].visTransform.localPosition = Vector3.Lerp(
-                    _allTireVisuals[index].visTransform.localPosition,
-                    _allTireVisuals[index].StartLocalPosition,
+                tireVisual.visTransform.localPosition = Vector3.Lerp(
+                    tireVisual.visTransform.localPosition,
+                    tireVisual.StartLocalPosition,
                     suspensionReturnSpeed * Time.fixedDeltaTime);
 
                 return;
             }
 
-            TireVisual tireVisual = _allTireVisuals[index];
+            Transform parent = tireVisual.visTransform.parent;
 
-            Vector3 localSuspensionDir =
-                Quaternion.Inverse(tireVisual.StartLocalRotation) * (-_carTransform.up);
-
-            tireVisual.visTransform.localPosition =
-                tireVisual.StartLocalPosition + localSuspensionDir * offset;
+            Vector3 worldPos = parent.TransformPoint(tireVisual.StartLocalPosition);
+            worldPos -= _carTransform.up * offset;
+            tireVisual.visTransform.position = worldPos;
         }
 
         public void RotateWheels(float carSpeed, float wheelRadius, bool isTireGrounded, int index)
@@ -99,11 +99,20 @@ namespace ProjectWallE
 
         private void ApplyVisualRotation(TireVisual tireVisual)
         {
-            Quaternion steerRotation = Quaternion.AngleAxis(tireVisual.steerY, Vector3.up);
+            Transform parent = tireVisual.visTransform.parent;
+            if (parent == null)
+            {
+                tireVisual.visTransform.localRotation = tireVisual.StartLocalRotation;
+                return;
+            }
+
+            Vector3 steerAxisInParentSpace = parent.InverseTransformDirection(_carTransform.up);
+            Quaternion steerRotation = Quaternion.AngleAxis(tireVisual.steerY, steerAxisInParentSpace);
+
             Quaternion spinRotation = Quaternion.AngleAxis(tireVisual.spinX, Vector3.right);
 
             tireVisual.visTransform.localRotation =
-                tireVisual.StartLocalRotation * steerRotation * spinRotation;
+                steerRotation * tireVisual.StartLocalRotation * spinRotation;
         }
 
         private bool IsValidIndex(int index)

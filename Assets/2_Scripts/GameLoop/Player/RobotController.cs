@@ -61,6 +61,8 @@ namespace ProjectWallE
 
         private bool _isSlopeSliding = false;
 
+        private float _yawDeltaThisStep;
+
         /// <summary>
         /// controls how much dv affects the acceleration (bigger = less control)
         /// </summary>
@@ -82,7 +84,7 @@ namespace ProjectWallE
 
             _input = GetComponent<RobotInput>();
             
-            visuals?.Initialize();
+            visuals?.Initialize(transform);
         }
 
         public void OnEnter()
@@ -106,9 +108,17 @@ namespace ProjectWallE
             ApplyGravity();
             UpdateJump(isGrounded, hit);
             UpdateGroundHeight(isGrounded, hit);
-            UpdateWheelVisuals(isGrounded, hit);
             UpdateLocomotion(hit);
             UpdateRotation();
+            UpdateWheelVisuals(isGrounded, hit);
+        }
+        
+        private void UpdateWheelVisuals(bool isGrounded, RaycastHit hit)
+        {
+            float offset = isGrounded ? hit.distance - groundHeight : 0f;
+            visuals?.UpdateSuspensionVisual(isGrounded, offset);
+            Vector3 moveDir = GetCameraRelativeDirection(_input.Movement);
+            visuals?.UpdateSwivelVisual(moveDir, _yawDeltaThisStep);
         }
 
         #region Locomotion
@@ -333,12 +343,6 @@ namespace ProjectWallE
             _hadGroundHitLastFrame = true;
         }
 
-        private void UpdateWheelVisuals(bool isGrounded, RaycastHit hit)
-        {
-            float offset = isGrounded ? hit.distance - groundHeight : 0f;
-            visuals?.UpdateSuspensionVisual(isGrounded, offset);
-        }
-
         private bool IsGrounded(out RaycastHit hit)
         {
             float dist = _isGrounded ? maxCheckHeight : groundHeight;
@@ -364,6 +368,14 @@ namespace ProjectWallE
         {
             ApplyUprightSpringTorque();
             ApplyCameraYawTorqueIfValid();
+            
+            UpdateYawDelta();
+        }
+        
+        private void UpdateYawDelta()
+        {
+            float yawVelWorld = Vector3.Dot(_playerRb.angularVelocity, Vector3.up);
+            _yawDeltaThisStep = yawVelWorld * Mathf.Rad2Deg * Time.fixedDeltaTime;
         }
 
         private void ApplyUprightSpringTorque()
@@ -400,6 +412,7 @@ namespace ProjectWallE
             float yawAccel = (yawErrorRad * yawStrength) - (yawVelLocal * yawDamping);
 
             _playerRb.AddRelativeTorque(0f, yawAccel, 0f, ForceMode.Acceleration);
+            
         }
 
         private bool TryGetFlattenedCameraForward(out Vector3 camForwardFlat)
