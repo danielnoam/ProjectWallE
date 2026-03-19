@@ -60,9 +60,6 @@ namespace ProjectWallE
         private bool _hadGroundHitLastFrame;
 
         private bool _isSlopeSliding = false;
-        
-        private Vector3 _cachedMoveDirWorld;
-        private bool _hasMovementInput;
 
         /// <summary>
         /// controls how much dv affects the acceleration (bigger = less control)
@@ -85,11 +82,13 @@ namespace ProjectWallE
 
             _input = GetComponent<RobotInput>();
             
-            visuals?.Initialize(transform);
+            visuals?.Initialize();
         }
 
         public void OnEnter()
         {
+            visuals?.ResetVisuals();
+
         }
 
         public void OnExit()
@@ -106,7 +105,10 @@ namespace ProjectWallE
         {
             if (visuals == null) return;
 
-            visuals.UpdateSwivelVisual(_hasMovementInput ? _cachedMoveDirWorld : Vector3.zero);
+            Vector3 moveDirWorld = GetCameraRelativeDirection(_input.Movement);
+            bool hasMovementInput = moveDirWorld.sqrMagnitude > 0.0001f;
+            visuals?.UpdateSwivelVisual(hasMovementInput ? moveDirWorld : Vector3.zero); //visuals
+            visuals?.UpdateWheelRollingVisual(_playerRb.linearVelocity);
         }
 
         public void ApplyMovement()
@@ -118,17 +120,8 @@ namespace ProjectWallE
             UpdateGroundHeight(isGrounded, hit);
             UpdateLocomotion(hit);
             UpdateRotation();
-            UpdateVisuals(isGrounded, hit);
         }
         
-        private void UpdateVisuals(bool isGrounded, RaycastHit hit)
-        {
-            float offset = isGrounded ? hit.distance - groundHeight : 0f;
-            visuals?.UpdateSuspensionVisual(isGrounded, offset);
-
-            _cachedMoveDirWorld = GetCameraRelativeDirection(_input.Movement);
-            _hasMovementInput = _cachedMoveDirWorld.sqrMagnitude > 0.0001f;
-        }
 
         #region Locomotion
 
@@ -333,14 +326,15 @@ namespace ProjectWallE
 
         private void UpdateGroundHeight(bool isGrounded, RaycastHit hit)
         {
+            float offset = hit.distance - groundHeight;
+            visuals?.UpdateSuspensionVisual(isGrounded, offset);             //visuals
+            
             if (!isGrounded || _isJumping)
             {
                 _hadGroundHitLastFrame = false;
                 return;
             }
-
-            float offset = hit.distance - groundHeight;
-
+            
             float springVel = 0f;
             if (_hadGroundHitLastFrame)
                 springVel = (hit.distance - _lastGroundDistance) / Time.fixedDeltaTime;

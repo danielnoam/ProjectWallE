@@ -105,7 +105,7 @@ namespace _2_Scripts
 
         public void OnEnter()
         {
-            
+            visuals?.ResetVisuals();
         }
 
         public void OnExit()
@@ -269,7 +269,7 @@ namespace _2_Scripts
 
             for (int i = 0; i < _allTires.Count; i++)
             {
-                visuals.RotateWheels(carSpeed, 0.5f, _allTires[i].isGroundedExtended, i);
+                visuals.RotateWheels(carSpeed, _allTires[i].isGroundedExtended, i);
             }
         }
 

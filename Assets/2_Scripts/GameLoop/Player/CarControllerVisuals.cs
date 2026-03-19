@@ -13,6 +13,7 @@ namespace ProjectWallE
         [Tooltip("Make sure this array and the corresponding staticTires array in CarController are in the same order")]
         [SerializeField] private TireVisual[] staticTires;
         [SerializeField] private float suspensionReturnSpeed = 5f;
+        [SerializeField] private float wheelRadius = 1.5f;
 
         private readonly List<TireVisual> _allTireVisuals = new List<TireVisual>();
         private Transform _carTransform;
@@ -41,7 +42,7 @@ namespace ProjectWallE
             tireVisual.visTransform.position = worldPos;
         }
 
-        public void RotateWheels(float carSpeed, float wheelRadius, bool isTireGrounded, int index)
+        public void RotateWheels(float carSpeed, bool isTireGrounded, int index)
         {
             if (!IsValidIndex(index)) return;
             if (!isTireGrounded) return;
