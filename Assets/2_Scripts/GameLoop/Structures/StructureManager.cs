@@ -12,14 +12,11 @@ public class StructureManager : MonoBehaviour
     [SerializeField] private Pod podPrefab;
     [SerializeField] private ChanceList<Transform> podSpawnPositions = new ChanceList<Transform>();
     
-
-    private readonly List<Structure> _allStructures = new List<Structure>();
+    private readonly List<Structure> _structures = new List<Structure>();
     private readonly List<Generator> _generators = new List<Generator>();
     private readonly List<Turret> _turrets = new List<Turret>();
     private readonly List<Base> _bases = new List<Base>();
     
-    
-
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -31,7 +28,6 @@ public class StructureManager : MonoBehaviour
         Instance = this;
     }
     
-    
     public void DeployPod(Structure structure, Vector3 targetPosition, Vector3 forward)
     {
         var spawnPosition = podSpawnPositions.GetRandomItem();
@@ -39,14 +35,13 @@ public class StructureManager : MonoBehaviour
         pod.Initialize(structure, targetPosition, forward);
     }
     
-    
     #region Structure Registration
     
     public void RegisterStructure(Structure structure)
     {
-        if (_allStructures.Contains(structure)) return;
+        if (_structures.Contains(structure)) return;
         
-        _allStructures.Add(structure);
+        _structures.Add(structure);
         
         switch (structure)
         {
@@ -64,9 +59,9 @@ public class StructureManager : MonoBehaviour
     
     public void UnregisterStructure(Structure structure)
     {
-        if (!_allStructures.Contains(structure)) return;
+        if (!_structures.Contains(structure)) return;
         
-        _allStructures.Remove(structure);
+        _structures.Remove(structure);
         
         switch (structure)
         {
@@ -120,21 +115,6 @@ public class StructureManager : MonoBehaviour
     }
     
     #endregion
-    
-    
-    #region Query Methods
-
-    public Turret GetNearestTurret(Vector3 position) => GetNearest(_turrets, position);
-    public Turret GetNearestTurretInRange(Vector3 position, float maxRange) => GetNearest(_turrets, position, maxRange);
-    public Generator GetNearestGeneratorInRange(Vector3 position, float maxRange) => GetNearest(_generators, position, maxRange);
-    public Base GetNearestBase(Vector3 position) => GetNearest(_bases, position);
-    public Structure GetNearestStructure(Vector3 position) => GetNearest(_allStructures, position);
-    
-    public Structure GetWeakestStructureInRange(Vector3 position, float maxRange) => GetWeakest(_allStructures, maxRange, position);
-    public Base GetWeakestBase() => GetWeakest(_bases);
-    
-    #endregion
-
 
     #region Helpers
     
@@ -181,6 +161,17 @@ public class StructureManager : MonoBehaviour
 
         return weakest;
     }
+    
+    public Base GetNearestBase(Vector3 position) => GetNearest(_bases, position);
+    public Base GetNearestBaseInRange(Vector3 position, float range) => GetNearest(_bases, position, range);
+    public Base GetWeakestBase(Vector3 position) => GetWeakest(_bases, float.MaxValue, position);
+    public Base GetWeakestBaseInRange(Vector3 position, float range) => GetWeakest(_bases, range, position);
+    public Structure GetNearestStructure(Vector3 position) => GetNearest(_structures, position);
+    public Structure GetNearestStructureInRange(Vector3 position, float range) => GetNearest(_structures, position, range);
+    public Structure GetWeakestStructure(Vector3 position) => GetWeakest(_structures, float.MaxValue, position);
+    public Structure GetWeakestStructureInRange(Vector3 position, float range) => GetWeakest(_structures, range, position);
+    public Turret GetNearestTurret(Vector3 position) => GetNearest(_turrets, position);
+    public Turret GetNearestTurretInRange(Vector3 position, float range) => GetNearest(_turrets, position, range);
 
     #endregion
 }

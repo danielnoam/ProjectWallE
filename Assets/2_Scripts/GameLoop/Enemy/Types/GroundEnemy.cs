@@ -2,35 +2,44 @@ using DNExtensions.Utilities.AutoGet;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(NavMeshAgent))]
-[RequireComponent(typeof(Rigidbody))]
-public class GroundEnemy : Enemy
+namespace ProjectWallE.GameLoop
 {
-    [SerializeField, AutoGetSelf, HideInInspector] private NavMeshAgent navMeshAgent;
-    [SerializeField, AutoGetSelf, HideInInspector] private Rigidbody rigidBody;
-    
-    protected override void UpdateMovement()
+    [RequireComponent(typeof(NavMeshAgent))]
+    [RequireComponent(typeof(Rigidbody))]
+    public class GroundEnemy : Enemy
     {
-        if (!IsTargetValid(CurrentTarget, out _))
+        [SerializeField, AutoGetSelf, HideInInspector] private NavMeshAgent navMeshAgent;
+        [SerializeField, AutoGetSelf, HideInInspector] private Rigidbody rigidBody;
+        
+        protected override void UpdateMovement()
         {
-            State = EnemyState.Idle;
-            return;
+            if (!IsTargetValid(CurrentTarget))
+            {
+                State = EnemyState.Idle;
+                navMeshAgent.ResetPath();
+                return;
+            }
+
+            State = EnemyState.MovingToTarget;
+
+            if (Vector3.Distance(navMeshAgent.destination, CurrentTarget.transform.position) > RetargetThreshold) SetDestination();
         }
 
-        State = EnemyState.MovingToTarget;
-        SetDestination();
-    }
-
-    protected override void SetDestination()
-    {
-        if (IsTargetValid(CurrentTarget, out var targetComponent))
+        protected override void SetDestination()
         {
-            navMeshAgent.SetDestination(targetComponent.transform.position);
+            if (IsTargetValid(CurrentTarget))
+            {
+                var positionOffset = Random.insideUnitSphere * RandomRange;
+                positionOffset.y = 0;
+                
+                navMeshAgent.SetDestination(CurrentTarget.transform.position + positionOffset);
+            }
         }
-    }
 
-    protected override void OnPush(Vector3 direction, float force)
-    {
-        rigidBody.AddForce(direction.normalized * force, ForceMode.Force);
+        protected override void OnPush(Vector3 direction, float force)
+        {
+            rigidBody.AddForce(direction.normalized * force, ForceMode.Force);
+        }
     }
 }
+

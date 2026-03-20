@@ -1,29 +1,37 @@
+using DNExtensions.Utilities;
 using DNExtensions.Utilities.AutoGet;
 using UnityEngine;
+
+namespace ProjectWallE.GameLoop
+{
 
 [RequireComponent(typeof(Rigidbody))]
 public class FlyingEnemy : Enemy
 {
-    [Header("Flying Settings")]
-    [SerializeField] private float flightHeight = 8f;
-    [SerializeField] private float moveSpeed = 14f;
-    [SerializeField] private float heightAdjustSpeed = 4f;
+    [Header("Flying")]
+    [SerializeField] private float stopDistance = 30f;
+    [SerializeField] private float moveSpeed = 17F;
     [SerializeField] private float rotationSpeed = 5f;
+
+    [Header("Height")]
+    [SerializeField] private float flightHeight = 8f;
+    [SerializeField] private float heightAdjustSpeed = 4f;
+    [SerializeField] private float heightCheckDistance = 30f;
+    [SerializeField] private LayerMask heightMask;
     [SerializeField] private float hoverAmplitude = 0.4f;
     [SerializeField] private float hoverFrequency = 1.2f;
-
-    [Header("Obstacle Settings")]
-    [SerializeField] private float obstacleCheckDistance = 30f;
-    [SerializeField] private float separationRadius = 5f;
+    
+    [Header("Obstacle Separation")]
+    [SerializeField] private float separationRadius = 4f;
     [SerializeField] private float separationForce = 15f;
-    [SerializeField] private LayerMask obstacleMask;
+    [SerializeField] private LayerMask separationMask;
 
     [SerializeField, AutoGetSelf, HideInInspector] private Rigidbody rigidBody;
 
-    private const float ArrivalThreshold = 1f;
+    private const float ArrivalThreshold = 3f;
     private const int SeparationCheckInterval = 5;
 
-    private Vector3 _targetFlyPosition;
+    private Vector3 _destination;
     private int _separationFrameOffset;
     private static int _frameOffsetCounter;
 
@@ -38,10 +46,15 @@ public class FlyingEnemy : Enemy
 
     protected override void SetDestination()
     {
-        if (IsTargetValid(CurrentTarget, out var targetComponent))
-        {
-            _targetFlyPosition = targetComponent.transform.position + Vector3.up * flightHeight;
-        }
+        if (!IsTargetValid(CurrentTarget)) return;
+
+        Vector3 targetPos = CurrentTarget.transform.position;
+        Vector3 directionToTarget = (transform.position - targetPos).normalized;
+
+        var offset = Random.insideUnitSphere * RandomRange;
+
+        var destination = targetPos + directionToTarget * stopDistance + offset;
+        _destination = new Vector3(destination.x, 0, destination.z);
     }
 
     protected override void OnPush(Vector3 direction, float force)
@@ -51,54 +64,58 @@ public class FlyingEnemy : Enemy
 
     protected override void UpdateMovement()
     {
-        if (!IsTargetValid(CurrentTarget, out var targetComponent))
+        if (!IsTargetValid(CurrentTarget))
         {
             State = EnemyState.Idle;
             Hover();
             return;
         }
 
-        _targetFlyPosition = targetComponent.transform.position + Vector3.up * flightHeight;
         State = EnemyState.MovingToTarget;
-
         MaintainAltitude();
 
-        if ((Time.frameCount + _separationFrameOffset) % SeparationCheckInterval == 0)
-            ApplySeparation();
+        if ((Time.frameCount + _separationFrameOffset) % SeparationCheckInterval == 0) ApplySeparation();
 
-        float distanceXZ = Vector3.Distance(
-            new Vector3(transform.position.x, 0, transform.position.z),
-            new Vector3(targetComponent.transform.position.x, 0, targetComponent.transform.position.z)
-        );
+        var targetXZ = new Vector3(CurrentTarget.transform.position.x, 0, CurrentTarget.transform.position.z);
+        if (Vector3.Distance(_destination, targetXZ) > RetargetThreshold) SetDestination();
 
-        if (distanceXZ > targetFindRange)
+        var posXZ = new Vector3(transform.position.x, 0, transform.position.z);
+        if (Vector3.Distance(posXZ, _destination) > ArrivalThreshold)
+        {
             FlyTowardTarget();
+        }
         else
         {
             Hover();
-            FaceTarget(targetComponent.transform.position);
+            FaceTarget(CurrentTarget.transform.position);
         }
     }
 
     private void MaintainAltitude()
     {
-        if (!Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, obstacleCheckDistance, obstacleMask)) return;
-
-        float desiredY = hit.point.y + flightHeight;
-        if (transform.position.y < desiredY)
+        if (!Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, heightCheckDistance, heightMask))
         {
-            float correction = (desiredY - transform.position.y) * heightAdjustSpeed;
             rigidBody.linearVelocity = new Vector3(
                 rigidBody.linearVelocity.x,
-                Mathf.Max(rigidBody.linearVelocity.y, correction),
+                -heightAdjustSpeed,
                 rigidBody.linearVelocity.z
             );
+            return;
         }
+
+        float desiredY = hit.point.y + flightHeight;
+        float correction = (desiredY - transform.position.y) * heightAdjustSpeed;
+
+        rigidBody.linearVelocity = new Vector3(
+            rigidBody.linearVelocity.x,
+            Mathf.MoveTowards(rigidBody.linearVelocity.y, correction, heightAdjustSpeed * Time.deltaTime),
+            rigidBody.linearVelocity.z
+        );
     }
 
     private void ApplySeparation()
     {
-        Collider[] nearby = Physics.OverlapSphere(transform.position, separationRadius, obstacleMask);
+        Collider[] nearby = Physics.OverlapSphere(transform.position, separationRadius, separationMask);
         foreach (var col in nearby)
         {
             if (col.gameObject == gameObject) continue;
@@ -110,21 +127,21 @@ public class FlyingEnemy : Enemy
 
     private void FlyTowardTarget()
     {
-        Vector3 direction = _targetFlyPosition - transform.position;
-        if (direction.magnitude > ArrivalThreshold)
-        {
-            Vector3 velocity = direction.normalized * moveSpeed;
-            velocity.y = Mathf.MoveTowards(rigidBody.linearVelocity.y, velocity.y, heightAdjustSpeed * Time.deltaTime);
-            rigidBody.linearVelocity = velocity;
-        }
+        Vector3 direction = _destination - transform.position;
+        direction.y = 0;
 
-        if (direction.sqrMagnitude > 0.01f)
-            FaceTarget(transform.position + direction);
+        if (direction.magnitude <= ArrivalThreshold) return;
+
+        Vector3 velocity = direction.normalized * moveSpeed;
+        velocity.y = rigidBody.linearVelocity.y;
+        rigidBody.linearVelocity = velocity;
+
+        FaceTarget(transform.position + direction);
     }
 
     private void Hover()
     {
-        float targetY = _targetFlyPosition.y + Mathf.Sin(Time.time * hoverFrequency) * hoverAmplitude;
+        float targetY = transform.position.y + Mathf.Sin(Time.time * hoverFrequency) * hoverAmplitude;
         float yVelocity = Mathf.MoveTowards(rigidBody.linearVelocity.y, (targetY - transform.position.y) * heightAdjustSpeed, heightAdjustSpeed * Time.deltaTime);
 
         rigidBody.linearVelocity = new Vector3(
@@ -146,7 +163,7 @@ public class FlyingEnemy : Enemy
     protected override void OnDrawGizmosSelected()
     {
         base.OnDrawGizmosSelected();
-        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, obstacleCheckDistance, obstacleMask))
+        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, heightCheckDistance, heightMask))
         {
             Gizmos.color = Color.green;
             Gizmos.DrawLine(transform.position, hit.point);
@@ -155,9 +172,13 @@ public class FlyingEnemy : Enemy
         else
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawLine(transform.position, transform.position + Vector3.down * obstacleCheckDistance);
+            Gizmos.DrawLine(transform.position, transform.position + Vector3.down * heightCheckDistance);
         }
+        
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(_destination.AddY(transform.position.y), 1f);
     }
 #endif
 
+}
 }

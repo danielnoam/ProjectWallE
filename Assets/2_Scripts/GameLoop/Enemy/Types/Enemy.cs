@@ -2,282 +2,241 @@ using System;
 using DNExtensions.Systems.ObjectPooling;
 using DNExtensions.Systems.Scriptables;
 using DNExtensions.Utilities;
-using ProjectWallE;
-using UnityEngine;
+using DNExtensions.Utilities.SerializableSelector;
+using UnityEditor;
+using UnityEngine;  
 
-public enum TargetPriority
+namespace ProjectWallE.GameLoop
 {
-    Player,
-    PlayerInRange,
-    NearestBase,
-    NearestTurretInRange,
-    NearestGeneratorInRange,
-    WeakestStructureInRange,
-    NearestStructure,
-}
-
-public enum AttackResponse
-{
-    None,
-    RetaliatePlayer,
-    RetaliateTurret,
-    RetaliateAll,
-}
-
-public enum EnemyState
-{
-    MovingToTarget, 
-    Idle
-}
-
-[SelectionBase]
-public abstract class Enemy : MonoBehaviour, IDamageable, IPushable, IPoolable
-{
-    [Header("Settings")]
-    [SerializeField] protected float maxHealth = 100f;
-    [SerializeField] protected float targetFindRange = 20f;
-    [Tooltip("What should the enemy do when being attacked")]
-    [SerializeField] protected AttackResponse attackResponse = AttackResponse.RetaliatePlayer;
-    [Tooltip("Order of priority for finding targets. If multiple targets are in range, the first one in this list will be chosen")]
-    [SerializeField] protected TargetPriority[] targetPriorities = { TargetPriority.NearestBase };
-
-    [Header("Attack")]
-    [SerializeField] protected float attackCooldown = 1f;
-    [SerializeField] protected Transform firePoint;
-    [SerializeField, SOSelector("Assets/Data")] protected ProjectileData projectileData;
-    [SerializeField, SOSelector("Assets/Data")] protected SOLayerMask hitLayers;
-
-    private float _currentHealth;
-    private float _attackTimer;
-
-    protected EnemyState State = EnemyState.MovingToTarget;
-    protected IDamageable CurrentTarget;
-
-    public event Action<IDamageable> OnDeath;
-    public event Action<float> OnDamaged;
-    public event Action OnAttack;
-    
-    
-    
-    
-    protected abstract void UpdateMovement();
-    protected abstract void SetDestination();
-    protected abstract void OnPush(Vector3 direction, float force);
-
-    protected virtual void Initialize()
+    public enum AttackResponse
     {
-        _currentHealth = maxHealth;
-        UpdateTarget();
-        EnemyManager.Instance?.RegisterEnemy(this);
-    }
-    
-    private void OnDestroy()
-    {
-        EnemyManager.Instance?.UnregisterEnemy(this);
-        if (CurrentTarget != null) CurrentTarget.OnDeath -= OnTargetDeath;
-    }
-    
-    private void Start()
-    {
-        Initialize();
+        None,
+        RetaliatePlayer,
+        RetaliateTurret,
+        RetaliateAll,
     }
 
-    private void Update()
+    public enum EnemyState
     {
-        UpdateMovement();
-        TryAttack();
+        MovingToTarget,
+        Idle
     }
 
-    private void OnCollisionEnter(Collision collision)
+    [SelectionBase]
+    public abstract class Enemy : MonoBehaviour, IDamageable, IPushable, IPoolable
     {
-        if (collision.gameObject.TryGetComponent(out Pod _))
+        [Header("Settings")] 
+        [SerializeField] private float maxHealth = 100f;
+        [SerializeField] private float targetFindRange = 20f;
+        [SerializeField] private AttackResponse attackResponse = AttackResponse.RetaliatePlayer;
+        [SerializeReference, SerializableSelector] private TargetingStrategy[] targetingStrategies;
+
+        [Header("Attack")] 
+        [SerializeField] private float attackCooldown = 1f;
+        [SerializeField] private float attackRange = 10f;
+        [SerializeField] private Transform firePoint;
+        [SerializeField, SOSelector("Assets/Data")] private ProjectileData projectileData;
+        [SerializeField, SOSelector("Assets/Data")] private SOLayerMask hitLayers;
+
+        private float _currentHealth;
+        private float _attackTimer;
+
+        protected EnemyState State = EnemyState.MovingToTarget;
+        protected IDamageable CurrentTarget;
+        protected const float RandomRange = 20f;
+        protected const float RetargetThreshold = 25f;
+
+        public event Action<IDamageable> OnDeath;
+        public event Action<float> OnDamaged;
+        public event Action OnAttack;
+
+
+        private void OnDestroy()
         {
-            Die();
-        }
-    }
-    
-    private void OnTargetChanged()
-    {
-        SetDestination();
-    }
-
-    private void OnTargetDeath(IDamageable deadTarget)
-    {
-        CurrentTarget.OnDeath -= OnTargetDeath;
-        UpdateTarget();
-    }
-
-    private void TryAttack()
-    {
-        if (!IsInAttackRange())
-        {
-            _attackTimer = 0f;
-            return;
+            EnemyManager.Instance?.UnregisterEnemy(this);
+            if (CurrentTarget != null) CurrentTarget.OnDeath -= OnTargetDeath;
         }
 
-        _attackTimer += Time.deltaTime;
-        if (_attackTimer >= attackCooldown)
+        private void Start()
         {
-            AttackTarget();
-            _attackTimer = 0f;
+            Initialize();
         }
-    }
-    
 
-    private void UpdateTarget()
-    {
-        if (CurrentTarget != null) CurrentTarget.OnDeath -= OnTargetDeath;
-
-        foreach (var priority in targetPriorities)
+        private void Update()
         {
-            IDamageable target = FindTargetByPriority(priority);
-            if (IsTargetValid(target, out _))
+            UpdateMovement();
+            TryAttack();
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (collision.gameObject.TryGetComponent(out Pod _))
             {
-                CurrentTarget = target;
-                CurrentTarget.OnDeath += OnTargetDeath;
-                OnTargetChanged();
-                return;
+                Die();
             }
         }
 
-        CurrentTarget = null;
-    }
-
-    private IDamageable FindTargetByPriority(TargetPriority priority)
-    {
-        switch (priority)
+        private void OnTargetDeath(IDamageable deadTarget)
         {
-            case TargetPriority.NearestBase:
-                return StructureManager.Instance?.GetNearestBase(transform.position);
-            case TargetPriority.Player:
-                return LevelManager.Instance?.Player;
-            case TargetPriority.NearestTurretInRange:
-                return StructureManager.Instance?.GetNearestTurretInRange(transform.position, targetFindRange);
-            case TargetPriority.WeakestStructureInRange:
-                return StructureManager.Instance?.GetWeakestStructureInRange(transform.position, targetFindRange);
-            case TargetPriority.PlayerInRange:
-                var player = LevelManager.Instance?.Player;
-                if (!player) return null;
-                return Vector3.Distance(transform.position, player.transform.position) <= targetFindRange ? player as IDamageable : null;
-            case TargetPriority.NearestGeneratorInRange:
-                return StructureManager.Instance?.GetNearestGeneratorInRange(transform.position, targetFindRange);
-            case TargetPriority.NearestStructure:
-                return StructureManager.Instance?.GetNearestStructure(transform.position);
-            default:
-                return null;
+            CurrentTarget.OnDeath -= OnTargetDeath;
+            CheckForTarget();
         }
-    }
-    
 
-    private void Die()
-    {
-        OnDeath?.Invoke(this);
-        Destroy(gameObject);   // ReturnToPool
-    }
-
-    private void AttackTarget()
-    {
-        if (IsTargetValid(CurrentTarget, out var targetComponent))
+        private void CheckForTarget()
         {
-            var direction = (targetComponent.transform.position - transform.position).normalized;
-            projectileData?.Spawn(hitLayers.Value, firePoint.position, direction, targetComponent.transform.position);
+            if (CurrentTarget != null) CurrentTarget.OnDeath -= OnTargetDeath;
+
+            foreach (var strategy in targetingStrategies)
+            {
+                IDamageable target = strategy.FindTarget(transform.position, targetFindRange);
+                if (IsTargetValid(target))
+                {
+                    SetTarget(target);
+                    return;
+                }
+            }
+
+            CurrentTarget = null;
+        }
+
+
+        private void Die()
+        {
+            OnDeath?.Invoke(this);
+            Destroy(gameObject);
+        }
+
+        private void TryAttack()
+        {
+            if (!IsInAttackRange())
+            {
+                _attackTimer = 0f;
+                return;
+            }
+
+            _attackTimer += Time.deltaTime;
+            if (_attackTimer >= attackCooldown)
+            {
+                Attack();
+                _attackTimer = 0f;
+            }
+        }
+
+        private void Attack()
+        {
+            if (!IsTargetValid(CurrentTarget)) return;
+
+            var direction = (CurrentTarget.transform.position - transform.position).normalized;
+            projectileData?.Spawn(hitLayers.Value, firePoint.position, direction, CurrentTarget.transform.position);
             OnAttack?.Invoke();
         }
-    }
-    
-    private bool IsInAttackRange() 
-    {
-        return IsTargetValid(CurrentTarget, out var component) && Vector3.Distance(transform.position, component.transform.position) <= targetFindRange;
-    }
-    
-    private bool ShouldRetaliate(IDamageable attacker)
-    {
-        switch (attackResponse)
+
+        private void SetTarget(IDamageable target)
         {
-            case AttackResponse.RetaliatePlayer: return attacker is PlayerManager;
-            case AttackResponse.RetaliateTurret: return attacker is Turret;
-            case AttackResponse.RetaliateAll:    return true;
-            case AttackResponse.None:
-            default:                             return false;
-        }
-    }
-
-    private void ForceTarget(IDamageable target)
-    {
-        if (CurrentTarget != null) CurrentTarget.OnDeath -= OnTargetDeath;
-        CurrentTarget = target;
-        CurrentTarget.OnDeath += OnTargetDeath;
-        OnTargetChanged();
-    }
-
-    
-    protected bool IsTargetValid(IDamageable target, out Component targetComponent)
-    {
-        targetComponent = target as Component;
-        return targetComponent && targetComponent.gameObject.activeInHierarchy;
-    }
-    
-    public void TakeDamage(float damage, IDamageable attacker = null)
-    {
-        if (_currentHealth <= 0) return;
-
-        _currentHealth -= damage;
-        OnDamaged?.Invoke(damage);
-        
-        if (attacker != null && attacker != CurrentTarget && ShouldRetaliate(attacker))
-        {
-            ForceTarget(attacker);
+            if (CurrentTarget != null) CurrentTarget.OnDeath -= OnTargetDeath;
+            CurrentTarget = target;
+            CurrentTarget.OnDeath += OnTargetDeath;
+            SetDestination();
         }
 
-        if (_currentHealth <= 0) Die();
-    }
+        private bool ShouldRetaliate(IDamageable attacker)
+        {
+            switch (attackResponse)
+            {
+                case AttackResponse.RetaliatePlayer:
+                    return attacker is PlayerManager;
+                case AttackResponse.RetaliateTurret:
+                    return attacker is Turret;
+                case AttackResponse.RetaliateAll:
+                    return true;
+                case AttackResponse.None:
+                default:
+                    return false;
+            }
+        }
 
-    public void Push(Vector3 direction, float force)
-    {
-        OnPush(direction, force);
-    }
-    
-    public void OnPoolGet()
-    {
-        Initialize();
-    }
+        private bool IsInAttackRange()
+        {
+            return IsTargetValid(CurrentTarget) && Vector3.Distance(transform.position, CurrentTarget.transform.position) <= attackRange;
+        }
 
-    public void OnPoolReturn()
-    {
-        EnemyManager.Instance?.UnregisterEnemy(this);
-        _currentHealth = maxHealth;
-        _attackTimer = 0f;
-        State = EnemyState.Idle;
-        if (CurrentTarget != null) CurrentTarget.OnDeath -= OnTargetDeath;
-        CurrentTarget = null;
-    }
+        protected bool IsTargetValid(IDamageable target)
+        {
+            return target is Component component && component && component.gameObject.activeInHierarchy;
+        }
 
-    public void OnPoolRecycle()
-    {
-        
-    }
+        protected virtual void Initialize()
+        {
+            _currentHealth = maxHealth;
+            _attackTimer = 0f;
+            State = EnemyState.Idle;
+            CheckForTarget();
+            EnemyManager.Instance?.RegisterEnemy(this);
+        }
+
+        protected abstract void UpdateMovement();
+        protected abstract void SetDestination();
+        protected abstract void OnPush(Vector3 direction, float force);
+
+        public void TakeDamage(float damage, IDamageable attacker = null)
+        {
+            if (_currentHealth <= 0) return;
+
+            _currentHealth -= damage;
+            OnDamaged?.Invoke(damage);
+
+            if (attacker != null && attacker != CurrentTarget && ShouldRetaliate(attacker))
+            {
+                SetTarget(attacker);
+            }
+
+            if (_currentHealth <= 0) Die();
+        }
+
+        public void Push(Vector3 direction, float force)
+        {
+            OnPush(direction, force);
+        }
+
+        public void OnPoolGet()
+        {
+            Initialize();
+        }
+
+        public void OnPoolReturn()
+        {
+            EnemyManager.Instance?.UnregisterEnemy(this);
+            if (CurrentTarget != null) CurrentTarget.OnDeath -= OnTargetDeath;
+            CurrentTarget = null;
+        }
+
+        public void OnPoolRecycle()
+        {
+
+        }
 
 #if UNITY_EDITOR
-    protected virtual void OnDrawGizmos()
-    {
-        if (!Application.isPlaying) return;
-        string targetName = (CurrentTarget is Component t && t) ? t.name : "None";
-        UnityEditor.Handles.Label(
-            transform.position + Vector3.up * 2.5f,
-            $"Health: {_currentHealth:N1}/{maxHealth}\nState: {State}\nTarget: {targetName}",
-            new GUIStyle()
-            {
-                normal = new GUIStyleState() { textColor = Color.red },
-                fontSize = 8,
-                fontStyle = FontStyle.Normal,
-                alignment = TextAnchor.MiddleCenter
-            });
-    }
+        protected virtual void OnDrawGizmos()
+        {
+            if (!Application.isPlaying) return;
+            string targetName = (CurrentTarget is Component t && t) ? t.name : "None";
+            Handles.Label(
+                transform.position + Vector3.up * 2.5f,
+                $"Health: {_currentHealth:N1}/{maxHealth}\nState: {State}\nTarget: {targetName}",
+                new GUIStyle()
+                {
+                    normal = new GUIStyleState() { textColor = Color.red },
+                    fontSize = 8,
+                    fontStyle = FontStyle.Normal,
+                    alignment = TextAnchor.MiddleCenter
+                });
+        }
 
-    protected virtual void OnDrawGizmosSelected()
-    {
-        Gizmos.color = new Color(1f, 0.5f, 0f, 0.3f);
-        Gizmos.DrawWireSphere(transform.position, targetFindRange);
-    }
+        protected virtual void OnDrawGizmosSelected()
+        {
+            Gizmos.color = new Color(1f, 0.5f, 0f, 0.3f);
+            Gizmos.DrawWireSphere(transform.position, targetFindRange);
+        }
 #endif
+    }
 }

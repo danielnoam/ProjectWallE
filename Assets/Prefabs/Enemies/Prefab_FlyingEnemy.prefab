@@ -971,24 +971,47 @@ MonoBehaviour:
   maxHealth: 100
   targetFindRange: 75
   attackResponse: 1
-  targetPriorities: 0100000006000000
+  targetingStrategies:
+  - rid: 6000861155382526038
+  - rid: 6000861155382526045
+  - rid: 6000861155382526047
   attackCooldown: 0.2
+  attackRange: 40
   firePoint: {fileID: 7429042783596894845}
   projectileData: {fileID: 11400000, guid: 5aa17da338669a14eba6994821f7b4a8, type: 2}
   hitLayers: {fileID: 11400000, guid: b3e3f0ea33464b048aaf56518036cb00, type: 2}
-  flightHeight: 8
+  stopDistance: 30
   moveSpeed: 17
-  heightAdjustSpeed: 4
   rotationSpeed: 5
+  flightHeight: 10
+  heightAdjustSpeed: 4
+  heightCheckDistance: 30
+  heightMask:
+    serializedVersion: 2
+    m_Bits: 1032
   hoverAmplitude: 0.4
   hoverFrequency: 1.2
-  obstacleCheckDistance: 30
   separationRadius: 4
   separationForce: 15
-  obstacleMask:
+  separationMask:
     serializedVersion: 2
-    m_Bits: 840
+    m_Bits: 768
   rigidBody: {fileID: 2448601663206975914}
+  references:
+    version: 2
+    RefIds:
+    - rid: 6000861155382526038
+      type: {class: NearestBaseTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        inRange: 1
+    - rid: 6000861155382526045
+      type: {class: PlayerTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        inRange: 1
+    - rid: 6000861155382526047
+      type: {class: NearestStructureTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        inRange: 0
 --- !u!114 &3903955066819552047
 MonoBehaviour:
   m_ObjectHideFlags: 0

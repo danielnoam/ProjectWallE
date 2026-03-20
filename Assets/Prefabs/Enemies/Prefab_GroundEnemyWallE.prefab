@@ -141,7 +141,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 6471506668328617800}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 1.11
+  m_Radius: 1
   m_Speed: 15
   m_Acceleration: 8
   avoidancePriority: 50
@@ -168,14 +168,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GroundEnemy
   maxHealth: 50
   targetFindRange: 50
-  attackResponse: 0
-  targetPriorities: 0600000001000000
+  attackResponse: 1
+  targetingStrategies:
+  - rid: 6000861155382526051
+  - rid: 6000861155382526060
+  - rid: 6000861155382526053
+  - rid: 6000861155382526052
   attackCooldown: 0.7
+  attackRange: 40
   firePoint: {fileID: 1150219598074133490}
   projectileData: {fileID: 11400000, guid: 8ffdf2f42528d434f91c7d9b565e08fd, type: 2}
   hitLayers: {fileID: 11400000, guid: b3e3f0ea33464b048aaf56518036cb00, type: 2}
   navMeshAgent: {fileID: 8909220601765990049}
   rigidBody: {fileID: 2448601663206975914}
+  references:
+    version: 2
+    RefIds:
+    - rid: 6000861155382526051
+      type: {class: NearestBaseTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        inRange: 1
+    - rid: 6000861155382526052
+      type: {class: PlayerTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        inRange: 1
+    - rid: 6000861155382526053
+      type: {class: NearestStructureTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        inRange: 0
+    - rid: 6000861155382526060
+      type: {class: NearestTurretTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        inRange: 1
 --- !u!114 &279998989523714228
 MonoBehaviour:
   m_ObjectHideFlags: 0

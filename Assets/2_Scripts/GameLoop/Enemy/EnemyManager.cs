@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using DNExtensions.Utilities;
+using ProjectWallE.GameLoop;
 using UnityEngine;
 
 public enum SpawnPosition
@@ -30,26 +31,6 @@ public class EnemyManager : MonoBehaviour
             return;
         }
         Instance = this;
-    }
-    
-    public Enemy GetNearestEnemy(Vector3 position)
-    {
-        Enemy nearest = null;
-        float closestDist = float.MaxValue;
-        
-        foreach (var enemy in _activeEnemies)
-        {
-            if (!enemy) continue;
-            
-            float dist = Vector3.Distance(position, enemy.transform.position);
-            if (dist < closestDist)
-            {
-                closestDist = dist;
-                nearest = enemy;
-            }
-        }
-        
-        return nearest;
     }
     
     #region Spawning

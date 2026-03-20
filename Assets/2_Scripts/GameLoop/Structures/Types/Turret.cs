@@ -4,6 +4,7 @@ using DNExtensions.Systems.Scriptables;
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.Button;
 using PrimeTween;
+using ProjectWallE.GameLoop;
 using UnityEngine;
 
 [Serializable]
