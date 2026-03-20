@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Wheel
+  m_Name: MushroomBase
   m_Shader: {fileID: -6465566751694194690, guid: 1862a6367050f2b4a84d84a7b9be1a5d, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -55,22 +55,21 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Ambient_Strength: 0.5
+    - _Ambient_Strength: 1
     - _Dither: 0
     - _Dither_Fade_Distance: 0
     - _Dither_Size: 2
     - _Emission_Strength: 0
-    - _Falloff_Amount: 0.1
-    - _Fresnel_Size: 0.1
+    - _Falloff_Amount: 2.55
+    - _Fresnel_Size: 0
     - _Lighting_Cutoff: 0
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Smoothness: 1
     m_Colors:
-    - _Diffuse_Color: {r: 0.31446534, g: 0.31446534, b: 0.31446534, a: 1}
-    - _Emission: {r: 1, g: 1, b: 1, a: 1}
-    - _Emission_Color: {r: 2.8884711, g: 2.8884711, b: 2.8884711, a: 1}
+    - _Diffuse_Color: {r: 0.52201253, g: 0.52201253, b: 0.52201253, a: 1}
+    - _Emission_Color: {r: 5.340313, g: 5.340313, b: 5.340313, a: 1}
     - _Fresnel_Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Specular_Color: {r: 0.18238991, g: 0.18238991, b: 0.18238991, a: 1}
+    - _Specular_Color: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
