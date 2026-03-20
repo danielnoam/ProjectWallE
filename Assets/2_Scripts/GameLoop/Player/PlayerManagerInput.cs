@@ -51,7 +51,6 @@ namespace ProjectWallE
         public void OnLook(InputAction.CallbackContext context)
         {
             MouseDelta = context.ReadValue<Vector2>();
-            Debug.Log(MouseDelta);
         }
     }
 }

@@ -1536,17 +1536,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 15, y: -90, z: 0}
---- !u!114 &1574036792 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8828607242384971384, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
-  m_PrefabInstance: {fileID: 5281606887408493550}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77c542fca3cb4d14eaa54ed2872752c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.CarBoost
 --- !u!1 &1592309857
 GameObject:
   m_ObjectHideFlags: 0
@@ -2326,10 +2315,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2635220521126351491, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
-      propertyPath: carBoost
-      value: 
-      objectReference: {fileID: 1574036792}
     - target: {fileID: 5821086676760150823, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
       propertyPath: m_Name
       value: PlayerManager
