@@ -13,13 +13,13 @@ namespace ProjectWallE
     public class PlayerManager : MonoBehaviour, IDamageable, IPushable
     {
         [SerializeField, Min(10f)] private float maxHealth = 100f;
+        [SerializeField] private float switchCooldown = 1f;
         [SerializeField] LayerMask groundLayer;
         
         [HideInInspector][SerializeField] CarController carController;
         [HideInInspector][SerializeField] RobotController robotController;
         [HideInInspector][SerializeField] PlayerStructureBuilder structureBuilder;
         
-        private float _currentHealth;
         private PlayerManagerInput _input;
         
         private Rigidbody _rigidbody;
@@ -29,6 +29,9 @@ namespace ProjectWallE
         private PlayerControllerType _lastFramePlayerControllerTypeEnum;
         
         private IPlayerController _currentController;
+        
+        private float _currentHealth;
+        private float _switchTimer;
 
         public CarController CarController => carController;
         public RobotController RobotController => robotController;
@@ -81,9 +84,10 @@ namespace ProjectWallE
 
         private void Update()
         {
-            if (_input.SwitchPressed) SwitchController();
-            SwitchBehavior();
+            if (_input.SwitchPressed && Time.time > _switchTimer + switchCooldown) 
+                SwitchControllerEnum();
             
+            SwitchBehavior();
         }
 
         private void FixedUpdate()
@@ -94,7 +98,7 @@ namespace ProjectWallE
 
         #region Controller Switch
 
-        private void SwitchController()
+        private void SwitchControllerEnum()
         {
             _playerControllerTypeEnum = _playerControllerTypeEnum == PlayerControllerType.Robot ? PlayerControllerType.Car : PlayerControllerType.Robot;
         }
@@ -105,6 +109,7 @@ namespace ProjectWallE
             ResetRbRotation();
             EnableController(_playerControllerTypeEnum);
             _lastFramePlayerControllerTypeEnum = _playerControllerTypeEnum;
+            _switchTimer = Time.time;
         }
 
         #endregion
@@ -121,6 +126,8 @@ namespace ProjectWallE
             _currentController = isRobot ? robotController : carController;
             _currentController.gameObject.SetActive(true);
             _currentController.OnEnter();
+
+            _rigidbody.centerOfMass = _currentController.CenterOfMassOffset;
             
             OnControllerChanged?.Invoke(playerControllerType);
         }
@@ -155,6 +162,14 @@ namespace ProjectWallE
 
         public void Push(Vector3 direction, float force)
         {
+            
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            if(_rigidbody == null) return;
+            Gizmos.color = Color.green;
+            Gizmos.DrawSphere(transform.position + _rigidbody.centerOfMass, .1f);
             
         }
     }

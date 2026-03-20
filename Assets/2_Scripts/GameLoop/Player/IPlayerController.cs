@@ -19,6 +19,7 @@ namespace ProjectWallE
         public void Initialize(PlayerReferences playerReferences);
 
         public GameObject gameObject { get; }
+        public Vector3 CenterOfMassOffset { get; }
 
         public void OnEnter();
         public void OnExit();

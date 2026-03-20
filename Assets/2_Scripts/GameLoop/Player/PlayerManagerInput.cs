@@ -8,6 +8,7 @@ namespace ProjectWallE
         public InputSystem_Actions Input { get; private set; }   
         
         public bool SwitchPressed { get; private set; }
+        public Vector2 MouseDelta { get; private set; }
 
         private void OnEnable()
         {
@@ -45,6 +46,12 @@ namespace ProjectWallE
         public void OnSwitchController(InputAction.CallbackContext context)
         {
             if (context.started) SwitchPressed = true;
+        }
+
+        public void OnLook(InputAction.CallbackContext context)
+        {
+            MouseDelta = context.ReadValue<Vector2>();
+            Debug.Log(MouseDelta);
         }
     }
 }

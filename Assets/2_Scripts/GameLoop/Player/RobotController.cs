@@ -8,6 +8,7 @@ namespace ProjectWallE
     {
         [SerializeField] private Transform groundRayPoint;
         [SerializeField] private RobotControllerVisuals visuals;
+        [SerializeField] private Vector3 centerOfMassOffset;
 
         [Header("Grounded Settings")]
         [SerializeField] private float groundHeight = 0.5f;
@@ -70,6 +71,7 @@ namespace ProjectWallE
         /// controls how much dv affects the gravity (bigger = less control)
         /// </summary>
         private float gravityControlFactor => gravityStrength * 0.25f;
+        public Vector3 CenterOfMassOffset => centerOfMassOffset;
 
         public bool canBuild { get; private set; } = true;
         public bool canShoot { get; private set; } = true;

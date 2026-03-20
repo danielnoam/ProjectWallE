@@ -14,6 +14,7 @@ namespace _2_Scripts
         [SerializeField] private Tire[] staticTires;
         [SerializeField] private CarControllerVisuals visuals;
         [SerializeField] private Transform boostPoint;
+        [SerializeField] private Vector3 centerOfMassOffset;
         
         [HideInInspector][SerializeField] private CarBoost carBoost;
 
@@ -74,9 +75,10 @@ namespace _2_Scripts
         /// <summary>
         /// controls how much dv affects the gravity (bigger = less control)
         /// </summary>
-        private float gravityControlFactor => gravityStrength * 0.25f;
+        private float GravityControlFactor => gravityStrength * 0.25f;
 
         public CarBoost CarBoost => carBoost;
+        public Vector3 CenterOfMassOffset => centerOfMassOffset;
         public bool canBuild { get; private set; } = false;
         public bool canShoot { get; private set; } = false;
 
@@ -269,7 +271,7 @@ namespace _2_Scripts
 
             for (int i = 0; i < _allTires.Count; i++)
             {
-                visuals.RotateWheels(carSpeed, _allTires[i].isGroundedExtended, i);
+                visuals.RotateWheels(carSpeed, i);
             }
         }
 
@@ -342,7 +344,7 @@ namespace _2_Scripts
             float desiredVerticalVel = -terminalVelocity;
 
             float dv = desiredVerticalVel - verticalVel;
-            float gravityForce = Mathf.Clamp(dv * gravityControlFactor, -gravityStrength, Mathf.Infinity);
+            float gravityForce = Mathf.Clamp(dv * GravityControlFactor, -gravityStrength, Mathf.Infinity);
 
             _playerRb.AddForce(Vector3.up * gravityForce, ForceMode.Acceleration);
         }

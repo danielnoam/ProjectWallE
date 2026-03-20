@@ -102,22 +102,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarController
   steeringTires:
-  - tireTransform: {fileID: 3987191290676102387}
-    isGroundedExact: 0
-    isGroundedExtended: 0
+  - tireTransform: {fileID: 0}
+    isGroundedExact: 1
+    isGroundedExtended: 1
     isMoving: 0
-  - tireTransform: {fileID: 813313045939543381}
-    isGroundedExact: 0
-    isGroundedExtended: 0
+  - tireTransform: {fileID: 0}
+    isGroundedExact: 1
+    isGroundedExtended: 1
     isMoving: 0
   staticTires:
-  - tireTransform: {fileID: 4997806077238404413}
-    isGroundedExact: 0
-    isGroundedExtended: 0
+  - tireTransform: {fileID: 0}
+    isGroundedExact: 1
+    isGroundedExtended: 1
     isMoving: 0
-  - tireTransform: {fileID: 5027628266276025665}
-    isGroundedExact: 0
-    isGroundedExtended: 0
+  - tireTransform: {fileID: 0}
+    isGroundedExact: 1
+    isGroundedExtended: 1
     isMoving: 0
   visuals:
     steeringTires:
@@ -127,14 +127,16 @@ MonoBehaviour:
     - visTransform: {fileID: 0}
     - visTransform: {fileID: 0}
     suspensionReturnSpeed: 5
-  boostPoint: {fileID: 3352623459842719466}
+    wheelRadius: 1.5
+  boostPoint: {fileID: 0}
+  centerOfMassOffset: {x: 0, y: -0.2, z: 0.35}
   carBoost: {fileID: 8828607242384971384}
   groundHeight: 0.65
   suspensionStrength: 25
   suspensionDamping: 2
-  steeringAngle: 25
+  steeringAngle: 40
   steeringStrength: 3
-  topSpeedSteeringFactor: 0.6
+  topSpeedSteeringFactor: 0.5
   steeringTiresFrictionCurve:
     serializedVersion: 2
     m_Curve:
@@ -226,7 +228,7 @@ MonoBehaviour:
   partialGroundGripPower: 2
   gravityStrength: 10
   terminalVelocity: 20
-  accelerationStrength: 10
+  accelerationStrength: 20
   accelerationCurve:
     serializedVersion: 2
     m_Curve:
@@ -679,7 +681,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1251613364947234956
 Transform:
   m_ObjectHideFlags: 0
@@ -717,9 +719,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.38
-  m_Height: 2.94
+  m_Height: 2.68
   m_Direction: 1
-  m_Center: {x: 0, y: 0.16, z: 0}
+  m_Center: {x: 0, y: 0.36, z: 0}
 --- !u!114 &1860573053989788979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -735,15 +737,18 @@ MonoBehaviour:
   groundRayPoint: {fileID: 4045004396600311935}
   visuals:
     suspensionVisual:
-      visTransform: {fileID: 0}
+      visTransform: {fileID: 8873794670012779194}
     swivelVisual:
-      visTransform: {fileID: 0}
-    wheelVisuals: []
+      visTransform: {fileID: 8449382769147926206}
+    wheelVisuals:
+    - visTransform: {fileID: 4065418684084768751}
+    - visTransform: {fileID: 3476467583809506216}
     suspensionReturnSpeed: 15
-    swivelTurnSpeed: 15
-    wheelRadius: 15
-  groundHeight: 0.35
-  maxCheckHeight: 1.25
+    swivelTurnSpeed: 5
+    wheelRadius: 1.5
+  centerOfMassOffset: {x: 0, y: -0.2, z: 0}
+  groundHeight: 0.6
+  maxCheckHeight: 0.8
   springStrength: 150
   springDamping: 12
   gravityStrength: 20
@@ -993,7 +998,7 @@ Transform:
   m_GameObject: {fileID: 5105030358576147286}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.266, z: 0}
+  m_LocalPosition: {x: 0, y: -0.916, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1152,7 +1157,7 @@ Rigidbody:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0
-  m_CenterOfMass: {x: 0, y: -0.2, z: 0}
+  m_CenterOfMass: {x: 0, y: 0, z: 2.04}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
@@ -1181,6 +1186,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.PlayerManager
   maxHealth: 100
+  switchCooldown: 0.5
   groundLayer:
     serializedVersion: 2
     m_Bits: 1352
@@ -2380,6 +2386,16 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 779677588487833707, guid: e52f8b427d6061341988baf63e42d520, type: 3}
   m_PrefabInstance: {fileID: 4237315540022215665}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &3476467583809506216 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 789006046418176089, guid: e52f8b427d6061341988baf63e42d520, type: 3}
+  m_PrefabInstance: {fileID: 4237315540022215665}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4065418684084768751 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 191047603475942430, guid: e52f8b427d6061341988baf63e42d520, type: 3}
+  m_PrefabInstance: {fileID: 4237315540022215665}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4415569934503453722 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e52f8b427d6061341988baf63e42d520, type: 3}
@@ -2393,6 +2409,16 @@ Transform:
 --- !u!4 &7683637889020800601 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5795072772989611432, guid: e52f8b427d6061341988baf63e42d520, type: 3}
+  m_PrefabInstance: {fileID: 4237315540022215665}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8449382769147926206 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5733017265781740879, guid: e52f8b427d6061341988baf63e42d520, type: 3}
+  m_PrefabInstance: {fileID: 4237315540022215665}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8873794670012779194 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4750159836343798091, guid: e52f8b427d6061341988baf63e42d520, type: 3}
   m_PrefabInstance: {fileID: 4237315540022215665}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4703817251739561894

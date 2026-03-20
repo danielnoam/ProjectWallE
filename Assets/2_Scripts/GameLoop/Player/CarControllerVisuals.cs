@@ -42,10 +42,9 @@ namespace ProjectWallE
             tireVisual.visTransform.position = worldPos;
         }
 
-        public void RotateWheels(float carSpeed, bool isTireGrounded, int index)
+        public void RotateWheels(float carSpeed, int index)
         {
             if (!IsValidIndex(index)) return;
-            if (!isTireGrounded) return;
             if (_allTireVisuals[index].visTransform == null) return;
             if (wheelRadius <= 0.0001f) return;
 
