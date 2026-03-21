@@ -21,9 +21,9 @@ public class FlyingEnemy : Enemy
     [SerializeField] private float hoverAmplitude = 0.4f;
     [SerializeField] private float hoverFrequency = 1.2f;
     
-    [Header("Obstacle Separation")]
-    [SerializeField] private float separationRadius = 4f;
-    [SerializeField] private float separationForce = 15f;
+    [Header("Obstacle Avoidance")]
+    [SerializeField] private float avoidanceRadius = 4f;
+    [SerializeField] private float avoidanceForce = 15f;
     [SerializeField] private LayerMask separationMask;
 
     [SerializeField, AutoGetSelf, HideInInspector] private Rigidbody rigidBody;
@@ -115,13 +115,13 @@ public class FlyingEnemy : Enemy
 
     private void ApplySeparation()
     {
-        Collider[] nearby = Physics.OverlapSphere(transform.position, separationRadius, separationMask);
+        Collider[] nearby = Physics.OverlapSphere(transform.position, avoidanceRadius, separationMask);
         foreach (var col in nearby)
         {
             if (col.gameObject == gameObject) continue;
             Vector3 away = transform.position - col.transform.position;
-            float strength = 1f - (away.magnitude / separationRadius);
-            rigidBody.AddForce(away.normalized * (separationForce * strength), ForceMode.Force);
+            float strength = 1f - (away.magnitude / avoidanceRadius);
+            rigidBody.AddForce(away.normalized * (avoidanceForce * strength), ForceMode.Force);
         }
     }
 

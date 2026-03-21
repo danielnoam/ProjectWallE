@@ -30,6 +30,12 @@ namespace ProjectWallE.GameLoop
         [SerializeField] private float targetFindRange = 20f;
         [SerializeField] private AttackResponse attackResponse = AttackResponse.RetaliatePlayer;
         [SerializeReference, SerializableSelector] private TargetingStrategy[] targetingStrategies;
+        
+        [Header("Head")]
+        [SerializeField] private Transform headTransform;
+        [SerializeField] private float headRotationSpeed = 180f;
+        [SerializeField] private float fireAngleThreshold = 15f;
+        [SerializeField] private bool yawOnly = true;
 
         [Header("Attack")] 
         [SerializeField] private float attackCooldown = 1f;
@@ -65,6 +71,7 @@ namespace ProjectWallE.GameLoop
         private void Update()
         {
             UpdateMovement();
+            RotateHead();
             TryAttack();
         }
 
@@ -98,6 +105,21 @@ namespace ProjectWallE.GameLoop
 
             CurrentTarget = null;
         }
+        
+        private void RotateHead()
+        {
+            if (!headTransform || !IsTargetValid(CurrentTarget)) return;
+
+            Vector3 direction = CurrentTarget.transform.position - headTransform.position;
+    
+            if (yawOnly) direction.y = 0;
+    
+            if (direction.sqrMagnitude < 0.001f) return;
+
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            headTransform.rotation = Quaternion.RotateTowards(
+                headTransform.rotation, targetRotation, headRotationSpeed * Time.deltaTime);
+        }
 
 
         private void Die()
@@ -108,7 +130,7 @@ namespace ProjectWallE.GameLoop
 
         private void TryAttack()
         {
-            if (!IsInAttackRange())
+            if (!IsInAttackRange() || !IsHeadAligned())
             {
                 _attackTimer = 0f;
                 return;
@@ -153,6 +175,17 @@ namespace ProjectWallE.GameLoop
                 default:
                     return false;
             }
+        }
+        
+        private bool IsHeadAligned()
+        {
+            if (!headTransform || !IsTargetValid(CurrentTarget)) return true;
+
+            Vector3 direction = CurrentTarget.transform.position - headTransform.position;
+            if (yawOnly) direction.y = 0;
+            if (direction.sqrMagnitude < 0.001f) return false;
+
+            return Vector3.Angle(headTransform.forward, direction) <= fireAngleThreshold;
         }
 
         private bool IsInAttackRange()

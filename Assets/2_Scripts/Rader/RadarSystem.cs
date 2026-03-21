@@ -3,16 +3,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using DNExtensions.Utilities.CustomFields;
 
-public enum RadarBlipColor
-{
-    White,
-    Red,
-    Green,
-    Blue,
-    Yellow,
-    Cyan
-}
-
 public class RadarSystem : MonoBehaviour
 {
     public static RadarSystem Instance { get; private set; }
@@ -23,7 +13,6 @@ public class RadarSystem : MonoBehaviour
     
     [Header("UI")]
     public float radiusMultiplier = 1;
-    public bool showOutOfRange;
     public OptionalField<Transform> rotationTarget;
     public RectTransform radarPanel;
     public Transform blipHolder;
@@ -56,22 +45,6 @@ public class RadarSystem : MonoBehaviour
         UpdateBlips();
     }
 
-    public void Register(RadarTarget target)
-    {
-        if (!_targets.Add(target)) return;
-
-        var blip = Instantiate(blipPrefab, blipHolder ? blipHolder : transform);
-        blip.color = GetColor(target.BlipColor);
-        _blips[target] = blip;
-    }
-
-    public void Unregister(RadarTarget target)
-    {
-        if (!_targets.Remove(target)) return;
-
-        if (_blips.Remove(target, out Graphic blip)) Destroy(blip.gameObject);
-    }
-
     private void UpdateBlips()
     {
         Vector3 center = worldCenter.Position;
@@ -89,7 +62,7 @@ public class RadarSystem : MonoBehaviour
 
             if (distance > _radarRadius)
             {
-                if (showOutOfRange)
+                if (target.ShowOutOfRange)
                 {
                     radarOffset = radarOffset.normalized * _radarRadius;
                     blip.enabled = true;
@@ -108,15 +81,21 @@ public class RadarSystem : MonoBehaviour
             blip.rectTransform.anchoredPosition = radarOffset;
         }
     }
-
-    private static Color GetColor(RadarBlipColor blipColor) => blipColor switch
+    
+    public void Register(RadarTarget target)
     {
-        RadarBlipColor.White => Color.white,
-        RadarBlipColor.Red => Color.red,
-        RadarBlipColor.Green => Color.green,
-        RadarBlipColor.Blue => Color.blue,
-        RadarBlipColor.Yellow => Color.yellow,
-        RadarBlipColor.Cyan => Color.cyan,
-        _ => Color.white
-    };
+        if (!_targets.Add(target)) return;
+
+        var blip = Instantiate(blipPrefab, blipHolder ? blipHolder : transform);
+        blip.transform.localScale *= target.BlipSizeMultiplier;
+        blip.color = target.BlipColor;
+        _blips[target] = blip;
+    }
+
+    public void Unregister(RadarTarget target)
+    {
+        if (!_targets.Remove(target)) return;
+
+        if (_blips.Remove(target, out Graphic blip)) Destroy(blip.gameObject);
+    }
 }

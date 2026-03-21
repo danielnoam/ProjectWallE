@@ -79,7 +79,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06535a561c25490abaa0eb30b94e8fdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RadarTarget
-  blipColor: 2
+  blipColor: {r: 0.7294118, g: 1, b: 0.3882353, a: 1}
+  blipSizeMultiplier: 1
+  showOutOfRange: 0
 --- !u!135 &8987554455923439112
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -177,9 +179,9 @@ MonoBehaviour:
         maxHealth: 300
         cost: 200
         fixCostPerHealthPoint: 0.5
-        detectionRadius: 25
+        detectionRadius: 50
         attackRotationSpeed: 125
-        attackCooldown: 0.5
+        attackCooldown: 0.25
         projectileData: {fileID: 11400000, guid: 8ffdf2f42528d434f91c7d9b565e08fd, type: 2}
 --- !u!1 &5813210165579224113
 GameObject:

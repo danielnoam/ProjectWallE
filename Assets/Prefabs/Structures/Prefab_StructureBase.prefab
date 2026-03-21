@@ -80,7 +80,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06535a561c25490abaa0eb30b94e8fdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RadarTarget
-  blipColor: 2
+  blipColor: {r: 0.7308548, g: 1, b: 0.38679236, a: 1}
+  blipSizeMultiplier: 2
+  showOutOfRange: 1
 --- !u!135 &4832250491942188457
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -134,6 +136,8 @@ MonoBehaviour:
   icon: {fileID: 0}
   upgradeIcon: {fileID: 21300000, guid: 2a7332bdc5467fe4e84ca21fdc48ecaa, type: 3}
   fixIcon: {fileID: 21300000, guid: c523318af4a1ca943932d905d83eed0b, type: 3}
+  demolishIcon: {fileID: 0}
+  canDemolish: 0
   topPoint: {x: 0, y: 9.7, z: 0}
   bottomPoint: {x: 0, y: -2.24, z: 0}
   gfx: {fileID: 6592863634933569427}

@@ -3,6 +3,7 @@ using DNExtensions.Systems.AudioLibrary;
 using DNExtensions.Systems.ObjectPooling;
 using DNExtensions.Utilities.AutoGet;
 using DNExtensions.Utilities.CinemachineExtensions;
+using ProjectWallE.GameLoop;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -15,6 +16,10 @@ public class Pod : MonoBehaviour
     [SerializeField] private float travelDuration = 3f;
     [SerializeField] private float rotationSpeed = 300f;
     [SerializeField] private LayerMask collisionMask;
+    
+    [Header("Push")]
+    [SerializeField] private float pushRange = 50f;
+    [SerializeField] private float pushPower = 50f;
     
     [Header("Effects")]
     [SerializeField] private PoolableParticleSystem collisionParticle;
@@ -42,17 +47,6 @@ public class Pod : MonoBehaviour
         
         Vector3 impactPoint = collision.contacts[0].point;
         Vector3 surfaceNormal = collision.contacts[0].normal;
-
-        var enemiesInRange = Physics.OverlapSphere(impactPoint, 25f);
-        
-        foreach (Collider col in enemiesInRange)
-        {
-            if (col.TryGetComponent(out IPushable pushable))
-            {
-                Vector3 direction = (col.transform.position - impactPoint).normalized;
-                pushable.Push(direction, 50);
-            }
-        }
         
         Land(impactPoint, surfaceNormal);
     }
@@ -102,17 +96,35 @@ public class Pod : MonoBehaviour
     
     private void Land(Vector3 impactPoint, Vector3 surfaceNormal)
     {
+        // Effects
         impulseSource?.GenerateImpulse(collisionImpulseSettings);
         AudioLibrary.PlayAtPosition(collisionSfx, transform.position);
-
         if (collisionParticle)
         {
             var particle = ObjectPooler.GetObjectFromPool(collisionParticle, impactPoint, Quaternion.LookRotation(surfaceNormal));
-            particle.Play();
+            particle?.Play();
         }
         
+        // Push && Damage
+        var colliders = Physics.OverlapSphere(impactPoint, pushRange);
+        foreach (Collider col in colliders)
+        {
+            Enemy enemy = col.GetComponentInParent<IDamageable>() as Enemy;
+            enemy?.TakeDamage(100f);
+            
+            IPushable pushable = col.GetComponentInParent<IPushable>();
+            if (pushable != null)
+            {
+                Vector3 direction = (col.transform.position - impactPoint).normalized;
+                pushable.Push(direction, pushPower);
+            }
+        }
+        
+        // Deployable
         var instance = Instantiate(_deployable as MonoBehaviour);
         ((IDeployable)instance).Deploy(impactPoint, surfaceNormal, _forward);
+        
+        
         Destroy(gameObject);
     }
     

@@ -928,7 +928,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06535a561c25490abaa0eb30b94e8fdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RadarTarget
-  blipColor: 1
+  blipColor: {r: 1, g: 0.25471687, b: 0.25471687, a: 1}
+  blipSizeMultiplier: 1
+  showOutOfRange: 0
 --- !u!54 &2448601663206975914
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -975,6 +977,10 @@ MonoBehaviour:
   - rid: 6000861155382526038
   - rid: 6000861155382526045
   - rid: 6000861155382526047
+  headTransform: {fileID: 5095333146691459747}
+  headRotationSpeed: 180
+  fireAngleThreshold: 25
+  yawOnly: 1
   attackCooldown: 0.2
   attackRange: 40
   firePoint: {fileID: 7429042783596894845}
@@ -991,8 +997,8 @@ MonoBehaviour:
     m_Bits: 1032
   hoverAmplitude: 0.4
   hoverFrequency: 1.2
-  separationRadius: 4
-  separationForce: 15
+  avoidanceRadius: 4
+  avoidanceForce: 15
   separationMask:
     serializedVersion: 2
     m_Bits: 768
@@ -1027,7 +1033,7 @@ MonoBehaviour:
   damagedSoundId: 
   punchStrength: 1
   punchDuration: 0.15
-  punchEase: 1
+  punchEase: 4
   punchCycles: 1
   excludedRenderers: []
   enemy: {fileID: -4769723865369596212}
