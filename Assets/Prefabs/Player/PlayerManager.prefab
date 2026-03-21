@@ -224,6 +224,9 @@ MonoBehaviour:
   handBreakGripFactor: 0.03
   handbrakeBlendIn: 12
   handbrakeBlendOut: 10
+  minSlippingSpeed: 0
+  maxSlippingSpeed: 15
+  minGripAtMaxSlip: 0.5
   minGripWhenPartialGround: 0.15
   partialGroundGripPower: 2
   gravityStrength: 10

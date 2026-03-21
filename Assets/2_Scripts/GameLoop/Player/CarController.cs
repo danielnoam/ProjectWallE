@@ -34,6 +34,14 @@ namespace _2_Scripts
         [SerializeField] private float handBreakGripFactor;
         [SerializeField] private float handbrakeBlendIn = 12f;
         [SerializeField] private float handbrakeBlendOut = 8f;
+        [SerializeField, Tooltip("reaching a speed in the tire slipping direction between minSlippingSpeed and maxSlippingSpeed" +
+                                 " will factor the grip by a factor between minGripAtMaxSlip and 1 accordingly")] 
+        private float minSlippingSpeed;
+        [SerializeField, Tooltip("reaching a speed in the tire slipping direction between minSlippingSpeed and maxSlippingSpeed" +
+                                 " will factor the grip by a factor between minGripAtMaxSlip and 1 accordingly")] 
+        private float maxSlippingSpeed = 15f;
+        [SerializeField, Range(0,1), Tooltip("the minimum factor which is applied after reaching maxSlippingSpeed")] 
+        private float minGripAtMaxSlip = 0.5f;
 
         [Header("Takeoff / partial-ground tuning")]
         [SerializeField] private float minGripWhenPartialGround = 0.15f;
@@ -71,6 +79,7 @@ namespace _2_Scripts
         private float _groundedRatio;
         private float _airborneBlend;
         private float _handbrake01;
+        private float _slippingBlend;
 
         /// <summary>
         /// controls how much dv affects the gravity (bigger = less control)
@@ -117,12 +126,12 @@ namespace _2_Scripts
 
         public void ApplyMovement()
         {
-            UpdateTiresGroundState();
+            UpdateTiresGroundState(out Vector3 planeNormal);
 
             ApplyGravity();
             ApplySuspensionPerTiresType(_allTires);
             ApplyTireRotation();
-            ApplyTireFriction();
+            ApplyTireFriction(planeNormal);
             ApplyAirControl();
             ApplyLongitudinalMovement();
         }
@@ -170,10 +179,13 @@ namespace _2_Scripts
 
         private void ApplyTireRotation()
         {
+            float speed01 = Mathf.Clamp01(
+                Mathf.Abs(Vector3.Dot(transform.forward, _playerRb.linearVelocity)) / topForwardSpeed);
+
             float desiredSteeringAngle = Mathf.Lerp(
                 steeringAngle,
                 topSpeedSteeringFactor * steeringAngle,
-                Mathf.Abs(Vector3.Dot(transform.forward, _playerRb.linearVelocity)) / topForwardSpeed);
+                speed01);
 
             float target = _carInput.Steering * desiredSteeringAngle;
 
@@ -190,15 +202,15 @@ namespace _2_Scripts
             visuals.SteerWheels(_currentSteering);
         }
 
-        private void ApplyTireFriction()
+        private void ApplyTireFriction(Vector3 planeNormal)
         {
-            ApplyTireFrictionModifiers();
+            ApplyTireFrictionModifiers(planeNormal);
 
             ApplyFrictionPerTiresType(steeringTires, steeringTiresFrictionCurve);
             ApplyFrictionPerTiresType(staticTires, staticTiresFrictionCurve);
         }
 
-        private void ApplyTireFrictionModifiers()
+        private void ApplyTireFrictionModifiers(Vector3 planeNormal)
         {
             _groundedRatio = GetGroundedRatio(out _);
             float planted = Mathf.Pow(_groundedRatio, partialGroundGripPower);
@@ -207,6 +219,12 @@ namespace _2_Scripts
             float targetHb = _carInput.HandBreakHeld ? 1f : 0f;
             float rate = (targetHb > _handbrake01) ? handbrakeBlendIn : handbrakeBlendOut;
             _handbrake01 = Mathf.Lerp(_handbrake01, targetHb, rate * Time.fixedDeltaTime);
+            
+            Vector3 planarVelocity = Vector3.ProjectOnPlane(_playerRb.linearVelocity, planeNormal);
+            float slippingSpeed = Vector3.Dot(transform.right, planarVelocity);
+            float absSlipSpeed = Mathf.Abs(slippingSpeed);
+            float t = Mathf.InverseLerp(minSlippingSpeed, maxSlippingSpeed, absSlipSpeed);
+            _slippingBlend = Mathf.Lerp(1f, minGripAtMaxSlip, t);
         }
 
         private void ApplyFrictionPerTiresType(Tire[] tires, AnimationCurve frictionCurve)
@@ -218,10 +236,10 @@ namespace _2_Scripts
                 Vector3 tireVel = _playerRb.GetPointVelocity(tire.tireTransform.position);
                 float steeringVel = Vector3.Dot(tire.tireTransform.right, tireVel);
 
-                float normalGrip = CalcCurrentTireGripFactor(tire, frictionCurve);
-                float gripFactor = Mathf.Lerp(normalGrip, handBreakGripFactor, _handbrake01);
-
+                float gripFactor = CalcCurrentTireGripFactor(tire, frictionCurve, tireVel);
                 gripFactor *= _airborneBlend;
+                gripFactor *= _slippingBlend;
+                gripFactor = Mathf.Lerp(gripFactor, handBreakGripFactor, _handbrake01);
 
                 float desiredVelChange = -steeringVel * gripFactor;
                 float desiredAccel = desiredVelChange / Time.fixedDeltaTime;
@@ -234,20 +252,20 @@ namespace _2_Scripts
             }
         }
 
-        private float CalcCurrentTireGripFactor(Tire tire, AnimationCurve frictionCurve)
+        private float CalcCurrentTireGripFactor(Tire tire, AnimationCurve frictionCurve, Vector3 tireVel)
         {
-            Vector3 tireVel = _playerRb.GetPointVelocity(tire.tireTransform.position);
-            tireVel.y = 0f;
+            Vector3 tireVelAlongGround = Vector3.ProjectOnPlane(tireVel, tire.extendedGroundHit.normal);
 
-            if (tireVel.magnitude < 0.1f)
+            if (tireVelAlongGround.magnitude < 0.1f)
                 return frictionCurve.Evaluate(0f);
 
             float slippingAmount = Mathf.Clamp(
-                Vector3.Dot(tire.tireTransform.right, tireVel.normalized),
+                Vector3.Dot(tire.tireTransform.right, tireVelAlongGround.normalized),
                 -1f,
                 1f);
-
+            
             float gripFactor = frictionCurve.Evaluate(Mathf.Abs(slippingAmount));
+            
             return gripFactor;
         }
 
@@ -401,7 +419,7 @@ namespace _2_Scripts
 
         #region Helpers
 
-        private void UpdateTiresGroundState()
+        private void UpdateTiresGroundState(out Vector3 planeNormal)
         {
             float exactDistance = groundHeight;
             float extendedDistance = groundHeight + ExtendedGroundCheckExtraDistance;
@@ -415,7 +433,9 @@ namespace _2_Scripts
                 tire.exactGroundHit = exactHit;
                 tire.isGroundedExtended = Physics.Raycast(origin, direction, out RaycastHit extendedHit, extendedDistance, _groundLayer);
                 tire.extendedGroundHit = extendedHit;
+                planeNormal = extendedHit.normal;
             }
+            planeNormal = transform.up;
         }
 
         private bool IsCarGrounded()
