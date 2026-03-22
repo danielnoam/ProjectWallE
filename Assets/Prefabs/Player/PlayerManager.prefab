@@ -129,7 +129,7 @@ MonoBehaviour:
     suspensionReturnSpeed: 5
     wheelRadius: 1.5
   boostPoint: {fileID: 3352623459842719466}
-  centerOfMassOffset: {x: 0, y: -0.2, z: 0.35}
+  centerOfMassOffset: {x: 0, y: -0.25, z: 0.35}
   carBoost: {fileID: 8828607242384971384}
   groundHeight: 0.65
   suspensionStrength: 25
@@ -224,10 +224,10 @@ MonoBehaviour:
   handBreakGripFactor: 0.03
   handbrakeBlendIn: 12
   handbrakeBlendOut: 10
-  minSlippingSpeed: 0
-  maxSlippingSpeed: 15
+  minSlippingSpeed: 6
+  maxSlippingSpeed: 12
   minGripAtMaxSlip: 0.5
-  minGripWhenPartialGround: 0.15
+  minGripWhenPartialGround: 0.1
   partialGroundGripPower: 2
   gravityStrength: 10
   terminalVelocity: 20

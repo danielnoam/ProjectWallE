@@ -106,8 +106,8 @@ namespace ProjectWallE
         private void SwitchBehavior()
         {
             if(_playerControllerTypeEnum == _lastFramePlayerControllerTypeEnum) return;
-            ResetRbRotation();
             EnableController(_playerControllerTypeEnum);
+            ResetRbRotation();
             _lastFramePlayerControllerTypeEnum = _playerControllerTypeEnum;
             _switchTimer = Time.time;
         }

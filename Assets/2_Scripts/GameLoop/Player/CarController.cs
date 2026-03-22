@@ -116,7 +116,7 @@ namespace _2_Scripts
 
         public void OnEnter()
         {
-            visuals?.ResetVisuals();
+            
         }
 
         public void OnExit()

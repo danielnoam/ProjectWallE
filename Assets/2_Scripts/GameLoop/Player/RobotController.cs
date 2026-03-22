@@ -89,8 +89,7 @@ namespace ProjectWallE
 
         public void OnEnter()
         {
-            visuals?.ResetVisuals();
-
+            
         }
 
         public void OnExit()
