@@ -47,7 +47,7 @@ namespace ProjectWallE.GameLoop
         private float _currentHealth;
         private float _attackTimer;
 
-        protected EnemyState State = EnemyState.MovingToTarget;
+        protected EnemyState State;
         protected IDamageable CurrentTarget;
         protected const float RandomRange = 20f;
         protected const float RetargetThreshold = 25f;
@@ -70,9 +70,14 @@ namespace ProjectWallE.GameLoop
 
         private void Update()
         {
-            UpdateMovement();
             RotateHead();
             TryAttack();
+            OnUpdate();
+        }
+
+        private void FixedUpdate()
+        {
+            OnFixedUpdate();
         }
 
         private void OnCollisionEnter(Collision collision)
@@ -82,12 +87,39 @@ namespace ProjectWallE.GameLoop
                 Die();
             }
         }
-
+        
         private void OnTargetDeath(IDamageable deadTarget)
         {
             CurrentTarget.OnDeath -= OnTargetDeath;
             CheckForTarget();
         }
+        
+        protected bool IsTargetValid(IDamageable target)
+        {
+            return target is Component component && component && component.gameObject.activeInHierarchy;
+        }
+
+        protected virtual void Initialize()
+        {
+            _currentHealth = maxHealth;
+            _attackTimer = 0f;
+            State = EnemyState.Idle;
+            CheckForTarget();
+            EnemyManager.Instance?.RegisterEnemy(this);
+        }
+        
+        protected virtual void OnFixedUpdate()
+        {
+            
+        }
+
+        protected virtual void OnUpdate()
+        {
+            
+        }
+        protected abstract void SetDestination();
+        protected abstract void OnPush(Vector3 direction, float force);
+        
 
         private void CheckForTarget()
         {
@@ -192,24 +224,7 @@ namespace ProjectWallE.GameLoop
         {
             return IsTargetValid(CurrentTarget) && Vector3.Distance(transform.position, CurrentTarget.transform.position) <= attackRange;
         }
-
-        protected bool IsTargetValid(IDamageable target)
-        {
-            return target is Component component && component && component.gameObject.activeInHierarchy;
-        }
-
-        protected virtual void Initialize()
-        {
-            _currentHealth = maxHealth;
-            _attackTimer = 0f;
-            State = EnemyState.Idle;
-            CheckForTarget();
-            EnemyManager.Instance?.RegisterEnemy(this);
-        }
-
-        protected abstract void UpdateMovement();
-        protected abstract void SetDestination();
-        protected abstract void OnPush(Vector3 direction, float force);
+        
 
         public void TakeDamage(float damage, IDamageable attacker = null)
         {

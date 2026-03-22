@@ -32,6 +32,7 @@ public class RadarSystem : MonoBehaviour
         }
 
         Instance = this;
+        _radarRadius = radarPanel.rect.width * 0.5f * radiusMultiplier;
     }
 
     private void OnDestroy()
@@ -41,7 +42,6 @@ public class RadarSystem : MonoBehaviour
 
     private void LateUpdate()
     {
-        _radarRadius = radarPanel.rect.width * 0.5f * radiusMultiplier;
         UpdateBlips();
     }
 
@@ -89,6 +89,7 @@ public class RadarSystem : MonoBehaviour
         var blip = Instantiate(blipPrefab, blipHolder ? blipHolder : transform);
         blip.transform.localScale *= target.BlipSizeMultiplier;
         blip.color = target.BlipColor;
+        if (blip is Image image && target.BlipSprite) image.sprite = target.BlipSprite;
         _blips[target] = blip;
     }
 

@@ -11,7 +11,7 @@ namespace ProjectWallE.GameLoop
         [SerializeField, AutoGetSelf, HideInInspector] private NavMeshAgent navMeshAgent;
         [SerializeField, AutoGetSelf, HideInInspector] private Rigidbody rigidBody;
         
-        protected override void UpdateMovement()
+        protected override void OnUpdate()
         {
             if (!IsTargetValid(CurrentTarget))
             {
