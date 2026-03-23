@@ -56,20 +56,22 @@ public class Projectile : MonoBehaviour, IPoolable
     {
         if (_hitSomething || !_isInitialized) return;
         if (((1 << other.gameObject.layer) & _hitLayers) == 0) return;
-        
+
+        bool hitDamageable = false;
         _hitSomething = true;
 
         switch (_data.damageType)
         {
             case ProjectileDamageType.Single:
                 
-                var damageable = other.transform.GetComponentInParent<IDamageable>();
+                var damageable = other.collider.GetComponentInParent<IDamageable>();
                 if (damageable != null)
                 {
+                    hitDamageable = true;
                     damageable.TakeDamage(_data.damage, _owner);
                 }
-        
-                var pushable = other.transform.GetComponentInParent<IPushable>();
+
+                var pushable = other.collider.GetComponentInParent<IPushable>();
                 if (pushable != null)
                 {
                     Vector3 pushDirection = (other.transform.position - transform.position).normalized;
@@ -78,33 +80,37 @@ public class Projectile : MonoBehaviour, IPoolable
                 
                 break;
             case ProjectileDamageType.AreaOfEffect:
-                
+
                 Collider[] damagedObjects = Physics.OverlapSphere(transform.position, _data.aoeRadius, _hitLayers);
                 _alreadyHit.Clear();
-                
+
                 foreach (var damagedObject in damagedObjects)
                 {
-                    var aoeHit = damagedObject.GetComponentInParent<IDamageable>();
-                    if (aoeHit != null && !_alreadyHit.Add(aoeHit)) continue;
-                    
-                    float distance = Vector3.Distance(transform.position, damagedObject.transform.position);
-                    float normalizedDistance = distance / _data.aoeRadius;
-                    float damage = _data.damageRange.Lerp(1 - normalizedDistance);
-                    float push = _data.pushRange.Lerp(1 - normalizedDistance);
-                    
-                    if (aoeHit != null)
+                    IDamageable target = damagedObject.GetComponentInParent<IDamageable>();
+                    if (target != null)
                     {
-                        aoeHit.TakeDamage(damage, _owner);
-                    }
+                        hitDamageable = true;
 
-                    var aoePush = damagedObject.GetComponentInParent<IPushable>();
-                    if (aoePush != null)
-                    {
-                        Vector3 pushDirection = (damagedObject.transform.position - transform.position).normalized;
-                        aoePush.Push(pushDirection, push);
+                        if (target is EnemyDamageRelay relay) target = relay.Parent;
+
+                        if (target == null || !_alreadyHit.Add(target)) continue;
+
+                        float distance = Vector3.Distance(transform.position, damagedObject.transform.position);
+                        float normalizedDistance = distance / _data.aoeRadius;
+                        float damage = _data.damageRange.Lerp(1 - normalizedDistance);
+                        float push = _data.pushRange.Lerp(1 - normalizedDistance);
+
+                        target.TakeDamage(damage, _owner);
+
+                        var aoePush = damagedObject.GetComponentInParent<IPushable>();
+                        if (aoePush != null)
+                        {
+                            Vector3 pushDirection = (damagedObject.transform.position - transform.position).normalized;
+                            aoePush.Push(pushDirection, push);
+                        }
                     }
                 }
-                
+
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -117,7 +123,11 @@ public class Projectile : MonoBehaviour, IPoolable
             var particle = ObjectPooler.GetObjectFromPool(_data.hitParticle, transform.position, Quaternion.LookRotation(hitNormal));
             particle?.Play();
         }
-        AudioLibrary.PlayAtPosition(_data.collisionSFX, transform.position);
+
+        if (!hitDamageable)
+        {
+            AudioLibrary.PlayAtPosition(_data.collisionSFX, transform.position);
+        }
         ObjectPooler.ReturnObjectToPool(this);
     }
 

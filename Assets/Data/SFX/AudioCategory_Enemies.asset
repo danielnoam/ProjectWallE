@@ -14,4 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.Systems.AudioLibrary.SOAudioCategory
   label: Enemies
   audioMixerGroup: {fileID: -8484508710474354332, guid: 6d307fcdc9063864f92ead1a27b76789, type: 2}
-  audioMappings: []
+  audioMappings:
+  - id: CriticalHit
+    audioObject: {fileID: 11400000, guid: 11ef8bb5fd9ad1845a211dedee41f598, type: 2}
+  - id: NormalHit
+    audioObject: {fileID: 11400000, guid: 592b275ce27d1334c9f53fa40ea87e36, type: 2}

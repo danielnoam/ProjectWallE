@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using DNExtensions.Systems.ObjectPooling;
 using DNExtensions.Systems.Scriptables;
 using DNExtensions.Utilities;
@@ -8,11 +9,11 @@ using UnityEngine;
 
 namespace ProjectWallE.GameLoop
 {
-    public enum AttackResponse
+    public enum AttackerResponse
     {
         None,
-        RetaliatePlayer,
-        RetaliateTurret,
+        RetaliateIfPlayer,
+        RetaliateIfTurret,
         RetaliateAll,
     }
 
@@ -21,6 +22,12 @@ namespace ProjectWallE.GameLoop
         MovingToTarget,
         Idle
     }
+    
+    public enum EnemyHitZone
+    {
+        Normal,
+        Critical
+    }
 
     [SelectionBase]
     public abstract class Enemy : MonoBehaviour, IDamageable, IPushable, IPoolable
@@ -28,8 +35,9 @@ namespace ProjectWallE.GameLoop
         [Header("Settings")] 
         [SerializeField] private float maxHealth = 100f;
         [SerializeField] private float targetFindRange = 20f;
-        [SerializeField] private AttackResponse attackResponse = AttackResponse.RetaliatePlayer;
+        [SerializeField] private AttackerResponse attackerResponse = AttackerResponse.RetaliateIfPlayer;
         [SerializeReference, SerializableSelector] private TargetingStrategy[] targetingStrategies;
+        [SerializeField] private EnemyEffects effects;
         
         [Header("Head")]
         [SerializeField] private Transform headTransform;
@@ -44,6 +52,8 @@ namespace ProjectWallE.GameLoop
         [SerializeField, SOSelector("Assets/Data")] private ProjectileData projectileData;
         [SerializeField, SOSelector("Assets/Data")] private SOLayerMask hitLayers;
 
+        
+        private readonly List<EnemyDamageRelay> _relays = new();
         private float _currentHealth;
         private float _attackTimer;
 
@@ -52,10 +62,12 @@ namespace ProjectWallE.GameLoop
         protected const float RandomRange = 20f;
         protected const float RetargetThreshold = 25f;
 
+        public bool IsAlive => _currentHealth > 0;
+        
         public event Action<IDamageable> OnDeath;
         public event Action<float> OnDamaged;
-        public event Action OnAttack;
-
+        
+        
 
         private void OnDestroy()
         {
@@ -182,7 +194,6 @@ namespace ProjectWallE.GameLoop
 
             var direction = (CurrentTarget.transform.position - transform.position).normalized;
             projectileData?.Spawn(hitLayers.Value, firePoint.position, direction, CurrentTarget.transform.position);
-            OnAttack?.Invoke();
         }
 
         private void SetTarget(IDamageable target)
@@ -195,15 +206,15 @@ namespace ProjectWallE.GameLoop
 
         private bool ShouldRetaliate(IDamageable attacker)
         {
-            switch (attackResponse)
+            switch (attackerResponse)
             {
-                case AttackResponse.RetaliatePlayer:
+                case AttackerResponse.RetaliateIfPlayer:
                     return attacker is PlayerManager;
-                case AttackResponse.RetaliateTurret:
+                case AttackerResponse.RetaliateIfTurret:
                     return attacker is Turret;
-                case AttackResponse.RetaliateAll:
+                case AttackerResponse.RetaliateAll:
                     return true;
-                case AttackResponse.None:
+                case AttackerResponse.None:
                 default:
                     return false;
             }
@@ -225,26 +236,47 @@ namespace ProjectWallE.GameLoop
             return IsTargetValid(CurrentTarget) && Vector3.Distance(transform.position, CurrentTarget.transform.position) <= attackRange;
         }
         
-
-        public void TakeDamage(float damage, IDamageable attacker = null)
+        private void ApplyDamage(float damage, IDamageable attacker)
         {
-            if (_currentHealth <= 0) return;
-
             _currentHealth -= damage;
             OnDamaged?.Invoke(damage);
 
             if (attacker != null && attacker != CurrentTarget && ShouldRetaliate(attacker))
-            {
                 SetTarget(attacker);
-            }
 
             if (_currentHealth <= 0) Die();
         }
+        
+
+        public void TakeHitZoneDamage(float damage, IDamageable attacker, EnemyDamageRelay relay)
+        {
+            if (!IsAlive) return;
+            
+            float multiplier = relay.HitZone switch
+            {
+                EnemyHitZone.Critical => 2f,
+                _ => 1f
+            };
+
+            effects.PlayHit(transform.position, relay);
+            ApplyDamage(damage * multiplier, attacker);
+        }
+
+        public void TakeDamage(float damage, IDamageable attacker = null)
+        {
+            if (!IsAlive) return;
+            
+            effects.PlayHitAll(transform.position, _relays);
+            ApplyDamage(damage, attacker);
+        }
+        
 
         public void Push(Vector3 direction, float force)
         {
             OnPush(direction, force);
         }
+        
+        public void RegisterRelay(EnemyDamageRelay relay) => _relays.Add(relay);
 
         public void OnPoolGet()
         {

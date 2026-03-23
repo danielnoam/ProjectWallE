@@ -1,84 +1,60 @@
 using System;
 using System.Collections.Generic;
 using DNExtensions.Systems.AudioLibrary;
-using DNExtensions.Utilities.AutoGet;
 using PrimeTween;
 using UnityEngine;
 
 namespace ProjectWallE.GameLoop
 {
-    public class EnemyEffects : MonoBehaviour
+    [Serializable]
+    public class EnemyEffects
     {
-        [Header("SFX")]
-        [SerializeField, AudioLibraryID] private string damagedSoundId;
-
-        [Header("Emission Punch")]
+        [Header("Emission")]
         [SerializeField] private float punchStrength = 1f;
         [SerializeField] private float punchDuration = 0.15f;
         [SerializeField] private Ease punchEase = Ease.Linear;
-        [SerializeField] private int punchCycles = 1;
+        [SerializeField, ColorUsage(false, true)] private Color normalEmissionColor = Color.red;
+        [SerializeField, ColorUsage(false, true)] private Color criticalEmissionColor = Color.red;
 
-        [Header("References")]
-        [SerializeField] private Renderer[] excludedRenderers;
-        [SerializeField, AutoGetSelf] private Enemy enemy;
+        [Header("SFX")]
+        [SerializeField, AudioLibraryID] private string normalDamagedSoundId;
+        [SerializeField, AudioLibraryID] private string criticalDamageSoundId;
 
         private static readonly int EmissionStrength = Shader.PropertyToID("_Emission_Strength");
-
-        private Material[] _materials;
-        private Sequence _punchSequence;
-
-        private void OnValidate() => AutoGetSystem.Process(this);
-
-        private void Start()
+        private static readonly int EmissionColor = Shader.PropertyToID("_Emission_Color");
+        
+        private void PunchEmission(Material[] materials, Color color)
         {
-            var renderers = GetComponentsInChildren<Renderer>();
-            var mats = new List<Material>();
-            foreach (var r in renderers)
+            if (materials == null || materials.Length == 0) return;
+
+            foreach (var mat in materials)
+                mat.SetColor(EmissionColor, color);
+
+            var seq = Sequence.Create();
+            foreach (var mat in materials)
+                seq.Group(Tween.MaterialProperty(mat, EmissionStrength, punchStrength, punchDuration * 0.5f, punchEase));
+
+            seq.Chain(Tween.MaterialProperty(materials[0], EmissionStrength, 0f, punchDuration * 0.5f, punchEase));
+            for (var i = 1; i < materials.Length; i++)
+                seq.Group(Tween.MaterialProperty(materials[i], EmissionStrength, 0f, punchDuration * 0.5f, punchEase));
+        }
+        
+        public void PlayHitAll(Vector3 position, List<EnemyDamageRelay> relays)
+        {
+            foreach (var relay in relays)
             {
-                if (Array.IndexOf(excludedRenderers, r) >= 0) continue;
-                foreach (var mat in r.materials)
-                {
-                    if (mat.HasProperty(EmissionStrength))
-                    {
-                        mats.Add(mat);
-                    }
-                }
+                PunchEmission(relay.Materials, normalEmissionColor);
             }
-            _materials = mats.ToArray();
+            AudioLibrary.PlayAtPosition(normalDamagedSoundId, position);
         }
-
-        private void OnEnable()
+        
+        public void PlayHit(Vector3 position, EnemyDamageRelay relay)
         {
-            if (enemy) enemy.OnDamaged += OnDamaged;
-        }
-
-        private void OnDisable()
-        {
-            if (enemy) enemy.OnDamaged -= OnDamaged;
-        }
-
-        private void OnDamaged(float damage)
-        {
-            PunchEmission();
-            AudioLibrary.PlayAtPosition(damagedSoundId, transform.position);
-        }
-
-        private void PunchEmission()
-        {
-            if (_materials == null || _materials.Length == 0) return;
-            if (_punchSequence.isAlive) _punchSequence.Stop();
-
-            _punchSequence = Sequence.Create(cycles: punchCycles);
-            foreach (var mat in _materials)
-            {
-                _punchSequence.Group(Tween.MaterialProperty(mat, EmissionStrength, punchStrength, punchDuration * 0.5f, punchEase));
-            }
-
-            _punchSequence.Chain(Tween.MaterialProperty(_materials[0], EmissionStrength, 0f, punchDuration * 0.5f, punchEase));
-            for (var i = 1; i < _materials.Length; i++)
-            {
-                _punchSequence.Group(Tween.MaterialProperty(_materials[i], EmissionStrength, 0f, punchDuration * 0.5f, punchEase));
-            }
+            Color color = relay.HitZone == EnemyHitZone.Critical ? criticalEmissionColor : normalEmissionColor;
+            string soundId = relay.HitZone == EnemyHitZone.Critical ? criticalDamageSoundId : normalDamagedSoundId;
+            
+            PunchEmission(relay.Materials, color);
+            AudioLibrary.PlayAtPosition(soundId, position);
         }
     }
 }
