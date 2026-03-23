@@ -49,6 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06535a561c25490abaa0eb30b94e8fdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RadarTarget
+  blipSprite: {fileID: 0}
   blipColor: {r: 1, g: 0.25490198, b: 0.25490198, a: 1}
   blipSizeMultiplier: 1
   showOutOfRange: 0
@@ -198,7 +199,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1172277388000784943}
+  m_Father: {fileID: 4079017067893938437}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9070794248794423676
 GameObject:
@@ -340,6 +341,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 846fd6f4d2dd1354eb91cd685e757bc5, type: 2}
+    - target: {fileID: -7814649696102850417, guid: df15f20dde9794642b3cf6f528a5476a, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 846fd6f4d2dd1354eb91cd685e757bc5, type: 2}
     - target: {fileID: -7562846898429900858, guid: df15f20dde9794642b3cf6f528a5476a, type: 3}
       propertyPath: m_Layer
       value: 8
@@ -432,6 +437,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 59ab1f84806b3c84c8bd11be2c9d53dc, type: 2}
+    - target: {fileID: 4016635775301324417, guid: df15f20dde9794642b3cf6f528a5476a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.942
+      objectReference: {fileID: 0}
     - target: {fileID: 4170013294775895339, guid: df15f20dde9794642b3cf6f528a5476a, type: 3}
       propertyPath: m_Layer
       value: 8
@@ -491,16 +500,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: -5812483528580019007, guid: df15f20dde9794642b3cf6f528a5476a, type: 3}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: df15f20dde9794642b3cf6f528a5476a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8925620038691902775}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: df15f20dde9794642b3cf6f528a5476a, type: 3}
---- !u!4 &1172277388000784943 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -5812483528580019007, guid: df15f20dde9794642b3cf6f528a5476a, type: 3}
-  m_PrefabInstance: {fileID: 4544463063355473646}
-  m_PrefabAsset: {fileID: 0}
 --- !u!23 &2294688138829299902 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -6860825425164714416, guid: df15f20dde9794642b3cf6f528a5476a, type: 3}
