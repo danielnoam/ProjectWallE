@@ -37,6 +37,7 @@ namespace ProjectWallE
         {
             suspensionVisual.ResetVisual();
             swivelVisual.ResetVisual();
+            _hasDesiredYaw = false;
             _currentSwivelWorldYaw = swivelVisual.visTransform.eulerAngles.y;
             _desiredSwivelWorldYaw = _currentSwivelWorldYaw;
             foreach (var wheel in wheelVisuals)
