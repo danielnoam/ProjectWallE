@@ -33,12 +33,16 @@ namespace ProjectWallE.UI
         
         public void Show(Vector3 position)
         {
+            if (!canvasGroup) return;
+            
             transform.position = position.Add(offset);
             canvasGroup.alpha = 1;
         }
         
         public void Hide()
         {
+            if (!canvasGroup) return;
+            
             canvasGroup.alpha = 0;
         }
     }

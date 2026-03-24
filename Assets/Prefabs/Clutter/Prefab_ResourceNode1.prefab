@@ -105,6 +105,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 728664008368868911}
   m_SourcePrefab: {fileID: 100100000, guid: 573442b838fdcba4080f80f33b114fd4, type: 3}
+--- !u!23 &5072832496208480937 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 573442b838fdcba4080f80f33b114fd4, type: 3}
+  m_PrefabInstance: {fileID: 5883891232852284973}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6209758667840909766 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 573442b838fdcba4080f80f33b114fd4, type: 3}
@@ -153,3 +158,10 @@ MonoBehaviour:
   resourceAmount: 100
   destroyEffect: {fileID: 8719693749157704221, guid: 1b3442425d82af9499ec794800098825, type: 3}
   destroyEffectPosition: {fileID: 268659226318373905}
+  damagedSoundId: ProjectileCollision
+  destroySoundId: 
+  punchStrength: 1
+  punchDuration: 0.15
+  punchEase: 4
+  emissionColor: {r: 10.536487, g: 0, b: 4.0270376, a: 1}
+  rend: {fileID: 5072832496208480937}
