@@ -14,7 +14,9 @@ namespace ProjectWallE
     {
         [SerializeField, Min(10f)] private float maxHealth = 100f;
         [SerializeField] private float switchCooldown = 1f;
+        [SerializeField] private float robotHeightCheck;
         [SerializeField] LayerMask groundLayer;
+        [SerializeField] LayerMask switchBlockLayer;
         
         [HideInInspector][SerializeField] CarController carController;
         [HideInInspector][SerializeField] RobotController robotController;
@@ -44,6 +46,7 @@ namespace ProjectWallE
         public event Action<float> OnDamaged;
         public event Action<PlayerControllerType> OnControllerChanged;
         public event Action<float, float> OnHealthChanged;
+        public event Action OnControllerSwitchFailed;
 
         private void OnValidate()
         {
@@ -100,6 +103,11 @@ namespace ProjectWallE
 
         private void SwitchControllerEnum()
         {
+            if (_playerControllerTypeEnum == PlayerControllerType.Car && !CanSwitchToRobot())
+            {
+                OnControllerSwitchFailed?.Invoke();
+                return;
+            }
             _playerControllerTypeEnum = _playerControllerTypeEnum == PlayerControllerType.Robot ? PlayerControllerType.Car : PlayerControllerType.Robot;
         }
 
@@ -132,6 +140,12 @@ namespace ProjectWallE
             OnControllerChanged?.Invoke(playerControllerType);
         }
 
+        private bool CanSwitchToRobot()
+        {
+            bool isClear = !Physics.Raycast(transform.position, Vector3.up, robotHeightCheck, switchBlockLayer);
+            return isClear;
+        }
+
         private void ResetRbRotation()
         {
             Vector3 rot = _rigidbody.rotation.eulerAngles;
@@ -162,15 +176,18 @@ namespace ProjectWallE
 
         public void Push(Vector3 direction, float force)
         {
-            
+            _rigidbody.AddForce(direction * force, ForceMode.Impulse);
         }
 
         private void OnDrawGizmosSelected()
         {
-            if(_rigidbody == null) return;
-            Gizmos.color = Color.green;
-            Gizmos.DrawSphere(transform.position + _rigidbody.centerOfMass, .1f);
-            
+            if(_rigidbody != null)
+            {
+                Gizmos.color = Color.green;
+                Gizmos.DrawSphere(transform.position + _rigidbody.centerOfMass, .1f);
+            }
+            Gizmos.color = Color.red;
+            Gizmos.DrawRay(transform.position, Vector3.up * robotHeightCheck);
         }
     }
 }

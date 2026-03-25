@@ -6,45 +6,12 @@ namespace ProjectWallE
     [RequireComponent(typeof(RobotInput))]
     public class RobotController : MonoBehaviour, IPlayerController
     {
+        [SerializeField] private SORobotControllerSettings settings;
+        [Space(10)]
         [SerializeField] private Transform groundRayPoint;
-        [SerializeField] private RobotControllerVisuals visuals;
         [SerializeField] private Vector3 centerOfMassOffset;
-
-        [Header("Grounded Settings")]
-        [SerializeField] private float groundHeight = 0.5f;
-        [SerializeField] private float maxCheckHeight = 1f;
-        [SerializeField] private float springStrength;
-        [SerializeField] private float springDamping;
-
-        [Header("Gravity Settings")]
-        [SerializeField] private float gravityStrength;
-        [SerializeField] private float terminalVelocity;
-
-        [Header("Locomotion Settings")]
-        [SerializeField] private float moveAccel = 20f;
-        [Tooltip("x axis is how much we are changing our direction (-1 is completely changing, 1 is not changing at all)" +
-                 "y axis is the multiplier itself relative to the change")]
-        [SerializeField] private AnimationCurve dirChangeAccelFactor;
-        [SerializeField] private float maxMoveSpeed = 8f;
-        [SerializeField] private float forcePointBelowCom = 0.2f;
-        [SerializeField] private float groundMoveFactor = 1f;
-        [SerializeField] private float airMoveFactor = 0.35f;
-
-        [Header("Slope Settings")]
-        [SerializeField] private float maxWalkableSlopeAngle = 45f;
-        [SerializeField] private float slopeSlideAccel = 8f;
-        [SerializeField] private float maxSlopeSlideSpeed = 6f;
-        [SerializeField] private float slopeSlideMoveFactor = 0.1f;
-
-        [Header("Jump Settings")]
-        [SerializeField] private float jumpHeight = 3f;
-        [SerializeField] private float jumpBuffer = 0.2f;
-
-        [Header("Rotation Settings")]
-        [SerializeField] private float uprightStrength = 80f;
-        [SerializeField] private float uprightDamping = 12f;
-        [SerializeField] private float yawStrength = 40f;
-        [SerializeField] private float yawDamping = 8f;
+        [Space(10)]
+        [SerializeField] private RobotControllerVisuals visuals;
 
         private RobotInput _input;
         private LayerMask _groundLayer;
@@ -65,12 +32,13 @@ namespace ProjectWallE
         /// <summary>
         /// controls how much dv affects the acceleration (bigger = less control)
         /// </summary>
-        private float accelControlFactor => moveAccel * 0.25f;
+        private float accelControlFactor => settings.MoveAccel * 0.25f;
 
         /// <summary>
         /// controls how much dv affects the gravity (bigger = less control)
         /// </summary>
-        private float gravityControlFactor => gravityStrength * 0.25f;
+        private float gravityControlFactor => settings.GravityStrength * 0.25f;
+
         public Vector3 CenterOfMassOffset => centerOfMassOffset;
 
         public bool canBuild { get; private set; } = true;
@@ -78,6 +46,13 @@ namespace ProjectWallE
 
         public void Initialize(PlayerReferences playerReferences)
         {
+            if (settings == null)
+            {
+                Debug.LogError("RobotController: Missing settings!", this);
+                enabled = false;
+                return;
+            }
+
             _playerRb = playerReferences.rigidBody;
             _cameraTransform = playerReferences.cameraTransform;
             _groundLayer = playerReferences.groundLayer;
@@ -89,7 +64,6 @@ namespace ProjectWallE
 
         public void OnEnter()
         {
-            
         }
 
         public void OnExit()
@@ -108,7 +82,7 @@ namespace ProjectWallE
 
             Vector3 moveDirWorld = GetCameraRelativeDirection(_input.Movement);
             bool hasMovementInput = moveDirWorld.sqrMagnitude > 0.0001f;
-            visuals?.UpdateSwivelVisual(hasMovementInput ? moveDirWorld : Vector3.zero); //visuals
+            visuals?.UpdateSwivelVisual(hasMovementInput ? moveDirWorld : Vector3.zero);
             visuals?.UpdateWheelRollingVisual(_playerRb.linearVelocity);
         }
 
@@ -122,7 +96,6 @@ namespace ProjectWallE
             UpdateLocomotion(hit);
             UpdateRotation();
         }
-        
 
         #region Locomotion
 
@@ -143,8 +116,8 @@ namespace ProjectWallE
                 moveDir = GetSurfaceAlignedMoveDirection(moveDir, hit);
             }
 
-            float control = _isSlopeSliding ? slopeSlideMoveFactor :
-                _isGrounded ? groundMoveFactor : airMoveFactor;
+            float control = _isSlopeSliding ? settings.SlopeSlideMoveFactor :
+                _isGrounded ? settings.GroundMoveFactor : settings.AirMoveFactor;
 
             Vector3 accel = ComputeMoveAcceleration(moveDir, control, hit);
 
@@ -156,7 +129,7 @@ namespace ProjectWallE
 
         private void ApplyMoveAccelAtOffset(Vector3 accel)
         {
-            Vector3 forcePoint = _playerRb.worldCenterOfMass - transform.up * forcePointBelowCom;
+            Vector3 forcePoint = _playerRb.worldCenterOfMass - transform.up * settings.ForcePointBelowCom;
             _playerRb.AddForceAtPosition(accel, forcePoint, ForceMode.Acceleration);
         }
 
@@ -169,7 +142,7 @@ namespace ProjectWallE
                 : new Vector3(vel.x, 0f, vel.z);
 
             Vector3 dv = -moveVel;
-            Vector3 brakeAccel = Vector3.ClampMagnitude(dv * accelControlFactor, moveAccel);
+            Vector3 brakeAccel = Vector3.ClampMagnitude(dv * accelControlFactor, settings.MoveAccel);
 
             _playerRb.AddForce(brakeAccel * control, ForceMode.Acceleration);
         }
@@ -212,14 +185,14 @@ namespace ProjectWallE
                 ? Vector3.ProjectOnPlane(vel, hit.normal)
                 : new Vector3(vel.x, 0f, vel.z);
 
-            Vector3 desiredMoveVel = moveDir * maxMoveSpeed;
+            Vector3 desiredMoveVel = moveDir * settings.MaxMoveSpeed;
             Vector3 dv = desiredMoveVel - currentMoveVel;
 
             float dirChangeFactor = 0f;
             if (desiredMoveVel.sqrMagnitude > 0.0001f && currentMoveVel.sqrMagnitude > 0.0001f)
                 dirChangeFactor = Vector3.Dot(desiredMoveVel.normalized, currentMoveVel.normalized);
 
-            float accelCap = dirChangeAccelFactor.Evaluate(dirChangeFactor) * moveAccel;
+            float accelCap = settings.DirChangeAccelFactor.Evaluate(dirChangeFactor) * settings.MoveAccel;
 
             Vector3 accel = Vector3.ClampMagnitude(dv * accelControlFactor, accelCap);
             return accel * control;
@@ -235,8 +208,8 @@ namespace ProjectWallE
             if (slideDir.sqrMagnitude < 0.0001f) return;
 
             float currentSlideSpeed = Vector3.Dot(_playerRb.linearVelocity, slideDir);
-            float dv = maxSlopeSlideSpeed - currentSlideSpeed;
-            float slideAccel = Mathf.Clamp(dv * accelControlFactor, 0f, slopeSlideAccel);
+            float dv = settings.MaxSlopeSlideSpeed - currentSlideSpeed;
+            float slideAccel = Mathf.Clamp(dv * accelControlFactor, 0f, settings.SlopeSlideAccel);
 
             _playerRb.AddForce(slideDir * slideAccel, ForceMode.Acceleration);
         }
@@ -248,7 +221,7 @@ namespace ProjectWallE
 
         private bool IsSlopeWalkable(RaycastHit hit)
         {
-            return GetSlopeAngle(hit) <= maxWalkableSlopeAngle;
+            return GetSlopeAngle(hit) <= settings.MaxWalkableSlopeAngle;
         }
 
         private Vector3 GetSlopeDownDirection(RaycastHit hit)
@@ -270,7 +243,7 @@ namespace ProjectWallE
             _isJumping = _isJumping && isGrounded;
             if (!_isJumpAvail || !isGrounded || _isJumping) return;
 
-            float groundOffset = groundHeight - hit.distance;
+            float groundOffset = settings.GroundHeight - hit.distance;
             Jump(groundOffset);
         }
 
@@ -280,8 +253,8 @@ namespace ProjectWallE
             _isJumping = true;
             _isGrounded = false;
 
-            float targetHeight = jumpHeight + groundOffset;
-            float desiredJumpVel = Mathf.Sqrt(2f * gravityStrength * targetHeight);
+            float targetHeight = settings.JumpHeight + groundOffset;
+            float desiredJumpVel = Mathf.Sqrt(2f * settings.GravityStrength * targetHeight);
 
             float currentYVel = _playerRb.linearVelocity.y;
             float deltaV = desiredJumpVel - currentYVel;
@@ -289,7 +262,7 @@ namespace ProjectWallE
             if (deltaV <= 0f)
                 return;
 
-            Vector3 forcePoint = _playerRb.worldCenterOfMass - transform.up * forcePointBelowCom;
+            Vector3 forcePoint = _playerRb.worldCenterOfMass - transform.up * settings.ForcePointBelowCom;
             _playerRb.AddForceAtPosition(Vector3.up * deltaV, forcePoint, ForceMode.VelocityChange);
         }
 
@@ -298,7 +271,7 @@ namespace ProjectWallE
             if (_input.JumpPressed)
             {
                 _isJumpAvail = true;
-                _jumpTimer = Time.time + jumpBuffer;
+                _jumpTimer = Time.time + settings.JumpBuffer;
             }
 
             if (_jumpTimer <= Time.time)
@@ -314,10 +287,10 @@ namespace ProjectWallE
             if (_isGrounded) return;
 
             float verticalVel = _playerRb.linearVelocity.y;
-            float desiredVerticalVel = -terminalVelocity;
+            float desiredVerticalVel = -settings.TerminalVelocity;
             float dv = desiredVerticalVel - verticalVel;
 
-            float gravityForce = Mathf.Clamp(dv * gravityControlFactor, -gravityStrength, Mathf.Infinity);
+            float gravityForce = Mathf.Clamp(dv * gravityControlFactor, -settings.GravityStrength, Mathf.Infinity);
             _playerRb.AddForce(Vector3.up * gravityForce, ForceMode.Acceleration);
         }
 
@@ -327,8 +300,8 @@ namespace ProjectWallE
 
         private void UpdateGroundHeight(bool isGrounded, RaycastHit hit)
         {
-            float offset = hit.distance - groundHeight;
-            visuals?.UpdateSuspensionVisual(isGrounded, offset);             //visuals
+            float offset = hit.distance - settings.GroundHeight;
+            visuals?.UpdateSuspensionVisual(isGrounded, offset);
             
             if (!isGrounded || _isJumping)
             {
@@ -340,7 +313,7 @@ namespace ProjectWallE
             if (_hadGroundHitLastFrame)
                 springVel = (hit.distance - _lastGroundDistance) / Time.fixedDeltaTime;
 
-            float suspensionAccel = (-offset * springStrength) - (springVel * springDamping);
+            float suspensionAccel = (-offset * settings.SpringStrength) - (springVel * settings.SpringDamping);
             _playerRb.AddForce(Vector3.up * suspensionAccel, ForceMode.Acceleration);
 
             _lastGroundDistance = hit.distance;
@@ -349,7 +322,7 @@ namespace ProjectWallE
 
         private bool IsGrounded(out RaycastHit hit)
         {
-            float dist = _isGrounded ? maxCheckHeight : groundHeight;
+            float dist = _isGrounded ? settings.MaxCheckHeight : settings.GroundHeight;
 
             bool groundedNow = Physics.Raycast(
                 groundRayPoint.position,
@@ -379,7 +352,7 @@ namespace ProjectWallE
             Vector3 tiltAxisWorld = GetUprightCorrectionAxisWorld();
             Vector3 tiltAngVelWorld = GetTiltAngularVelocityWorld();
 
-            Vector3 uprightTorque = (tiltAxisWorld * uprightStrength) - (tiltAngVelWorld * uprightDamping);
+            Vector3 uprightTorque = (tiltAxisWorld * settings.UprightStrength) - (tiltAngVelWorld * settings.UprightDamping);
             _playerRb.AddTorque(uprightTorque, ForceMode.Acceleration);
         }
 
@@ -405,10 +378,9 @@ namespace ProjectWallE
             float yawErrorRad = GetSignedYawErrorRadians(forwardFlat, camForwardFlat);
 
             float yawVelLocal = GetLocalYawAngularVelocity();
-            float yawAccel = (yawErrorRad * yawStrength) - (yawVelLocal * yawDamping);
+            float yawAccel = (yawErrorRad * settings.YawStrength) - (yawVelLocal * settings.YawDamping);
 
             _playerRb.AddRelativeTorque(0f, yawAccel, 0f, ForceMode.Acceleration);
-            
         }
 
         private bool TryGetFlattenedCameraForward(out Vector3 camForwardFlat)

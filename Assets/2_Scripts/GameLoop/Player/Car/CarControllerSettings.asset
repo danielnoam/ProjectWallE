@@ -1,0 +1,170 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e2aef73163fa9a4d986ae4cc5ce44fc, type: 3}
+  m_Name: CarControllerSettings
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.SOCarControllerSettings
+  groundHeight: 0.65
+  suspensionStrength: 25
+  suspensionDamping: 2
+  steeringAngle: 35
+  steeringStrength: 3
+  topSpeedSteeringFactor: 0.7
+  steeringTiresFrictionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.5
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.12
+      value: 0.40999654
+      inSlope: -2.4166217
+      outSlope: -0.9751007
+      tangentMode: 1
+      weightedMode: 0
+      inWeight: 0.17745414
+      outWeight: 0.11262136
+    - serializedVersion: 3
+      time: 0.30502746
+      value: 0.1583652
+      inSlope: -0.6090035
+      outSlope: -0.3274603
+      tangentMode: 1
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.095829636
+    - serializedVersion: 3
+      time: 1.0015829
+      value: 0.026035102
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  staticTiresFrictionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.5
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.12
+      value: 0.40999654
+      inSlope: -2.4166217
+      outSlope: -0.9751007
+      tangentMode: 1
+      weightedMode: 0
+      inWeight: 0.17745414
+      outWeight: 0.11262136
+    - serializedVersion: 3
+      time: 0.30502746
+      value: 0.1583652
+      inSlope: -0.6090035
+      outSlope: -0.3274603
+      tangentMode: 1
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.095829636
+    - serializedVersion: 3
+      time: 1.0015829
+      value: 0.026035102
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  handBrakeGripFactor: 0
+  handbrakeBlendIn: 12
+  handbrakeBlendOut: 10
+  minSlippingSpeed: 6
+  maxSlippingSpeed: 12
+  minGripAtMaxSlip: 0.5
+  minGripWhenPartialGround: 0.1
+  partialGroundGripPower: 2
+  gravityStrength: 10
+  terminalVelocity: 20
+  accelerationStrength: 20
+  accelerationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.5
+      inSlope: 3.5506127
+      outSlope: 3.5506127
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.14142393
+      value: 1.0021416
+      inSlope: 1.4520358
+      outSlope: 0.000014825527
+      tangentMode: 1
+      weightedMode: 0
+      inWeight: 0.1639699
+      outWeight: 0.14932938
+    - serializedVersion: 3
+      time: 0.71682817
+      value: 1.0000004
+      inSlope: -0.0000022138865
+      outSlope: -1.7260942
+      tangentMode: 1
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.29714334
+    - serializedVersion: 3
+      time: 1
+      value: 0.09999466
+      inSlope: -3.1783023
+      outSlope: -3.1783023
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  topForwardSpeed: 15
+  topBackwardSpeed: 6
+  speedyLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  speedyTopSpeedMultiplier: 0
+  speedyAccelMultiplier: 0
+  brakeStrength: 10
+  engineBrakeStrength: 1
+  airAlignmentStrength: 2
+  airAlignmentDamping: 2
+  airSteeringStrength: 2
+  maxAirSteeringVelocity: 2
