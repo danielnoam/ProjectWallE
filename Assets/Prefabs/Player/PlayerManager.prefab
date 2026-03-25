@@ -1548,7 +1548,7 @@ MonoBehaviour:
   - {fileID: 5782453471879991033}
   - {fileID: 3686714904999105487}
   heighSpeedMagnitudeRange:
-    minValue: 16
+    minValue: 15
     maxValue: 30
   speedLinesSizeRange: {x: 1, y: 0.85}
   lowHealthThreshold: 0.3
@@ -1556,6 +1556,7 @@ MonoBehaviour:
   airReleaseSoundId: AirRelease
   changeStateSoundId: ChangeState
   shootSoundId: Shoot
+  damagedSoundId: ProjectileCollision
   lowHealthEffect: {fileID: 3576337536456230308}
   speedLinesVisibility: {fileID: 8104896233199378666}
   speedLinesSize: {fileID: 3404806522171678059}

@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using DNExtensions.Systems.ObjectPooling;
-using DNExtensions.Systems.Scriptables;
-using DNExtensions.Utilities;
+using DNExtensions.Utilities.AutoGet;
 using DNExtensions.Utilities.SerializableSelector;
 using UnityEditor;
-using UnityEngine;  
+using UnityEngine;
 
 namespace ProjectWallE.GameLoop
 {
@@ -22,7 +21,7 @@ namespace ProjectWallE.GameLoop
         MovingToTarget,
         Idle
     }
-    
+
     public enum EnemyHitZone
     {
         Normal,
@@ -30,44 +29,39 @@ namespace ProjectWallE.GameLoop
     }
 
     [SelectionBase]
+    [RequireComponent(typeof(Rigidbody))]
     public abstract class Enemy : MonoBehaviour, IDamageable, IPushable, IPoolable
     {
-        [Header("Settings")] 
+        [Header("Settings")]
         [SerializeField] private float maxHealth = 100f;
         [SerializeField] private float targetFindRange = 20f;
         [SerializeField] private AttackerResponse attackerResponse = AttackerResponse.RetaliateIfPlayer;
         [SerializeReference, SerializableSelector] private TargetingStrategy[] targetingStrategies;
-        [SerializeField] private EnemyEffects effects;
-        
-        [Header("Head")]
-        [SerializeField] private Transform headTransform;
-        [SerializeField] private float headRotationSpeed = 180f;
-        [SerializeField] private float fireAngleThreshold = 15f;
-        [SerializeField] private bool yawOnly = true;
+        [SerializeReference, SerializableSelector] private EnemyEffect[] effects;
 
-        [Header("Attack")] 
-        [SerializeField] private float attackCooldown = 1f;
-        [SerializeField] private float attackRange = 10f;
-        [SerializeField] private Transform firePoint;
-        [SerializeField, SOSelector("Assets/Data")] private ProjectileData projectileData;
-        [SerializeField, SOSelector("Assets/Data")] private SOLayerMask hitLayers;
+        [Header("Behavior")]
+        [SerializeReference, SerializableSelector] private AimingStrategy aimingStrategy;
+        [SerializeReference, SerializableSelector] private AttackStrategy attackStrategy;
 
-        
+        [Header("References")]
+        [SerializeField] private Renderer visibilityRenderer;
+        [SerializeField, AutoGetSelf, HideInInspector] private protected Rigidbody rigidBody;
+
         private readonly List<EnemyDamageRelay> _relays = new();
         private float _currentHealth;
-        private float _attackTimer;
 
         protected EnemyState State;
         protected IDamageable CurrentTarget;
         protected const float RandomRange = 20f;
         protected const float RetargetThreshold = 25f;
+        protected bool AimingControlsBodyRotation => aimingStrategy?.ControlsBodyRotation ?? false;
+        protected bool RequiresDirectApproach => attackStrategy?.RequiresDirectApproach ?? false;
+        protected virtual Vector3 Velocity => rigidBody.linearVelocity;
 
         public bool IsAlive => _currentHealth > 0;
-        
+
         public event Action<IDamageable> OnDeath;
         public event Action<float> OnDamaged;
-        
-        
 
         private void OnDestroy()
         {
@@ -82,8 +76,40 @@ namespace ProjectWallE.GameLoop
 
         private void Update()
         {
-            RotateHead();
-            TryAttack();
+            Vector3? targetPos = IsTargetValid(CurrentTarget) ? CurrentTarget.transform.position : null;
+            bool isVisible = visibilityRenderer && visibilityRenderer.isVisible;
+
+            var context = new EffectContext
+            {
+                DeltaTime = Time.deltaTime,
+                Position = transform.position,
+                Velocity = Velocity,
+                TargetPosition = targetPos,
+                IsVisible = isVisible
+            };
+
+            foreach (var effect in effects)
+            {
+                effect?.Tick(context);
+            }
+
+            if (targetPos.HasValue)
+            {
+                aimingStrategy?.Aim(transform, targetPos.Value, Time.deltaTime);
+
+                bool isAligned = aimingStrategy?.IsAligned(transform, targetPos.Value) ?? true;
+                float distance = Vector3.Distance(transform.position, targetPos.Value);
+
+                attackStrategy?.Tick(isAligned, distance, new AttackContext
+                {
+                    Position = transform.position,
+                    TargetPosition = targetPos.Value,
+                    Owner = this
+                }, Time.deltaTime);
+
+                if (attackStrategy is { ShouldDestroySelf: true }) Die();
+            }
+
             OnUpdate();
         }
 
@@ -99,13 +125,13 @@ namespace ProjectWallE.GameLoop
                 Die();
             }
         }
-        
+
         private void OnTargetDeath(IDamageable deadTarget)
         {
             CurrentTarget.OnDeath -= OnTargetDeath;
             CheckForTarget();
         }
-        
+
         protected bool IsTargetValid(IDamageable target)
         {
             return target is Component component && component && component.gameObject.activeInHierarchy;
@@ -114,24 +140,18 @@ namespace ProjectWallE.GameLoop
         protected virtual void Initialize()
         {
             _currentHealth = maxHealth;
-            _attackTimer = 0f;
             State = EnemyState.Idle;
+            attackStrategy?.Reset();
             CheckForTarget();
             EnemyManager.Instance?.RegisterEnemy(this);
         }
-        
-        protected virtual void OnFixedUpdate()
-        {
-            
-        }
 
-        protected virtual void OnUpdate()
-        {
-            
-        }
+        protected virtual void OnFixedUpdate() { }
+
+        protected virtual void OnUpdate() { }
+
         protected abstract void SetDestination();
         protected abstract void OnPush(Vector3 direction, float force);
-        
 
         private void CheckForTarget()
         {
@@ -149,51 +169,16 @@ namespace ProjectWallE.GameLoop
 
             CurrentTarget = null;
         }
-        
-        private void RotateHead()
-        {
-            if (!headTransform || !IsTargetValid(CurrentTarget)) return;
-
-            Vector3 direction = CurrentTarget.transform.position - headTransform.position;
-    
-            if (yawOnly) direction.y = 0;
-    
-            if (direction.sqrMagnitude < 0.001f) return;
-
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
-            headTransform.rotation = Quaternion.RotateTowards(
-                headTransform.rotation, targetRotation, headRotationSpeed * Time.deltaTime);
-        }
-
 
         private void Die()
         {
+            foreach (var effect in effects)
+            {
+                effect?.OnDeath(transform.position);
+            }
+
             OnDeath?.Invoke(this);
             Destroy(gameObject);
-        }
-
-        private void TryAttack()
-        {
-            if (!IsInAttackRange() || !IsHeadAligned())
-            {
-                _attackTimer = 0f;
-                return;
-            }
-
-            _attackTimer += Time.deltaTime;
-            if (_attackTimer >= attackCooldown)
-            {
-                Attack();
-                _attackTimer = 0f;
-            }
-        }
-
-        private void Attack()
-        {
-            if (!IsTargetValid(CurrentTarget)) return;
-
-            var direction = (CurrentTarget.transform.position - transform.position).normalized;
-            projectileData?.Spawn(hitLayers.Value, firePoint.position, direction, CurrentTarget.transform.position);
         }
 
         private void SetTarget(IDamageable target)
@@ -219,63 +204,50 @@ namespace ProjectWallE.GameLoop
                     return false;
             }
         }
-        
-        private bool IsHeadAligned()
-        {
-            if (!headTransform || !IsTargetValid(CurrentTarget)) return true;
 
-            Vector3 direction = CurrentTarget.transform.position - headTransform.position;
-            if (yawOnly) direction.y = 0;
-            if (direction.sqrMagnitude < 0.001f) return false;
-
-            return Vector3.Angle(headTransform.forward, direction) <= fireAngleThreshold;
-        }
-
-        private bool IsInAttackRange()
-        {
-            return IsTargetValid(CurrentTarget) && Vector3.Distance(transform.position, CurrentTarget.transform.position) <= attackRange;
-        }
-        
         private void ApplyDamage(float damage, IDamageable attacker)
         {
             _currentHealth -= damage;
             OnDamaged?.Invoke(damage);
 
-            if (attacker != null && attacker != CurrentTarget && ShouldRetaliate(attacker))
-                SetTarget(attacker);
+            if (attacker != null && attacker != CurrentTarget && ShouldRetaliate(attacker)) SetTarget(attacker);
 
             if (_currentHealth <= 0) Die();
         }
-        
 
         public void TakeHitZoneDamage(float damage, IDamageable attacker, EnemyDamageRelay relay)
         {
             if (!IsAlive) return;
-            
+
             float multiplier = relay.HitZone switch
             {
                 EnemyHitZone.Critical => 2f,
                 _ => 1f
             };
 
-            effects.PlayHit(transform.position, relay);
+            foreach (var effect in effects)
+            {
+                effect?.OnHit(transform.position, relay);
+            }
             ApplyDamage(damage * multiplier, attacker);
         }
 
         public void TakeDamage(float damage, IDamageable attacker = null)
         {
             if (!IsAlive) return;
-            
-            effects.PlayHitAll(transform.position, _relays);
+
+            foreach (var effect in effects)
+            {
+                effect?.OnHitAll(transform.position, _relays);
+            }
             ApplyDamage(damage, attacker);
         }
-        
 
         public void Push(Vector3 direction, float force)
         {
             OnPush(direction, force);
         }
-        
+
         public void RegisterRelay(EnemyDamageRelay relay) => _relays.Add(relay);
 
         public void OnPoolGet()
@@ -288,12 +260,10 @@ namespace ProjectWallE.GameLoop
             EnemyManager.Instance?.UnregisterEnemy(this);
             if (CurrentTarget != null) CurrentTarget.OnDeath -= OnTargetDeath;
             CurrentTarget = null;
+            attackStrategy?.Reset();
         }
 
-        public void OnPoolRecycle()
-        {
-
-        }
+        public void OnPoolRecycle() { }
 
 #if UNITY_EDITOR
         protected virtual void OnDrawGizmos()
@@ -316,6 +286,11 @@ namespace ProjectWallE.GameLoop
         {
             Gizmos.color = new Color(1f, 0.5f, 0f, 0.3f);
             Gizmos.DrawWireSphere(transform.position, targetFindRange);
+
+            foreach (var effect in effects)
+            {
+                effect?.OnDrawGizmos(transform);
+            }
         }
 #endif
     }

@@ -98,22 +98,14 @@ MonoBehaviour:
   - rid: 6000861155382526045
   - rid: 6000861155382526047
   effects:
-    punchStrength: 1
-    punchDuration: 0.2
-    punchEase: 4
-    normalEmissionColor: {r: 3.0943396, g: 0.5546454, b: 0.5546454, a: 1}
-    criticalEmissionColor: {r: 41.647724, g: 8.068139, b: 0, a: 1}
-    normalDamagedSoundId: NormalHit
-    criticalDamageSoundId: CriticalHit
-  headTransform: {fileID: 5400447300584528572}
-  headRotationSpeed: 180
-  fireAngleThreshold: 25
-  yawOnly: 0
-  attackCooldown: 0.2
-  attackRange: 40
-  firePoint: {fileID: 7429042783596894845}
-  projectileData: {fileID: 11400000, guid: 5aa17da338669a14eba6994821f7b4a8, type: 2}
-  hitLayers: {fileID: 11400000, guid: b3e3f0ea33464b048aaf56518036cb00, type: 2}
+  - rid: 6000861270941368425
+  - rid: 6000861270941368430
+  aimingStrategy:
+    rid: 6000861270941368423
+  attackStrategy:
+    rid: 6000861270941368424
+  visibilityRenderer: {fileID: 5462120949173186914}
+  rigidBody: {fileID: 2448601663206975914}
   stopDistance: 30
   rotationSpeed: 5
   moveSpeed: 17
@@ -132,14 +124,6 @@ MonoBehaviour:
   separationMask:
     serializedVersion: 2
     m_Bits: 1792
-  propellersBLFR:
-  - {fileID: 6322034236222027289}
-  - {fileID: 7760668899370424489}
-  propellersBRFL:
-  - {fileID: 6702231614900887059}
-  - {fileID: 8255852693297707880}
-  propellerRotationSpeed: 1000
-  rigidBody: {fileID: 2448601663206975914}
   references:
     version: 2
     RefIds:
@@ -155,6 +139,41 @@ MonoBehaviour:
       type: {class: NearestStructureTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         inRange: 0
+    - rid: 6000861270941368423
+      type: {class: IndependentAiming, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        headTransform: {fileID: 5400447300584528572}
+        rotationSpeed: 180
+        alignmentThreshold: 15
+        yawOnly: 0
+    - rid: 6000861270941368424
+      type: {class: ProjectileAttack, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        attackRange: 35
+        attackCooldown: 1
+        firePoint: {fileID: 7429042783596894845}
+        projectileData: {fileID: 11400000, guid: 5aa17da338669a14eba6994821f7b4a8, type: 2}
+        hitLayers: {fileID: 11400000, guid: b3e3f0ea33464b048aaf56518036cb00, type: 2}
+    - rid: 6000861270941368425
+      type: {class: HitEffect, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        punchStrength: 1
+        punchDuration: 0.15
+        punchEase: 1
+        normalEmissionColor: {r: 3.0943396, g: 0.5546454, b: 0.5546454, a: 1}
+        criticalEmissionColor: {r: 41.647724, g: 8.068139, b: 0, a: 1}
+        normalDamagedSoundId: NormalHit
+        criticalDamageSoundId: CriticalHit
+    - rid: 6000861270941368430
+      type: {class: PropellerEffect, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        propellersCw:
+        - {fileID: 6322034236222027289}
+        - {fileID: 7760668899370424489}
+        propellersCcw:
+        - {fileID: 6702231614900887059}
+        - {fileID: 8255852693297707880}
+        rotationSpeed: 1000
 --- !u!1 &8115690136778003990
 GameObject:
   m_ObjectHideFlags: 0
@@ -405,6 +424,11 @@ PrefabInstance:
 --- !u!4 &5400447300584528572 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4628696819905300460, guid: c6643c1cdc1e591449ec71fd576e381d, type: 3}
+  m_PrefabInstance: {fileID: 8444723127063061160}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &5462120949173186914 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -4684600263410887734, guid: c6643c1cdc1e591449ec71fd576e381d, type: 3}
   m_PrefabInstance: {fileID: 8444723127063061160}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &5610340185344684694 stripped

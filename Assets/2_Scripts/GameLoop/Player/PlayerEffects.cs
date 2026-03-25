@@ -25,6 +25,7 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField, AudioLibraryID] private string airReleaseSoundId;
         [SerializeField, AudioLibraryID] private string changeStateSoundId;
         [SerializeField, AudioLibraryID] private string shootSoundId;
+        [SerializeField, AudioLibraryID] private string damagedSoundId;
         
         [Header("References")]
         [SerializeField] private MaterialPropertyTweener lowHealthEffect;
@@ -109,6 +110,7 @@ namespace ProjectWallE.GameLoop.Player
         
         private void OnDamaged(float damage)
         {
+            AudioLibrary.PlayAtPosition(damagedSoundId, transform.position);
             emission?.Punch();
         }
 

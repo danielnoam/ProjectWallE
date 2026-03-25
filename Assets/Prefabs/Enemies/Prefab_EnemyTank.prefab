@@ -121,24 +121,15 @@ MonoBehaviour:
   - rid: 6000861155382526049
   - rid: 6000861155382526050
   effects:
-    punchStrength: 1
-    punchDuration: 0.2
-    punchEase: 4
-    normalEmissionColor: {r: 3.0943396, g: 0.5546454, b: 0.5546454, a: 1}
-    criticalEmissionColor: {r: 41.647724, g: 8.068139, b: 0, a: 1}
-    normalDamagedSoundId: NormalHit
-    criticalDamageSoundId: CriticalHit
-  headTransform: {fileID: 7416124439938271829}
-  headRotationSpeed: 160
-  fireAngleThreshold: 20
-  yawOnly: 1
-  attackCooldown: 2
-  attackRange: 40
-  firePoint: {fileID: 8925620038691902775}
-  projectileData: {fileID: 11400000, guid: c32a03d395cada347bd4ebe76d2ed779, type: 2}
-  hitLayers: {fileID: 11400000, guid: b3e3f0ea33464b048aaf56518036cb00, type: 2}
-  navMeshAgent: {fileID: 8909220601765990049}
+  - rid: 6000861270941368428
+  - rid: 6000861270941368433
+  aimingStrategy:
+    rid: 6000861270941368434
+  attackStrategy:
+    rid: 6000861270941368427
+  visibilityRenderer: {fileID: 7676367922731443217}
   rigidBody: {fileID: 2448601663206975914}
+  navMeshAgent: {fileID: 8909220601765990049}
   references:
     version: 2
     RefIds:
@@ -154,6 +145,47 @@ MonoBehaviour:
       type: {class: NearestStructureTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         inRange: 0
+    - rid: 6000861270941368427
+      type: {class: ProjectileAttack, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        attackRange: 25
+        attackCooldown: 1
+        firePoint: {fileID: 8925620038691902775}
+        projectileData: {fileID: 11400000, guid: c32a03d395cada347bd4ebe76d2ed779, type: 2}
+        hitLayers: {fileID: 11400000, guid: b3e3f0ea33464b048aaf56518036cb00, type: 2}
+    - rid: 6000861270941368428
+      type: {class: HitEffect, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        punchStrength: 1
+        punchDuration: 0.15
+        punchEase: 1
+        normalEmissionColor: {r: 3.0943396, g: 0.5546454, b: 0.5546454, a: 1}
+        criticalEmissionColor: {r: 41.647724, g: 8.068139, b: 0, a: 1}
+        normalDamagedSoundId: NormalHit
+        criticalDamageSoundId: CriticalHit
+    - rid: 6000861270941368433
+      type: {class: WheelEffect, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        wheels:
+        - transform: {fileID: 2804455286981966554}
+        - transform: {fileID: 6671350386464972004}
+        - transform: {fileID: 5828194507251480267}
+        - transform: {fileID: 1062343427066386213}
+        wheelRadius: 1.2
+        suspensionTravel: 1.55
+        suspensionStiffness: 10
+        suspensionDamping: 1
+        raycastDistance: 3
+        groundMask:
+          serializedVersion: 2
+          m_Bits: 1032
+    - rid: 6000861270941368434
+      type: {class: IndependentAiming, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        headTransform: {fileID: 7416124439938271829}
+        rotationSpeed: 180
+        alignmentThreshold: 25
+        yawOnly: 1
 --- !u!1 &7432827019393584379
 GameObject:
   m_ObjectHideFlags: 0
@@ -554,6 +586,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4016635775301324417, guid: df15f20dde9794642b3cf6f528a5476a, type: 3}
   m_PrefabInstance: {fileID: 4544463063355473646}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1062343427066386213 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -5643258118383277621, guid: df15f20dde9794642b3cf6f528a5476a, type: 3}
+  m_PrefabInstance: {fileID: 4544463063355473646}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1617741396909678604 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -6241300588750872862, guid: df15f20dde9794642b3cf6f528a5476a, type: 3}
@@ -569,10 +606,10 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 513
+    m_Bits: 512
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1352
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -632,6 +669,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDamageRelay
   hitZone: 0
+--- !u!4 &2804455286981966554 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -7351492877376486348, guid: df15f20dde9794642b3cf6f528a5476a, type: 3}
+  m_PrefabInstance: {fileID: 4544463063355473646}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &3441646628737346813 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1212033774458556947, guid: df15f20dde9794642b3cf6f528a5476a, type: 3}
@@ -654,7 +696,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1.0356925, y: 2.3368018, z: 2.3468134}
   m_Center: {x: 0, y: -0.0013756752, z: 0}
@@ -674,6 +716,16 @@ MonoBehaviour:
 --- !u!4 &4079017067893938437 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: df15f20dde9794642b3cf6f528a5476a, type: 3}
+  m_PrefabInstance: {fileID: 4544463063355473646}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5828194507251480267 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -1157208421310347227, guid: df15f20dde9794642b3cf6f528a5476a, type: 3}
+  m_PrefabInstance: {fileID: 4544463063355473646}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6671350386464972004 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -2052435538030927350, guid: df15f20dde9794642b3cf6f528a5476a, type: 3}
   m_PrefabInstance: {fileID: 4544463063355473646}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &6792981823853805920 stripped
@@ -720,6 +772,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -2739753217701006149, guid: df15f20dde9794642b3cf6f528a5476a, type: 3}
   m_PrefabInstance: {fileID: 4544463063355473646}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &7676367922731443217 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -3056041028626425089, guid: df15f20dde9794642b3cf6f528a5476a, type: 3}
+  m_PrefabInstance: {fileID: 4544463063355473646}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &8682987129418826038 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -4066460337595744296, guid: df15f20dde9794642b3cf6f528a5476a, type: 3}
@@ -735,10 +792,10 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 513
+    m_Bits: 512
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1352
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -781,7 +838,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1.0356923, y: 2.3368015, z: 2.3468134}
   m_Center: {x: 0, y: -0.0013756752, z: 0}

@@ -5,12 +5,18 @@ using UnityEngine.AI;
 namespace ProjectWallE.GameLoop
 {
     [RequireComponent(typeof(NavMeshAgent))]
-    [RequireComponent(typeof(Rigidbody))]
     public class GroundEnemy : Enemy
     {
         [SerializeField, AutoGetSelf, HideInInspector] private NavMeshAgent navMeshAgent;
-        [SerializeField, AutoGetSelf, HideInInspector] private Rigidbody rigidBody;
-        
+
+        protected override Vector3 Velocity => navMeshAgent.velocity;
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+            navMeshAgent.updateRotation = !AimingControlsBodyRotation;
+        }
+
         protected override void OnUpdate()
         {
             if (!IsTargetValid(CurrentTarget))
@@ -27,13 +33,18 @@ namespace ProjectWallE.GameLoop
 
         protected override void SetDestination()
         {
-            if (IsTargetValid(CurrentTarget))
+            if (!IsTargetValid(CurrentTarget)) return;
+
+            Vector3 destination = CurrentTarget.transform.position;
+
+            if (!RequiresDirectApproach)
             {
                 var positionOffset = Random.insideUnitSphere * RandomRange;
                 positionOffset.y = 0;
-                
-                navMeshAgent.SetDestination(CurrentTarget.transform.position + positionOffset);
+                destination += positionOffset;
             }
+
+            navMeshAgent?.SetDestination(destination);
         }
 
         protected override void OnPush(Vector3 direction, float force)
@@ -42,4 +53,3 @@ namespace ProjectWallE.GameLoop
         }
     }
 }
-

@@ -3894,13 +3894,16 @@ MonoBehaviour:
   enemyTypes:
     internalItems:
     - item: {fileID: 622395889724703068, guid: 311465a237bc47a4a80317173bf23667, type: 3}
-      chance: 55
+      chance: 50
       isLocked: 0
     - item: {fileID: -4769723865369596212, guid: 942ec3fb68d51bb418bece848d6bfd88, type: 3}
       chance: 30
-      isLocked: 0
+      isLocked: 1
     - item: {fileID: 622395889724703068, guid: 9e63c2e032022934290829d686f0c357, type: 3}
       chance: 15
+      isLocked: 1
+    - item: {fileID: 622395889724703068, guid: 83a877ad3335ba24198f58c9720f05c5, type: 3}
+      chance: 5
       isLocked: 0
 --- !u!114 &850447363
 MonoBehaviour:

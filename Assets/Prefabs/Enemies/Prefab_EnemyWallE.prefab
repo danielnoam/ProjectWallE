@@ -153,24 +153,16 @@ MonoBehaviour:
   - rid: 6000861155382526053
   - rid: 6000861155382526052
   effects:
-    punchStrength: 1
-    punchDuration: 0.2
-    punchEase: 4
-    normalEmissionColor: {r: 3.0943396, g: 0.5546454, b: 0.5546454, a: 1}
-    criticalEmissionColor: {r: 41.647724, g: 8.068139, b: 0, a: 1}
-    normalDamagedSoundId: NormalHit
-    criticalDamageSoundId: CriticalHit
-  headTransform: {fileID: 5793963329041179422}
-  headRotationSpeed: 180
-  fireAngleThreshold: 20
-  yawOnly: 0
-  attackCooldown: 0.7
-  attackRange: 40
-  firePoint: {fileID: 1150219598074133490}
-  projectileData: {fileID: 11400000, guid: 8ffdf2f42528d434f91c7d9b565e08fd, type: 2}
-  hitLayers: {fileID: 11400000, guid: b3e3f0ea33464b048aaf56518036cb00, type: 2}
-  navMeshAgent: {fileID: 8909220601765990049}
+  - rid: 6000861270941368421
+  - rid: 6000861270941368431
+  - rid: 6000861270941368432
+  aimingStrategy:
+    rid: 6000861270941368409
+  attackStrategy:
+    rid: 6000861270941368420
+  visibilityRenderer: {fileID: 1255327730837385236}
   rigidBody: {fileID: 2448601663206975914}
+  navMeshAgent: {fileID: 8909220601765990049}
   references:
     version: 2
     RefIds:
@@ -190,6 +182,49 @@ MonoBehaviour:
       type: {class: NearestTurretTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         inRange: 1
+    - rid: 6000861270941368409
+      type: {class: BodyAiming, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        rotationSpeed: 180
+        alignmentThreshold: 15
+    - rid: 6000861270941368420
+      type: {class: ProjectileAttack, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        attackRange: 35
+        attackCooldown: 0.5
+        firePoint: {fileID: 1150219598074133490}
+        projectileData: {fileID: 11400000, guid: 8ffdf2f42528d434f91c7d9b565e08fd, type: 2}
+        hitLayers: {fileID: 11400000, guid: b3e3f0ea33464b048aaf56518036cb00, type: 2}
+    - rid: 6000861270941368421
+      type: {class: HitEffect, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        punchStrength: 1
+        punchDuration: 0.15
+        punchEase: 1
+        normalEmissionColor: {r: 3.0943396, g: 0.5546454, b: 0.5546454, a: 1}
+        criticalEmissionColor: {r: 41.647724, g: 8.068139, b: 0, a: 1}
+        normalDamagedSoundId: NormalHit
+        criticalDamageSoundId: CriticalHit
+    - rid: 6000861270941368431
+      type: {class: HeadTrackingEffect, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        headTransform: {fileID: 5793963329041179422}
+        rotationSpeed: 180
+        yawOnly: 0
+    - rid: 6000861270941368432
+      type: {class: WheelEffect, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        wheels:
+        - transform: {fileID: 1932143315978848111}
+        - transform: {fileID: 7213171834896227090}
+        wheelRadius: 0.55
+        suspensionTravel: 0.4
+        suspensionStiffness: 10
+        suspensionDamping: 1
+        raycastDistance: 1.5
+        groundMask:
+          serializedVersion: 2
+          m_Bits: 1032
 --- !u!1 &9070794248794423676
 GameObject:
   m_ObjectHideFlags: 0
@@ -402,6 +437,16 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 863162244131085641}
   m_SourcePrefab: {fileID: 100100000, guid: 35ea43580c3aa6b4ca9ae7e68f4272e5, type: 3}
+--- !u!23 &1255327730837385236 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -6652725513331149018, guid: 35ea43580c3aa6b4ca9ae7e68f4272e5, type: 3}
+  m_PrefabInstance: {fileID: 3658915827697420082}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1932143315978848111 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2888864087182475357, guid: 35ea43580c3aa6b4ca9ae7e68f4272e5, type: 3}
+  m_PrefabInstance: {fileID: 3658915827697420082}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &3573712007619767282 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 243041194690276544, guid: 35ea43580c3aa6b4ca9ae7e68f4272e5, type: 3}
@@ -488,6 +533,11 @@ MonoBehaviour:
 --- !u!4 &5793963329041179422 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -2112365813379488724, guid: 35ea43580c3aa6b4ca9ae7e68f4272e5, type: 3}
+  m_PrefabInstance: {fileID: 3658915827697420082}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7213171834896227090 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6259230654859451424, guid: 35ea43580c3aa6b4ca9ae7e68f4272e5, type: 3}
   m_PrefabInstance: {fileID: 3658915827697420082}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &8355546580713915444 stripped
