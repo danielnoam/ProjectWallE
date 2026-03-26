@@ -55,7 +55,7 @@ namespace ProjectWallE.GameLoop
             }
 
             Vector3 directionToTarget = (transform.position - targetPos).normalized;
-            var offset = Random.insideUnitSphere * RandomRange;
+            var offset = Random.insideUnitSphere * targetRandomOffset;
             var destination = targetPos + directionToTarget * stopDistance + offset;
             _destination = new Vector3(destination.x, 0, destination.z);
         }
@@ -84,7 +84,7 @@ namespace ProjectWallE.GameLoop
                     if ((Time.frameCount + _separationFrameOffset) % SeparationCheckInterval == 0) ApplySeparation();
 
                     var targetXZ = new Vector3(CurrentTarget.transform.position.x, 0, CurrentTarget.transform.position.z);
-                    if (Vector3.Distance(_destination, targetXZ) > RetargetThreshold) SetDestination();
+                    if (Vector3.Distance(_destination, targetXZ) > retargetDestinationThreshold) SetDestination();
 
                     var posXZ = new Vector3(transform.position.x, 0, transform.position.z);
                     if (Vector3.Distance(posXZ, _destination) > ArrivalThreshold)

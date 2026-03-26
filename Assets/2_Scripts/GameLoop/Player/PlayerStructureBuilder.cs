@@ -71,11 +71,11 @@ namespace ProjectWallE.GameLoop.Player
         {
             if (!playerManager || !playerManager.CanBuild) return;
 
-            if (Mouse.current.rightButton.wasPressedThisFrame)
+            if (Keyboard.current.qKey.wasPressedThisFrame)
             {
                 OpenContextMenu();
             }
-            else if (Mouse.current.rightButton.wasReleasedThisFrame)
+            else if (Keyboard.current.qKey.wasReleasedThisFrame)
             {
                 CloseMenus();
             }

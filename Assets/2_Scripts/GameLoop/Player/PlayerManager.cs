@@ -19,6 +19,7 @@ namespace ProjectWallE
         [HideInInspector][SerializeField] CarController carController;
         [HideInInspector][SerializeField] RobotController robotController;
         [HideInInspector][SerializeField] PlayerStructureBuilder structureBuilder;
+        [HideInInspector][SerializeField] PlayerShooter shooter;
         
         private PlayerManagerInput _input;
         
@@ -36,6 +37,7 @@ namespace ProjectWallE
         public CarController CarController => carController;
         public RobotController RobotController => robotController;
         public PlayerStructureBuilder StructureBuilder => structureBuilder;
+        public PlayerShooter Shooter => shooter;
         public bool CanBuild => _currentController.canBuild;
         public bool CanShoot => _currentController.canShoot;
         public Vector3 Velocity => _rigidbody.linearVelocity;
@@ -53,6 +55,8 @@ namespace ProjectWallE
                 robotController = GetComponentInChildren<RobotController>();
             if(structureBuilder == null)
                 structureBuilder = GetComponentInChildren<PlayerStructureBuilder>();
+            if (shooter == null)
+                shooter = GetComponentInChildren<PlayerShooter>();
         }
 
         void Awake()

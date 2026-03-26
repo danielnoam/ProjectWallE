@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using DNExtensions.Systems.ObjectPooling;
+using DNExtensions.Systems.Scriptables;
+using DNExtensions.Utilities;
 using DNExtensions.Utilities.AutoGet;
 using DNExtensions.Utilities.SerializableSelector;
 using UnityEditor;
@@ -34,13 +36,22 @@ namespace ProjectWallE.GameLoop
     {
         [Header("Settings")]
         [SerializeField] private float maxHealth = 100f;
-        [SerializeField] private float targetFindRange = 20f;
         [SerializeField] private bool canBePushed = true;
-        [SerializeField] private AttackerResponse attackerResponse = AttackerResponse.RetaliateIfPlayer;
-        [SerializeReference, SerializableSelector] private TargetingStrategy[] targetingStrategies;
+        [SerializeField, SOSelector("Assets/Data")] private SOLayerMask hitLayers;
         [SerializeReference, SerializableSelector] private EnemyEffect[] effects;
+        
+        [Header("Targeting")]
+        [SerializeField, Tooltip("Range to search for targets based on priority.")]
+        private float targetFindRange = 75f;
+        [SerializeField, Tooltip("Random offset applied to the target position.")]
+        protected float targetRandomOffset = 20f;
+        [SerializeField, Tooltip("How far the target can move from the current destination before the path is recalculated.")]
+        protected float retargetDestinationThreshold = 25f;
+        [SerializeReference, SerializableSelector] private TargetingStrategy[] targetingStrategies;
 
         [Header("Behavior")]
+        [Tooltip("What to do when getting hit")]
+        [SerializeField] private AttackerResponse attackerResponse = AttackerResponse.RetaliateIfPlayer;
         [SerializeReference, SerializableSelector] private AimingStrategy aimingStrategy;
         [SerializeReference, SerializableSelector] private AttackStrategy attackStrategy;
 
@@ -53,8 +64,6 @@ namespace ProjectWallE.GameLoop
 
         protected EnemyState State;
         protected IDamageable CurrentTarget;
-        protected const float RandomRange = 20f;
-        protected const float RetargetThreshold = 25f;
         protected bool AimingControlsBodyRotation => aimingStrategy?.ControlsBodyRotation ?? false;
         protected bool RequiresDirectApproach => attackStrategy?.RequiresDirectApproach ?? false;
         protected virtual Vector3 Velocity => rigidBody.linearVelocity;
@@ -105,7 +114,8 @@ namespace ProjectWallE.GameLoop
                 {
                     Position = transform.position,
                     TargetPosition = targetPos.Value,
-                    Owner = this
+                    Owner = this,
+                    HitLayers = hitLayers.Value
                 }, Time.deltaTime);
 
                 if (attackStrategy is { ShouldDestroySelf: true }) Die();
@@ -160,7 +170,7 @@ namespace ProjectWallE.GameLoop
 
             foreach (var strategy in targetingStrategies)
             {
-                IDamageable target = strategy.FindTarget(transform.position, targetFindRange);
+                IDamageable target = strategy.GetTarget(transform.position, targetFindRange);
                 if (IsTargetValid(target))
                 {
                     SetTarget(target);

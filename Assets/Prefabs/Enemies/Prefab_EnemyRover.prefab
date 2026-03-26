@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 8909220601765990049}
   - component: {fileID: 622395889724703068}
   m_Layer: 8
-  m_Name: Prefab_EnemyWallE
+  m_Name: Prefab_EnemyRover
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -83,6 +83,9 @@ MonoBehaviour:
   blipColor: {r: 1, g: 0.25490198, b: 0.25490198, a: 1}
   blipSizeMultiplier: 1
   showOutOfRange: 0
+  pingOnRegister: 0
+  pingOnUnregister: 0
+  pingStartStrength: 1
 --- !u!54 &2448601663206975914
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -145,18 +148,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GroundEnemy
   maxHealth: 100
-  targetFindRange: 50
   canBePushed: 1
-  attackerResponse: 1
-  targetingStrategies:
-  - rid: 6000861155382526051
-  - rid: 6000861155382526060
-  - rid: 6000861155382526053
-  - rid: 6000861155382526052
+  hitLayers: {fileID: 11400000, guid: b3e3f0ea33464b048aaf56518036cb00, type: 2}
   effects:
   - rid: 6000861270941368421
   - rid: 6000861270941368431
   - rid: 6000861270941368432
+  targetFindRange: 50
+  targetRandomOffset: 20
+  retargetDestinationThreshold: 25
+  targetingStrategies:
+  - rid: 6000861286935560273
+  - rid: 6000861155382526051
+  - rid: 6000861155382526060
+  - rid: 6000861155382526053
+  - rid: 6000861155382526052
+  attackerResponse: 1
   aimingStrategy:
     rid: 6000861270941368409
   attackStrategy:
@@ -171,18 +178,22 @@ MonoBehaviour:
       type: {class: NearestBaseTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         inRange: 1
+        weight: 100
     - rid: 6000861155382526052
       type: {class: PlayerTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         inRange: 1
+        weight: 100
     - rid: 6000861155382526053
       type: {class: NearestStructureTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         inRange: 0
+        weight: 100
     - rid: 6000861155382526060
       type: {class: NearestTurretTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         inRange: 1
+        weight: 100
     - rid: 6000861270941368409
       type: {class: BodyAiming, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
@@ -195,7 +206,6 @@ MonoBehaviour:
         attackCooldown: 0.5
         firePoint: {fileID: 1150219598074133490}
         soProjectileData: {fileID: 11400000, guid: 8ffdf2f42528d434f91c7d9b565e08fd, type: 2}
-        hitLayers: {fileID: 11400000, guid: b3e3f0ea33464b048aaf56518036cb00, type: 2}
     - rid: 6000861270941368421
       type: {class: HitEffect, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
@@ -226,6 +236,11 @@ MonoBehaviour:
         groundMask:
           serializedVersion: 2
           m_Bits: 1032
+    - rid: 6000861286935560273
+      type: {class: PlayerTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        inRange: 0
+        weight: 25
 --- !u!1 &9070794248794423676
 GameObject:
   m_ObjectHideFlags: 0

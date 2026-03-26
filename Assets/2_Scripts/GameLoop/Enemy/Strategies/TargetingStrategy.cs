@@ -1,21 +1,33 @@
 using System;
 using DNExtensions.Utilities.SerializableSelector;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace ProjectWallE.GameLoop
 {
     [Serializable]
     public abstract class TargetingStrategy
     {
+        [Tooltip("Should it use the targetFindRange to find the target")]
         public bool inRange = true;
-        public abstract IDamageable FindTarget(Vector3 position, float range);
+        [Tooltip("Chance this strategy is selected when evaluating targets")]
+        [Range(0.1f, 100f)] public float weight = 100f;
+        
+        
+        public IDamageable GetTarget(Vector3 position, float range)
+        {
+            if (Random.Range(0f, 100f) > weight) return null;
+            return FindTarget(position, range);
+        }
+
+        protected abstract IDamageable FindTarget(Vector3 position, float range);
     }
     
     [Serializable]
     [SerializableSelectorName("Player")]
     public class PlayerTarget : TargetingStrategy
     {
-        public override IDamageable FindTarget(Vector3 position, float range)
+        protected override IDamageable FindTarget(Vector3 position, float range)
         {
             var player = LevelManager.Instance?.Player;
             if (!player) return null;
@@ -34,7 +46,7 @@ namespace ProjectWallE.GameLoop
     [SerializableSelectorName("Nearest Base")]
     public class NearestBaseTarget : TargetingStrategy
     {
-        public override IDamageable FindTarget(Vector3 position, float range)
+        protected override IDamageable FindTarget(Vector3 position, float range)
         {
             if (inRange)
             {
@@ -49,7 +61,7 @@ namespace ProjectWallE.GameLoop
     [SerializableSelectorName("Weakest Base")]
     public class WeakestBaseTarget : TargetingStrategy
     {
-        public override IDamageable FindTarget(Vector3 position, float range)
+        protected override IDamageable FindTarget(Vector3 position, float range)
         {
             if (inRange)
             {
@@ -64,7 +76,7 @@ namespace ProjectWallE.GameLoop
     [SerializableSelectorName("Nearest Structure")]
     public class NearestStructureTarget : TargetingStrategy
     {
-        public override IDamageable FindTarget(Vector3 position, float range)
+        protected override IDamageable FindTarget(Vector3 position, float range)
         {
             if (inRange)
             {
@@ -80,7 +92,7 @@ namespace ProjectWallE.GameLoop
     [SerializableSelectorName("Weakest Structure")]
     public class WeakestStructureTarget : TargetingStrategy
     {
-        public override IDamageable FindTarget(Vector3 position, float range)
+        protected override IDamageable FindTarget(Vector3 position, float range)
         {
             if (inRange)
             {
@@ -95,7 +107,7 @@ namespace ProjectWallE.GameLoop
     [SerializableSelectorName("Nearest Turret")]
     public class NearestTurretTarget : TargetingStrategy
     {
-        public override IDamageable FindTarget(Vector3 position, float range)
+        protected override IDamageable FindTarget(Vector3 position, float range)
         {
             if (inRange)
             {

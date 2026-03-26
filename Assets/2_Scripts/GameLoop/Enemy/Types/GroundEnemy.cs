@@ -28,7 +28,7 @@ namespace ProjectWallE.GameLoop
 
             State = EnemyState.MovingToTarget;
 
-            if (Vector3.Distance(navMeshAgent.destination, CurrentTarget.transform.position) > RetargetThreshold) SetDestination();
+            if (Vector3.Distance(navMeshAgent.destination, CurrentTarget.transform.position) > retargetDestinationThreshold) SetDestination();
         }
 
         protected override void SetDestination()
@@ -39,7 +39,7 @@ namespace ProjectWallE.GameLoop
 
             if (!RequiresDirectApproach)
             {
-                var positionOffset = Random.insideUnitSphere * RandomRange;
+                var positionOffset = Random.insideUnitSphere * targetRandomOffset;
                 positionOffset.y = 0;
                 destination += positionOffset;
             }

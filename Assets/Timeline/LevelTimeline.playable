@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9616d1e4bad49f1bc525bc4810b87e1, type: 3}
   m_Name: ContinuousEnemySpawnEvent
   m_EditorClassIdentifier: Assembly-CSharp::ContinuousEnemySpawnEvent
+  spawnInterval: 3
   enemiesPerWave: 2
-  spawnInterval: 2
+  enemyType: 0
+  enemies:
+    internalItems: []
   spawnPosition: 0
   spawnPoint:
     exposedName: c4938d78d26a5e84ea63d31d43bdbca8
@@ -229,8 +232,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9616d1e4bad49f1bc525bc4810b87e1, type: 3}
   m_Name: ContinuousEnemySpawnEvent(Clone)(Clone)
   m_EditorClassIdentifier: Assembly-CSharp::ContinuousEnemySpawnEvent
+  spawnInterval: 2
   enemiesPerWave: 2
-  spawnInterval: 1
+  enemyType: 0
+  enemies:
+    internalItems: []
   spawnPosition: 0
   spawnPoint:
     exposedName: 
@@ -311,7 +317,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
   m_Time: 27.033333333333335
   enemyCount: 5
-  spawnPosition: 1
+  enemyType: 0
+  enemies:
+    internalItems: []
+  spawnType: 0
   spawnPoint:
     exposedName: 484274ddc675ccf4ca4a18b8a0fd0641
     defaultValue: {fileID: 0}

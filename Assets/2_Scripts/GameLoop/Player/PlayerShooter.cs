@@ -23,7 +23,8 @@ namespace ProjectWallE.GameLoop.Player
         [Header("Special Attack")]
         [SerializeField] private float aoeFireRate = 1.5f;
         [SerializeField, SOSelector] private SOProjectileData specialProjectileData;
-        
+
+        private bool _inMenu;
         private float _basicCooldown;
         private float _specialCooldown;
         private Camera _mainCamera;
@@ -41,24 +42,56 @@ namespace ProjectWallE.GameLoop.Player
             _mainCamera = Camera.main;
         }
 
+        private void OnEnable()
+        {
+            playerManager.StructureBuilder.ActionsMenuRequested += OnActionsMenuRequested;
+            playerManager.StructureBuilder.BuildMenuRequested += OnBuildMenuRequested;
+            playerManager.StructureBuilder.MenuCloseRequested += OnMenuCloseRequested;
+        }
+
+        private void OnDisable()
+        {
+            playerManager.StructureBuilder.ActionsMenuRequested -= OnActionsMenuRequested;
+            playerManager.StructureBuilder.BuildMenuRequested -= OnBuildMenuRequested;
+            playerManager.StructureBuilder.MenuCloseRequested -= OnMenuCloseRequested;
+        }
+        
         private void Update()
         {
             UpdateCooldowns();
             CheckInput();
+        }
+        
+        private void OnMenuCloseRequested()
+        {
+            _inMenu = false;
+        }
+
+        private void OnBuildMenuRequested(Structure[] obj)
+        {
+            _inMenu = true;
+        }
+
+        private void OnActionsMenuRequested(Structure obj)
+        {
+            _inMenu = true;
         }
 
         private void CheckInput()
         {
             if (playerManager)
             {
-                if (Mouse.current.leftButton.isPressed && _basicCooldown <= 0 && playerManager.CanShoot)
+                if (playerManager.CanShoot && !_inMenu)
                 {
-                    ShootBasic();
-                }
+                    if (Mouse.current.leftButton.isPressed && _basicCooldown <= 0)
+                    {
+                        ShootBasic();
+                    }
                 
-                if (Mouse.current.rightButton.isPressed && _specialCooldown <= 0 && playerManager.CanShoot)
-                {
-                    ShootSpecial();
+                    if (Mouse.current.rightButton.isPressed && _specialCooldown <= 0)
+                    {
+                        ShootSpecial();
+                    }
                 }
             }
             else

@@ -36,7 +36,6 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField] private AudioSource boostAudioSource;
         [SerializeField] private AudioSource changeStateAudioSource;
         [SerializeField, AutoGetParent, HideInInspector] private PlayerManager player;
-        [SerializeField, AutoGetParent, HideInInspector] private PlayerShooter shooter;
 
 
         private bool _speedLinesActive;
@@ -60,7 +59,8 @@ namespace ProjectWallE.GameLoop.Player
                     player.CarController.CarBoost.OnBoostStart += OnBoostStart;
                     player.CarController.CarBoost.OnBoostEnd += OnBoostEnd;
                 }
-                if (shooter) shooter.OnAttack1 += PlayMuzzleFlash;
+                player.Shooter.OnAttack1 += PlayMuzzleFlash;
+                player.Shooter.OnAttack2 += PlayMuzzleFlash;
             }
         }
         
@@ -77,7 +77,8 @@ namespace ProjectWallE.GameLoop.Player
                     player.CarController.CarBoost.OnBoostEnd -= OnBoostEnd;
                 }
                 
-                if (shooter) shooter.OnAttack1 -= PlayMuzzleFlash;
+                player.Shooter.OnAttack1 -= PlayMuzzleFlash;
+                player.Shooter.OnAttack2 -= PlayMuzzleFlash;
             }
         }
         

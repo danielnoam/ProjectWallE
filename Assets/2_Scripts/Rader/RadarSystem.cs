@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DNExtensions.Utilities.CustomFields;
+using PrimeTween;
 
 public class RadarSystem : MonoBehaviour
 {
@@ -17,9 +18,15 @@ public class RadarSystem : MonoBehaviour
     public RectTransform radarPanel;
     public Transform blipHolder;
     public Graphic blipPrefab;
+    
+    [Header("Ping")]
+    public float pingDuration = 1f;
+    public float pingScaleMultiplier = 10;
+    public Graphic pingPrefab;
 
     private readonly HashSet<RadarTarget> _targets = new();
     private readonly Dictionary<RadarTarget, Graphic> _blips = new();
+    private readonly Dictionary<Graphic, RadarTarget> _pings = new();
 
     private float _radarRadius;
 
@@ -43,6 +50,7 @@ public class RadarSystem : MonoBehaviour
     private void LateUpdate()
     {
         UpdateBlips();
+        UpdatePings();
     }
 
     private void UpdateBlips()
@@ -77,9 +85,54 @@ public class RadarSystem : MonoBehaviour
             {
                 blip.enabled = true;
             }
-
+            
             blip.rectTransform.anchoredPosition = radarOffset;
         }
+    }
+    
+    private void UpdatePings()
+    {
+        Vector3 center = worldCenter.Position;
+        float angle = rotationTarget && rotationTarget.Value ? rotationTarget.Value.eulerAngles.y : 0f;
+        Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
+
+        foreach (var (ping, target) in _pings)
+        {
+            if (!ping || !target) continue;
+
+            Vector3 offset = target.transform.position - center;
+            Vector2 radarOffset = new Vector2(offset.x, offset.z) / radarRange * _radarRadius;
+            radarOffset = rotation * radarOffset;
+
+            if (radarOffset.magnitude > _radarRadius)
+                radarOffset = radarOffset.normalized * _radarRadius;
+
+            ping.rectTransform.anchoredPosition = radarOffset;
+        }
+    }
+    
+    private void DestroyPing(Graphic ping)
+    {
+        if (!ping) return;
+        _pings.Remove(ping);
+        Destroy(ping.gameObject);
+    }
+
+    private void PingTarget(RadarTarget target, Color? colorOverride = null)
+    {
+        if (!pingPrefab) return;
+        if (!_blips.TryGetValue(target, out Graphic blip)) return;
+
+        var ping = Instantiate(pingPrefab, blipHolder ? blipHolder : transform);
+        ping.rectTransform.anchoredPosition = blip.rectTransform.anchoredPosition;
+        if (colorOverride.HasValue) ping.color = colorOverride.Value;
+        _pings[ping] = target;
+
+        Sequence.Create()
+            .ChainDelay(0.15f)
+            .Group(Tween.Alpha(ping, target.PingStartStrength, 0, pingDuration))
+            .Group(Tween.Scale(ping.transform, ping.transform.localScale * pingScaleMultiplier, pingDuration))
+            .OnComplete(() => DestroyPing(ping));
     }
     
     public void Register(RadarTarget target)
@@ -91,11 +144,21 @@ public class RadarSystem : MonoBehaviour
         blip.color = target.BlipColor;
         if (blip is Image image && target.BlipSprite) image.sprite = target.BlipSprite;
         _blips[target] = blip;
+
+        if (target.PingOnRegister)
+        {
+            PingTarget(target);
+        }
     }
 
     public void Unregister(RadarTarget target)
     {
         if (!_targets.Remove(target)) return;
+
+        if (target.PingOnUnregister)
+        {
+            PingTarget(target, Color.red);
+        }
 
         if (_blips.Remove(target, out Graphic blip)) Destroy(blip.gameObject);
     }

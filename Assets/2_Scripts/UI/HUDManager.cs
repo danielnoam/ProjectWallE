@@ -5,20 +5,22 @@ using DNExtensions.Utilities.AutoGet;
 using DNExtensions.Utilities.CustomFields;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ProjectWallE.UI
 {
     public class HUDManager : MonoBehaviour
     {
         
-        [Header("Player State")]
+        [Header("Status")]
         [SerializeField] private OptionalField<string> showFuelPrefix = new OptionalField<string>("Fuel: ", true);
         [SerializeField] private SDFRectangle fuelBar;
         [SerializeField] private TextMeshProUGUI fuelText;
         [SerializeField] private OptionalField<string> showHealthPrefix = new OptionalField<string>("Health: ", true);
         [SerializeField] private SDFRectangle healthBar;
         [SerializeField] private TextMeshProUGUI healthText;
-        
+        [SerializeField] private Image basicAttackIcon;
+        [SerializeField] private Image specialAttackIcon;
         
         
         [Header("References")] 
@@ -48,6 +50,9 @@ namespace ProjectWallE.UI
                 player.OnControllerChanged += OnControllerChanged;
                 player.OnHealthChanged += UpdateHealthBar;
                 player.CarController.CarBoost.OnFuelChange += UpdateFuelBar;
+                player.Shooter.OnBasicCooldownUpdated += OnBasicCooldownUpdated;
+                player.Shooter.OnSpecialCooldownUpdated += OnSpecialCooldownUpdated;
+                
                 radarSystem.worldCenter.SetTransform(player.transform);
                 if (Camera.main) radarSystem.rotationTarget.Value = Camera.main.transform;
                 UpdateFuelBar(100,100);
@@ -55,8 +60,6 @@ namespace ProjectWallE.UI
             }
         }
         
-
-
         private void OnDisable()
         {
             ResourceManager.OnResourcesChanged -= UpdateResourcesDisplay;
@@ -71,6 +74,8 @@ namespace ProjectWallE.UI
                 player.OnControllerChanged -= OnControllerChanged;
                 player.OnHealthChanged -= UpdateHealthBar;
                 player.CarController.CarBoost.OnFuelChange -= UpdateFuelBar;
+                player.Shooter.OnBasicCooldownUpdated -= OnBasicCooldownUpdated;
+                player.Shooter.OnSpecialCooldownUpdated -= OnSpecialCooldownUpdated;
             }
         }
         
@@ -154,6 +159,22 @@ namespace ProjectWallE.UI
             {
                 healthText.text = showHealthPrefix.isSet ? $"{showHealthPrefix.Value}{currentHealth:N0}/{maxHealth}" : $"{currentHealth:N0}/{maxHealth}";
             }
+        }
+        
+        private void OnSpecialCooldownUpdated(float currentCooldown, float maxCooldown)
+        {
+            if (!specialAttackIcon) return;
+            
+            var normalizedCooldown = 1f - (currentCooldown / maxCooldown);
+            specialAttackIcon.color = specialAttackIcon.color.SetAlpha(normalizedCooldown);
+        }
+
+        private void OnBasicCooldownUpdated(float currentCooldown, float maxCooldown)
+        {
+            if (!basicAttackIcon) return;
+            
+            var normalizedCooldown = 1f - (currentCooldown / maxCooldown);
+            basicAttackIcon.color = basicAttackIcon.color.SetAlpha(normalizedCooldown);
         }
 
     }

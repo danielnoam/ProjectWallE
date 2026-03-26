@@ -52,6 +52,9 @@ MonoBehaviour:
   blipColor: {r: 1, g: 0.25490198, b: 0.25490198, a: 1}
   blipSizeMultiplier: 1
   showOutOfRange: 0
+  pingOnRegister: 0
+  pingOnUnregister: 0
+  pingStartStrength: 1
 --- !u!54 &2448601663206975914
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -114,16 +117,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GroundEnemy
   maxHealth: 350
-  targetFindRange: 50
   canBePushed: 0
-  attackerResponse: 1
+  hitLayers: {fileID: 11400000, guid: b3e3f0ea33464b048aaf56518036cb00, type: 2}
+  effects:
+  - rid: 6000861270941368428
+  - rid: 6000861270941368433
+  targetFindRange: 50
+  targetRandomOffset: 20
+  retargetDestinationThreshold: 25
   targetingStrategies:
   - rid: 6000861155382526048
   - rid: 6000861155382526049
   - rid: 6000861155382526050
-  effects:
-  - rid: 6000861270941368428
-  - rid: 6000861270941368433
+  attackerResponse: 1
   aimingStrategy:
     rid: 6000861270941368434
   attackStrategy:
@@ -153,7 +159,6 @@ MonoBehaviour:
         attackCooldown: 1
         firePoint: {fileID: 8925620038691902775}
         soProjectileData: {fileID: 11400000, guid: 8ffdf2f42528d434f91c7d9b565e08fd, type: 2}
-        hitLayers: {fileID: 11400000, guid: b3e3f0ea33464b048aaf56518036cb00, type: 2}
     - rid: 6000861270941368428
       type: {class: HitEffect, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:

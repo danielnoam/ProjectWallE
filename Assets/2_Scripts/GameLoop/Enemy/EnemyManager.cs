@@ -3,11 +3,12 @@ using DNExtensions.Utilities;
 using ProjectWallE.GameLoop;
 using UnityEngine;
 
-public enum SpawnPosition
+public enum SpawnType
 {
     Random,
     Specific
 }
+
 
 public class EnemyManager : MonoBehaviour
 {
@@ -44,31 +45,22 @@ public class EnemyManager : MonoBehaviour
         Instantiate(enemy, spawnPosition, Quaternion.identity);
     }
     
-    public void SpawnEnemyWaveRandomPosition(int enemiesToSpawn)
+    public void SpawnEnemyWave(int enemiesToSpawn, ChanceList<Enemy> enemySource = null, EnemySpawnPoint spawnPoint = null)
     {
-        if (_enemySpawnPoints.Count == 0 || _activeEnemies.Count >= maxEnemies) return;
-        
-        var spawnPoint = _enemySpawnPoints.GetRandomItem();
-        
-        for (int i = 0; i < enemiesToSpawn; i++)
+        if (_activeEnemies.Count >= maxEnemies) return;
+
+        if (!spawnPoint)
         {
-            if (_activeEnemies.Count >= maxEnemies) return;
-            
-            var enemy = enemyTypes.GetRandomItem();
-            SpawnEnemy(enemy, spawnPoint);
+            if (_enemySpawnPoints.Count == 0) return;
+            spawnPoint = _enemySpawnPoints.GetRandomItem();
         }
-    }
-    
-    public void SpawnEnemyWaveSpecificPosition(int enemiesToSpawn, EnemySpawnPoint spawnPoint)
-    {
-        if (!spawnPoint || _activeEnemies.Count >= maxEnemies) return;
+
+        var source = enemySource ?? enemyTypes;
 
         for (int i = 0; i < enemiesToSpawn; i++)
         {
             if (_activeEnemies.Count >= maxEnemies) return;
-
-            var enemy = enemyTypes.GetRandomItem();
-            SpawnEnemy(enemy, spawnPoint);
+            SpawnEnemy(source.GetRandomItem(), spawnPoint);
         }
     }
     

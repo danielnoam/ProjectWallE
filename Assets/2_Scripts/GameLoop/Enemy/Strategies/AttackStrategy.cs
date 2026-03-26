@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DNExtensions.Systems.AudioLibrary;
 using DNExtensions.Systems.Scriptables;
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.SerializableSelector;
@@ -12,6 +13,7 @@ namespace ProjectWallE.GameLoop
         public Vector3 Position;
         public Vector3 TargetPosition;
         public IDamageable Owner;
+        public LayerMask HitLayers;
     }
 
     [Serializable]
@@ -34,7 +36,6 @@ namespace ProjectWallE.GameLoop
         [SerializeField] private float attackCooldown = 1f;
         [SerializeField] private Transform firePoint;
         [SerializeField, SOSelector("Assets/Data")] private SOProjectileData soProjectileData;
-        [SerializeField, SOSelector("Assets/Data")] private SOLayerMask hitLayers;
 
         private float _attackTimer;
 
@@ -50,7 +51,7 @@ namespace ProjectWallE.GameLoop
             if (_attackTimer < attackCooldown) return;
 
             var direction = (context.TargetPosition - context.Position).normalized;
-            soProjectileData?.Spawn(hitLayers.Value, firePoint.position, direction, context.TargetPosition);
+            soProjectileData?.Spawn(context.HitLayers, firePoint.position, direction, context.TargetPosition);
             _attackTimer = 0f;
         }
 
@@ -61,13 +62,16 @@ namespace ProjectWallE.GameLoop
     [SerializableSelectorName("Suicide")]
     public class SuicideAttack : AttackStrategy
     {
+        [SerializeField] private float armedDuration = 1.5f;
         [SerializeField] private float aoeRadius = 5f;
         [SerializeField, MinMaxRange(0f, 100f)] private RangedFloat damageRange = new RangedFloat(10f, 25f);
         [SerializeField, MinMaxRange(0f, 100f)] private RangedFloat pushStrengthRange = new RangedFloat(25f, 50f);
-        [SerializeField, SOSelector("Assets/Data")] private SOLayerMask hitLayers;
-        [SerializeField] private DeathEffect deathEffect;
+        [SerializeField] private DeathEffect detonateEffect;
+        [SerializeField, AudioLibraryID] private string armedSoundID;
 
         private bool _shouldDestroySelf;
+        private bool _isArmed;
+        private float _armedTimer;
         private readonly HashSet<IDamageable> _alreadyHit = new();
 
         public override bool ShouldDestroySelf => _shouldDestroySelf;
@@ -75,15 +79,27 @@ namespace ProjectWallE.GameLoop
 
         public override void Tick(bool isAligned, float distanceToTarget, AttackContext context, float deltaTime)
         {
-            if (distanceToTarget > AttackRange) return;
+            if (!(distanceToTarget > AttackRange) && !_isArmed)
+            {
+                AudioLibrary.PlayAtPosition(armedSoundID, context.Position);
+                _isArmed = true;
+                _armedTimer = armedDuration;
+            }
+            
+            if (_isArmed)
+            {
+                _armedTimer -= deltaTime;
 
-            Detonate(context);
-            _shouldDestroySelf = true;
+                if (_armedTimer <= 0f)
+                {
+                    Detonate(context);
+                }
+            }
         }
 
         private void Detonate(AttackContext context)
         {
-            Collider[] hits = Physics.OverlapSphere(context.Position, aoeRadius, hitLayers.Value);
+            Collider[] hits = Physics.OverlapSphere(context.Position, aoeRadius, context.HitLayers);
             _alreadyHit.Clear();
 
             foreach (var hit in hits)
@@ -109,7 +125,8 @@ namespace ProjectWallE.GameLoop
                 }
             }
             
-            deathEffect?.OnDeath(context.Position);
+            detonateEffect?.OnDeath(context.Position);
+            _shouldDestroySelf = true;
         }
 
         public override void Reset()

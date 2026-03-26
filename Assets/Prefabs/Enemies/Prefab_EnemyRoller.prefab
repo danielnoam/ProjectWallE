@@ -52,6 +52,9 @@ MonoBehaviour:
   blipColor: {r: 1, g: 0.25490198, b: 0.25490198, a: 1}
   blipSizeMultiplier: 1
   showOutOfRange: 0
+  pingOnRegister: 0
+  pingOnUnregister: 0
+  pingStartStrength: 1
 --- !u!54 &2448601663206975914
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -88,14 +91,14 @@ NavMeshAgent:
   m_GameObject: {fileID: 6471506668328617800}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 1.2
+  m_Radius: 1.45
   m_Speed: 25
   m_Acceleration: 20
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 0
+  m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 1.91
   m_BaseOffset: 0.43
@@ -113,16 +116,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 581df25d31c3471eb2dfb2996c0c6195, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GroundEnemy
-  maxHealth: 400
-  targetFindRange: 50
+  maxHealth: 300
   canBePushed: 1
-  attackerResponse: 1
-  targetingStrategies:
-  - rid: 6000861155382526052
-  - rid: 6000861155382526053
+  hitLayers: {fileID: 11400000, guid: b3e3f0ea33464b048aaf56518036cb00, type: 2}
   effects:
   - rid: 6000861270941368421
   - rid: 6000861270941368432
+  targetFindRange: 50
+  targetRandomOffset: 20
+  retargetDestinationThreshold: 1
+  targetingStrategies:
+  - rid: 6000861155382526052
+  - rid: 6000861155382526053
+  attackerResponse: 3
   aimingStrategy:
     rid: 6000861270941368409
   attackStrategy:
@@ -137,10 +143,12 @@ MonoBehaviour:
       type: {class: PlayerTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         inRange: 0
+        weight: 75
     - rid: 6000861155382526053
       type: {class: NearestStructureTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         inRange: 0
+        weight: 100
     - rid: 6000861270941368409
       type: {class: BodyAiming, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
@@ -162,8 +170,8 @@ MonoBehaviour:
         wheels:
         - transform: {fileID: 6789345302792274751}
         wheelRadius: 0.8
-        suspensionTravel: 0.5
-        suspensionStiffness: 25
+        suspensionTravel: 1
+        suspensionStiffness: 35
         suspensionDamping: 5
         raycastDistance: 1.5
         groundMask:
@@ -172,7 +180,8 @@ MonoBehaviour:
     - rid: 6000861270941368436
       type: {class: SuicideAttack, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
-        attackRange: 3
+        attackRange: 4
+        armedDuration: 1
         aoeRadius: 10
         damageRange:
           minValue: 10
@@ -180,10 +189,10 @@ MonoBehaviour:
         pushStrengthRange:
           minValue: 25
           maxValue: 50
-        hitLayers: {fileID: 11400000, guid: b3e3f0ea33464b048aaf56518036cb00, type: 2}
-        deathEffect:
+        detonateEffect:
           particle: {fileID: 8195002406593029198, guid: a62798f284250ba4bb103e5058045684, type: 3}
           soundId: ProjectileCollision
+        armedSoundID: Armed
 --- !u!1 &9070794248794423676
 GameObject:
   m_ObjectHideFlags: 0
