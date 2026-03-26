@@ -90,8 +90,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b076bc7649041bb908a1422b81ae3c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FlyingEnemy
-  maxHealth: 100
+  maxHealth: 250
   targetFindRange: 75
+  canBePushed: 1
   attackerResponse: 1
   targetingStrategies:
   - rid: 6000861155382526038
@@ -152,7 +153,7 @@ MonoBehaviour:
         attackRange: 35
         attackCooldown: 1
         firePoint: {fileID: 7429042783596894845}
-        projectileData: {fileID: 11400000, guid: 5aa17da338669a14eba6994821f7b4a8, type: 2}
+        soProjectileData: {fileID: 11400000, guid: 5aa17da338669a14eba6994821f7b4a8, type: 2}
         hitLayers: {fileID: 11400000, guid: b3e3f0ea33464b048aaf56518036cb00, type: 2}
     - rid: 6000861270941368425
       type: {class: HitEffect, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}

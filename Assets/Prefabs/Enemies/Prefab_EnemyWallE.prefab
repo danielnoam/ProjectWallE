@@ -123,7 +123,7 @@ NavMeshAgent:
   m_Speed: 15
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 180
   m_StoppingDistance: 30
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -144,8 +144,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 581df25d31c3471eb2dfb2996c0c6195, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GroundEnemy
-  maxHealth: 50
+  maxHealth: 100
   targetFindRange: 50
+  canBePushed: 1
   attackerResponse: 1
   targetingStrategies:
   - rid: 6000861155382526051
@@ -193,7 +194,7 @@ MonoBehaviour:
         attackRange: 35
         attackCooldown: 0.5
         firePoint: {fileID: 1150219598074133490}
-        projectileData: {fileID: 11400000, guid: 8ffdf2f42528d434f91c7d9b565e08fd, type: 2}
+        soProjectileData: {fileID: 11400000, guid: 8ffdf2f42528d434f91c7d9b565e08fd, type: 2}
         hitLayers: {fileID: 11400000, guid: b3e3f0ea33464b048aaf56518036cb00, type: 2}
     - rid: 6000861270941368421
       type: {class: HitEffect, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
@@ -220,7 +221,7 @@ MonoBehaviour:
         wheelRadius: 0.55
         suspensionTravel: 0.4
         suspensionStiffness: 10
-        suspensionDamping: 1
+        suspensionDamping: 5
         raycastDistance: 1.5
         groundMask:
           serializedVersion: 2

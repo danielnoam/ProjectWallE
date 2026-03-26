@@ -11,8 +11,11 @@ public class EnemyDamageRelay : MonoBehaviour, IDamageable
     public Enemy Parent { get; private set; }
     public Material[] Materials { get; private set; }
 
+    // disabled warning for this event because its never used but is part of the interface
+    #pragma warning disable 0067
     public event Action<IDamageable> OnDeath;
     public event Action<float> OnDamaged;
+    #pragma warning restore 0067
     
     private static readonly int EmissionStrength = Shader.PropertyToID("_Emission_Strength");
 

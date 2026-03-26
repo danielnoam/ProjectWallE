@@ -11,7 +11,7 @@ public class Projectile : MonoBehaviour, IPoolable
     [SerializeField, AutoGetSelf] private Collider col;
     
     private IDamageable _owner;
-    private ProjectileData _data;
+    private SOProjectileData _data;
     private float _maxLifetime;
     private LayerMask _hitLayers;
     
@@ -169,7 +169,7 @@ public class Projectile : MonoBehaviour, IPoolable
     }
 
     
-    public void Initialize(ProjectileData data, LayerMask hitLayers, Vector3 direction, Vector3 targetPosition, IDamageable owner)
+    public void Initialize(SOProjectileData data, LayerMask hitLayers, Vector3 direction, Vector3 targetPosition, IDamageable owner)
     {
         _data = data;
         _owner = owner;

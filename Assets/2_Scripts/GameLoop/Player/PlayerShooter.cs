@@ -11,18 +11,29 @@ namespace ProjectWallE.GameLoop.Player
     public class PlayerShooter : MonoBehaviour
     {
         [Header("Settings")] 
-        [SerializeField] private float fireRate = 0.1f;
         [SerializeField] private Vector3 aimOffset = Vector3.zero;
         [SerializeField] private Transform firePoint;
-        [SerializeField] private ProjectileData projectileData;
         [SerializeField] private SOLayerMask enemyLayerMask;
         [SerializeField, AutoGetSelf, HideInInspector] private PlayerManager playerManager;
-
-        private float _nextTimeToFire;
+        
+        [Header("Basic Attack")]
+        [SerializeField] private float basicFireRate = 0.1f;
+        [SerializeField, SOSelector] private SOProjectileData basicProjectileData;
+        
+        [Header("Special Attack")]
+        [SerializeField] private float aoeFireRate = 1.5f;
+        [SerializeField, SOSelector] private SOProjectileData specialProjectileData;
+        
+        private float _basicCooldown;
+        private float _specialCooldown;
         private Camera _mainCamera;
 
 
-        public event Action OnShoot;
+        public event Action OnAttack1;
+        public event Action OnAttack2;
+
+        public event Action<float, float> OnBasicCooldownUpdated;
+        public event Action<float, float> OnSpecialCooldownUpdated;
 
 
         private void Awake()
@@ -32,35 +43,74 @@ namespace ProjectWallE.GameLoop.Player
 
         private void Update()
         {
-            if (_nextTimeToFire > 0)
-            {
-                _nextTimeToFire -= Time.deltaTime;
-            }
+            UpdateCooldowns();
+            CheckInput();
+        }
 
+        private void CheckInput()
+        {
             if (playerManager)
             {
-                if (Mouse.current.leftButton.isPressed && _nextTimeToFire <= 0 && playerManager.CanShoot)
+                if (Mouse.current.leftButton.isPressed && _basicCooldown <= 0 && playerManager.CanShoot)
                 {
-                    ShootProjectile();
+                    ShootBasic();
+                }
+                
+                if (Mouse.current.rightButton.isPressed && _specialCooldown <= 0 && playerManager.CanShoot)
+                {
+                    ShootSpecial();
                 }
             }
             else
             {
-                if (Mouse.current.leftButton.isPressed && _nextTimeToFire <= 0)
+                if (Mouse.current.leftButton.isPressed && _basicCooldown <= 0)
                 {
-                    ShootProjectile();
+                    ShootBasic();
+                }
+                if (Mouse.current.rightButton.isPressed && _specialCooldown <= 0)
+                {
+                    ShootSpecial();
                 }
             }
-
         }
 
-        private void ShootProjectile()
+        private void UpdateCooldowns()
         {
-            _nextTimeToFire = fireRate;
+            if (_basicCooldown > 0)
+            {
+                _basicCooldown -= Time.deltaTime;
+                OnBasicCooldownUpdated?.Invoke(_basicCooldown, basicFireRate);
+            }
+
+            if (_specialCooldown > 0)
+            {
+                _specialCooldown -= Time.deltaTime;
+                OnSpecialCooldownUpdated?.Invoke(_specialCooldown, aoeFireRate);
+            }
+        }
+
+        private void ShootBasic()
+        {
+            if (!basicProjectileData) return;
+            
+            _basicCooldown = basicFireRate;
             Vector3 position = firePoint ? firePoint.position : transform.position;
             Vector3 direction = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)).direction;
-            projectileData?.Spawn(enemyLayerMask.Value, position, direction.Add(aimOffset), default, playerManager);
-            OnShoot?.Invoke();
+            basicProjectileData.Spawn(enemyLayerMask.Value, position, direction.Add(aimOffset), default, playerManager);
+            OnAttack1?.Invoke();
+            OnBasicCooldownUpdated?.Invoke(_basicCooldown, basicFireRate);
+        }
+
+        private void ShootSpecial()
+        {
+            if (!specialProjectileData) return;
+            
+            _specialCooldown = aoeFireRate;
+            Vector3 position = firePoint ? firePoint.position : transform.position;
+            Vector3 direction = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)).direction;
+            specialProjectileData.Spawn(enemyLayerMask.Value, position, direction.Add(aimOffset), default, playerManager);
+            OnAttack2?.Invoke();
+            OnSpecialCooldownUpdated?.Invoke(_specialCooldown, aoeFireRate);
         }
     }
 }

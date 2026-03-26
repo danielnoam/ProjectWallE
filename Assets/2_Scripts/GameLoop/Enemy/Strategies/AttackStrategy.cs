@@ -33,7 +33,7 @@ namespace ProjectWallE.GameLoop
     {
         [SerializeField] private float attackCooldown = 1f;
         [SerializeField] private Transform firePoint;
-        [SerializeField, SOSelector("Assets/Data")] private ProjectileData projectileData;
+        [SerializeField, SOSelector("Assets/Data")] private SOProjectileData soProjectileData;
         [SerializeField, SOSelector("Assets/Data")] private SOLayerMask hitLayers;
 
         private float _attackTimer;
@@ -50,7 +50,7 @@ namespace ProjectWallE.GameLoop
             if (_attackTimer < attackCooldown) return;
 
             var direction = (context.TargetPosition - context.Position).normalized;
-            projectileData?.Spawn(hitLayers.Value, firePoint.position, direction, context.TargetPosition);
+            soProjectileData?.Spawn(hitLayers.Value, firePoint.position, direction, context.TargetPosition);
             _attackTimer = 0f;
         }
 
@@ -65,6 +65,7 @@ namespace ProjectWallE.GameLoop
         [SerializeField, MinMaxRange(0f, 100f)] private RangedFloat damageRange = new RangedFloat(10f, 25f);
         [SerializeField, MinMaxRange(0f, 100f)] private RangedFloat pushStrengthRange = new RangedFloat(25f, 50f);
         [SerializeField, SOSelector("Assets/Data")] private SOLayerMask hitLayers;
+        [SerializeField] private DeathEffect deathEffect;
 
         private bool _shouldDestroySelf;
         private readonly HashSet<IDamageable> _alreadyHit = new();
@@ -107,6 +108,8 @@ namespace ProjectWallE.GameLoop
                     pushable.Push(pushDirection, push);
                 }
             }
+            
+            deathEffect?.OnDeath(context.Position);
         }
 
         public override void Reset()

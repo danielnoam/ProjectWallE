@@ -1247,12 +1247,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2da3f03942bd4251800628fa5b420e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerShooter
-  fireRate: 0.13
   aimOffset: {x: 0, y: 0, z: 0}
   firePoint: {fileID: 6599197979102317477}
-  projectileData: {fileID: 11400000, guid: b6fff52b19a3bf34fae6ef66121a0c95, type: 2}
   enemyLayerMask: {fileID: 11400000, guid: 2d607d7566d764844b32be4199186943, type: 2}
   playerManager: {fileID: 2369243402749369746}
+  basicFireRate: 0.1
+  basicProjectileData: {fileID: 11400000, guid: b6fff52b19a3bf34fae6ef66121a0c95, type: 2}
+  aoeFireRate: 1.5
+  specialProjectileData: {fileID: 11400000, guid: e07c3359bef11e948816f1eeec402754, type: 2}
 --- !u!114 &4580229760322147779
 MonoBehaviour:
   m_ObjectHideFlags: 0

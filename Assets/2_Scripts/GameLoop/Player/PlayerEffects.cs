@@ -60,7 +60,7 @@ namespace ProjectWallE.GameLoop.Player
                     player.CarController.CarBoost.OnBoostStart += OnBoostStart;
                     player.CarController.CarBoost.OnBoostEnd += OnBoostEnd;
                 }
-                if (shooter) shooter.OnShoot += PlayMuzzleFlash;
+                if (shooter) shooter.OnAttack1 += PlayMuzzleFlash;
             }
         }
         
@@ -77,7 +77,7 @@ namespace ProjectWallE.GameLoop.Player
                     player.CarController.CarBoost.OnBoostEnd -= OnBoostEnd;
                 }
                 
-                if (shooter) shooter.OnShoot -= PlayMuzzleFlash;
+                if (shooter) shooter.OnAttack1 -= PlayMuzzleFlash;
             }
         }
         

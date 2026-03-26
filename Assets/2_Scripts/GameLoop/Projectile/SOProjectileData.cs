@@ -21,7 +21,7 @@ public enum ProjectileDamageType
 }
 
 [CreateAssetMenu(fileName = "New ProjectileData", menuName = "Projectile Data")]
-public class ProjectileData : ScriptableObject
+public class SOProjectileData : ScriptableObject
 {
 
     [Header("Settings")]

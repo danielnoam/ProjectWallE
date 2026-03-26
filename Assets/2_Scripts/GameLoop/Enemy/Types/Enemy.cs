@@ -35,6 +35,7 @@ namespace ProjectWallE.GameLoop
         [Header("Settings")]
         [SerializeField] private float maxHealth = 100f;
         [SerializeField] private float targetFindRange = 20f;
+        [SerializeField] private bool canBePushed = true;
         [SerializeField] private AttackerResponse attackerResponse = AttackerResponse.RetaliateIfPlayer;
         [SerializeReference, SerializableSelector] private TargetingStrategy[] targetingStrategies;
         [SerializeReference, SerializableSelector] private EnemyEffect[] effects;
@@ -245,6 +246,8 @@ namespace ProjectWallE.GameLoop
 
         public void Push(Vector3 direction, float force)
         {
+            if (!canBePushed) return;
+            
             OnPush(direction, force);
         }
 

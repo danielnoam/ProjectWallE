@@ -10,18 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 112b5f81215549d982d6424af1c2b370, type: 3}
-  m_Name: ProjectileData_Player
+  m_Name: ProjectileData_PlayerSpecial
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileData
   maxLifetime: 10
-  pushStrength: 0
-  damageType: 0
+  damageType: 1
   damage: 25
-  aoeRadius: 5
+  pushStrength: 0
+  aoeRadius: 7
   damageRange:
-    minValue: 1
+    minValue: 50
     maxValue: 100
+  pushRange:
+    minValue: 15
+    maxValue: 50
   movementType: 0
   speed: 75
-  prefab: {fileID: 8338543337846540916, guid: 3c09a670e7ef45449a66861350c5473d, type: 3}
-  hitParticle: {fileID: 8195002406593029198, guid: 9d833e0335f9b0548b713e0ce34d2739, type: 3}
+  prefab: {fileID: 8338543337846540916, guid: 5bd177565f170f8498a68ad83c8892d2, type: 3}
+  hitParticle: {fileID: 8195002406593029198, guid: a62798f284250ba4bb103e5058045684, type: 3}
   collisionSFX: ProjectileCollision

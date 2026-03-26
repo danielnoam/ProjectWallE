@@ -113,8 +113,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 581df25d31c3471eb2dfb2996c0c6195, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GroundEnemy
-  maxHealth: 200
+  maxHealth: 350
   targetFindRange: 50
+  canBePushed: 0
   attackerResponse: 1
   targetingStrategies:
   - rid: 6000861155382526048
@@ -151,7 +152,7 @@ MonoBehaviour:
         attackRange: 25
         attackCooldown: 1
         firePoint: {fileID: 8925620038691902775}
-        projectileData: {fileID: 11400000, guid: c32a03d395cada347bd4ebe76d2ed779, type: 2}
+        soProjectileData: {fileID: 11400000, guid: 8ffdf2f42528d434f91c7d9b565e08fd, type: 2}
         hitLayers: {fileID: 11400000, guid: b3e3f0ea33464b048aaf56518036cb00, type: 2}
     - rid: 6000861270941368428
       type: {class: HitEffect, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
@@ -173,8 +174,8 @@ MonoBehaviour:
         - transform: {fileID: 1062343427066386213}
         wheelRadius: 1.2
         suspensionTravel: 1.55
-        suspensionStiffness: 10
-        suspensionDamping: 1
+        suspensionStiffness: 25
+        suspensionDamping: 5
         raycastDistance: 3
         groundMask:
           serializedVersion: 2
@@ -606,7 +607,7 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 513
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 1352
@@ -692,11 +693,11 @@ BoxCollider:
     m_Bits: 513
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1352
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1.0356925, y: 2.3368018, z: 2.3468134}
   m_Center: {x: 0, y: -0.0013756752, z: 0}
@@ -792,7 +793,7 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 513
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 1352
@@ -834,11 +835,11 @@ BoxCollider:
     m_Bits: 513
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1352
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1.0356923, y: 2.3368015, z: 2.3468134}
   m_Center: {x: 0, y: -0.0013756752, z: 0}

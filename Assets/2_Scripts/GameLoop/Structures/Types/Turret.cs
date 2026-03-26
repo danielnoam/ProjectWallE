@@ -13,7 +13,7 @@ public class TurretLevelData : StructureLevelData
     public float detectionRadius = 25f;
     public float attackRotationSpeed = 125f;
     public float attackCooldown = 0.3f;
-    [SOSelector("Assets/Data")] public ProjectileData projectileData;
+    [SOSelector("Assets/Data")] public SOProjectileData soProjectileData;
 }
 
 public enum TurretState { Scanning, Attacking, Broken }
@@ -89,7 +89,7 @@ public abstract class Turret : Structure
     private void Fire(Vector3 targetPosition)
     {
         var direction = (targetPosition - firePoint.position).normalized;
-        CurrentTurretLevelData.projectileData?.Spawn(hitLayers.Value, firePoint.position, direction, targetPosition, this);
+        CurrentTurretLevelData.soProjectileData?.Spawn(hitLayers.Value, firePoint.position, direction, targetPosition, this);
     }
 
     protected override void OnBuild()
