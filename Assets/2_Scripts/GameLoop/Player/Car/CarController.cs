@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using DNExtensions.Utilities.Inline;
 using ProjectWallE;
@@ -395,14 +396,15 @@ namespace _2_Scripts
 
             foreach (var tire in _allTires)
             {
-                Vector3 origin = tire.tireTransform.position;
+                Vector3 origin = tire.tireTransform.position + tire.tireTransform.up * settings.WheelRadius;
                 Vector3 direction = -tire.tireTransform.up;
-
-                tire.isGroundedExact = Physics.Raycast(origin, direction, out RaycastHit exactHit, exactDistance, _groundLayer);
+                
+                tire.isGroundedExact = Physics.SphereCast(origin, settings.WheelRadius, direction, out RaycastHit exactHit, exactDistance , _groundLayer);
                 tire.exactGroundHit = exactHit;
 
-                tire.isGroundedExtended = Physics.Raycast(origin, direction, out RaycastHit extendedHit, extendedDistance, _groundLayer);
+                tire.isGroundedExtended = Physics.SphereCast(origin, settings.WheelRadius, direction, out RaycastHit extendedHit, extendedDistance , _groundLayer);
                 tire.extendedGroundHit = extendedHit;
+                
 
                 if (tire.isGroundedExtended)
                     planeNormal = extendedHit.normal;
