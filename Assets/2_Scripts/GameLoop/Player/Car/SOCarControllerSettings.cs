@@ -18,9 +18,10 @@ namespace ProjectWallE
         [Header("Tire Friction Parameters")]
         [SerializeField] private AnimationCurve steeringTiresFrictionCurve;
         [SerializeField] private AnimationCurve staticTiresFrictionCurve;
-        [SerializeField] private float handBrakeGripFactor;
+        [SerializeField] private float handBrakeGrip;
         [SerializeField] private float handbrakeBlendIn = 12f;
         [SerializeField] private float handbrakeBlendOut = 8f;
+        [SerializeField] private float minLateralFrictionAccel = 6f;
         [SerializeField, Tooltip("reaching a speed in the tire slipping direction between minSlippingSpeed and maxSlippingSpeed" +
                                  " will factor the grip by a factor between minGripAtMaxSlip and 1 accordingly")] 
         private float minSlippingSpeed;
@@ -71,9 +72,10 @@ namespace ProjectWallE
 
         public AnimationCurve SteeringTiresFrictionCurve => steeringTiresFrictionCurve;
         public AnimationCurve StaticTiresFrictionCurve => staticTiresFrictionCurve;
-        public float HandBrakeGripFactor => handBrakeGripFactor;
+        public float HandBrakeGrip => handBrakeGrip;
         public float HandbrakeBlendIn => handbrakeBlendIn;
         public float HandbrakeBlendOut => handbrakeBlendOut;
+        public float MinLateralFrictionAccel => minLateralFrictionAccel;
         public float MinSlippingSpeed => minSlippingSpeed;
         public float MaxSlippingSpeed => maxSlippingSpeed;
         public float MinGripAtMaxSlip => minGripAtMaxSlip;

@@ -199,10 +199,20 @@ namespace _2_Scripts
                 float gripFactor = CalcCurrentTireGripFactor(tire, frictionCurve, tireVel);
                 gripFactor *= _airborneBlend;
                 gripFactor *= _slippingBlend;
-                gripFactor = Mathf.Lerp(gripFactor, settings.HandBrakeGripFactor, _handbrake01);
+                gripFactor = Mathf.Lerp(gripFactor, settings.HandBrakeGrip, _handbrake01);
 
                 float desiredVelChange = -steeringVel * gripFactor;
                 float desiredAccel = desiredVelChange / Time.fixedDeltaTime;
+
+                if (!_carInput.HandBreakHeld)
+                {
+                    float accelSign = Mathf.Sign(-steeringVel);
+                    float exactStopAccel = Mathf.Abs(steeringVel) / Time.fixedDeltaTime;
+                    float accelMagnitude = Mathf.Max(Mathf.Abs(desiredAccel), settings.MinLateralFrictionAccel);
+                    accelMagnitude = Mathf.Min(accelMagnitude, exactStopAccel);
+
+                    desiredAccel = accelSign * accelMagnitude;
+                }
 
                 _playerRb.AddForceAtPosition(
                     tire.tireTransform.right * (_playerRb.mass / _allTires.Count * desiredAccel),
@@ -235,7 +245,6 @@ namespace _2_Scripts
         private void ApplyLongitudinalMovement()
         {
             float carSpeed = Vector3.Dot(transform.forward, _playerRb.linearVelocity);
-            Debug.Log(carSpeed);
 
             if (_carInput.Acceleration > 0 || _carInput.BoostHeld)
                 ApplyForwardAcceleration(carSpeed);
@@ -322,7 +331,7 @@ namespace _2_Scripts
             float dv = desiredVerticalVel - verticalVel;
             float gravityForce = Mathf.Clamp(dv * GravityControlFactor, -settings.GravityStrength, Mathf.Infinity);
 
-            _playerRb.AddForce(Vector3.up * gravityForce, ForceMode.Acceleration);
+            _playerRb.linearVelocity += Vector3.up * (gravityForce * Time.fixedDeltaTime);
         }
 
         #endregion
