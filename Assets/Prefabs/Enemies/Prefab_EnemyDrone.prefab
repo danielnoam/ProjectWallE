@@ -138,14 +138,17 @@ MonoBehaviour:
       type: {class: NearestBaseTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         inRange: 1
+        weight: 100
     - rid: 6000861155382526045
       type: {class: PlayerTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         inRange: 1
+        weight: 100
     - rid: 6000861155382526047
       type: {class: NearestStructureTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         inRange: 0
+        weight: 100
     - rid: 6000861270941368423
       type: {class: IndependentAiming, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
@@ -302,11 +305,11 @@ PrefabInstance:
     - target: {fileID: -5947060068207801836, guid: c6643c1cdc1e591449ec71fd576e381d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 846fd6f4d2dd1354eb91cd685e757bc5, type: 2}
+      objectReference: {fileID: 2100000, guid: 59ab1f84806b3c84c8bd11be2c9d53dc, type: 2}
     - target: {fileID: -5287207780472354340, guid: c6643c1cdc1e591449ec71fd576e381d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 846fd6f4d2dd1354eb91cd685e757bc5, type: 2}
+      objectReference: {fileID: 2100000, guid: 59ab1f84806b3c84c8bd11be2c9d53dc, type: 2}
     - target: {fileID: -4684600263410887734, guid: c6643c1cdc1e591449ec71fd576e381d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -330,7 +333,7 @@ PrefabInstance:
     - target: {fileID: -3127101111377009425, guid: c6643c1cdc1e591449ec71fd576e381d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 846fd6f4d2dd1354eb91cd685e757bc5, type: 2}
+      objectReference: {fileID: 2100000, guid: 59ab1f84806b3c84c8bd11be2c9d53dc, type: 2}
     - target: {fileID: -2329556121137812105, guid: c6643c1cdc1e591449ec71fd576e381d, type: 3}
       propertyPath: m_Layer
       value: 8
@@ -390,7 +393,7 @@ PrefabInstance:
     - target: {fileID: 6868211733290630110, guid: c6643c1cdc1e591449ec71fd576e381d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 846fd6f4d2dd1354eb91cd685e757bc5, type: 2}
+      objectReference: {fileID: 2100000, guid: 59ab1f84806b3c84c8bd11be2c9d53dc, type: 2}
     - target: {fileID: 6870028280695652166, guid: c6643c1cdc1e591449ec71fd576e381d, type: 3}
       propertyPath: m_Layer
       value: 8

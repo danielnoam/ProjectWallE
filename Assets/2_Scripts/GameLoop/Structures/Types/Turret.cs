@@ -6,6 +6,7 @@ using DNExtensions.Utilities.Button;
 using PrimeTween;
 using ProjectWallE.GameLoop;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 [Serializable]
 public class TurretLevelData : StructureLevelData
@@ -23,12 +24,15 @@ public abstract class Turret : Structure
     [Header("Turret")]
     [SerializeReference, DrawSerializeReference] private TurretLevelData[] levels = Array.Empty<TurretLevelData>();
     [SerializeField, SOSelector("Assets/Data")] protected SOLayerMask hitLayers;
+    [SerializeField] protected Transform firePoint;
+    [SerializeField] protected float angleThreshold = 10f;
+
+    [Header("Swivel")]
+    [SerializeField] protected Transform horizontalSwivel;
+    [SerializeField] protected Transform verticalSwivel;
+    [SerializeField] protected Vector3 brokenRotation;
     [SerializeField] private float scanRotationSpeed = 35f;
     [SerializeField] private float scanWaitDuration = 1.5f;
-    [SerializeField] protected Vector3 brokenRotation;
-    [SerializeField] protected Transform headTransform;
-    [SerializeField] protected Transform firePoint;
-    [SerializeField] protected ShakeSettings attackAnimationSettings;
 
     private float _attackTimer;
     private TurretState _currentState;
@@ -38,9 +42,7 @@ public abstract class Turret : Structure
 
     protected TurretLevelData CurrentTurretLevelData => (TurretLevelData)Levels[currentUpgradeLevel - 1];
     protected override StructureLevelData[] Levels => levels;
-    
 
-    protected abstract Quaternion GetAimRotation(Vector3 targetPosition);
     protected abstract bool CanFire(Vector3 targetPosition);
 
     protected override void OnDestroy()
@@ -58,23 +60,12 @@ public abstract class Turret : Structure
             {
                 _attackTimer += Time.deltaTime;
                 Vector3 targetPosition = target.transform.position;
-
-                headTransform.rotation = Quaternion.RotateTowards(
-                    headTransform.rotation,
-                    GetAimRotation(targetPosition),
-                    CurrentTurretLevelData.attackRotationSpeed * Time.deltaTime
-                );
+                RotateToTarget(targetPosition, CurrentTurretLevelData.attackRotationSpeed * Time.deltaTime);
 
                 if (!CanFire(targetPosition)) return;
 
                 if (_attackTimer >= CurrentTurretLevelData.attackCooldown)
-                {
-                    Vector3 capturedPosition = targetPosition;
-                    _attackSequence = Sequence.Create();
-                    _attackSequence.Group(Tween.PunchScale(headTransform, attackAnimationSettings));
-                    _attackSequence.OnComplete(() => Fire(capturedPosition));
-                    _attackTimer = 0f;
-                }
+                    Fire(targetPosition);
             }
             else
             {
@@ -86,27 +77,40 @@ public abstract class Turret : Structure
         StateInfo = $"Health: {CurrentHealth:N0}/{MaxHealth}\nState: {_currentState}";
     }
 
+    protected virtual void RotateToTarget(Vector3 targetPosition, float rotSpeed)
+    {
+        // Yaw
+        Vector3 flatDir = targetPosition - horizontalSwivel.position;
+        flatDir.y = 0f;
+        if (flatDir.sqrMagnitude > 0.001f)
+        {
+            horizontalSwivel.rotation = Quaternion.RotateTowards(
+                horizontalSwivel.rotation,
+                Quaternion.LookRotation(flatDir),
+                rotSpeed
+            );
+        }
+
+        // Pitch
+        Vector3 localDir = horizontalSwivel.InverseTransformPoint(targetPosition);
+        float pitch = Mathf.Atan2(localDir.y, localDir.z) * Mathf.Rad2Deg;
+        verticalSwivel.localRotation = Quaternion.RotateTowards(
+            verticalSwivel.localRotation,
+            Quaternion.Euler(-pitch, 0f, 0f),
+            rotSpeed
+        );
+    }
+
     private void Fire(Vector3 targetPosition)
     {
         var direction = (targetPosition - firePoint.position).normalized;
         CurrentTurretLevelData.soProjectileData?.Spawn(hitLayers.Value, firePoint.position, direction, targetPosition, this);
+        _attackTimer = 0f;
     }
 
-    protected override void OnBuild()
-    {
-        StartScanning();
-    }
-
-    protected override void OnUpgrade()
-    {
-        StartScanning();
-    }
-    
-    protected override void OnFix()
-    {
-        StartScanning();
-    }
-
+    protected override void OnBuild() => StartScanning();
+    protected override void OnUpgrade() => StartScanning();
+    protected override void OnFix() => StartScanning();
 
     protected override void OnBreak()
     {
@@ -124,24 +128,22 @@ public abstract class Turret : Structure
             _scanRoutine = null;
         }
 
-        var endRotation = headTransform.localEulerAngles;
-        endRotation.x = brokenRotation.x;
-        Tween.LocalRotation(headTransform, Quaternion.Euler(endRotation), duration: 1f);
+        Tween.LocalRotation(verticalSwivel, Quaternion.Euler(brokenRotation), duration: 1f);
     }
 
     [Button(ButtonPlayMode.OnlyWhenPlaying)]
     private void StartScanning()
     {
         _currentState = TurretState.Scanning;
-
         if (_scanRoutine != null) StopCoroutine(_scanRoutine);
-
         if (!TryAcquireTarget()) _scanRoutine = StartCoroutine(ScanningRoutine());
     }
 
     private IEnumerator ScanningRoutine()
     {
         float[] scanAngles = { -90, -45f, 0f, 45f, 90, 0f };
+        Vector2 scanPitchRange = new Vector2(10f, 55f);
+        
         int currentAngleIndex = 0;
 
         while (_currentState == TurretState.Scanning)
@@ -149,14 +151,16 @@ public abstract class Turret : Structure
             if (TryAcquireTarget()) yield break;
 
             Quaternion targetRotation = Quaternion.Euler(0, scanAngles[currentAngleIndex], 0);
+            float targetPitch = Random.Range(scanPitchRange.x, scanPitchRange.y);
+            Quaternion pitchRotation = Quaternion.Euler(-targetPitch, 0f, 0f);
 
-            while (Quaternion.Angle(headTransform.localRotation, targetRotation) > 0.1f)
+            while (Quaternion.Angle(horizontalSwivel.localRotation, targetRotation) > 0.1f)
             {
-                headTransform.localRotation = Quaternion.RotateTowards(
-                    headTransform.localRotation,
-                    targetRotation,
-                    scanRotationSpeed * Time.deltaTime
-                );
+                float step = scanRotationSpeed * Time.deltaTime;
+                horizontalSwivel.localRotation = Quaternion.RotateTowards(
+                    horizontalSwivel.localRotation, targetRotation, step);
+                verticalSwivel.localRotation = Quaternion.RotateTowards(
+                    verticalSwivel.localRotation, pitchRotation, step);
                 yield return null;
             }
 
@@ -208,7 +212,6 @@ public abstract class Turret : Structure
         base.OnDrawGizmosSelected();
         if (!Application.isPlaying || levels == null) return;
 
-            
         Gizmos.color = Color.red;
         if (levels is { Length: > 0 } && levels[0] != null)
         {
@@ -216,5 +219,4 @@ public abstract class Turret : Structure
         }
     }
 #endif
-
 }
