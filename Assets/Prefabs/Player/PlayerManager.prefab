@@ -106,19 +106,31 @@ MonoBehaviour:
   - tireTransform: {fileID: 3987191290676102387}
     isGroundedExact: 1
     isGroundedExtended: 1
+    hitLayer:
+      serializedVersion: 2
+      m_Bits: 0
     isMoving: 0
   - tireTransform: {fileID: 813313045939543381}
     isGroundedExact: 1
     isGroundedExtended: 1
+    hitLayer:
+      serializedVersion: 2
+      m_Bits: 0
     isMoving: 0
   staticTires:
   - tireTransform: {fileID: 4997806077238404413}
     isGroundedExact: 1
     isGroundedExtended: 1
+    hitLayer:
+      serializedVersion: 2
+      m_Bits: 0
     isMoving: 0
   - tireTransform: {fileID: 5027628266276025665}
     isGroundedExact: 1
     isGroundedExtended: 1
+    hitLayer:
+      serializedVersion: 2
+      m_Bits: 0
     isMoving: 0
   boostPoint: {fileID: 3352623459842719466}
   centerOfMassOffset: {x: 0, y: -0.25, z: 0.35}
@@ -130,6 +142,7 @@ MonoBehaviour:
     - visTransform: {fileID: 4065418684084768751}
     - visTransform: {fileID: 3476467583809506216}
     suspensionReturnSpeed: 5
+    suspensionSmoothness: 10
     wheelRadius: 1.5
   carBoost: {fileID: 8828607242384971384}
 --- !u!114 &6607225680324455528

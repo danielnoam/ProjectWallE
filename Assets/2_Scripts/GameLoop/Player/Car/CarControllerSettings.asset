@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: CarControllerSettings
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.SOCarControllerSettings
   groundHeight: 0.65
-  wheelRadius: 0.65
   suspensionStrength: 25
   suspensionDamping: 2
   steeringAngle: 35
@@ -161,9 +160,9 @@ MonoBehaviour:
   topBackwardSpeed: 6
   speedyLayer:
     serializedVersion: 2
-    m_Bits: 0
-  speedyTopSpeedMultiplier: 0
-  speedyAccelMultiplier: 0
+    m_Bits: 2048
+  speedySpeedMultiplier: 4
+  speedyAccelMultiplier: 1.25
   brakeStrength: 10
   engineBrakeStrength: 1
   airAlignmentStrength: 2

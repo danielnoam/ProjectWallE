@@ -2,12 +2,12 @@ using UnityEngine;
 
 namespace ProjectWallE
 {
+    
     [CreateAssetMenu(menuName = "Scriptable Objects/Car Controller Settings")]
     public class SOCarControllerSettings : ScriptableObject
     {
         [Header("Suspension Parameters")]
         [SerializeField] private float groundHeight = 0.2f;
-        [SerializeField] private float wheelRadius = 0.4f;
         [SerializeField] private float suspensionStrength;
         [SerializeField] private float suspensionDamping;
 
@@ -48,7 +48,7 @@ namespace ProjectWallE
         
         [Header("Speedy Layer Settings")]
         [SerializeField] private LayerMask speedyLayer;
-        [SerializeField] private float speedyTopSpeedMultiplier;
+        [SerializeField] private float speedySpeedMultiplier;
         [SerializeField] private float speedyAccelMultiplier;
 
         [Header("Breaking Parameters")]
@@ -64,7 +64,6 @@ namespace ProjectWallE
         // --- Getters ---
 
         public float GroundHeight => groundHeight;
-        public float WheelRadius => wheelRadius;
         public float SuspensionStrength => suspensionStrength;
         public float SuspensionDamping => suspensionDamping;
 
@@ -94,7 +93,7 @@ namespace ProjectWallE
         public float TopBackwardSpeed => topBackwardSpeed;
 
         public LayerMask SpeedyLayer => speedyLayer;
-        public float SpeedyTopSpeedMultiplier => speedyTopSpeedMultiplier;
+        public float SpeedySpeedMultiplier => speedySpeedMultiplier;
         public float SpeedyAccelMultiplier => speedyAccelMultiplier;
 
         public float BrakeStrength => brakeStrength;

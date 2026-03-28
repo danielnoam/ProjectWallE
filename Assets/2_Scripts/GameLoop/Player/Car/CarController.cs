@@ -29,6 +29,8 @@ namespace _2_Scripts
         private List<Tire> _allTires;
 
         private const float ExtendedGroundCheckExtraDistance = 0.1f;
+        
+        private Vector3 _groundPlaneNormal;
 
         private float _currentSteering;
         private float _groundedRatio;
@@ -83,14 +85,19 @@ namespace _2_Scripts
             visuals?.ResetVisuals();
         }
 
-        public void ApplyMovement()
+        void Update()
         {
             UpdateTiresGroundState(out Vector3 planeNormal);
+            _groundPlaneNormal = planeNormal;
+        }
+
+        public void ApplyMovement()
+        {
 
             ApplyGravity();
             ApplySuspensionPerTiresType(_allTires);
             ApplyTireRotation();
-            ApplyTireFriction(planeNormal);
+            ApplyTireFriction(_groundPlaneNormal);
             ApplyAirControl();
             ApplyLongitudinalMovement();
         }
@@ -247,10 +254,13 @@ namespace _2_Scripts
         {
             float carSpeed = Vector3.Dot(transform.forward, _playerRb.linearVelocity);
 
+            GetLongitudinalValues(out float topForwardSpeed, out float topBackwardSpeed,
+                                  out float accelForce, out float brakeForce);
+
             if (_carInput.Acceleration > 0 || _carInput.BoostHeld)
-                ApplyForwardAcceleration(carSpeed);
+                ApplyForwardAcceleration(carSpeed, topForwardSpeed, accelForce, brakeForce);
             else if (_carInput.Acceleration < 0)
-                ApplyBackwardsAcceleration(carSpeed);
+                ApplyBackwardsAcceleration(carSpeed, topBackwardSpeed, accelForce, brakeForce);
             else
                 ApplyEngineBreaking(carSpeed);
 
@@ -260,40 +270,36 @@ namespace _2_Scripts
             for (int i = 0; i < _allTires.Count; i++)
                 visuals.RotateWheels(carSpeed, i);
         }
-
-        private void ApplyForwardAcceleration(float carSpeed)
+        
+        private void ApplyForwardAcceleration(float carSpeed, float topSpeed, float accelForce, float brakeForce)
         {
-            if (carSpeed > settings.TopForwardSpeed) return;
-
-            foreach (var tire in steeringTires)
+            foreach (var tire in _allTires)
             {
-                if (!tire.isGroundedExtended) continue;
-
-                float normalizedSpeed = Mathf.Clamp01(Mathf.Abs(carSpeed) / settings.TopForwardSpeed);
+                float normalizedSpeed = Mathf.Clamp01(Mathf.Abs(carSpeed) / topSpeed);
 
                 float availableAcceleration = carSpeed >= 0
-                    ? settings.AccelerationCurve.Evaluate(normalizedSpeed) * settings.AccelerationStrength
-                    : settings.BrakeStrength;
+                    ? settings.AccelerationCurve.Evaluate(normalizedSpeed) * accelForce
+                    : brakeForce;
 
                 _playerRb.AddForceAtPosition(
-                    tire.tireTransform.forward * (availableAcceleration * _playerRb.mass / steeringTires.Length),
+                    tire.tireTransform.forward * (availableAcceleration * _playerRb.mass / _allTires.Count),
                     tire.tireTransform.position);
             }
         }
 
-        private void ApplyBackwardsAcceleration(float carSpeed)
+        private void ApplyBackwardsAcceleration(float carSpeed, float topSpeed, float accelForce, float brakeForce)
         {
-            if (carSpeed < -settings.TopBackwardSpeed) return;
+            if (carSpeed < -topSpeed) return;
 
             foreach (var tire in steeringTires)
             {
                 if (!tire.isGroundedExtended) continue;
 
-                float normalizedSpeed = Mathf.Clamp01(Mathf.Abs(carSpeed) / settings.TopBackwardSpeed);
+                float normalizedSpeed = Mathf.Clamp01(Mathf.Abs(carSpeed) / topSpeed);
 
                 float availableAcceleration = carSpeed <= 0
-                    ? settings.AccelerationCurve.Evaluate(normalizedSpeed) * settings.AccelerationStrength
-                    : settings.BrakeStrength;
+                    ? settings.AccelerationCurve.Evaluate(normalizedSpeed) * accelForce
+                    : brakeForce;
 
                 _playerRb.AddForceAtPosition(
                     -tire.tireTransform.forward * (availableAcceleration * _playerRb.mass / steeringTires.Length),
@@ -318,6 +324,35 @@ namespace _2_Scripts
             if (carSpeed > settings.TopForwardSpeed * boostSpeedFactor) return;
 
             _playerRb.AddForce(transform.forward * (boostAccel * _playerRb.mass));
+        }
+        
+        private void GetLongitudinalValues(out float topForwardSpeed, out float topBackwardSpeed,
+            out float accelForce, out float brakeForce)
+        {
+            bool isSpeedyLayer = IsOnSpeedyLayer();
+
+            float speedMultiplier = isSpeedyLayer ? settings.SpeedySpeedMultiplier : 1f;
+            float accelMultiplier = isSpeedyLayer ? settings.SpeedyAccelMultiplier : 1f;
+
+            topForwardSpeed = settings.TopForwardSpeed * speedMultiplier;
+            topBackwardSpeed = settings.TopBackwardSpeed * speedMultiplier;
+            accelForce = settings.AccelerationStrength * accelMultiplier;
+            brakeForce = settings.BrakeStrength * accelMultiplier;
+        }
+
+        private bool IsOnSpeedyLayer()
+        {
+            bool isSpeedyLayer = false;
+            foreach (Tire tire in _allTires)
+            {
+                if (tire.hitLayer != settings.SpeedyLayer)
+                {
+                    isSpeedyLayer = false;
+                    continue;
+                }
+                isSpeedyLayer = true;
+            }
+            return isSpeedyLayer;
         }
 
         #endregion
@@ -396,18 +431,19 @@ namespace _2_Scripts
 
             foreach (var tire in _allTires)
             {
-                Vector3 origin = tire.tireTransform.position + tire.tireTransform.up * settings.WheelRadius;
+                Vector3 origin = tire.tireTransform.position;
                 Vector3 direction = -tire.tireTransform.up;
                 
-                tire.isGroundedExact = Physics.SphereCast(origin, settings.WheelRadius, direction, out RaycastHit exactHit, exactDistance , _groundLayer);
+                tire.isGroundedExact = Physics.Raycast(origin, direction, out RaycastHit exactHit, exactDistance , _groundLayer);
                 tire.exactGroundHit = exactHit;
 
-                tire.isGroundedExtended = Physics.SphereCast(origin, settings.WheelRadius, direction, out RaycastHit extendedHit, extendedDistance , _groundLayer);
+                tire.isGroundedExtended = Physics.Raycast(origin, direction, out RaycastHit extendedHit, extendedDistance , _groundLayer);
                 tire.extendedGroundHit = extendedHit;
-                
 
-                if (tire.isGroundedExtended)
-                    planeNormal = extendedHit.normal;
+
+                if (!tire.isGroundedExtended) continue;
+                planeNormal = extendedHit.normal;
+                tire.hitLayer = 1 << extendedHit.collider.gameObject.layer;
             }
         }
 

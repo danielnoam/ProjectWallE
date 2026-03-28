@@ -13,6 +13,7 @@ namespace ProjectWallE
         [Tooltip("Make sure this array and the corresponding staticTires array in CarController are in the same order")]
         [SerializeField] private TireVisual[] staticTires;
         [SerializeField] private float suspensionReturnSpeed = 5f;
+        [SerializeField] private float suspensionSmoothness = 10f;
         [SerializeField] private float wheelRadius = 1.5f;
 
         private readonly List<TireVisual> _allTireVisuals = new List<TireVisual>();
@@ -39,7 +40,11 @@ namespace ProjectWallE
 
             Vector3 worldPos = parent.TransformPoint(tireVisual.StartLocalPosition);
             worldPos -= _carTransform.up * offset;
-            tireVisual.visTransform.position = worldPos;
+            Vector3 difference = worldPos - tireVisual.visTransform.position;
+            
+            tireVisual.visTransform.position = difference.magnitude > 0.25f ?
+                Vector3.Lerp(tireVisual.visTransform.position, worldPos, suspensionSmoothness * Time.fixedDeltaTime) :
+                worldPos;
         }
 
         public void RotateWheels(float carSpeed, int index)

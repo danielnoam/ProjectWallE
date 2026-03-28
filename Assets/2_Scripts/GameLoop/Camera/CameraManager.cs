@@ -68,9 +68,8 @@ namespace ProjectWallE
 
         private void UpdateCameraMovement()
         {
-            if (_cameraLocked) return;
-            
             cameraTarget.position = _playerManager.transform.position;
+            if (_cameraLocked) return;
             
             cameraTarget.rotation *= Quaternion.Euler(-_input.MouseDelta.y * cameraLookSensitivity, _input.MouseDelta.x * cameraLookSensitivity, 0);
             Vector3 targetRotation = cameraTarget.rotation.eulerAngles;
