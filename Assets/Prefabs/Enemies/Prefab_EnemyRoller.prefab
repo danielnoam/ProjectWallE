@@ -119,9 +119,6 @@ MonoBehaviour:
   maxHealth: 300
   canBePushed: 1
   hitLayers: {fileID: 11400000, guid: b3e3f0ea33464b048aaf56518036cb00, type: 2}
-  effects:
-  - rid: 6000861270941368421
-  - rid: 6000861270941368432
   targetFindRange: 50
   targetRandomOffset: 20
   retargetDestinationThreshold: 1
@@ -133,6 +130,23 @@ MonoBehaviour:
     rid: 6000861270941368409
   attackStrategy:
     rid: 6000861270941368436
+  normalDamageEffects:
+    punchStrength: 1
+    punchDuration: 0.15
+    punchEase: 1
+    emissionColor: {fileID: 11400000, guid: 8bf95861b5525384394ed765bdbfb105, type: 2}
+    hitSoundId: NormalHit
+  criticalDamageEffects:
+    punchStrength: 1
+    punchDuration: 0.15
+    punchEase: 1
+    emissionColor: {fileID: 11400000, guid: ef8eb77c9e380be48a477d6f92e3d209, type: 2}
+    hitSoundId: CriticalHit
+  deathEffect:
+    particle: {fileID: 0}
+    soundId: ProjectileCollision
+  effects:
+  - rid: 6000861270941368432
   visibilityRenderer: {fileID: 206706519288862166}
   rigidBody: {fileID: 2448601663206975914}
   navMeshAgent: {fileID: 8909220601765990049}
@@ -154,16 +168,6 @@ MonoBehaviour:
       data:
         rotationSpeed: 180
         alignmentThreshold: 33.1
-    - rid: 6000861270941368421
-      type: {class: HitEffect, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
-      data:
-        punchStrength: 1
-        punchDuration: 0.15
-        punchEase: 1
-        normalEmissionColor: {r: 3.0943396, g: 0.5546454, b: 0.5546454, a: 1}
-        criticalEmissionColor: {r: 41.647724, g: 8.068139, b: 0, a: 1}
-        normalDamagedSoundId: NormalHit
-        criticalDamageSoundId: CriticalHit
     - rid: 6000861270941368432
       type: {class: WheelEffect, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:

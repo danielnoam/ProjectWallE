@@ -38,27 +38,27 @@ namespace ProjectWallE.GameLoop
         [SerializeField] private float maxHealth = 100f;
         [SerializeField] private bool canBePushed = true;
         [SerializeField, SOSelector("Assets/Data")] private SOLayerMask hitLayers;
-        [SerializeReference, SerializableSelector] private EnemyEffect[] effects;
-        
+
         [Header("Targeting")]
-        [SerializeField, Tooltip("Range to search for targets based on priority.")]
-        private float targetFindRange = 75f;
-        [SerializeField, Tooltip("Random offset applied to the target position.")]
-        protected float targetRandomOffset = 20f;
-        [SerializeField, Tooltip("How far the target can move from the current destination before the path is recalculated.")]
-        protected float retargetDestinationThreshold = 25f;
+        [SerializeField] private float targetFindRange = 75f;
+        [SerializeField] protected float targetRandomOffset = 20f;
+        [SerializeField] protected float retargetDestinationThreshold = 25f;
         [SerializeReference, SerializableSelector] private TargetingStrategy[] targetingStrategies;
 
         [Header("Behavior")]
-        [Tooltip("What to do when getting hit")]
         [SerializeField] private AttackerResponse attackerResponse = AttackerResponse.RetaliateIfPlayer;
         [SerializeReference, SerializableSelector] private AimingStrategy aimingStrategy;
         [SerializeReference, SerializableSelector] private AttackStrategy attackStrategy;
 
-        [Header("References")]
+        [Header("Effects")]
+        [SerializeField] private DamageEffects normalDamageEffects;
+        [SerializeField] private DamageEffects criticalDamageEffects;
+        [SerializeField] private EffectAction deathEffect;
+        [SerializeReference, SerializableSelector] private EnemyEffect[] effects;
         [SerializeField] private Renderer visibilityRenderer;
+        
+        
         [SerializeField, AutoGetSelf, HideInInspector] private protected Rigidbody rigidBody;
-
         private readonly List<EnemyDamageRelay> _relays = new();
         private float _currentHealth;
 
@@ -72,6 +72,8 @@ namespace ProjectWallE.GameLoop
 
         public event Action<IDamageable> OnDeath;
         public event Action<float> OnDamaged;
+
+        private void OnValidate() => AutoGetSystem.Process(this);
 
         private void OnDestroy()
         {
@@ -99,9 +101,7 @@ namespace ProjectWallE.GameLoop
             };
 
             foreach (var effect in effects)
-            {
                 effect?.Tick(context);
-            }
 
             if (targetPos.HasValue)
             {
@@ -132,9 +132,7 @@ namespace ProjectWallE.GameLoop
         private void OnCollisionEnter(Collision collision)
         {
             if (collision.gameObject.TryGetComponent(out Pod _))
-            {
                 Die();
-            }
         }
 
         private void OnTargetDeath(IDamageable deadTarget)
@@ -158,9 +156,7 @@ namespace ProjectWallE.GameLoop
         }
 
         protected virtual void OnFixedUpdate() { }
-
         protected virtual void OnUpdate() { }
-
         protected abstract void SetDestination();
         protected abstract void OnPush(Vector3 direction, float force);
 
@@ -183,11 +179,7 @@ namespace ProjectWallE.GameLoop
 
         private void Die()
         {
-            foreach (var effect in effects)
-            {
-                effect?.OnDeath(transform.position);
-            }
-
+            deathEffect?.Play(transform.position);
             OnDeath?.Invoke(this);
             Destroy(gameObject);
         }
@@ -204,15 +196,11 @@ namespace ProjectWallE.GameLoop
         {
             switch (attackerResponse)
             {
-                case AttackerResponse.RetaliateIfPlayer:
-                    return attacker is PlayerManager;
-                case AttackerResponse.RetaliateIfTurret:
-                    return attacker is Turret;
-                case AttackerResponse.RetaliateAll:
-                    return true;
+                case AttackerResponse.RetaliateIfPlayer: return attacker is PlayerManager;
+                case AttackerResponse.RetaliateIfTurret: return attacker is Turret;
+                case AttackerResponse.RetaliateAll: return true;
                 case AttackerResponse.None:
-                default:
-                    return false;
+                default: return false;
             }
         }
 
@@ -222,7 +210,6 @@ namespace ProjectWallE.GameLoop
             OnDamaged?.Invoke(damage);
 
             if (attacker != null && attacker != CurrentTarget && ShouldRetaliate(attacker)) SetTarget(attacker);
-
             if (_currentHealth <= 0) Die();
         }
 
@@ -230,16 +217,11 @@ namespace ProjectWallE.GameLoop
         {
             if (!IsAlive) return;
 
-            float multiplier = relay.HitZone switch
-            {
-                EnemyHitZone.Critical => 2f,
-                _ => 1f
-            };
+            bool isCritical = relay.HitZone == EnemyHitZone.Critical;
+            var damageEffects = isCritical ? criticalDamageEffects : normalDamageEffects;
+            float multiplier = isCritical ? 2f : 1f;
 
-            foreach (var effect in effects)
-            {
-                effect?.OnHit(transform.position, relay);
-            }
+            damageEffects?.Play(transform.position, relay.Materials);
             ApplyDamage(damage * multiplier, attacker);
         }
 
@@ -247,26 +229,23 @@ namespace ProjectWallE.GameLoop
         {
             if (!IsAlive) return;
 
-            foreach (var effect in effects)
+            foreach (var relay in _relays)
             {
-                effect?.OnHitAll(transform.position, _relays);
+                normalDamageEffects?.PunchOnly(relay.Materials);
             }
+            normalDamageEffects?.PlayHitSound(transform.position);
+            
             ApplyDamage(damage, attacker);
         }
-
         public void Push(Vector3 direction, float force)
         {
             if (!canBePushed) return;
-            
             OnPush(direction, force);
         }
 
         public void RegisterRelay(EnemyDamageRelay relay) => _relays.Add(relay);
 
-        public void OnPoolGet()
-        {
-            Initialize();
-        }
+        public void OnPoolGet() => Initialize();
 
         public void OnPoolReturn()
         {
@@ -301,9 +280,7 @@ namespace ProjectWallE.GameLoop
             Gizmos.DrawWireSphere(transform.position, targetFindRange);
 
             foreach (var effect in effects)
-            {
                 effect?.OnDrawGizmos(transform);
-            }
         }
 #endif
     }

@@ -18,7 +18,7 @@ public abstract class ResourceGenerator : Structure
     
     private bool _generating;
     private Coroutine _generationCoroutine;
-    private ResourceGeneratorLevelData CurrentBaseLevelData => (ResourceGeneratorLevelData)Levels[currentUpgradeLevel - 1];
+    private ResourceGeneratorLevelData CurrentBaseLevelData => (ResourceGeneratorLevelData)Levels[CurrentUpgradeLevel - 1];
     protected override StructureLevelData[] Levels => levels;
 
     private void Update()

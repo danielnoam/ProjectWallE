@@ -53,43 +53,43 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2b006025e90e4c848911428205d64f6d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -84.73499
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2b006025e90e4c848911428205d64f6d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -3.3119695
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2b006025e90e4c848911428205d64f6d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 46.191727
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2b006025e90e4c848911428205d64f6d, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.74028325
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2b006025e90e4c848911428205d64f6d, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0.581414
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2b006025e90e4c848911428205d64f6d, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 0.08991092
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2b006025e90e4c848911428205d64f6d, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: 0.32535297
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2b006025e90e4c848911428205d64f6d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -483.941
+      value: -473.172
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2b006025e90e4c848911428205d64f6d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -270.726
+      value: -218.548
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2b006025e90e4c848911428205d64f6d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 85.355
+      value: 253.432
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 2b006025e90e4c848911428205d64f6d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -168,12 +168,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ResourceNode
   maxHealth: 150
   resourceAmount: 100
-  destroyEffect: {fileID: 8719693749157704221, guid: 1b3442425d82af9499ec794800098825, type: 3}
-  destroyEffectPosition: {fileID: 3110741916951461481}
-  damagedSoundId: ProjectileCollision
-  destroySoundId: 
-  punchStrength: 1
-  punchDuration: 0.15
-  punchEase: 4
-  emissionColor: {r: 10.536487, g: 0, b: 4.0270376, a: 1}
+  damageEffects:
+    punchStrength: 1
+    punchDuration: 0.15
+    punchEase: 1
+    emissionColor: {fileID: 11400000, guid: 208c7c901ce76184cbbfd84d0e9bd8b1, type: 2}
+    hitSoundId: ProjectileCollision
+  destroyEffect:
+    particle: {fileID: 8719693749157704221, guid: 1b3442425d82af9499ec794800098825, type: 3}
+    soundId: ProjectileCollision
   rend: {fileID: 7427115607873785031}

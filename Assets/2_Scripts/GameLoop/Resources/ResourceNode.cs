@@ -1,32 +1,17 @@
 using System;
-using DNExtensions.Systems.AudioLibrary;
-using DNExtensions.Systems.ObjectPooling;
 using DNExtensions.Utilities.AutoGet;
-using PrimeTween;
+using ProjectWallE.GameLoop;
 using UnityEngine;
 
 [DisallowMultipleComponent]
 public class ResourceNode : MonoBehaviour, IDamageable
 {
     [Header("Settings")]
-    [SerializeField] private float maxHealth = 50;
+    [SerializeField] private float maxHealth = 150;
     [SerializeField] private int resourceAmount = 100;
-    
-    [Header("Effects")]
-    [SerializeField] private PoolableParticleSystem destroyEffect;
-    [SerializeField] private Transform destroyEffectPosition;
-    [SerializeField, AudioLibraryID] private string damagedSoundId;
-    [SerializeField, AudioLibraryID] private string destroySoundId;
-
-    [Header("Emission")]
-    [SerializeField] private float punchStrength = 1f;
-    [SerializeField] private float punchDuration = 0.15f;
-    [SerializeField] private Ease punchEase = Ease.Linear;
-    [SerializeField, ColorUsage(false, true)] private Color emissionColor = Color.red;
-    [SerializeField, AutoGetChildren] private Renderer rend;
-
-    private static readonly int EmissionStrength = Shader.PropertyToID("_Emission_Strength");
-    private static readonly int EmissionColorID = Shader.PropertyToID("_Emission_Color");
+    [SerializeField] private DamageEffects damageEffects;
+    [SerializeField] private EffectAction destroyEffect;
+    [SerializeField, AutoGetChildren, HideInInspector] private Renderer rend;
     
     private float _currentHealth;
     private Material _material;
@@ -41,28 +26,11 @@ public class ResourceNode : MonoBehaviour, IDamageable
         _currentHealth = maxHealth;
         _material = rend.material;
     }
-    
-    private void PunchEmission()
-    {
-        if (!_material) return;
-        
-        _material.SetColor(EmissionColorID, emissionColor);
-
-        var seq = Sequence.Create();
-        seq.Group(Tween.MaterialProperty(_material, EmissionStrength, punchStrength, punchDuration * 0.5f, punchEase));
-        seq.Chain(Tween.MaterialProperty(_material, EmissionStrength, 0f, punchDuration * 0.5f, punchEase));
-    }
-    
     private void DestroySelf()
     {
-        if (destroyEffect)
-        {
-            var effect = ObjectPooler.GetObjectFromPool(destroyEffect, destroyEffectPosition.position);
-            effect?.Play();
-        }
-        AudioLibrary.PlayAtPosition(destroySoundId, transform.position);
-        OnDeath?.Invoke(this);
+        destroyEffect?.Play(transform.position);
         ResourceManager.Instance?.AddResources(resourceAmount);
+        OnDeath?.Invoke(this);
         Destroy(gameObject);
     }
 
@@ -71,9 +39,8 @@ public class ResourceNode : MonoBehaviour, IDamageable
         if (_currentHealth <= 0) return;
 
         _currentHealth -= damage;
+        damageEffects?.Play(transform.position, _material);
         OnDamaged?.Invoke(damage);
-        PunchEmission();
-        AudioLibrary.PlayAtPosition(damagedSoundId, transform.position);
 
         if (_currentHealth <= 0)
             DestroySelf();

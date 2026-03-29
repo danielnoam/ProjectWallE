@@ -32,20 +32,20 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     [SerializeField] protected Transform gfx;
     
     
-
-    protected StructureLevelData CurrentLevelData => Levels[currentUpgradeLevel - 1];
+    private int UpgradeCost => CanUpgrade() ? Levels[CurrentUpgradeLevel].cost : 0;
+    private float FixCost => (MaxHealth - CurrentHealth) * CurrentLevelData.fixCostPerHealthPoint;
+    private StructureLevelData CurrentLevelData => Levels[CurrentUpgradeLevel - 1];
+    
     protected string StateInfo;
     protected abstract StructureLevelData[] Levels { get; }
-    public float CurrentHealth { get; private set; }
+    protected int CurrentUpgradeLevel { get; private set; }
     
-    public int currentUpgradeLevel;
+    public float CurrentHealth { get; private set; }
     public string Label => label;
     public Sprite Icon => icon;
     public Vector3 TopPoint => transform.position + transform.TransformVector(topPoint);
     public float MaxHealth => CurrentLevelData.maxHealth;
     public int BuildCost => Levels[0].cost;
-    public int UpgradeCost => CanUpgrade() ? Levels[currentUpgradeLevel].cost : 0;
-    public float FixCost => (MaxHealth - CurrentHealth) * CurrentLevelData.fixCostPerHealthPoint;
     
     public event Action<IDamageable> OnDeath;
     public event Action<float> OnDamaged;
@@ -81,7 +81,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     private void Build()
     {
         StructureManager.Instance?.RegisterStructure(this);
-        currentUpgradeLevel = 1;
+        CurrentUpgradeLevel = 1;
         CurrentHealth = CurrentLevelData.maxHealth;
         PlaySpawnEffect();
         OnBuild();
@@ -109,7 +109,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     
     private bool CanUpgrade() 
     {
-        return currentUpgradeLevel < Levels.Length;
+        return CurrentUpgradeLevel < Levels.Length;
     }
     
     private void Demolish()
@@ -137,7 +137,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
 
         if (!ResourceManager.Instance.TrySpendResources(UpgradeCost)) return;
 
-        currentUpgradeLevel++;
+        CurrentUpgradeLevel++;
         CurrentHealth = CurrentLevelData.maxHealth;
         PlayUpgradeEffect();
         OnUpgrade();
@@ -175,8 +175,8 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
         bool canFix = CurrentHealth < MaxHealth;
 
         string upgradeLabel = canUpgrade
-            ? $"Upgrade {currentUpgradeLevel} -> {currentUpgradeLevel + 1}\n{UpgradeCost}"
-            : $"At Max Level\n{currentUpgradeLevel}/{currentUpgradeLevel}";
+            ? $"Upgrade {CurrentUpgradeLevel} -> {CurrentUpgradeLevel + 1}\n{UpgradeCost}"
+            : $"At Max Level\n{CurrentUpgradeLevel}/{CurrentUpgradeLevel}";
 
         string fixLabel = canFix
             ? $"Fix {(int)FixCost}\n{(int)CurrentHealth}/{(int)MaxHealth}"

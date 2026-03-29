@@ -117,7 +117,7 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 1, y: 2, z: 1}
+  m_Extents: {x: 0.5, y: 2, z: 0.5}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1
@@ -144,36 +144,16 @@ MonoBehaviour:
   topPoint: {x: 0, y: 2.19, z: 0}
   bottomPoint: {x: 0, y: -0.66, z: 0}
   gfx: {fileID: 6756884417540177175}
-  currentUpgradeLevel: 0
   levels:
   - rid: 4437626158574207052
   hitLayers: {fileID: 11400000, guid: 2d607d7566d764844b32be4199186943, type: 2}
+  firePoint: {fileID: 2441275468809066944}
+  angleThreshold: 10
+  horizontalSwivel: {fileID: 5574081638935564198}
+  verticalSwivel: {fileID: 7218337009258223216}
+  brokenRotation: {x: 50, y: 0, z: 0}
   scanRotationSpeed: 35
   scanWaitDuration: 1.5
-  brokenRotation: {x: 50, y: 0, z: 0}
-  headTransform: {fileID: 7602555568587241934}
-  firePoint: {fileID: 2441275468809066944}
-  attackAnimationSettings:
-    strength: {x: 0.3, y: 0.3, z: 0.3}
-    duration: 0.2
-    frequency: 1
-    enableFalloff: 0
-    falloffEase: 0
-    strengthOverTime:
-      serializedVersion: 2
-      m_Curve: []
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    asymmetry: 0
-    easeBetweenShakes: 0
-    cycles: 1
-    startDelay: 0
-    endDelay: 0
-    useUnscaledTime: 0
-    _useFixedUpdate: 0
-    _updateType: 0
-  angleThreshold: 10
   references:
     version: 2
     RefIds:
@@ -289,6 +269,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8194135393673521409, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: -7835213812586182840, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: -7523861004045814244, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -300,7 +288,11 @@ PrefabInstance:
     - target: {fileID: -6167303928605763371, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 8f766c2ed6500a94ca5427956ad34d54, type: 2}
+      objectReference: {fileID: 2100000, guid: 5daa2d568ea93a64ba0d31816b4a5b93, type: 2}
+    - target: {fileID: -5545678044519789381, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: -2862484433118043519, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -313,6 +305,14 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 5daa2d568ea93a64ba0d31816b4a5b93, type: 2}
+    - target: {fileID: -936301478154612314, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: -880230525032284596, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 466358876411193660, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -321,14 +321,42 @@ PrefabInstance:
       propertyPath: m_Name
       value: TurretGunMesh
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 992547253051740349, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 1493092965241773759, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 97f6f496be545354e9997b5f67139ccc, type: 2}
+    - target: {fileID: 4673319759951675056, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5380669750624157811, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5607461608540561397, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7095150011589704979, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8075466759188704593, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 8520933294962574635, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 5daa2d568ea93a64ba0d31816b4a5b93, type: 2}
+      objectReference: {fileID: 2100000, guid: 8f766c2ed6500a94ca5427956ad34d54, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -337,14 +365,14 @@ PrefabInstance:
       addedObject: {fileID: 2441275468809066944}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
+--- !u!4 &5574081638935564198 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -6588851789922460015, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
+  m_PrefabInstance: {fileID: 7625913046391689527}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7218337009258223216 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8216816691412875449, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
-  m_PrefabInstance: {fileID: 7625913046391689527}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &7602555568587241934 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -9199416420939667207, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
   m_PrefabInstance: {fileID: 7625913046391689527}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &7952819274115774172 stripped

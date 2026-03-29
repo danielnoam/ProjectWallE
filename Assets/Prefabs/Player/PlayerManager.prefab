@@ -1288,7 +1288,6 @@ GameObject:
   - component: {fileID: 8104896233199378666}
   - component: {fileID: 3404806522171678059}
   - component: {fileID: 3576337536456230308}
-  - component: {fileID: 2618845710779842857}
   - component: {fileID: 4948167179135989057}
   - component: {fileID: 6740650985369683722}
   - component: {fileID: 1023129824596148253}
@@ -1501,27 +1500,6 @@ MonoBehaviour:
   punchCount: 1
   punchDuration: 0.25
   punchEase: 1
---- !u!114 &2618845710779842857
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6733501558051180430}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 286c0a9b65940bc46a4af2e3e8df3264, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FullscreenVignetteController
-  material: {fileID: 2100000, guid: 260130cb5b14d4f42a45816df75683a8, type: 2}
-  propertyName: _Emission_Strength
-  showValue: 1
-  hideValue: 0
-  duration: 0.5
-  ease: 4
-  punchCount: 1
-  punchDuration: 0.15
-  punchEase: 1
 --- !u!114 &4948167179135989057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1534,39 +1512,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27d3d691044dfda42b95c239ad6be28b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.PlayerAnimator
-  carBoostEffects:
-  - {fileID: 5454407353768600682}
-  - {fileID: 3246170288374732677}
-  carDirtParticles:
-  - {fileID: 1322608540948452487}
-  - {fileID: 3152115435382748368}
-  robotDirtParticles:
-  - {fileID: 6436861685030297602}
-  wheelsAirReleaseEffects:
-  - {fileID: 4038127333170522525}
-  - {fileID: 4973269791065966836}
-  - {fileID: 3149229671974226224}
-  - {fileID: 2909571650443864060}
-  muzzleFlashEffects:
-  - {fileID: 5782453471879991033}
-  - {fileID: 3686714904999105487}
+  shootEffect:
+    visualEffects:
+    - {fileID: 5782453471879991033}
+    - {fileID: 3686714904999105487}
+    soundId: Shoot
+  carBoostEffect:
+    visualEffects:
+    - {fileID: 5454407353768600682}
+    - {fileID: 3246170288374732677}
+    soundId: Boost
+  wheelsAirReleaseEffect:
+    visualEffects:
+    - {fileID: 3149229671974226224}
+    - {fileID: 2909571650443864060}
+    - {fileID: 4038127333170522525}
+    - {fileID: 4973269791065966836}
+    soundId: AirRelease
+  damageEffects:
+    punchStrength: 1
+    punchDuration: 0.15
+    punchEase: 1
+    emissionColor: {fileID: 11400000, guid: a96c7138587d94644ace68611d614fe6, type: 2}
+    hitSoundId: NormalHit
+  changeStateSoundId: ChangeState
   heighSpeedMagnitudeRange:
     minValue: 15
     maxValue: 30
   speedLinesSizeRange: {x: 1, y: 0.85}
   lowHealthThreshold: 0.3
-  boostSoundId: Boost
-  airReleaseSoundId: AirRelease
-  changeStateSoundId: ChangeState
-  shootSoundId: Shoot
-  damagedSoundId: ProjectileCollision
   lowHealthEffect: {fileID: 3576337536456230308}
   speedLinesVisibility: {fileID: 8104896233199378666}
   speedLinesSize: {fileID: 3404806522171678059}
-  emission: {fileID: 2618845710779842857}
   airReleaseAudioSource: {fileID: 1757885287560848928}
-  boostAudioSource: {fileID: 8467015804595106265}
   changeStateAudioSource: {fileID: 3113016758275396871}
+  boostAudioSource: {fileID: 8467015804595106265}
   player: {fileID: 2369243402749369746}
 --- !u!114 &6740650985369683722
 MonoBehaviour:
@@ -1900,11 +1880,6 @@ PrefabInstance:
 --- !u!4 &5669524202456344809 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4965192251463791562, guid: c954d8c7533d2854a8cf91792ff11c16, type: 3}
-  m_PrefabInstance: {fileID: 741363524158528291}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &6436861685030297602 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 5989094450199739169, guid: c954d8c7533d2854a8cf91792ff11c16, type: 3}
   m_PrefabInstance: {fileID: 741363524158528291}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1461941048779852252
@@ -2500,11 +2475,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4965192251463791562, guid: c954d8c7533d2854a8cf91792ff11c16, type: 3}
   m_PrefabInstance: {fileID: 4703817251739561894}
   m_PrefabAsset: {fileID: 0}
---- !u!198 &1322608540948452487 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 5989094450199739169, guid: c954d8c7533d2854a8cf91792ff11c16, type: 3}
-  m_PrefabInstance: {fileID: 4703817251739561894}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5340877673887342399
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2767,11 +2737,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c954d8c7533d2854a8cf91792ff11c16, type: 3}
---- !u!198 &3152115435382748368 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 5989094450199739169, guid: c954d8c7533d2854a8cf91792ff11c16, type: 3}
-  m_PrefabInstance: {fileID: 8692820164467003377}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4342861927101103163 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4965192251463791562, guid: c954d8c7533d2854a8cf91792ff11c16, type: 3}

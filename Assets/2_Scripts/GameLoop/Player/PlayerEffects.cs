@@ -1,51 +1,58 @@
+using System.Collections.Generic;
 using DNExtensions.Systems.AudioLibrary;
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.AutoGet;
 using UnityEngine;
-using UnityEngine.VFX;
 
 namespace ProjectWallE.GameLoop.Player
 {
     public class PlayerEffects : MonoBehaviour
     {
-        [Header("Particle")]
-        [SerializeField] private VisualEffect[] carBoostEffects;
-        [SerializeField] private ParticleSystem[] carDirtParticles;
-        [SerializeField] private ParticleSystem[] robotDirtParticles;
-        [SerializeField] private VisualEffect[] wheelsAirReleaseEffects;
-        [SerializeField] private VisualEffect[] muzzleFlashEffects;
+        [Header("Effects")]
+        [SerializeField] private VisualEffectAction shootEffect;
+        [SerializeField] private VisualEffectAction carBoostEffect;
+        [SerializeField] private VisualEffectAction wheelsAirReleaseEffect;
+        [SerializeField] private DamageEffects damageEffects;
+        [SerializeField, AudioLibraryID] private string changeStateSoundId;
         
-        [Header("Screen Effects")]
+        [Header("FullScreen Effects")]
         [SerializeField, MinMaxRange(0f, 50f)] private RangedFloat heighSpeedMagnitudeRange = new RangedFloat(20f,30f);
         [SerializeField, MinMaxRange(0f, 1f)] private Vector2 speedLinesSizeRange = new Vector2(1f, 0.8f);
         [SerializeField, Range(0f,1f)] private float lowHealthThreshold = 0.3f;
-        
-        [Header("SFX")]
-        [SerializeField, AudioLibraryID] private string boostSoundId;
-        [SerializeField, AudioLibraryID] private string airReleaseSoundId;
-        [SerializeField, AudioLibraryID] private string changeStateSoundId;
-        [SerializeField, AudioLibraryID] private string shootSoundId;
-        [SerializeField, AudioLibraryID] private string damagedSoundId;
         
         [Header("References")]
         [SerializeField] private MaterialPropertyTweener lowHealthEffect;
         [SerializeField] private MaterialPropertyTweener speedLinesVisibility;
         [SerializeField] private MaterialPropertyTweener speedLinesSize;
-        [SerializeField] private MaterialPropertyTweener emission;
         [SerializeField] private AudioSource airReleaseAudioSource;
-        [SerializeField] private AudioSource boostAudioSource;
         [SerializeField] private AudioSource changeStateAudioSource;
+        [SerializeField] private AudioSource boostAudioSource;
         [SerializeField, AutoGetParent, HideInInspector] private PlayerManager player;
 
 
         private bool _speedLinesActive;
         private bool _lowHealthActive;
+        private Material[] _materials;
         
         private void OnValidate()
         {
             AutoGetSystem.Process(this);
         }
 
+        private void Awake()
+        {
+            var renderers = GetComponentsInChildren<Renderer>();
+            var mats = new List<Material>();
+            foreach (var rend in renderers)
+            {
+                if (rend is UnityEngine.VFX.VFXRenderer) continue;
+                foreach (var mat in rend.materials)
+                {
+                    if (mat.HasProperty(DamageEffects.EmissionStrength)) mats.Add(mat);
+                }
+            }
+            _materials = mats.ToArray();
+        }
 
         private void OnEnable()
         {
@@ -111,26 +118,23 @@ namespace ProjectWallE.GameLoop.Player
         
         private void OnDamaged(float damage)
         {
-            AudioLibrary.PlayAtPosition(damagedSoundId, transform.position);
-            emission?.Punch();
+            damageEffects?.Play(transform.position, _materials);
         }
 
         
         private void OnBoostStart()
         {
-            ToggleEffect(carBoostEffects, true);
-            AudioLibrary.PlayOnSource(boostSoundId, boostAudioSource);
+            carBoostEffect?.Play(transform.position, boostAudioSource);
         }
         
         private void OnBoostEnd()
         {
-            ToggleEffect(carBoostEffects,false);
-            boostAudioSource?.Stop();
+            carBoostEffect?.Stop(boostAudioSource);
         }
 
         private void OnControllerChanged(PlayerControllerType type)
         {
-            ToggleEffect(carBoostEffects, false);
+            carBoostEffect?.Stop(boostAudioSource);
             AudioLibrary.PlayOnSource(changeStateSoundId, changeStateAudioSource);
         }
         
@@ -149,64 +153,20 @@ namespace ProjectWallE.GameLoop.Player
                 _lowHealthActive = false;
             }
         }
-
-        private void ToggleParticle(ParticleSystem[] particleSystems, bool state)
-        {
-            if (particleSystems == null || particleSystems.Length == 0) return;
-            
-            if (state)
-            {
-                foreach (var particle in particleSystems)
-                {
-                    particle?.Play();
-                }
-            }
-            else
-            {
-                foreach (var particle in particleSystems)
-                {
-                    particle?.Stop();
-                }
-            }
-
-        }
-        
-        private void ToggleEffect(VisualEffect[] effects, bool state)
-        {
-            if (effects == null || effects.Length == 0) return;
-
-            if (state)
-            {
-                foreach (var effect in effects)
-                {
-                    effect?.Play();
-                }
-            }
-            else
-            {
-                foreach (var effect in effects)
-                {
-                    effect?.Stop();
-                }
-            }
-        }
         
         private void PlayMuzzleFlash()
         {
-            ToggleEffect(muzzleFlashEffects, true);
-            AudioLibrary.PlayAtPosition(shootSoundId, transform.position);
+            shootEffect?.Play(transform.position);
         }
         
         public void EnableWheelsAirRelease()
         {
-           ToggleEffect(wheelsAirReleaseEffects, true);
-           AudioLibrary.PlayOnSource(airReleaseSoundId, airReleaseAudioSource);
+            wheelsAirReleaseEffect?.Play(transform.position, airReleaseAudioSource);
         }
         
         public void DisableWheelsAirRelease()
         {
-            ToggleEffect(wheelsAirReleaseEffects, false);
-            airReleaseAudioSource?.Stop();
+            wheelsAirReleaseEffect?.Stop(airReleaseAudioSource);
         }
     }
 }

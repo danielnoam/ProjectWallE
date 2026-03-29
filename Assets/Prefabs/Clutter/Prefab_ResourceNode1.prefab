@@ -41,15 +41,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 573442b838fdcba4080f80f33b114fd4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 329.81
+      value: -77.39
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 573442b838fdcba4080f80f33b114fd4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 20.52
+      value: -4.3775253
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 573442b838fdcba4080f80f33b114fd4, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 308.69
+      value: 46.7
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 573442b838fdcba4080f80f33b114fd4, type: 3}
       propertyPath: m_LocalRotation.w
@@ -156,12 +156,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ResourceNode
   maxHealth: 150
   resourceAmount: 100
-  destroyEffect: {fileID: 8719693749157704221, guid: 1b3442425d82af9499ec794800098825, type: 3}
-  destroyEffectPosition: {fileID: 268659226318373905}
-  damagedSoundId: ProjectileCollision
-  destroySoundId: 
-  punchStrength: 1
-  punchDuration: 0.15
-  punchEase: 4
-  emissionColor: {r: 10.536487, g: 0, b: 4.0270376, a: 1}
+  damageEffects:
+    punchStrength: 1
+    punchDuration: 0.15
+    punchEase: 1
+    emissionColor: {fileID: 11400000, guid: 208c7c901ce76184cbbfd84d0e9bd8b1, type: 2}
+    hitSoundId: ProjectileCollision
+  destroyEffect:
+    particle: {fileID: 8719693749157704221, guid: 1b3442425d82af9499ec794800098825, type: 3}
+    soundId: ProjectileCollision
   rend: {fileID: 5072832496208480937}
