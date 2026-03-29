@@ -119,9 +119,6 @@ MonoBehaviour:
   maxHealth: 350
   canBePushed: 0
   hitLayers: {fileID: 11400000, guid: b3e3f0ea33464b048aaf56518036cb00, type: 2}
-  effects:
-  - rid: 6000861270941368428
-  - rid: 6000861270941368433
   targetFindRange: 50
   targetRandomOffset: 20
   retargetDestinationThreshold: 25
@@ -134,6 +131,23 @@ MonoBehaviour:
     rid: 6000861270941368434
   attackStrategy:
     rid: 6000861270941368427
+  normalDamageEffects:
+    punchStrength: 1
+    punchDuration: 0.15
+    punchEase: 1
+    emissionColor: {fileID: 11400000, guid: 8bf95861b5525384394ed765bdbfb105, type: 2}
+    hitSoundId: NormalHit
+  criticalDamageEffects:
+    punchStrength: 1
+    punchDuration: 0.15
+    punchEase: 1
+    emissionColor: {fileID: 11400000, guid: ef8eb77c9e380be48a477d6f92e3d209, type: 2}
+    hitSoundId: CriticalHit
+  deathEffect:
+    particle: {fileID: 0}
+    soundId: 
+  effects:
+  - rid: 6000861270941368433
   visibilityRenderer: {fileID: 7676367922731443217}
   rigidBody: {fileID: 2448601663206975914}
   navMeshAgent: {fileID: 8909220601765990049}
@@ -144,14 +158,17 @@ MonoBehaviour:
       type: {class: NearestBaseTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         inRange: 1
+        weight: 100
     - rid: 6000861155382526049
       type: {class: PlayerTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         inRange: 1
+        weight: 100
     - rid: 6000861155382526050
       type: {class: NearestStructureTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         inRange: 0
+        weight: 100
     - rid: 6000861270941368427
       type: {class: ProjectileAttack, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
@@ -159,16 +176,10 @@ MonoBehaviour:
         attackCooldown: 1
         firePoint: {fileID: 8925620038691902775}
         soProjectileData: {fileID: 11400000, guid: 8ffdf2f42528d434f91c7d9b565e08fd, type: 2}
-    - rid: 6000861270941368428
-      type: {class: HitEffect, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
-      data:
-        punchStrength: 1
-        punchDuration: 0.15
-        punchEase: 1
-        normalEmissionColor: {r: 3.0943396, g: 0.5546454, b: 0.5546454, a: 1}
-        criticalEmissionColor: {r: 41.647724, g: 8.068139, b: 0, a: 1}
-        normalDamagedSoundId: NormalHit
-        criticalDamageSoundId: CriticalHit
+        shootEffect:
+          visualEffects:
+          - {fileID: 7214270018605058130}
+          soundId: Shoot
     - rid: 6000861270941368433
       type: {class: WheelEffect, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
@@ -220,7 +231,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0.901}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 6843354145639655890}
   m_Father: {fileID: 625114008568574063}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9070794248794423676
@@ -861,3 +873,94 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDamageRelay
   hitZone: 0
+--- !u!1001 &9097202400334944660
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 8925620038691902775}
+    m_Modifications:
+    - target: {fileID: 1883064543651762630, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_PropertySheet.m_Vector2f.m_Array.Array.data[0].m_Value.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1883064543651762630, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_PropertySheet.m_Vector2f.m_Array.Array.data[0].m_Value.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1883064543651762630, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_PropertySheet.m_Vector2f.m_Array.Array.data[1].m_Value.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1883064543651762630, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_PropertySheet.m_Vector2f.m_Array.Array.data[1].m_Value.y
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1883064543651762630, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_PropertySheet.m_Vector2f.m_Array.Array.data[2].m_Value.x
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1883064543651762630, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_PropertySheet.m_Vector2f.m_Array.Array.data[2].m_Value.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362062362309554246, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362062362309554246, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362062362309554246, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362062362309554246, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362062362309554246, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362062362309554246, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362062362309554246, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362062362309554246, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362062362309554246, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362062362309554246, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4062553600856719021, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_Name
+      value: VisualEffect_MuzzleFlashFire
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+--- !u!4 &6843354145639655890 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2362062362309554246, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+  m_PrefabInstance: {fileID: 9097202400334944660}
+  m_PrefabAsset: {fileID: 0}
+--- !u!2083052967 &7214270018605058130 stripped
+VisualEffect:
+  m_CorrespondingSourceObject: {fileID: 1883064543651762630, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+  m_PrefabInstance: {fileID: 9097202400334944660}
+  m_PrefabAsset: {fileID: 0}

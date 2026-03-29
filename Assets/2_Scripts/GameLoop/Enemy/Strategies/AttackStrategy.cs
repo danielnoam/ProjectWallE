@@ -36,6 +36,7 @@ namespace ProjectWallE.GameLoop
         [SerializeField] private float attackCooldown = 1f;
         [SerializeField] private Transform firePoint;
         [SerializeField, SOSelector("Assets/Data")] private SOProjectileData soProjectileData;
+        [SerializeField] private VisualEffectAction shootEffect;
 
         private float _attackTimer;
 
@@ -48,11 +49,13 @@ namespace ProjectWallE.GameLoop
             }
 
             _attackTimer += deltaTime;
-            if (_attackTimer < attackCooldown) return;
-
-            var direction = (context.TargetPosition - context.Position).normalized;
-            soProjectileData?.Spawn(context.HitLayers, firePoint.position, direction, context.TargetPosition);
-            _attackTimer = 0f;
+            if (!(_attackTimer < attackCooldown))
+            {
+                var direction = (context.TargetPosition - context.Position).normalized;
+                soProjectileData?.Spawn(context.HitLayers, firePoint.position, direction, context.TargetPosition);
+                shootEffect?.Play(firePoint.position);
+                _attackTimer = 0f;
+            }
         }
 
         public override void Reset() => _attackTimer = 0f;
@@ -66,7 +69,7 @@ namespace ProjectWallE.GameLoop
         [SerializeField] private float aoeRadius = 5f;
         [SerializeField, MinMaxRange(0f, 100f)] private RangedFloat damageRange = new RangedFloat(10f, 25f);
         [SerializeField, MinMaxRange(0f, 100f)] private RangedFloat pushStrengthRange = new RangedFloat(25f, 50f);
-        [SerializeField] private DeathEffect detonateEffect;
+        [SerializeField] private EffectAction detonateEffect;
         [SerializeField, AudioLibraryID] private string armedSoundID;
 
         private bool _shouldDestroySelf;
@@ -125,7 +128,7 @@ namespace ProjectWallE.GameLoop
                 }
             }
             
-            detonateEffect?.OnDeath(context.Position);
+            detonateEffect?.Play(context.Position);
             _shouldDestroySelf = true;
         }
 

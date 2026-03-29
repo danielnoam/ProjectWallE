@@ -29,12 +29,12 @@ public class EnemyDamageRelay : MonoBehaviour, IDamageable
 
             var renderers = GetComponentsInChildren<Renderer>();
             var mats = new List<Material>();
-            foreach (var r in renderers)
+            foreach (var rend in renderers)
             {
-                foreach (var mat in r.materials)
+                if (rend is UnityEngine.VFX.VFXRenderer) continue;
+                foreach (var mat in rend.materials)
                 {
-                    if (mat.HasProperty(EmissionStrength))
-                        mats.Add(mat);
+                    if (mat.HasProperty(EmissionStrength)) mats.Add(mat);
                 }
             }
             Materials = mats.ToArray();

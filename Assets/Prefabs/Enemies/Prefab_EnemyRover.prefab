@@ -28,7 +28,8 @@ Transform:
   m_LocalPosition: {x: 0, y: -0.0048545003, z: 0.39723754}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 793401759515694583}
   m_Father: {fileID: 8355546580713915444}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6471506668328617800
@@ -150,10 +151,6 @@ MonoBehaviour:
   maxHealth: 100
   canBePushed: 1
   hitLayers: {fileID: 11400000, guid: b3e3f0ea33464b048aaf56518036cb00, type: 2}
-  effects:
-  - rid: 6000861270941368421
-  - rid: 6000861270941368431
-  - rid: 6000861270941368432
   targetFindRange: 50
   targetRandomOffset: 20
   retargetDestinationThreshold: 25
@@ -168,6 +165,24 @@ MonoBehaviour:
     rid: 6000861270941368409
   attackStrategy:
     rid: 6000861270941368420
+  normalDamageEffects:
+    punchStrength: 1
+    punchDuration: 0.15
+    punchEase: 1
+    emissionColor: {fileID: 11400000, guid: ef8eb77c9e380be48a477d6f92e3d209, type: 2}
+    hitSoundId: NormalHit
+  criticalDamageEffects:
+    punchStrength: 1
+    punchDuration: 0.15
+    punchEase: 1
+    emissionColor: {fileID: 11400000, guid: ef8eb77c9e380be48a477d6f92e3d209, type: 2}
+    hitSoundId: CriticalHit
+  deathEffect:
+    particle: {fileID: 0}
+    soundId: 
+  effects:
+  - rid: 6000861270941368431
+  - rid: 6000861270941368432
   visibilityRenderer: {fileID: 1255327730837385236}
   rigidBody: {fileID: 2448601663206975914}
   navMeshAgent: {fileID: 8909220601765990049}
@@ -206,16 +221,10 @@ MonoBehaviour:
         attackCooldown: 0.5
         firePoint: {fileID: 1150219598074133490}
         soProjectileData: {fileID: 11400000, guid: 8ffdf2f42528d434f91c7d9b565e08fd, type: 2}
-    - rid: 6000861270941368421
-      type: {class: HitEffect, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
-      data:
-        punchStrength: 1
-        punchDuration: 0.15
-        punchEase: 1
-        normalEmissionColor: {r: 3.0943396, g: 0.5546454, b: 0.5546454, a: 1}
-        criticalEmissionColor: {r: 41.647724, g: 8.068139, b: 0, a: 1}
-        normalDamagedSoundId: NormalHit
-        criticalDamageSoundId: CriticalHit
+        shootEffect:
+          visualEffects:
+          - {fileID: 3595276303300998263}
+          soundId: Shoot
     - rid: 6000861270941368431
       type: {class: HeadTrackingEffect, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
@@ -273,6 +282,73 @@ Transform:
   - {fileID: 3840917313222664409}
   m_Father: {fileID: 8574883881445243624}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &3153928791007274417
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1150219598074133490}
+    m_Modifications:
+    - target: {fileID: 2362062362309554246, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362062362309554246, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362062362309554246, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362062362309554246, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362062362309554246, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362062362309554246, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362062362309554246, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362062362309554246, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362062362309554246, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2362062362309554246, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4062553600856719021, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_Name
+      value: VisualEffect_MuzzleFlashFire
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+--- !u!4 &793401759515694583 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2362062362309554246, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+  m_PrefabInstance: {fileID: 3153928791007274417}
+  m_PrefabAsset: {fileID: 0}
+--- !u!2083052967 &3595276303300998263 stripped
+VisualEffect:
+  m_CorrespondingSourceObject: {fileID: 1883064543651762630, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+  m_PrefabInstance: {fileID: 3153928791007274417}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3658915827697420082
 PrefabInstance:
   m_ObjectHideFlags: 0

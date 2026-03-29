@@ -14,14 +14,22 @@ namespace ProjectWallE.GameLoop
         [SerializeField] private PoolableParticleSystem particle;
         [SerializeField, AudioLibraryID] private string soundId;
 
-        public void Play(Vector3 position)
+        public void Play(Vector3 position, AudioSource audioSource = null)
         {
             if (particle)
             {
                 var effect = ObjectPooler.GetObjectFromPool(particle, position);
                 effect?.Play();
             }
-            AudioLibrary.PlayAtPosition(soundId, position);
+            
+            if (audioSource)
+            {
+                AudioLibrary.PlayOnSource(soundId, audioSource);
+            }
+            else
+            {
+                AudioLibrary.PlayAtPosition(soundId, position);
+            }
         }
     }
     
