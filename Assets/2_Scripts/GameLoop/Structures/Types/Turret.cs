@@ -26,13 +26,12 @@ public abstract class Turret : Structure
     [SerializeField, SOSelector("Assets/Data")] protected SOLayerMask hitLayers;
     [SerializeField] protected Transform firePoint;
     [SerializeField] protected float angleThreshold = 10f;
-
-    [Header("Swivel")]
     [SerializeField] protected Transform horizontalSwivel;
     [SerializeField] protected Transform verticalSwivel;
     [SerializeField] protected Vector3 brokenRotation;
     [SerializeField] private float scanRotationSpeed = 35f;
     [SerializeField] private float scanWaitDuration = 1.5f;
+    [SerializeField] private VisualEffectAction shootEffect;
 
     private float _attackTimer;
     private TurretState _currentState;
@@ -105,6 +104,7 @@ public abstract class Turret : Structure
     {
         var direction = (targetPosition - firePoint.position).normalized;
         CurrentTurretLevelData.soProjectileData?.Spawn(hitLayers.Value, firePoint.position, direction, targetPosition, this);
+        shootEffect?.Play(firePoint.position);
         _attackTimer = 0f;
     }
 
@@ -173,8 +173,7 @@ public abstract class Turret : Structure
     {
         if (target == null) return;
 
-        if (_currentTarget != null)
-            _currentTarget.OnDeath -= OnTargetDeath;
+        if (_currentTarget != null) _currentTarget.OnDeath -= OnTargetDeath;
 
         _currentState = TurretState.Attacking;
         _currentTarget = target;

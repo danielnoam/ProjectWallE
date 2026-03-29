@@ -143,12 +143,17 @@ MonoBehaviour:
   demolishIcon: {fileID: 0}
   canDemolish: 0
   topPoint: {x: 0, y: 9.7, z: 0}
-  bottomPoint: {x: 0, y: -2.24, z: 0}
+  bottomPoint: {x: 0, y: -3.21, z: 0}
   gfx: {fileID: 6592863634933569427}
-  currentUpgradeLevel: 0
+  damageEffects:
+    punchStrength: 1
+    punchDuration: 0.15
+    punchEase: 1
+    emissionColor: {fileID: 11400000, guid: a96c7138587d94644ace68611d614fe6, type: 2}
+    hitSoundId: NormalHit
   levels:
   - rid: 4437626180964712523
-  obelisk: {fileID: 0}
+  obelisk: {fileID: 9120860632088681477}
   references:
     version: 2
     RefIds:
@@ -325,6 +330,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2121082584537592385, guid: 11d0b4ca14fdff8419fcf81ae14b4217, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4436561306204545868}
+    - targetCorrespondingSourceObject: {fileID: 2121082584537592385, guid: 11d0b4ca14fdff8419fcf81ae14b4217, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9120860632088681477}
     - targetCorrespondingSourceObject: {fileID: 713580337202288018, guid: 11d0b4ca14fdff8419fcf81ae14b4217, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7914819772532307108}
@@ -577,6 +585,41 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 5494988237580893208, guid: 11d0b4ca14fdff8419fcf81ae14b4217, type: 3}
+--- !u!114 &9120860632088681477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7203024036019229147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d323b82d633143bb86158863cf217c76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.Utilities.TransformEffector
+  localPosition: 1
+  positionEffect:
+    rid: 6000861358004633689
+  localRotation: 1
+  rotationEffect:
+    rid: 6000861358004633688
+  scaleEffect:
+    rid: -2
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 6000861358004633688
+      type: {class: AxisRotationEffect, ns: DNExtensions.Utilities, asm: Assembly-CSharp-firstpass}
+      data:
+        rotationSpeed: {x: 0, y: 25, z: 0}
+    - rid: 6000861358004633689
+      type: {class: HoverPositionEffect, ns: DNExtensions.Utilities, asm: Assembly-CSharp-firstpass}
+      data:
+        hoverSpeed: 1
+        hoverAmount: 0.2
+        hoverDirection: {x: 0, y: 1, z: 0}
 --- !u!1 &8610588801368258056 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 713580337202288018, guid: 11d0b4ca14fdff8419fcf81ae14b4217, type: 3}

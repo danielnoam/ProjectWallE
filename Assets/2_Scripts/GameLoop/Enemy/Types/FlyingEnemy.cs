@@ -6,24 +6,26 @@ namespace ProjectWallE.GameLoop
 {
     public class FlyingEnemy : Enemy
     {
-        [Header("Flying")]
+        [Header("Movement")]
         [SerializeField] private float stopDistance = 30f;
         [SerializeField] private float rotationSpeed = 5f;
         [SerializeField] private float moveSpeed = 17F;
-        [SerializeField] private float acceleration = 12f;
-        [SerializeField] private float deceleration = 20f;
+        [SerializeField] private float acceleration = 10f;
+        [SerializeField] private float deceleration = 15f;
 
         [Header("Height")]
-        [SerializeField] private float flightHeight = 8f;
-        [SerializeField] private float heightAdjustSpeed = 4f;
+        [SerializeField] private float flightHeight = 14f;
+        [SerializeField] private float heightAdjustSpeed = 10f;
         [SerializeField] private float heightCheckDistance = 30f;
-        [SerializeField] private LayerMask heightMask;
-        [SerializeField] private float hoverAmplitude = 0.4f;
-        [SerializeField] private float hoverFrequency = 1.2f;
+        [SerializeField] private LayerMask groundMask;
+        
+        [Header("Hover")]
+        [SerializeField] private float hoverAmplitude = 0.2f;
+        [SerializeField] private float hoverFrequency = 1f;
 
         [Header("Obstacle Avoidance")]
         [SerializeField] private float avoidanceRadius = 4f;
-        [SerializeField] private float avoidanceForce = 15f;
+        [SerializeField] private float avoidanceForce = 25f;
         [SerializeField] private LayerMask separationMask;
 
         private const float ArrivalThreshold = 3f;
@@ -62,7 +64,7 @@ namespace ProjectWallE.GameLoop
 
         protected override void OnPush(Vector3 direction, float force)
         {
-            rigidBody.AddForce(direction.normalized * force, ForceMode.Force);
+            rigidBody.AddForce(direction.normalized * force, ForceMode.Impulse);
         }
 
         protected override void OnUpdate()
@@ -105,7 +107,7 @@ namespace ProjectWallE.GameLoop
 
         private void MaintainAltitude(ref Vector3 velocity)
         {
-            if (!Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, heightCheckDistance, heightMask))
+            if (!Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, heightCheckDistance, groundMask))
             {
                 velocity.y = -heightAdjustSpeed;
                 return;
@@ -169,7 +171,7 @@ namespace ProjectWallE.GameLoop
         protected override void OnDrawGizmosSelected()
         {
             base.OnDrawGizmosSelected();
-            if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, heightCheckDistance, heightMask))
+            if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, heightCheckDistance, groundMask))
             {
                 Gizmos.color = Color.green;
                 Gizmos.DrawLine(transform.position, hit.point);

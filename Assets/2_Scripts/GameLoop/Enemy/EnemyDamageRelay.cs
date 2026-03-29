@@ -16,8 +16,6 @@ public class EnemyDamageRelay : MonoBehaviour, IDamageable
     public event Action<IDamageable> OnDeath;
     public event Action<float> OnDamaged;
     #pragma warning restore 0067
-    
-    private static readonly int EmissionStrength = Shader.PropertyToID("_Emission_Strength");
 
     private void Awake()
     {
@@ -34,7 +32,7 @@ public class EnemyDamageRelay : MonoBehaviour, IDamageable
                 if (rend is UnityEngine.VFX.VFXRenderer) continue;
                 foreach (var mat in rend.materials)
                 {
-                    if (mat.HasProperty(EmissionStrength)) mats.Add(mat);
+                    if (mat.HasProperty(DamageEffects.EmissionStrength)) mats.Add(mat);
                 }
             }
             Materials = mats.ToArray();

@@ -49,7 +49,7 @@ namespace ProjectWallE.GameLoop
 
         protected override void OnPush(Vector3 direction, float force)
         {
-            rigidBody.AddForce(direction.normalized * force, ForceMode.Force);
+            rigidBody.AddForce(direction.normalized * force, ForceMode.Impulse);
         }
     }
 }

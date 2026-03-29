@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DNExtensions.Utilities.Button;
 using PrimeTween;
+using ProjectWallE.GameLoop;
 using UnityEditor;
 using UnityEngine;
 
@@ -30,8 +31,10 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     [SerializeField] protected Vector3 topPoint = Vector3.up;
     [SerializeField] protected Vector3 bottomPoint = Vector3.down;
     [SerializeField] protected Transform gfx;
+    [SerializeField] private DamageEffects damageEffects;
     
     
+    private Material[] _materials;
     private int UpgradeCost => CanUpgrade() ? Levels[CurrentUpgradeLevel].cost : 0;
     private float FixCost => (MaxHealth - CurrentHealth) * CurrentLevelData.fixCostPerHealthPoint;
     private StructureLevelData CurrentLevelData => Levels[CurrentUpgradeLevel - 1];
@@ -66,6 +69,18 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
 
     private void Awake()
     {
+        var renderers = GetComponentsInChildren<Renderer>();
+        var mats = new List<Material>();
+        foreach (var rend in renderers)
+        {
+            if (rend is UnityEngine.VFX.VFXRenderer) continue;
+            foreach (var mat in rend.materials)
+            {
+                if (mat.HasProperty(DamageEffects.EmissionStrength)) mats.Add(mat);
+            }
+        }
+        _materials = mats.ToArray();
+        
         // initialize if in test scene and not in game
         if (!StructureManager.Instance)
         {
@@ -148,6 +163,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     {
         if (CurrentHealth <= 0 || damage <= 0) return;
 
+        damageEffects?.Play(transform.position, _materials);
         CurrentHealth -= damage;
         OnDamaged?.Invoke(damage);
         
