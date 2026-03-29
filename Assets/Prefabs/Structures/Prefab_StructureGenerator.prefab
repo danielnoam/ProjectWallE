@@ -142,6 +142,13 @@ MonoBehaviour:
     punchEase: 1
     emissionColor: {fileID: 11400000, guid: a96c7138587d94644ace68611d614fe6, type: 2}
     hitSoundId: NormalHit
+  brokenEffect:
+    duration: 0.3
+    ease: 4
+    brokenColor: {r: 0.3882353, g: 0, b: 0, a: 1}
+    materialProperty: _Base_Color
+    emissiveRenderers:
+    - {fileID: 692746655692641454}
   levels:
   - rid: 4437626180964712524
   - rid: 4437626180964712525
@@ -345,6 +352,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 113f02c3665fdd043ac10eb3c45f8654, type: 3}
+--- !u!23 &692746655692641454 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4879311556932027928, guid: 113f02c3665fdd043ac10eb3c45f8654, type: 3}
+  m_PrefabInstance: {fileID: 5344626430254912182}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5593844668426057053 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 113f02c3665fdd043ac10eb3c45f8654, type: 3}

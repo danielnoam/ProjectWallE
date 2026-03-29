@@ -33,7 +33,7 @@ namespace ProjectWallE.GameLoop
 
         protected override void SetDestination()
         {
-            if (!IsTargetValid(CurrentTarget)) return;
+            if (!IsTargetValid(CurrentTarget) || !navMeshAgent.isOnNavMesh) return;
 
             Vector3 destination = CurrentTarget.transform.position;
 
@@ -44,7 +44,7 @@ namespace ProjectWallE.GameLoop
                 destination += positionOffset;
             }
 
-            navMeshAgent?.SetDestination(destination);
+            navMeshAgent.SetDestination(destination);
         }
 
         protected override void OnPush(Vector3 direction, float force)

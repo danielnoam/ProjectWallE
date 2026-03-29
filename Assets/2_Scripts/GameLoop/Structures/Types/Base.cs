@@ -8,7 +8,8 @@ public class Base : ResourceGenerator
 {
     
     [Header("Base")]
-    [SerializeField] private TransformEffector obelisk;
+    [SerializeField] private TransformEffector[] transformEffectors;
+    [SerializeField] private Transform crystalsTransform;
     
     
     protected override void OnBuild()
@@ -19,7 +20,11 @@ public class Base : ResourceGenerator
     protected override void OnFix()
     {
         StartGenerating();
-        obelisk.enabled = true;
+        foreach (var transformEffector in transformEffectors)
+        {
+            if (transformEffector) transformEffector.enabled = true;
+            crystalsTransform?.gameObject.SetActive(true);
+        }
     }
 
     protected override void OnUpgrade()
@@ -29,7 +34,11 @@ public class Base : ResourceGenerator
 
     protected override void OnBreak()
     {
-        obelisk.enabled = false;
+        foreach (var transformEffector in transformEffectors)
+        {
+            if (transformEffector) transformEffector.enabled = false;
+            crystalsTransform?.gameObject.SetActive(false);
+        }
         StopGenerating();
         LevelManager.Instance?.FailLevel();
     }

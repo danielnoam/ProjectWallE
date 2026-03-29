@@ -75,6 +75,11 @@ namespace ProjectWallE.GameLoop
 
         private void OnValidate() => AutoGetSystem.Process(this);
 
+        private void Awake()
+        {
+            attackStrategy?.SetUp();
+        }
+
         private void OnDestroy()
         {
             EnemyManager.Instance?.UnregisterEnemy(this);

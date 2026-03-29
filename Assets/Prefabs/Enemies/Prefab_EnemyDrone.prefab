@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8574883881445243624}
   - component: {fileID: 5663768101188873445}
   - component: {fileID: 2448601663206975914}
+  - component: {fileID: 7364616695804156870}
   - component: {fileID: -4769723865369596212}
   m_Layer: 8
   m_Name: Prefab_EnemyDrone
@@ -81,6 +82,36 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &7364616695804156870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6471506668328617800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 648765c3335c44d1ba621cac3ac34e32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.FlyingAgent
+  rotationSpeed: 5
+  moveSpeed: 17
+  acceleration: 10
+  deceleration: 15
+  flightHeight: 14
+  heightAdjustSpeed: 10
+  heightCheckDistance: 30
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 1032
+  hoverAmplitude: 0.2
+  hoverFrequency: 1
+  avoidanceRadius: 4
+  avoidanceForce: 25
+  separationMask:
+    serializedVersion: 2
+    m_Bits: 1344
+  rigidBody: {fileID: 2448601663206975914}
 --- !u!114 &-4769723865369596212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,23 +159,7 @@ MonoBehaviour:
   visibilityRenderer: {fileID: 5462120949173186914}
   rigidBody: {fileID: 2448601663206975914}
   stopDistance: 30
-  rotationSpeed: 5
-  moveSpeed: 17
-  acceleration: 10
-  deceleration: 15
-  flightHeight: 14
-  heightAdjustSpeed: 10
-  heightCheckDistance: 30
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 1032
-  hoverAmplitude: 0.2
-  hoverFrequency: 1
-  avoidanceRadius: 4
-  avoidanceForce: 25
-  separationMask:
-    serializedVersion: 2
-    m_Bits: 1792
+  flyingAgent: {fileID: 7364616695804156870}
   references:
     version: 2
     RefIds:

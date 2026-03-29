@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using DNExtensions.Systems.AudioLibrary;
 using DNExtensions.Systems.ObjectPooling;
 using DNExtensions.Systems.Scriptables;
@@ -134,6 +135,103 @@ namespace ProjectWallE.GameLoop
         public void PlayHitSound(Vector3 position)
         {
             AudioLibrary.PlayAtPosition(hitSoundId, position);
+        }
+    }
+
+    [Serializable]
+    public class ColorPunchEffect
+    {
+        [SerializeField] private float punchDuration = 0.15f;
+        [SerializeField] private Ease punchEase = Ease.Linear;
+        [SerializeField, ColorUsage(true,true)] private Color punchColor = Color.white;
+        
+        private Color _baseColor =  Color.white;
+        public static readonly int ColorID = Shader.PropertyToID("_Color");
+
+
+        public void Play(Material material)
+        {
+            if (!material) return;
+
+            if (_baseColor == Color.white) _baseColor = material.GetColor(ColorID);
+            
+            var seq = Sequence.Create();
+            seq.Group(Tween.MaterialProperty(material, ColorID, punchColor, punchDuration * 0.5f, punchEase));
+            seq.Chain(Tween.MaterialProperty(material, ColorID, _baseColor, punchDuration * 0.5f, punchEase));
+        }
+    }
+    
+    [Serializable]
+    public class ColorSetEffect
+    {
+        [SerializeField] private float duration = 0.15f;
+        [SerializeField] private Ease ease = Ease.Linear;
+        [SerializeField, ColorUsage(true,true)] private Color color = Color.white;
+        
+        public static readonly int ColorID = Shader.PropertyToID("_Color");
+
+
+        public void Play(Material material)
+        {
+            if (!material) return;
+            
+            var seq = Sequence.Create();
+            seq.Group(Tween.MaterialProperty(material,ColorID, color, duration, ease));
+        }
+    }
+    
+    [Serializable]
+    public class StructureBreakEffect
+    {
+        [SerializeField] private float duration = 0.3f;
+        [SerializeField] private Ease ease = Ease.InOutSine;
+        [SerializeField, ColorUsage(true, true)] private Color brokenColor = Color.red;
+        [SerializeField] private string materialProperty = "_Emission_Color";
+        [SerializeField] private Renderer[] emissiveRenderers;
+        [SerializeField, AudioLibraryID] private string brokenSoundId; 
+
+        private int _propertyId;
+        private Material[] _materials;
+        private Color[] _baseColors;
+
+        public void Initialize()
+        {
+            if (emissiveRenderers == null || emissiveRenderers.Length == 0) return;
+
+            _propertyId = Shader.PropertyToID(materialProperty);
+            
+            var mats = new List<Material>();
+            foreach (var rend in emissiveRenderers)
+            {
+                if (rend) mats.AddRange(rend.materials);
+            }
+
+            _materials = mats.ToArray();
+            _baseColors = new Color[_materials.Length];
+            for (int i = 0; i < _materials.Length; i++)
+            {
+                _baseColors[i] = _materials[i].GetColor(_propertyId);
+            }
+        }
+
+        public void SetBroken(Vector3 position)
+        {
+            if (_materials == null) return;
+            foreach (var mat in _materials)
+            {
+                Tween.MaterialProperty(mat, _propertyId, brokenColor, duration, ease);
+            }
+            
+            AudioLibrary.PlayAtPosition(brokenSoundId, position);
+        }
+
+        public void SetNormal()
+        {
+            if (_materials == null) return;
+            for (int i = 0; i < _materials.Length; i++)
+            {
+                Tween.MaterialProperty(_materials[i], _propertyId, _baseColors[i], duration, ease);
+            }
         }
     }
 }

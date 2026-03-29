@@ -151,9 +151,21 @@ MonoBehaviour:
     punchEase: 1
     emissionColor: {fileID: 11400000, guid: a96c7138587d94644ace68611d614fe6, type: 2}
     hitSoundId: NormalHit
+  brokenEffect:
+    duration: 0.3
+    ease: 4
+    brokenColor: {r: 0.3882353, g: 0, b: 0, a: 1}
+    materialProperty: _Base_Color
+    emissiveRenderers:
+    - {fileID: 3132724331002020593}
+    - {fileID: 53038199937898807}
+    brokenSoundId: 
   levels:
   - rid: 4437626180964712523
-  obelisk: {fileID: 9120860632088681477}
+  transformEffectors:
+  - {fileID: 9120860632088681477}
+  - {fileID: 7914819772532307108}
+  crystalsTransform: {fileID: 6421189787955750266}
   references:
     version: 2
     RefIds:
@@ -337,6 +349,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 7914819772532307108}
   m_SourcePrefab: {fileID: 100100000, guid: 11d0b4ca14fdff8419fcf81ae14b4217, type: 3}
+--- !u!23 &53038199937898807 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 9089878800379198125, guid: 11d0b4ca14fdff8419fcf81ae14b4217, type: 3}
+  m_PrefabInstance: {fileID: 9122552790208979866}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1758213716649870726 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -1801510895125977572, guid: 11d0b4ca14fdff8419fcf81ae14b4217, type: 3}
@@ -377,6 +394,11 @@ MonoBehaviour:
       type: {class: AxisRotationEffect, ns: DNExtensions.Utilities, asm: Assembly-CSharp-firstpass}
       data:
         rotationSpeed: {x: 0, y: 25, z: 0}
+--- !u!23 &3132724331002020593 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6188083617034330475, guid: 11d0b4ca14fdff8419fcf81ae14b4217, type: 3}
+  m_PrefabInstance: {fileID: 9122552790208979866}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &3984609102540172805 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -3902934552970637921, guid: 11d0b4ca14fdff8419fcf81ae14b4217, type: 3}
@@ -518,6 +540,11 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 6556555065620201767, guid: 11d0b4ca14fdff8419fcf81ae14b4217, type: 3}
+--- !u!4 &6421189787955750266 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -6375558328594970912, guid: 11d0b4ca14fdff8419fcf81ae14b4217, type: 3}
+  m_PrefabInstance: {fileID: 9122552790208979866}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6792943370869873449 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2367964783500376243, guid: 11d0b4ca14fdff8419fcf81ae14b4217, type: 3}

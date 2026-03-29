@@ -151,6 +151,14 @@ MonoBehaviour:
     punchEase: 1
     emissionColor: {fileID: 11400000, guid: a96c7138587d94644ace68611d614fe6, type: 2}
     hitSoundId: NormalHit
+  brokenEffect:
+    duration: 0.3
+    ease: 4
+    brokenColor: {r: 0.3882353, g: 0, b: 0, a: 1}
+    materialProperty: _Base_Color
+    emissiveRenderers:
+    - {fileID: 9097640428187871019}
+    - {fileID: 9037642151175868296}
   levels:
   - rid: 4437626158574207052
   hitLayers: {fileID: 11400000, guid: 2d607d7566d764844b32be4199186943, type: 2}
@@ -456,5 +464,15 @@ Transform:
 --- !u!4 &7952819274115774172 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
+  m_PrefabInstance: {fileID: 7625913046391689527}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &9037642151175868296 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1493092965241773759, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
+  m_PrefabInstance: {fileID: 7625913046391689527}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &9097640428187871019 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7523861004045814244, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
   m_PrefabInstance: {fileID: 7625913046391689527}
   m_PrefabAsset: {fileID: 0}

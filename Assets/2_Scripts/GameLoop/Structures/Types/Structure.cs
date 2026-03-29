@@ -32,6 +32,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     [SerializeField] protected Vector3 bottomPoint = Vector3.down;
     [SerializeField] protected Transform gfx;
     [SerializeField] private DamageEffects damageEffects;
+    [SerializeField] private StructureBreakEffect brokenEffect;
     
     
     private Material[] _materials;
@@ -81,6 +82,8 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
         }
         _materials = mats.ToArray();
         
+        brokenEffect?.Initialize();
+        
         // initialize if in test scene and not in game
         if (!StructureManager.Instance)
         {
@@ -117,6 +120,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     private void Break()
     {
         CurrentHealth = 0f;
+        brokenEffect?.SetBroken(transform.position);
         StructureManager.Instance?.UnregisterStructure(this);
         OnDeath?.Invoke(this);
         OnBreak();
@@ -135,8 +139,9 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     [Button(ButtonPlayMode.OnlyWhenPlaying)]
     private void Fix()
     {
-        if (!ResourceManager.Instance.TrySpendResources((int)FixCost)) return;
+        if (ResourceManager.Instance && !ResourceManager.Instance.TrySpendResources((int)FixCost)) return;
 
+        if (CurrentHealth <= 0) brokenEffect?.SetNormal();
         CurrentHealth = MaxHealth;
         OnFix();
     }
@@ -146,12 +151,13 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     {
         if (!CanUpgrade())
         {
-            Debug.Log("Can't upgrade");
+            Debug.Log("At max upgrade level");
             return;
         }
 
-        if (!ResourceManager.Instance.TrySpendResources(UpgradeCost)) return;
+        if (ResourceManager.Instance && !ResourceManager.Instance.TrySpendResources(UpgradeCost)) return;
 
+        if (CurrentHealth <= 0) brokenEffect?.SetNormal();
         CurrentUpgradeLevel++;
         CurrentHealth = CurrentLevelData.maxHealth;
         PlayUpgradeEffect();

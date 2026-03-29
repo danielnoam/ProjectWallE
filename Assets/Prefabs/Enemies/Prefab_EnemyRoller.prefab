@@ -167,7 +167,7 @@ MonoBehaviour:
       type: {class: BodyAiming, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         rotationSpeed: 180
-        alignmentThreshold: 33.1
+        alignmentThreshold: 33
     - rid: 6000861270941368432
       type: {class: WheelEffect, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
@@ -185,7 +185,7 @@ MonoBehaviour:
       type: {class: SuicideAttack, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         attackRange: 4
-        armedDuration: 1
+        armedDuration: 2
         aoeRadius: 10
         damageRange:
           minValue: 10
@@ -196,7 +196,14 @@ MonoBehaviour:
         detonateEffect:
           particle: {fileID: 8195002406593029198, guid: a62798f284250ba4bb103e5058045684, type: 3}
           soundId: ProjectileCollision
-        armedSoundID: Armed
+        armedPulseEffect:
+          punchDuration: 0.15
+          punchEase: 1
+          punchColor: {r: 1, g: 1, b: 1, a: 1}
+        armedSoundId: Armed
+        pulseIntervalStart: 0.5
+        pulseIntervalEnd: 0.03
+        screenRenderer: {fileID: 7218650407366163535}
 --- !u!1 &9070794248794423676
 GameObject:
   m_ObjectHideFlags: 0
@@ -451,6 +458,11 @@ MonoBehaviour:
 --- !u!4 &6789345302792274751 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -3823778088782923069, guid: 6930883bdc246d0468845291cef00251, type: 3}
+  m_PrefabInstance: {fileID: 1501861976589826556}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &7218650407366163535 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -1082443023603432013, guid: 6930883bdc246d0468845291cef00251, type: 3}
   m_PrefabInstance: {fileID: 1501861976589826556}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &8117930429298228241 stripped

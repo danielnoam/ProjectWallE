@@ -24,7 +24,8 @@ namespace ProjectWallE.GameLoop
         public float AttackRange => attackRange;
         public virtual bool ShouldDestroySelf => false;
         public virtual bool RequiresDirectApproach => false;
-
+        public virtual void SetUp() { }
+        
         public abstract void Tick(bool isAligned, float distanceToTarget, AttackContext context, float deltaTime);
         public abstract void Reset();
     }
@@ -70,34 +71,61 @@ namespace ProjectWallE.GameLoop
         [SerializeField, MinMaxRange(0f, 100f)] private RangedFloat damageRange = new RangedFloat(10f, 25f);
         [SerializeField, MinMaxRange(0f, 100f)] private RangedFloat pushStrengthRange = new RangedFloat(25f, 50f);
         [SerializeField] private EffectAction detonateEffect;
-        [SerializeField, AudioLibraryID] private string armedSoundID;
-
+        [SerializeField] private ColorPunchEffect armedPulseEffect;
+        [SerializeField, AudioLibraryID] private string armedSoundId;
+        [SerializeField] private float pulseIntervalStart = 0.5f;
+        [SerializeField] private float pulseIntervalEnd = 0.08f;
+        [SerializeField] private Renderer screenRenderer;
+        
+        private Material _material;
         private bool _shouldDestroySelf;
         private bool _isArmed;
         private float _armedTimer;
+        private float _pulseTimer;
         private readonly HashSet<IDamageable> _alreadyHit = new();
 
         public override bool ShouldDestroySelf => _shouldDestroySelf;
         public override bool RequiresDirectApproach => true;
 
+        public override void SetUp()
+        {
+            if (!screenRenderer) return;
+            _material = screenRenderer.material;
+        }
+
         public override void Tick(bool isAligned, float distanceToTarget, AttackContext context, float deltaTime)
         {
             if (!(distanceToTarget > AttackRange) && !_isArmed)
             {
-                AudioLibrary.PlayAtPosition(armedSoundID, context.Position);
                 _isArmed = true;
                 _armedTimer = armedDuration;
+                PlayArmedEffect(context.Position);
             }
             
             if (_isArmed)
             {
                 _armedTimer -= deltaTime;
+                _pulseTimer -= deltaTime;
+
+                if (_pulseTimer <= 0f)
+                {
+                    PlayArmedEffect(context.Position);
+                }
 
                 if (_armedTimer <= 0f)
                 {
                     Detonate(context);
                 }
             }
+        }
+
+        private void PlayArmedEffect(Vector3 position)
+        {
+            float t = 1f - (_armedTimer / armedDuration);
+            t = t * t * t;
+            _pulseTimer = Mathf.Lerp(pulseIntervalStart, pulseIntervalEnd, t);
+            armedPulseEffect?.Play(_material);
+            AudioLibrary.PlayAtPosition(armedSoundId, position);
         }
 
         private void Detonate(AttackContext context)
