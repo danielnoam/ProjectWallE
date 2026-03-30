@@ -70,7 +70,7 @@ namespace ProjectWallE.GameLoop
         [SerializeField] private float aoeRadius = 5f;
         [SerializeField, MinMaxRange(0f, 100f)] private RangedFloat damageRange = new RangedFloat(10f, 25f);
         [SerializeField, MinMaxRange(0f, 100f)] private RangedFloat pushStrengthRange = new RangedFloat(25f, 50f);
-        [SerializeField] private EffectAction detonateEffect;
+        [SerializeField] private ParticleEffectAction detonateEffect;
         [SerializeField] private ColorPunchEffect armedPulseEffect;
         [SerializeField, AudioLibraryID] private string armedSoundId;
         [SerializeField] private float pulseIntervalStart = 0.5f;

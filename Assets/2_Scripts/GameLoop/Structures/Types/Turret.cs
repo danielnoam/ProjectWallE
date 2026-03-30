@@ -40,8 +40,11 @@ public abstract class Turret : Structure
     private Sequence _attackSequence;
 
     protected TurretLevelData CurrentTurretLevelData => (TurretLevelData)Levels[CurrentUpgradeLevel - 1];
-    protected override StructureLevelData[] Levels => levels;
 
+    public override StructureLevelData[] Levels => levels;
+
+    
+    
     protected abstract bool CanFire(Vector3 targetPosition);
 
     protected override void OnDestroy()

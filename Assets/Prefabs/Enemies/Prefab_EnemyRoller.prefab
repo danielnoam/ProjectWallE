@@ -96,7 +96,7 @@ NavMeshAgent:
   m_Acceleration: 20
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 1
+  m_StoppingDistance: 2
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -143,7 +143,9 @@ MonoBehaviour:
     emissionColor: {fileID: 11400000, guid: ef8eb77c9e380be48a477d6f92e3d209, type: 2}
     hitSoundId: CriticalHit
   deathEffect:
+    effectType: 1
     particle: {fileID: 0}
+    triggerParticle: {fileID: 0}
     soundId: 
   effects:
   - rid: 6000861270941368432
@@ -194,7 +196,9 @@ MonoBehaviour:
           minValue: 25
           maxValue: 50
         detonateEffect:
+          effectType: 1
           particle: {fileID: 8195002406593029198, guid: a62798f284250ba4bb103e5058045684, type: 3}
+          triggerParticle: {fileID: 0}
           soundId: ProjectileCollision
         armedPulseEffect:
           punchDuration: 0.15

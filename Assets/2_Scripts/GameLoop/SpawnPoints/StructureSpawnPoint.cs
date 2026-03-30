@@ -16,7 +16,7 @@ public class StructureSpawnPoint : BaseSpawnPoint
 
         if (structurePrefab && spawnAtStart)
         {
-            gameObject.name = $"StructureSpawnPointAtStart({structurePrefab.Label})";
+            gameObject.name = $"StructureSpawnPointAtStart({structurePrefab.StructureUIData.Label})";
         }
         else
         {
@@ -63,7 +63,7 @@ public class StructureSpawnPoint : BaseSpawnPoint
 
         UnityEditor.Handles.Label(
             transform.position + Vector3.up * (2 + 0.5f),
-            structurePrefab && spawnAtStart ? $"Start Structure Spawn Point: {structurePrefab.Label}" :  $"Structure Spawn Point",
+            structurePrefab && spawnAtStart ? $"Start Structure Spawn Point: {structurePrefab.StructureUIData.Label}" :  $"Structure Spawn Point",
             new GUIStyle()
             {
                 normal = new GUIStyleState() { textColor = Color.cyan },

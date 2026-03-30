@@ -104,21 +104,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 386116e238224b778a9d13e8ff7010fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Ramp
-  label: Ramp
-  icon: {fileID: 0}
-  upgradeIcon: {fileID: 21300000, guid: 2a7332bdc5467fe4e84ca21fdc48ecaa, type: 3}
-  fixIcon: {fileID: 21300000, guid: c523318af4a1ca943932d905d83eed0b, type: 3}
-  demolishIcon: {fileID: 21300000, guid: 697bc25bd45233c47bf2e585f87d35b2, type: 3}
   canDemolish: 1
   topPoint: {x: 0, y: 4.41, z: 0}
   bottomPoint: {x: 0, y: -2.16, z: 0}
-  gfx: {fileID: 2170286402575911496}
+  structureUIData:
+    label: Ramp
+    icon: {fileID: 0}
+    upgradeIcon: {fileID: 21300000, guid: 2a7332bdc5467fe4e84ca21fdc48ecaa, type: 3}
+    fixIcon: {fileID: 21300000, guid: c523318af4a1ca943932d905d83eed0b, type: 3}
+    demolishIcon: {fileID: 21300000, guid: 697bc25bd45233c47bf2e585f87d35b2, type: 3}
   damageEffects:
     punchStrength: 1
     punchDuration: 0.15
     punchEase: 1
     emissionColor: {fileID: 11400000, guid: a96c7138587d94644ace68611d614fe6, type: 2}
     hitSoundId: NormalHit
+  brokenEffect:
+    duration: 0.3
+    ease: 4
+    brokenColor: {r: 1, g: 0, b: 0, a: 1}
+    materialProperty: _Emission_Color
+    emissiveRenderers: []
+    brokenSoundId: 
+  upgradeEffect:
+    duration: 0.2
+    punchStrength: 0.9
+    ease: 27
+    gfx: {fileID: 2170286402575911496}
+    upgradeSoundId: 
+  buildEffect:
+    duration: 0.3
+    ease: 27
+    gfx: {fileID: 2170286402575911496}
+    buildSoundId: 
+  gfx: {fileID: 2170286402575911496}
   levels:
   - rid: 4437626158574207055
   references:

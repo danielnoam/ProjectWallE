@@ -34,12 +34,12 @@ public class StructureBuildMenu : RadialMenu<Structure>
     private void ConfigureElement(RadialMenuElement element, Structure structure)
     {
         bool canAfford = ResourceManager.Instance.CanAfford(structure.BuildCost);
-        element.elementInfo = $"{structure.Label}\nCost: {structure.BuildCost}";
+        element.elementInfo = $"{structure.StructureUIData.Label}\nCost: {structure.BuildCost}";
         element.SetDisabled(!canAfford);
 
-        if (structure.Icon)
+        if (structure.StructureUIData.Icon)
         {
-            element.iconImage.sprite = structure.Icon;
+            element.iconImage.sprite = structure.StructureUIData.Icon;
         }
         else
         {

@@ -136,21 +136,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c9a5b9f2b3348dd85aee4c33acc2514, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunTurret
-  label: Gun Turret
-  icon: {fileID: 0}
-  upgradeIcon: {fileID: 21300000, guid: 2a7332bdc5467fe4e84ca21fdc48ecaa, type: 3}
-  fixIcon: {fileID: 21300000, guid: c523318af4a1ca943932d905d83eed0b, type: 3}
-  demolishIcon: {fileID: 0}
   canDemolish: 1
   topPoint: {x: 0, y: 2.19, z: 0}
   bottomPoint: {x: 0, y: -0.66, z: 0}
-  gfx: {fileID: 6756884417540177175}
+  structureUIData:
+    label: Gun Turret
+    icon: {fileID: 0}
+    upgradeIcon: {fileID: 21300000, guid: 2a7332bdc5467fe4e84ca21fdc48ecaa, type: 3}
+    fixIcon: {fileID: 21300000, guid: c523318af4a1ca943932d905d83eed0b, type: 3}
+    demolishIcon: {fileID: 21300000, guid: 697bc25bd45233c47bf2e585f87d35b2, type: 3}
   damageEffects:
     punchStrength: 1
     punchDuration: 0.15
     punchEase: 1
     emissionColor: {fileID: 11400000, guid: a96c7138587d94644ace68611d614fe6, type: 2}
     hitSoundId: NormalHit
+  buildEffect:
+    duration: 0.3
+    ease: 27
+    gfx: {fileID: 6756884417540177175}
+    buildSoundId: 
+    playAnimation:
+      isSet: 1
+      hideValueIfSet: 0
+      value:
+        simpleAnimator: {fileID: 3131128396841918410}
+        clipName: TurretGunBuild
+        clipIndex: 0
+        assigned: 1
+  upgradeEffect:
+    duration: 0.2
+    punchStrength: 0.9
+    ease: 27
+    gfx: {fileID: 6756884417540177175}
+    upgradeSoundId: 
   brokenEffect:
     duration: 0.3
     ease: 4
@@ -159,6 +178,7 @@ MonoBehaviour:
     emissiveRenderers:
     - {fileID: 9097640428187871019}
     - {fileID: 9037642151175868296}
+    brokenSoundId: 
   levels:
   - rid: 4437626158574207052
   hitLayers: {fileID: 11400000, guid: 2d607d7566d764844b32be4199186943, type: 2}
@@ -196,6 +216,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6756884417540177175}
   - component: {fileID: 7629224576366583026}
+  - component: {fileID: 2316747767634319888}
+  - component: {fileID: 3131128396841918410}
   m_Layer: 6
   m_Name: Gfx
   m_TagString: Untagged
@@ -240,6 +262,46 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2, y: 4, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!95 &2316747767634319888
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8525994617640084064}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9e822b53aa61a0e4eb40ae213f5478d4, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3131128396841918410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8525994617640084064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 565d1cf57cd14de7abd62398f84ce08a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.Utilities.SimpleAnimator
+  playOnStart:
+    isSet: 0
+    hideValueIfSet: 0
+    value: 0
+  clips:
+  - {fileID: 7400000, guid: eea43ad899546a744975ccecee46278b, type: 2}
 --- !u!1001 &1860159774656600581
 PrefabInstance:
   m_ObjectHideFlags: 0

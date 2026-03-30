@@ -3,7 +3,6 @@ using UnityEngine;
 
 
 
-
 public class Base : ResourceGenerator
 {
     
@@ -31,7 +30,6 @@ public class Base : ResourceGenerator
     {
 
     }
-
     protected override void OnBreak()
     {
         foreach (var transformEffector in transformEffectors)

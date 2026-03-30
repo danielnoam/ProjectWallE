@@ -44,7 +44,7 @@ public class SpawnStructureMarkerEditor : MarkerEditor
         var structure = ((SpawnStructureMarker)marker).structureToSpawn;
         return new MarkerDrawOptions
         {
-            tooltip = $"Spawn {(!structure ? "Structure" : structure.Label)}",
+            tooltip = $"Spawn {(!structure ? "Structure" : structure.StructureUIData.Label)}",
         };
     }
 }

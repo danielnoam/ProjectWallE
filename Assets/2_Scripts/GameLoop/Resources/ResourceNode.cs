@@ -10,7 +10,7 @@ public class ResourceNode : MonoBehaviour, IDamageable
     [SerializeField] private float maxHealth = 150;
     [SerializeField] private int resourceAmount = 100;
     [SerializeField] private DamageEffects damageEffects;
-    [SerializeField] private EffectAction destroyEffect;
+    [SerializeField] private ParticleEffectAction destroyEffect;
     [SerializeField, AutoGetChildren, HideInInspector] private Renderer rend;
     
     private float _currentHealth;

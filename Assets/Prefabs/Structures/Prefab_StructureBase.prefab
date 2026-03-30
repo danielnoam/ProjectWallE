@@ -136,15 +136,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ead681678a5b4db8af32e1bcfc0eb1b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Base
-  label: Base
-  icon: {fileID: 0}
-  upgradeIcon: {fileID: 21300000, guid: 2a7332bdc5467fe4e84ca21fdc48ecaa, type: 3}
-  fixIcon: {fileID: 21300000, guid: c523318af4a1ca943932d905d83eed0b, type: 3}
-  demolishIcon: {fileID: 0}
   canDemolish: 0
   topPoint: {x: 0, y: 9.7, z: 0}
   bottomPoint: {x: 0, y: -3.21, z: 0}
-  gfx: {fileID: 6592863634933569427}
+  structureUIData:
+    label: Base
+    icon: {fileID: 0}
+    upgradeIcon: {fileID: 21300000, guid: 2a7332bdc5467fe4e84ca21fdc48ecaa, type: 3}
+    fixIcon: {fileID: 21300000, guid: c523318af4a1ca943932d905d83eed0b, type: 3}
+    demolishIcon: {fileID: 21300000, guid: 697bc25bd45233c47bf2e585f87d35b2, type: 3}
   damageEffects:
     punchStrength: 1
     punchDuration: 0.15
@@ -160,6 +160,18 @@ MonoBehaviour:
     - {fileID: 3132724331002020593}
     - {fileID: 53038199937898807}
     brokenSoundId: 
+  upgradeEffect:
+    duration: 0.2
+    punchStrength: 0.9
+    ease: 27
+    gfx: {fileID: 6592863634933569427}
+    upgradeSoundId: 
+  buildEffect:
+    duration: 0.3
+    ease: 27
+    gfx: {fileID: 6592863634933569427}
+    buildSoundId: 
+  gfx: {fileID: 6592863634933569427}
   levels:
   - rid: 4437626180964712523
   transformEffectors:

@@ -53,7 +53,7 @@ namespace ProjectWallE.GameLoop
         [Header("Effects")]
         [SerializeField] private DamageEffects normalDamageEffects;
         [SerializeField] private DamageEffects criticalDamageEffects;
-        [SerializeField] private EffectAction deathEffect;
+        [SerializeField] private ParticleEffectAction deathEffect;
         [SerializeReference, SerializableSelector] private EnemyEffect[] effects;
         [SerializeField] private Renderer visibilityRenderer;
         

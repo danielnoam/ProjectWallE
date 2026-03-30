@@ -3,25 +3,48 @@ using System.Collections.Generic;
 using DNExtensions.Systems.AudioLibrary;
 using DNExtensions.Systems.ObjectPooling;
 using DNExtensions.Systems.Scriptables;
+using DNExtensions.Utilities;
+using DNExtensions.Utilities.CustomFields;
 using PrimeTween;
 using UnityEngine;
 using UnityEngine.VFX;
 
 namespace ProjectWallE.GameLoop
 {
-    [Serializable]
-    public class EffectAction
+    public enum EffectType
     {
-        [SerializeField] private PoolableParticleSystem particle;
+        Trigger,
+        Spawn
+    }
+    
+    [Serializable]
+    public class ParticleEffectAction
+    {
+        [SerializeField] private EffectType effectType = EffectType.Spawn;
+        [SerializeField, ShowIf(nameof(effectType), EffectType.Spawn)] private PoolableParticleSystem particle;
+        [SerializeField, ShowIf(nameof(effectType), EffectType.Trigger)] private ParticleSystem triggerParticle;
         [SerializeField, AudioLibraryID] private string soundId;
 
         public void Play(Vector3 position, AudioSource audioSource = null)
         {
-            if (particle)
+            switch (effectType)
             {
-                var effect = ObjectPooler.GetObjectFromPool(particle, position);
-                effect?.Play();
+                case EffectType.Trigger:
+                    triggerParticle?.Play();
+                    
+                    break;
+                case EffectType.Spawn:
+                    
+                    if (particle)
+                    {
+                        var effect = ObjectPooler.GetObjectFromPool(particle, position);
+                        effect?.Play();
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
+            
             
             if (audioSource)
             {
@@ -231,6 +254,47 @@ namespace ProjectWallE.GameLoop
             for (int i = 0; i < _materials.Length; i++)
             {
                 Tween.MaterialProperty(_materials[i], _propertyId, _baseColors[i], duration, ease);
+            }
+        }
+    }
+    
+    [Serializable]
+    public class StructureUpgradeEffect
+    {
+        [SerializeField] private float duration = 0.2f;
+        [SerializeField] private float punchStrength = 0.9f;
+        [SerializeField] private Ease ease = Ease.OutBack;
+        [SerializeField] private Transform gfx;
+        [SerializeField, AudioLibraryID] private string upgradeSoundId; 
+
+        public void Play()
+        {
+            if (!gfx) return;
+            
+            Sequence.Create().Group(Tween.PunchScale(gfx, Vector3.one * punchStrength, duration,1,true, ease));
+            AudioLibrary.PlayAtPosition(upgradeSoundId, gfx);
+        }
+    }
+    
+    [Serializable]
+    public class StructureBuildEffect
+    {
+        [SerializeField] private float duration = 0.3f;
+        [SerializeField] private Ease ease = Ease.OutBack;
+        [SerializeField] private Transform gfx;
+        [SerializeField, AudioLibraryID] private string buildSoundId; 
+        [SerializeField] private OptionalField<SimpleAnimatorClipField> playAnimation;
+
+        public void Play()
+        {
+            if (!gfx) return;
+            
+            Sequence.Create().Group(Tween.Scale(gfx, Vector3.zero, Vector3.one, duration, ease));
+            AudioLibrary.PlayAtPosition(buildSoundId, gfx);
+
+            if (playAnimation.IsSetAndHasValue())
+            {
+                playAnimation.Value.Play();
             }
         }
     }

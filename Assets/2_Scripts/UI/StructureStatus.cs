@@ -1,4 +1,3 @@
-using System;
 using DNExtensions.Systems.Shapes;
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.AutoGet;
@@ -49,18 +48,12 @@ namespace ProjectWallE.UI
         
         private void UpdateStatus()
         {
-            if (structureName) structureName.text = _structure.Label;
+            if (structureName)
+            {
+                structureName.text = _structure.Levels.Length > 1 ? $"{_structure.StructureUIData.Label} ({_structure.CurrentUpgradeLevel})" : $"{_structure.StructureUIData.Label}";
+            }
             
-            if (_structure.CurrentHealth <= 0)
-            {
-                healthBar.color = healthBar.color.SetAlpha(0.5f);
-                healthText.text = "Broken";
-            }
-            else
-            {
-                healthBar.color = healthBar.color.SetAlpha(1f);
-                healthText.text = $"{_structure.CurrentHealth:F0}/{_structure.MaxHealth}";
-            }
+            healthText.text = _structure.CurrentHealth <= 0 ? "Broken" : $"{_structure.CurrentHealth:F0}/{_structure.MaxHealth}";
             
             healthBar.fillAmount = _structure.CurrentHealth / _structure.MaxHealth;
         }

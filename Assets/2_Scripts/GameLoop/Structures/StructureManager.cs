@@ -1,12 +1,21 @@
+using System;
 using System.Collections.Generic;
-using DNExtensions;
 using DNExtensions.Utilities;
-using DNExtensions.Utilities.SerializedInterface;
 using UnityEngine;
+
+public struct StructuresData
+{
+    public int BasesCount;
+    public int TurretsCount;
+    public int GeneratorsCount;
+    public int TotalStructures => BasesCount + TurretsCount + GeneratorsCount;
+}
 
 public class StructureManager : MonoBehaviour
 {
     public static StructureManager Instance { get; private set; }
+    public static event Action<StructuresData> OnStructureCreated;
+    public static event Action<StructuresData> OnStructureDestroyed;
     
     [Header("Settings")]
     [SerializeField] private Pod podPrefab;
@@ -55,6 +64,13 @@ public class StructureManager : MonoBehaviour
                 RegisterGenerator(generator);
                 break;
         }
+        
+        OnStructureCreated?.Invoke(new StructuresData
+        {
+            BasesCount = _bases.Count,
+            TurretsCount = _turrets.Count,
+            GeneratorsCount = _generators.Count
+        });
     }
     
     public void UnregisterStructure(Structure structure)
@@ -76,6 +92,13 @@ public class StructureManager : MonoBehaviour
                     break;
             
         }
+        
+        OnStructureDestroyed?.Invoke(new StructuresData
+        {
+            BasesCount = _bases.Count,
+            TurretsCount = _turrets.Count,
+            GeneratorsCount = _generators.Count
+        });
     }
     
     private void RegisterTurret(Turret turret)

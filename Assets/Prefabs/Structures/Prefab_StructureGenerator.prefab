@@ -127,15 +127,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c72f8049da654147ba3c44168bfc0b12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Generator
-  label: Generator
-  icon: {fileID: 0}
-  upgradeIcon: {fileID: 21300000, guid: 2a7332bdc5467fe4e84ca21fdc48ecaa, type: 3}
-  fixIcon: {fileID: 21300000, guid: c523318af4a1ca943932d905d83eed0b, type: 3}
-  demolishIcon: {fileID: 0}
   canDemolish: 1
   topPoint: {x: 0, y: 2.56, z: 0}
   bottomPoint: {x: 0, y: -0.75, z: 0}
-  gfx: {fileID: 2170286402575911496}
+  structureUIData:
+    label: Generator
+    icon: {fileID: 0}
+    upgradeIcon: {fileID: 21300000, guid: 2a7332bdc5467fe4e84ca21fdc48ecaa, type: 3}
+    fixIcon: {fileID: 21300000, guid: c523318af4a1ca943932d905d83eed0b, type: 3}
+    demolishIcon: {fileID: 21300000, guid: 697bc25bd45233c47bf2e585f87d35b2, type: 3}
   damageEffects:
     punchStrength: 1
     punchDuration: 0.15
@@ -149,6 +149,19 @@ MonoBehaviour:
     materialProperty: _Base_Color
     emissiveRenderers:
     - {fileID: 692746655692641454}
+    brokenSoundId: 
+  upgradeEffect:
+    duration: 0.2
+    punchStrength: 0.9
+    ease: 27
+    gfx: {fileID: 2170286402575911496}
+    upgradeSoundId: 
+  buildEffect:
+    duration: 0.3
+    ease: 27
+    gfx: {fileID: 2170286402575911496}
+    buildSoundId: 
+  gfx: {fileID: 2170286402575911496}
   levels:
   - rid: 4437626180964712524
   - rid: 4437626180964712525

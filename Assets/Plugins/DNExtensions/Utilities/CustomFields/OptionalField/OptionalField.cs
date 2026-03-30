@@ -49,7 +49,15 @@ namespace DNExtensions.Utilities.CustomFields
             get => isSet ? value : default;
             set => this.value = value;
         }
-        
+
+        /// <summary>
+        /// Returns true if field is checked and value is not null (for reference types) or not default (for value types).
+        /// </summary>
+        /// <returns></returns>
+        public bool IsSetAndHasValue()
+        {
+            return isSet && value != null;
+        }
         
         /// <summary>
         /// Returns value when checked, provided defaultValue otherwise.

@@ -11,8 +11,12 @@ namespace ProjectWallE.UI
 {
     public class HUDManager : MonoBehaviour
     {
+        [Header("Game Status")]
+        [SerializeField] private TextMeshProUGUI currentResourcesText;
+        [SerializeField] private TextMeshProUGUI objectivesText;
+        [SerializeField] private TextMeshProUGUI structuresText;
         
-        [Header("Status")]
+        [Header("Player Status")]
         [SerializeField] private OptionalField<string> showFuelPrefix = new OptionalField<string>("Fuel: ", true);
         [SerializeField] private SDFRectangle fuelBar;
         [SerializeField] private TextMeshProUGUI fuelText;
@@ -24,10 +28,8 @@ namespace ProjectWallE.UI
         
         
         [Header("References")] 
-        [SerializeField] private TextMeshProUGUI currentResourcesText;
-        [SerializeField] private TextMeshProUGUI objectivesText;
         [SerializeField] private GameObject crosshair;
-        [SerializeField, AutoGetChildren] private RadarSystem radarSystem;
+        [SerializeField, AutoGetChildren, HideInInspector] private RadarSystem radarSystem;
         [SerializeField, AutoGetScene, HideInInspector] private PlayerManager player;
 
 
@@ -36,10 +38,17 @@ namespace ProjectWallE.UI
             AutoGetSystem.Process(this);
         }
 
+        private void Awake()
+        {
+            ResetTexts();
+        }
+
         private void OnEnable()
         {
             ResourceManager.OnResourcesChanged += UpdateResourcesDisplay;
-            LevelManager.OnLevelInitializing += OnLevelInitializing;
+            StructureManager.OnStructureCreated += UpdateStructuresText;
+            StructureManager.OnStructureDestroyed += UpdateStructuresText;
+            LevelManager.OnLevelInitializing += ResetTexts;
             LevelManager.OnLevelStarted += OnLevelStarted;
             LevelManager.OnTimeUpdated += OnTimeUpdated;
             LevelManager.OnLevelCompleted += OnLevelCompleted;
@@ -59,11 +68,13 @@ namespace ProjectWallE.UI
                 UpdateHealthBar(100, 100);
             }
         }
-        
+
         private void OnDisable()
         {
             ResourceManager.OnResourcesChanged -= UpdateResourcesDisplay;
-            LevelManager.OnLevelInitializing -= OnLevelInitializing;
+            StructureManager.OnStructureCreated -= UpdateStructuresText;
+            StructureManager.OnStructureDestroyed -= UpdateStructuresText;
+            LevelManager.OnLevelInitializing -= ResetTexts;
             LevelManager.OnLevelStarted -= OnLevelStarted;
             LevelManager.OnTimeUpdated -= OnTimeUpdated;
             LevelManager.OnLevelCompleted -= OnLevelCompleted;
@@ -79,10 +90,19 @@ namespace ProjectWallE.UI
             }
         }
         
-        private void OnLevelInitializing()
+        private void UpdateStructuresText(StructuresData data)
+        {
+            structuresText.text = $"Bases - {data.BasesCount}" +
+                                  $"\nTurrets - {data.TurretsCount}" +
+                                  $"\nGenerators - {data.GeneratorsCount}";
+        }
+        
+        
+        private void ResetTexts()
         {
             objectivesText.text = ""; 
-            currentResourcesText.color = currentResourcesText.color.SetAlpha(0f);
+            currentResourcesText.text = ""; 
+            structuresText.text = "";
         }
         
         private void OnLevelStarted()
@@ -94,13 +114,11 @@ namespace ProjectWallE.UI
         private void OnLevelFailed()
         {
             UpdateObjectiveDisplay("Fail");
-            currentResourcesText.color = currentResourcesText.color.SetAlpha(0f);
         }
 
         private void OnLevelCompleted()
         {
             UpdateObjectiveDisplay("Success");  
-            currentResourcesText.color = currentResourcesText.color.SetAlpha(0f);
         }
 
 

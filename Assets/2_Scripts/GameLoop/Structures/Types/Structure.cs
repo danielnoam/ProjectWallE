@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using DNExtensions.Utilities.Button;
-using PrimeTween;
 using ProjectWallE.GameLoop;
 using UnityEditor;
 using UnityEngine;
@@ -17,23 +16,36 @@ public class StructureLevelData
     public float fixCostPerHealthPoint = 1;
 }
 
+[Serializable]
+public struct StructureUIData
+{
+    [SerializeField] private string label;
+    [SerializeField] private Sprite icon;
+    [SerializeField] private Sprite upgradeIcon;
+    [SerializeField] private Sprite fixIcon;
+    [SerializeField] private Sprite demolishIcon;
+    
+    public string Label => label;
+    public Sprite Icon => icon;
+    public Sprite UpgradeIcon => upgradeIcon;
+    public Sprite FixIcon => fixIcon;
+    public Sprite DemolishIcon => demolishIcon;
+}
+
 [DisallowMultipleComponent]
 [SelectionBase]
 public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
 {
     [Header("Structure")]
-    [SerializeField] private string label = "Structure";
-    [SerializeField] private Sprite icon;
-    [SerializeField] private Sprite upgradeIcon;
-    [SerializeField] private Sprite fixIcon;
-    [SerializeField] private Sprite demolishIcon;
     [SerializeField] private bool canDemolish;
     [SerializeField] protected Vector3 topPoint = Vector3.up;
     [SerializeField] protected Vector3 bottomPoint = Vector3.down;
-    [SerializeField] protected Transform gfx;
+    [SerializeField] private StructureUIData structureUIData;
     [SerializeField] private DamageEffects damageEffects;
+    [SerializeField] private StructureBuildEffect buildEffect;
+    [SerializeField] private StructureUpgradeEffect upgradeEffect;
     [SerializeField] private StructureBreakEffect brokenEffect;
-    
+
     
     private Material[] _materials;
     private int UpgradeCost => CanUpgrade() ? Levels[CurrentUpgradeLevel].cost : 0;
@@ -41,12 +53,11 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     private StructureLevelData CurrentLevelData => Levels[CurrentUpgradeLevel - 1];
     
     protected string StateInfo;
-    protected abstract StructureLevelData[] Levels { get; }
-    protected int CurrentUpgradeLevel { get; private set; }
     
+    public abstract StructureLevelData[] Levels { get; }
+    public int CurrentUpgradeLevel { get; private set; }
     public float CurrentHealth { get; private set; }
-    public string Label => label;
-    public Sprite Icon => icon;
+    public StructureUIData StructureUIData => structureUIData;
     public Vector3 TopPoint => transform.position + transform.TransformVector(topPoint);
     public float MaxHealth => CurrentLevelData.maxHealth;
     public int BuildCost => Levels[0].cost;
@@ -54,10 +65,10 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     public event Action<IDamageable> OnDeath;
     public event Action<float> OnDamaged;
 
-    protected abstract void OnBuild();
-    protected abstract void OnFix();
-    protected abstract void OnUpgrade();
-    protected abstract void OnBreak();
+    protected virtual void OnBuild() {}
+    protected virtual void OnFix() {}
+    protected virtual void OnUpgrade() {}
+    protected virtual void OnBreak() {}
     
     private void OnValidate()
     {
@@ -101,18 +112,8 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
         StructureManager.Instance?.RegisterStructure(this);
         CurrentUpgradeLevel = 1;
         CurrentHealth = CurrentLevelData.maxHealth;
-        PlaySpawnEffect();
+        buildEffect?.Play();
         OnBuild();
-    }
-
-    private void PlaySpawnEffect()
-    {
-        Sequence.Create().Group(Tween.Scale(gfx, Vector3.zero, Vector3.one, 0.3f, Ease.OutBack));
-    }
-    
-    private void PlayUpgradeEffect()
-    {
-        Sequence.Create().Group(Tween.PunchScale(gfx, Vector3.one * 0.9f, 0.2f,1,true, Ease.OutBack));
     }
     
 
@@ -160,7 +161,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
         if (CurrentHealth <= 0) brokenEffect?.SetNormal();
         CurrentUpgradeLevel++;
         CurrentHealth = CurrentLevelData.maxHealth;
-        PlayUpgradeEffect();
+        upgradeEffect?.Play();
         OnUpgrade();
     }
 
@@ -210,22 +211,22 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
         {
             new StructureAction
             {
-                Label = $"{label}\n{upgradeLabel}",
-                Icon = upgradeIcon,
+                Label = $"{structureUIData.Label}\n{upgradeLabel}",
+                Icon = structureUIData.UpgradeIcon,
                 IsAvailable = canUpgrade && ResourceManager.Instance.CanAfford(UpgradeCost),
                 OnSelected = Upgrade
             },
             new StructureAction
             {
-                Label = $"{label}\n{fixLabel}",
-                Icon = fixIcon,
+                Label = $"{structureUIData.Label}\n{fixLabel}",
+                Icon = structureUIData.FixIcon,
                 IsAvailable = canFix && ResourceManager.Instance.CanAfford((int)FixCost),
                 OnSelected = Fix
             },
             new StructureAction
             {
-            Label = $"{label}\n{demolishLabel}",
-            Icon = demolishIcon,
+            Label = $"{structureUIData.Label}\n{demolishLabel}",
+            Icon = structureUIData.DemolishIcon,
             IsAvailable = canDemolish,
             OnSelected = Demolish
         }

@@ -5,12 +5,9 @@ using UnityEngine;
 
 public class Generator : ResourceGenerator
 {
-
     [Header("Animation")]
     [SerializeField] private AnimatorStateField pumpingState;
     [SerializeField] private AnimatorStateField idleState;
-    
-
     
     protected override void OnBuild()
     {
@@ -22,11 +19,6 @@ public class Generator : ResourceGenerator
     {
         StartPumpingAnimation();
         StartGenerating();
-    }
-
-    protected override void OnUpgrade()
-    {
-
     }
 
     protected override void OnBreak()

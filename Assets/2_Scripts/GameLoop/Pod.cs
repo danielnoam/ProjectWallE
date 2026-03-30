@@ -18,8 +18,8 @@ public class Pod : MonoBehaviour
     [SerializeField] private LayerMask collisionMask;
     
     [Header("Push")]
-    [SerializeField] private float pushRange = 50f;
-    [SerializeField] private float pushPower = 50f;
+    [SerializeField] private float pushRange = 15f;
+    [SerializeField] private float pushPower = 15f;
     
     [Header("Effects")]
     [SerializeField] private PoolableParticleSystem collisionParticle;
