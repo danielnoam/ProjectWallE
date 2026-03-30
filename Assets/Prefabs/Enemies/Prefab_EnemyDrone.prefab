@@ -134,7 +134,8 @@ MonoBehaviour:
   - rid: 6000861155382526038
   - rid: 6000861155382526045
   - rid: 6000861155382526047
-  attackerResponse: 1
+  retaliationStrategy:
+    rid: 6000861380839735508
   aimingStrategy:
     rid: 6000861270941368423
   attackStrategy:
@@ -152,7 +153,9 @@ MonoBehaviour:
     emissionColor: {fileID: 11400000, guid: ef8eb77c9e380be48a477d6f92e3d209, type: 2}
     hitSoundId: CriticalHit
   deathEffect:
+    effectType: 1
     particle: {fileID: 0}
+    triggerParticle: {fileID: 0}
     soundId: 
   effects:
   - rid: 6000861270941368430
@@ -166,12 +169,12 @@ MonoBehaviour:
     - rid: 6000861155382526038
       type: {class: NearestBaseTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
-        inRange: 1
+        inRange: 0
         weight: 100
     - rid: 6000861155382526045
       type: {class: PlayerTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
-        inRange: 1
+        inRange: 0
         weight: 100
     - rid: 6000861155382526047
       type: {class: NearestStructureTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
@@ -206,6 +209,11 @@ MonoBehaviour:
         - {fileID: 6702231614900887059}
         - {fileID: 8255852693297707880}
         rotationSpeed: 1000
+    - rid: 6000861380839735508
+      type: {class: ConditionalRetaliation, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        loyalTo: 1
+        retaliateAgainst: 3
 --- !u!1 &8115690136778003990
 GameObject:
   m_ObjectHideFlags: 0

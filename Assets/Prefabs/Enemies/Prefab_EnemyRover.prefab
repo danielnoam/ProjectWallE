@@ -84,9 +84,11 @@ MonoBehaviour:
   blipColor: {r: 1, g: 0.25490198, b: 0.25490198, a: 1}
   blipSizeMultiplier: 1
   showOutOfRange: 0
-  pingOnRegister: 0
-  pingOnUnregister: 0
-  pingStartStrength: 1
+  pingDuration: 1
+  pingSizeMultiplier: 10
+  pingStartAlpha: 1
+  punchDuration: 0.15
+  punchSizeMultiplier: 1.25
 --- !u!54 &2448601663206975914
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -155,12 +157,12 @@ MonoBehaviour:
   targetRandomOffset: 20
   retargetDestinationThreshold: 25
   targetingStrategies:
-  - rid: 6000861286935560273
+  - rid: 6000861380839735769
   - rid: 6000861155382526051
   - rid: 6000861155382526060
-  - rid: 6000861155382526053
   - rid: 6000861155382526052
-  attackerResponse: 1
+  retaliationStrategy:
+    rid: 6000861380839735501
   aimingStrategy:
     rid: 6000861270941368409
   attackStrategy:
@@ -178,7 +180,9 @@ MonoBehaviour:
     emissionColor: {fileID: 11400000, guid: ef8eb77c9e380be48a477d6f92e3d209, type: 2}
     hitSoundId: CriticalHit
   deathEffect:
+    effectType: 1
     particle: {fileID: 0}
+    triggerParticle: {fileID: 0}
     soundId: 
   effects:
   - rid: 6000861270941368431
@@ -192,23 +196,18 @@ MonoBehaviour:
     - rid: 6000861155382526051
       type: {class: NearestBaseTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
-        inRange: 1
-        weight: 100
+        inRange: 0
+        weight: 50
     - rid: 6000861155382526052
       type: {class: PlayerTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
-      data:
-        inRange: 1
-        weight: 100
-    - rid: 6000861155382526053
-      type: {class: NearestStructureTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         inRange: 0
         weight: 100
     - rid: 6000861155382526060
       type: {class: NearestTurretTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
-        inRange: 1
-        weight: 100
+        inRange: 0
+        weight: 50
     - rid: 6000861270941368409
       type: {class: BodyAiming, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
@@ -245,11 +244,16 @@ MonoBehaviour:
         groundMask:
           serializedVersion: 2
           m_Bits: 1032
-    - rid: 6000861286935560273
-      type: {class: PlayerTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+    - rid: 6000861380839735501
+      type: {class: ConditionalRetaliation, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        loyalTo: 0
+        retaliateAgainst: 3
+    - rid: 6000861380839735769
+      type: {class: NearestStructureTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         inRange: 0
-        weight: 25
+        weight: 50
 --- !u!1 &9070794248794423676
 GameObject:
   m_ObjectHideFlags: 0

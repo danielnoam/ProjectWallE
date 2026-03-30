@@ -1,16 +1,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AnimationEventReceiver : MonoBehaviour
+namespace DNExtensions.Utilities
 {
-
-    [SerializeField] private List<AnimationEvent> animationEvents = new();
-    
-    
-    public void OnAnimationEventTriggered(string eventName)
+    /// <summary>
+    /// Dispatches Unity Animation Events to UnityEvents
+    /// </summary>
+    [AddComponentMenu("DNExtensions/Animation Event Receiver")]
+    public class AnimationEventReceiver : MonoBehaviour
     {
-        var eventToTrigger = animationEvents.Find(se => se.eventName == eventName);
-        eventToTrigger?.onAnimationEvent?.Invoke();
+        [SerializeField] private List<AnimationEvent> animationEvents = new();
+        
+        public void OnAnimationEventTriggered(string eventName)
+        {
+            var eventToTrigger = animationEvents.Find(se => se.eventName == eventName);
+            eventToTrigger?.onAnimationEvent?.Invoke();
+        }
     }
-    
 }
+

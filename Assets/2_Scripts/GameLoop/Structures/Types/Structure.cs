@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DNExtensions.Utilities.AutoGet;
 using DNExtensions.Utilities.Button;
 using ProjectWallE.GameLoop;
 using UnityEditor;
@@ -46,6 +47,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     [SerializeField] private StructureUpgradeEffect upgradeEffect;
     [SerializeField] private StructureBreakEffect brokenEffect;
 
+    [SerializeField, AutoGetSelf, HideInInspector] private RadarTarget radarTarget;
     
     private Material[] _materials;
     private int UpgradeCost => CanUpgrade() ? Levels[CurrentUpgradeLevel].cost : 0;
@@ -76,7 +78,8 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
         {
             Debug.LogWarning($"{name}: Levels array is empty, must have at least 1 level.", this);
         }
-
+        
+        AutoGetSystem.Process(this);
     }
 
     private void Awake()
@@ -113,6 +116,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
         CurrentUpgradeLevel = 1;
         CurrentHealth = CurrentLevelData.maxHealth;
         buildEffect?.Play();
+        radarTarget?.Ping();
         OnBuild();
     }
     
@@ -124,6 +128,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
         brokenEffect?.SetBroken(transform.position);
         StructureManager.Instance?.UnregisterStructure(this);
         OnDeath?.Invoke(this);
+        radarTarget?.Ping(Color.red);
         OnBreak();
     }
     
@@ -170,6 +175,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     {
         if (CurrentHealth <= 0 || damage <= 0) return;
 
+        radarTarget?.PunchBlip(Color.darkOrange);
         damageEffects?.Play(transform.position, _materials);
         CurrentHealth -= damage;
         OnDamaged?.Invoke(damage);

@@ -24,7 +24,7 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
     [SerializeField] private float initializeDelay = 4f;
     [SerializeField, AutoGetSelf, HideInInspector] private PlayableDirector timeline;
     [SerializeField, AutoGetScene, HideInInspector] private PlayerManager player;
-    
+
     
     private bool _levelActive;
     
@@ -46,8 +46,18 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
         Instance = this;
     }
     
+    private void OnEnable()
+    {
+        StructureManager.OnStructureDestroyed += OnStructureDestroyed;
+        if (timeline)
+        {
+            timeline.stopped += OnTimelineStopped;
+        }
+    }
+
     private void OnDestroy()
     {
+        StructureManager.OnStructureDestroyed -= OnStructureDestroyed;
         if (timeline)
         {
             timeline.stopped -= OnTimelineStopped;
@@ -58,20 +68,21 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
     {
         if (timeline)
         {
-            timeline.stopped += OnTimelineStopped;
             StartCoroutine(StartLevel());
         }
     }
     
     private void Update()
     {
-
         if (Keyboard.current.f1Key.wasPressedThisFrame)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
         
-        if (_levelActive) OnTimeUpdated?.Invoke(TimeRemaining);
+        if (_levelActive)
+        {
+            OnTimeUpdated?.Invoke(TimeRemaining);
+        }
     }
 
     private IEnumerator StartLevel()
@@ -92,6 +103,16 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
         
         CompleteLevel();
     }
+    
+    private void OnStructureDestroyed(StructuresData data)
+    {
+        if  (!_levelActive) return;
+        
+        if (data.BasesCount <= 0)
+        {
+            FailLevel();
+        }
+    }
 
     private void CompleteLevel()
     {
@@ -102,7 +123,7 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
         OnLevelCompleted?.Invoke();
     }
 
-    public void FailLevel()
+    private void FailLevel()
     {
         if (!_levelActive) return;
         

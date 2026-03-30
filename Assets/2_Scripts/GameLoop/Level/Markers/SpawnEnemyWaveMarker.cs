@@ -15,7 +15,7 @@ public class SpawnEnemyWaveMarker : BaseLevelEventMarker
     [Header("Position")]
     public SpawnType spawnType = SpawnType.Random;
     [InfoBox("Random - Will spawn randomly from the active spawners pool \n Specific - Will spawn in a specific spawn point")]
-    [ShowIf("spawnPosition", SpawnType.Specific)] public ExposedReference<EnemySpawnPoint> spawnPoint;
+    [ShowIf("spawnType", SpawnType.Specific)] public ExposedReference<EnemySpawnPoint> spawnPoint;
     
     public override void Execute(IExposedPropertyTable resolver = null)
     {

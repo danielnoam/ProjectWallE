@@ -7,7 +7,7 @@ namespace DNExtensions.Utilities
     /// Forwards all collision and trigger callbacks as subscribable C# events.
     /// Attach to any GameObject with a Collider to relay physics events to external scripts.
     /// </summary>
-    [AddComponentMenu("DNExtensions/Utilities/Collision Relay")]
+    [AddComponentMenu("DNExtensions/Collision Relay")]
     [RequireComponent(typeof(Collider))]
     public class CollisionRelay : MonoBehaviour
     {

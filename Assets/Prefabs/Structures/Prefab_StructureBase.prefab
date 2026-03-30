@@ -84,9 +84,11 @@ MonoBehaviour:
   blipColor: {r: 0.7308548, g: 1, b: 0.38679236, a: 1}
   blipSizeMultiplier: 2
   showOutOfRange: 1
-  pingOnRegister: 1
-  pingOnUnregister: 1
-  pingStartStrength: 1
+  pingDuration: 1
+  pingSizeMultiplier: 10
+  pingStartAlpha: 1
+  punchDuration: 0.25
+  punchSizeMultiplier: 2
 --- !u!135 &4832250491942188457
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -151,6 +153,25 @@ MonoBehaviour:
     punchEase: 1
     emissionColor: {fileID: 11400000, guid: a96c7138587d94644ace68611d614fe6, type: 2}
     hitSoundId: NormalHit
+  buildEffect:
+    duration: 0.3
+    ease: 27
+    gfx: {fileID: 6592863634933569427}
+    buildSoundId: 
+    playAnimation:
+      isSet: 0
+      hideValueIfSet: 0
+      value:
+        simpleAnimator: {fileID: 0}
+        clipName: 
+        clipIndex: 0
+        assigned: 0
+  upgradeEffect:
+    duration: 0.2
+    punchStrength: 0.9
+    ease: 27
+    gfx: {fileID: 6592863634933569427}
+    upgradeSoundId: 
   brokenEffect:
     duration: 0.3
     ease: 4
@@ -160,18 +181,7 @@ MonoBehaviour:
     - {fileID: 3132724331002020593}
     - {fileID: 53038199937898807}
     brokenSoundId: 
-  upgradeEffect:
-    duration: 0.2
-    punchStrength: 0.9
-    ease: 27
-    gfx: {fileID: 6592863634933569427}
-    upgradeSoundId: 
-  buildEffect:
-    duration: 0.3
-    ease: 27
-    gfx: {fileID: 6592863634933569427}
-    buildSoundId: 
-  gfx: {fileID: 6592863634933569427}
+  radarTarget: {fileID: -6891724181451812259}
   levels:
   - rid: 4437626180964712523
   transformEffectors:

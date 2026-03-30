@@ -294,7 +294,7 @@ namespace ProjectWallE.GameLoop
 
             if (playAnimation.IsSetAndHasValue())
             {
-                playAnimation.Value.Play();
+                playAnimation.Value.PlayOnce();
             }
         }
     }

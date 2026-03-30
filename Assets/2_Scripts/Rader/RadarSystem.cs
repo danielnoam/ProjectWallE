@@ -18,15 +18,12 @@ public class RadarSystem : MonoBehaviour
     public RectTransform radarPanel;
     public Transform blipHolder;
     public Graphic blipPrefab;
-    
-    [Header("Ping")]
-    public float pingDuration = 1f;
-    public float pingScaleMultiplier = 10;
     public Graphic pingPrefab;
 
     private readonly HashSet<RadarTarget> _targets = new();
     private readonly Dictionary<RadarTarget, Graphic> _blips = new();
     private readonly Dictionary<Graphic, RadarTarget> _pings = new();
+    private readonly Dictionary<RadarTarget, (Sequence sequence, Vector3 baseScale)> _punches = new();
 
     private float _radarRadius;
 
@@ -118,7 +115,7 @@ public class RadarSystem : MonoBehaviour
         Destroy(ping.gameObject);
     }
 
-    private void PingTarget(RadarTarget target, Color? colorOverride = null)
+    public void PingTarget(RadarTarget target, Color? colorOverride = null)
     {
         if (!pingPrefab) return;
         if (!_blips.TryGetValue(target, out Graphic blip)) return;
@@ -130,9 +127,32 @@ public class RadarSystem : MonoBehaviour
 
         Sequence.Create()
             .ChainDelay(0.15f)
-            .Group(Tween.Alpha(ping, target.PingStartStrength, 0, pingDuration))
-            .Group(Tween.Scale(ping.transform, ping.transform.localScale * pingScaleMultiplier, pingDuration))
+            .Group(Tween.Alpha(ping, target.PingStartAlpha, 0, target.PingDuration))
+            .Group(Tween.Scale(ping.transform, ping.transform.localScale * target.PingSizeMultiplier, target.PingDuration))
             .OnComplete(() => DestroyPing(ping));
+    }
+    
+    public void PunchTarget(RadarTarget target, Color color)
+    {
+        if (!_blips.TryGetValue(target, out Graphic blip)) return;
+
+        if (_punches.TryGetValue(target, out var existing) && existing.sequence.isAlive)
+        {
+            existing.sequence.Stop();
+            blip.color = target.BlipColor;
+            blip.transform.localScale = existing.baseScale;
+        }
+
+        Vector3 baseScale = blip.transform.localScale;
+        float d = target.PunchDuration;
+
+        var sequence = Sequence.Create()
+            .Group(Tween.Color(blip, color, d))
+            .Group(Tween.Scale(blip.transform, baseScale * target.PunchSizeMultiplier, d))
+            .Chain(Tween.Color(blip, target.BlipColor, d))
+            .Group(Tween.Scale(blip.transform, baseScale, d));
+
+        _punches[target] = (sequence, baseScale);
     }
     
     public void Register(RadarTarget target)
@@ -144,21 +164,14 @@ public class RadarSystem : MonoBehaviour
         blip.color = target.BlipColor;
         if (blip is Image image && target.BlipSprite) image.sprite = target.BlipSprite;
         _blips[target] = blip;
-
-        if (target.PingOnRegister)
-        {
-            PingTarget(target);
-        }
+        
     }
 
     public void Unregister(RadarTarget target)
     {
         if (!_targets.Remove(target)) return;
 
-        if (target.PingOnUnregister)
-        {
-            PingTarget(target, Color.red);
-        }
+        if (_punches.Remove(target, out var punch) && punch.sequence.isAlive) punch.sequence.Stop();
 
         if (_blips.Remove(target, out Graphic blip)) Destroy(blip.gameObject);
     }

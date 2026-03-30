@@ -10,14 +10,6 @@ using UnityEngine;
 
 namespace ProjectWallE.GameLoop
 {
-    public enum AttackerResponse
-    {
-        None,
-        RetaliateIfPlayer,
-        RetaliateIfTurret,
-        RetaliateAll,
-    }
-
     public enum EnemyState
     {
         MovingToTarget,
@@ -43,10 +35,10 @@ namespace ProjectWallE.GameLoop
         [SerializeField] private float targetFindRange = 75f;
         [SerializeField] protected float targetRandomOffset = 20f;
         [SerializeField] protected float retargetDestinationThreshold = 25f;
-        [SerializeReference, SerializableSelector] private TargetingStrategy[] targetingStrategies;
+        [SerializeReference, SerializableSelector(Foldout = false)] private TargetingStrategy[] targetingStrategies;
 
         [Header("Behavior")]
-        [SerializeField] private AttackerResponse attackerResponse = AttackerResponse.RetaliateIfPlayer;
+        [SerializeReference, SerializableSelector] private RetaliationStrategy retaliationStrategy = new NoRetaliation();
         [SerializeReference, SerializableSelector] private AimingStrategy aimingStrategy;
         [SerializeReference, SerializableSelector] private AttackStrategy attackStrategy;
 
@@ -54,7 +46,7 @@ namespace ProjectWallE.GameLoop
         [SerializeField] private DamageEffects normalDamageEffects;
         [SerializeField] private DamageEffects criticalDamageEffects;
         [SerializeField] private ParticleEffectAction deathEffect;
-        [SerializeReference, SerializableSelector] private EnemyEffect[] effects;
+        [SerializeReference, SerializableSelector(Foldout = false)] private EnemyEffect[] effects;
         [SerializeField] private Renderer visibilityRenderer;
         
         
@@ -199,14 +191,7 @@ namespace ProjectWallE.GameLoop
 
         private bool ShouldRetaliate(IDamageable attacker)
         {
-            switch (attackerResponse)
-            {
-                case AttackerResponse.RetaliateIfPlayer: return attacker is PlayerManager;
-                case AttackerResponse.RetaliateIfTurret: return attacker is Turret;
-                case AttackerResponse.RetaliateAll: return true;
-                case AttackerResponse.None:
-                default: return false;
-            }
+            return retaliationStrategy?.ShouldRetarget(CurrentTarget, attacker) ?? false;
         }
 
         private void ApplyDamage(float damage, IDamageable attacker)
@@ -214,8 +199,15 @@ namespace ProjectWallE.GameLoop
             _currentHealth -= damage;
             OnDamaged?.Invoke(damage);
 
-            if (attacker != null && attacker != CurrentTarget && ShouldRetaliate(attacker)) SetTarget(attacker);
-            if (_currentHealth <= 0) Die();
+            if (attacker != null && attacker != CurrentTarget && ShouldRetaliate(attacker))
+            {
+                SetTarget(attacker);
+            }
+            
+            if (_currentHealth <= 0)
+            {
+                Die();
+            }
         }
 
         public void TakeHitZoneDamage(float damage, IDamageable attacker, EnemyDamageRelay relay)

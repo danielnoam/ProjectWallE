@@ -123,10 +123,12 @@ MonoBehaviour:
   targetRandomOffset: 20
   retargetDestinationThreshold: 25
   targetingStrategies:
+  - rid: 6000861380839735444
   - rid: 6000861155382526048
   - rid: 6000861155382526049
   - rid: 6000861155382526050
-  attackerResponse: 1
+  retaliationStrategy:
+    rid: 6000861380839735453
   aimingStrategy:
     rid: 6000861270941368434
   attackStrategy:
@@ -144,7 +146,9 @@ MonoBehaviour:
     emissionColor: {fileID: 11400000, guid: ef8eb77c9e380be48a477d6f92e3d209, type: 2}
     hitSoundId: CriticalHit
   deathEffect:
+    effectType: 1
     particle: {fileID: 0}
+    triggerParticle: {fileID: 0}
     soundId: 
   effects:
   - rid: 6000861270941368433
@@ -157,12 +161,12 @@ MonoBehaviour:
     - rid: 6000861155382526048
       type: {class: NearestBaseTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
-        inRange: 1
-        weight: 100
+        inRange: 0
+        weight: 80.7
     - rid: 6000861155382526049
       type: {class: PlayerTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
-        inRange: 1
+        inRange: 0
         weight: 100
     - rid: 6000861155382526050
       type: {class: NearestStructureTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
@@ -203,6 +207,14 @@ MonoBehaviour:
         rotationSpeed: 180
         alignmentThreshold: 25
         yawOnly: 1
+    - rid: 6000861380839735444
+      type: {class: NearestTurretTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        inRange: 0
+        weight: 50
+    - rid: 6000861380839735453
+      type: {class: NoRetaliation, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data: 
 --- !u!1 &7432827019393584379
 GameObject:
   m_ObjectHideFlags: 0

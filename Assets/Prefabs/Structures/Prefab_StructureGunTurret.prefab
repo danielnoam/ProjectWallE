@@ -83,10 +83,12 @@ MonoBehaviour:
   blipSprite: {fileID: 0}
   blipColor: {r: 0.7294118, g: 1, b: 0.3882353, a: 1}
   blipSizeMultiplier: 1
-  showOutOfRange: 0
-  pingOnRegister: 1
-  pingOnUnregister: 0
-  pingStartStrength: 0.5
+  showOutOfRange: 1
+  pingDuration: 1
+  pingSizeMultiplier: 10
+  pingStartAlpha: 1
+  punchDuration: 0.15
+  punchSizeMultiplier: 2
 --- !u!135 &8987554455923439112
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -179,6 +181,7 @@ MonoBehaviour:
     - {fileID: 9097640428187871019}
     - {fileID: 9037642151175868296}
     brokenSoundId: 
+  radarTarget: {fileID: 6290268805781187500}
   levels:
   - rid: 4437626158574207052
   hitLayers: {fileID: 11400000, guid: 2d607d7566d764844b32be4199186943, type: 2}

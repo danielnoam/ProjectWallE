@@ -123,9 +123,10 @@ MonoBehaviour:
   targetRandomOffset: 20
   retargetDestinationThreshold: 1
   targetingStrategies:
-  - rid: 6000861155382526052
-  - rid: 6000861155382526053
-  attackerResponse: 3
+  - rid: 6000861380839735493
+  - rid: 6000861380839735494
+  retaliationStrategy:
+    rid: 6000861380839735393
   aimingStrategy:
     rid: 6000861270941368409
   attackStrategy:
@@ -155,16 +156,6 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 6000861155382526052
-      type: {class: PlayerTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
-      data:
-        inRange: 0
-        weight: 75
-    - rid: 6000861155382526053
-      type: {class: NearestStructureTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
-      data:
-        inRange: 0
-        weight: 100
     - rid: 6000861270941368409
       type: {class: BodyAiming, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
@@ -208,6 +199,21 @@ MonoBehaviour:
         pulseIntervalStart: 0.5
         pulseIntervalEnd: 0.03
         screenRenderer: {fileID: 7218650407366163535}
+    - rid: 6000861380839735393
+      type: {class: ConditionalRetaliation, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        loyalTo: 1
+        retaliateAgainst: 1
+    - rid: 6000861380839735493
+      type: {class: NearestStructureTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        inRange: 0
+        weight: 25
+    - rid: 6000861380839735494
+      type: {class: PlayerTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        inRange: 0
+        weight: 100
 --- !u!1 &9070794248794423676
 GameObject:
   m_ObjectHideFlags: 0

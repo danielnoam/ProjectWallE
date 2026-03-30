@@ -1449,7 +1449,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 286c0a9b65940bc46a4af2e3e8df3264, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FullscreenVignetteController
-  material: {fileID: 2100000, guid: 11a4b36f82c657b429a3edb70f119268, type: 2}
+  material: {fileID: 2100000, guid: 6e808c978bf70bc488a47a310c10d16d, type: 2}
   propertyName: _Visibility
   showValue: 1
   hideValue: 0
@@ -1471,10 +1471,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FullscreenVignetteController
   material: {fileID: 2100000, guid: 11a4b36f82c657b429a3edb70f119268, type: 2}
-  propertyName: _Mask_Size
+  propertyName: _Visibility
   showValue: 1
   hideValue: 0
-  duration: 0.1
+  duration: 0.5
   ease: 4
   punchCount: 1
   punchDuration: 0.25
@@ -1491,8 +1491,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 286c0a9b65940bc46a4af2e3e8df3264, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FullscreenVignetteController
-  material: {fileID: 2100000, guid: 6e808c978bf70bc488a47a310c10d16d, type: 2}
-  propertyName: _Visibility
+  material: {fileID: 2100000, guid: 11a4b36f82c657b429a3edb70f119268, type: 2}
+  propertyName: _Mask_Size
   showValue: 1
   hideValue: 0
   duration: 0.5
@@ -1541,9 +1541,9 @@ MonoBehaviour:
     maxValue: 30
   speedLinesSizeRange: {x: 1, y: 0.85}
   lowHealthThreshold: 0.3
-  lowHealthEffect: {fileID: 3576337536456230308}
-  speedLinesVisibility: {fileID: 8104896233199378666}
-  speedLinesSize: {fileID: 3404806522171678059}
+  lowHealthEffect: {fileID: 8104896233199378666}
+  speedLinesVisibility: {fileID: 3404806522171678059}
+  speedLinesSize: {fileID: 3576337536456230308}
   airReleaseAudioSource: {fileID: 1757885287560848928}
   changeStateAudioSource: {fileID: 3113016758275396871}
   boostAudioSource: {fileID: 8467015804595106265}
@@ -1587,39 +1587,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8933685496a40ff96b2904f60f1da3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AnimationEventReceiver
-  animationEvents:
-  - eventName: DisableWheelAirRelease
-    onAnimationEvent:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 4948167179135989057}
-          m_TargetAssemblyTypeName: ProjectWallE.PlayerEffects, Assembly-CSharp
-          m_MethodName: DisableWheelsAirRelease
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventName: EnableWheelAirRelease
-    onAnimationEvent:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 4948167179135989057}
-          m_TargetAssemblyTypeName: ProjectWallE.PlayerEffects, Assembly-CSharp
-          m_MethodName: EnableWheelsAirRelease
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+  animationEvents: []
 --- !u!1 &7170555774389211336
 GameObject:
   m_ObjectHideFlags: 0

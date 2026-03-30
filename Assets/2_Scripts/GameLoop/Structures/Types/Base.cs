@@ -1,11 +1,8 @@
 using DNExtensions.Utilities;
 using UnityEngine;
 
-
-
 public class Base : ResourceGenerator
 {
-    
     [Header("Base")]
     [SerializeField] private TransformEffector[] transformEffectors;
     [SerializeField] private Transform crystalsTransform;
@@ -38,6 +35,5 @@ public class Base : ResourceGenerator
             crystalsTransform?.gameObject.SetActive(false);
         }
         StopGenerating();
-        LevelManager.Instance?.FailLevel();
     }
 }

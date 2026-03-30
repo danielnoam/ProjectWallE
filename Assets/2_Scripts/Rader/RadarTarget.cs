@@ -1,4 +1,3 @@
-using DNExtensions.Utilities.Button;
 using UnityEngine;
 
 public class RadarTarget : MonoBehaviour
@@ -6,44 +5,39 @@ public class RadarTarget : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private Sprite blipSprite;
     [SerializeField] private Color blipColor = Color.white;
-    [SerializeField, Range(0.1f,2.0f)] private float blipSizeMultiplier = 1.0f;
+    [SerializeField, Range(0.1f, 2.0f)] private float blipSizeMultiplier = 1.0f;
     [SerializeField] private bool showOutOfRange;
-    
+
     [Header("Ping")]
-    [SerializeField] private bool pingOnRegister;
-    [SerializeField] private bool pingOnUnregister;
-    [SerializeField, Range(0.1f, 1f)] private float pingStartStrength = 1f;
+    [SerializeField, Min(0.1f)] private float pingDuration = 1f;
+    [SerializeField, Min(0.1f)] private float pingSizeMultiplier = 10;
+    [SerializeField, Range(0.1f, 1f)] private float pingStartAlpha = 1f;
+    
+    [Header("Punch")]
+    [SerializeField, Min(0.1f)] private float punchDuration = 0.15f;
+    [SerializeField, Range(0.1f, 2.0f)] private float punchSizeMultiplier = 1.25f;
+    
 
     public Sprite BlipSprite => blipSprite;
     public Color BlipColor => blipColor;
     public float BlipSizeMultiplier => blipSizeMultiplier;
     public bool ShowOutOfRange => showOutOfRange;
-    public bool PingOnRegister => pingOnRegister;
-    public bool PingOnUnregister => pingOnUnregister;
-    public float PingStartStrength => pingStartStrength;
-    
-    
+    public float PingDuration => pingDuration;
+    public float PingSizeMultiplier => pingSizeMultiplier;
+    public float PingStartAlpha => pingStartAlpha;
+    public float PunchDuration => punchDuration;
+    public float PunchSizeMultiplier => punchSizeMultiplier;
 
-    private void OnEnable()
-    {
-        RadarSystem.Instance?.Register(this);
-    }
+    private void OnEnable() => RadarSystem.Instance?.Register(this);
+    private void OnDisable() => RadarSystem.Instance?.Unregister(this);
 
-    private void OnDisable()
+    public void Ping(Color? colorOverride = null)
     {
-        RadarSystem.Instance?.Unregister(this);
+        RadarSystem.Instance?.PingTarget(this, colorOverride);
     }
     
-    
-    [Button]
-    private void TestRegister()
+    public void PunchBlip(Color color) 
     {
-        RadarSystem.Instance?.Register(this);
-    }
-
-    [Button]
-    private void TestUnregister()
-    {
-        RadarSystem.Instance?.Unregister(this);
+        RadarSystem.Instance?.PunchTarget(this, color);
     }
 }

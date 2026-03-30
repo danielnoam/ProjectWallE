@@ -1,9 +1,13 @@
 using System;
 using UnityEngine.Events;
 
-[Serializable]
-public class AnimationEvent
+namespace DNExtensions.Utilities
 {
-    public string eventName;
-    public UnityEvent onAnimationEvent;
+    [Serializable]
+    public class AnimationEvent
+    {
+        public string eventName;
+        public UnityEvent onAnimationEvent;
+    }
 }
+
