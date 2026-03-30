@@ -12,17 +12,24 @@ namespace ProjectWallE
     }
     public class PlayerManager : MonoBehaviour, IDamageable, IPushable
     {
+        [Header("Settings")]
         [SerializeField, Min(10f)] private float maxHealth = 100f;
+        [SerializeField] private float timeBeforeHealthRegen = 1.5f;
+        [SerializeField] private float healthRegenRate = 5f;
         [SerializeField] private float switchCooldown = 1f;
-        [SerializeField] LayerMask groundLayer;
         
-        [HideInInspector][SerializeField] CarController carController;
-        [HideInInspector][SerializeField] RobotController robotController;
-        [HideInInspector][SerializeField] PlayerStructureBuilder structureBuilder;
-        [HideInInspector][SerializeField] PlayerShooter shooter;
+        [Header("Collision")]
+        [SerializeField] private float robotHeightCheck;
+        [SerializeField] private LayerMask groundLayer;
+        [SerializeField] private LayerMask switchBlockLayer;
         
+        [HideInInspector, SerializeField] private CarController carController;
+        [HideInInspector, SerializeField] private RobotController robotController;
+        [HideInInspector, SerializeField] private PlayerStructureBuilder structureBuilder;
+        [HideInInspector, SerializeField] private PlayerShooter shooter;
+        
+
         private PlayerManagerInput _input;
-        
         private Rigidbody _rigidbody;
         private Transform _cameraTransform;
         
@@ -33,6 +40,7 @@ namespace ProjectWallE
         
         private float _currentHealth;
         private float _switchTimer;
+        private float _lastDamageTime;
 
         public CarController CarController => carController;
         public RobotController RobotController => robotController;
@@ -46,20 +54,17 @@ namespace ProjectWallE
         public event Action<float> OnDamaged;
         public event Action<PlayerControllerType> OnControllerChanged;
         public event Action<float, float> OnHealthChanged;
+        public event Action OnControllerSwitchFailed;
 
         private void OnValidate()
         {
-            if (carController == null)
-                carController = GetComponentInChildren<CarController>();
-            if(robotController == null)
-                robotController = GetComponentInChildren<RobotController>();
-            if(structureBuilder == null)
-                structureBuilder = GetComponentInChildren<PlayerStructureBuilder>();
-            if (shooter == null)
-                shooter = GetComponentInChildren<PlayerShooter>();
+            if (carController == null) carController = GetComponentInChildren<CarController>();
+            if(robotController == null) robotController = GetComponentInChildren<RobotController>();
+            if(structureBuilder == null) structureBuilder = GetComponentInChildren<PlayerStructureBuilder>();
+            if (shooter == null) shooter = GetComponentInChildren<PlayerShooter>();
         }
 
-        void Awake()
+        private void Awake()
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -88,10 +93,10 @@ namespace ProjectWallE
 
         private void Update()
         {
-            if (_input.SwitchPressed && Time.time > _switchTimer + switchCooldown) 
-                SwitchControllerEnum();
+            if (_input.SwitchPressed && Time.time > _switchTimer + switchCooldown) SwitchControllerEnum();
             
             SwitchBehavior();
+            RegenerateHealth();
         }
 
         private void FixedUpdate()
@@ -104,20 +109,57 @@ namespace ProjectWallE
 
         private void SwitchControllerEnum()
         {
+            if (_playerControllerTypeEnum == PlayerControllerType.Car && !CanSwitchToRobot())
+            {
+                OnControllerSwitchFailed?.Invoke();
+                return;
+            }
             _playerControllerTypeEnum = _playerControllerTypeEnum == PlayerControllerType.Robot ? PlayerControllerType.Car : PlayerControllerType.Robot;
         }
 
         private void SwitchBehavior()
         {
             if(_playerControllerTypeEnum == _lastFramePlayerControllerTypeEnum) return;
-            ResetRbRotation();
             EnableController(_playerControllerTypeEnum);
+            ResetRbRotation();
             _lastFramePlayerControllerTypeEnum = _playerControllerTypeEnum;
             _switchTimer = Time.time;
         }
 
         #endregion
 
+        #region Health
+
+        private void RegenerateHealth()
+        {
+            if (_currentHealth >= maxHealth || Time.time < _lastDamageTime + timeBeforeHealthRegen) return;
+
+            _currentHealth += healthRegenRate * Time.deltaTime;
+            _currentHealth = Mathf.Min(_currentHealth, maxHealth);
+            
+            OnHealthChanged?.Invoke(_currentHealth, maxHealth);
+        }
+        
+        public void TakeDamage(float damage, IDamageable attacker = null)
+        {
+            if (damage <= 0 || _currentHealth <= 0) return;
+            
+            _currentHealth -= damage;
+            _lastDamageTime = Time.time;
+            
+            OnDamaged?.Invoke(damage);
+            
+            if (_currentHealth <= 0)
+            {
+                _currentHealth = 0;
+                OnDeath?.Invoke(attacker);
+            }
+            
+            OnHealthChanged?.Invoke(_currentHealth, maxHealth);
+        }
+
+        #endregion
+        
         #region Helpers
 
         private void EnableController(PlayerControllerType playerControllerType)
@@ -136,6 +178,12 @@ namespace ProjectWallE
             OnControllerChanged?.Invoke(playerControllerType);
         }
 
+        private bool CanSwitchToRobot()
+        {
+            bool isClear = !Physics.Raycast(transform.position, Vector3.up, robotHeightCheck, switchBlockLayer);
+            return isClear;
+        }
+
         private void ResetRbRotation()
         {
             Vector3 rot = _rigidbody.rotation.eulerAngles;
@@ -145,36 +193,22 @@ namespace ProjectWallE
         }
 
         #endregion
-
         
-        public void TakeDamage(float damage, IDamageable attacker = null)
-        {
-            if (damage <= 0 || _currentHealth <= 0) return;
-            
-            _currentHealth -= damage;
-            
-            OnDamaged?.Invoke(damage);
-            
-            if (_currentHealth <= 0)
-            {
-                _currentHealth = 0;
-                OnDeath?.Invoke(attacker);
-            }
-            
-            OnHealthChanged?.Invoke(_currentHealth, maxHealth);
-        }
 
         public void Push(Vector3 direction, float force)
         {
-            
+            _rigidbody.AddForce(direction * force, ForceMode.Impulse);
         }
 
         private void OnDrawGizmosSelected()
         {
-            if(_rigidbody == null) return;
-            Gizmos.color = Color.green;
-            Gizmos.DrawSphere(transform.position + _rigidbody.centerOfMass, .1f);
-            
+            if(_rigidbody != null)
+            {
+                Gizmos.color = Color.green;
+                Gizmos.DrawSphere(transform.position + _rigidbody.centerOfMass, .1f);
+            }
+            Gizmos.color = Color.red;
+            Gizmos.DrawRay(transform.position, Vector3.up * robotHeightCheck);
         }
     }
 }

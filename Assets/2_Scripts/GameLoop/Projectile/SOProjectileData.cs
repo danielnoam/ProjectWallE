@@ -39,8 +39,8 @@ public class SOProjectileData : ScriptableObject
     public float speed = 55f;
     
     [Header("Effects")]
-    [PrefabSelector("Assets/Prefabs")] public Projectile prefab;
-    [PrefabSelector("Assets/Prefabs")] public PoolableParticleSystem hitParticle;
+    [PrefabSelector("Assets")] public Projectile prefab;
+    [PrefabSelector("Assets")] public PoolableParticleSystem hitParticle;
     [SerializeField, AudioLibraryID] public string collisionSFX;
 
     public Projectile Spawn(LayerMask hitLayers, Vector3 position, Vector3 direction, Vector3 targetPosition = default, IDamageable owner = null)

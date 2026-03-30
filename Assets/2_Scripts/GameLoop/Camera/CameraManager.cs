@@ -13,17 +13,13 @@ namespace ProjectWallE
         [SerializeField] private float cameraLookSensitivity;
         [SerializeField, Range(1, 89)] private float cameraVerticalClamp;
         
-        private CinemachineInputAxisController _robotInputAxisController;
-        private CinemachineInputAxisController _carInputAxisController;
-        
         private PlayerManager _playerManager;
         private PlayerManagerInput _input;
+        
+        private bool _cameraLocked;
 
         private void Awake()
         {
-            _robotInputAxisController = robotCamera.GetComponent<CinemachineInputAxisController>();
-            _carInputAxisController = carCamera.GetComponent<CinemachineInputAxisController>();
-            
             _playerManager = FindFirstObjectByType<PlayerManager>();
             _input = GetComponent<PlayerManagerInput>();
         }
@@ -58,21 +54,22 @@ namespace ProjectWallE
         
         private void OnMenuActionRequested(Structure obj)
         {
-            
+            _cameraLocked = true;
         }
         
         private void OnBuildMenuRequested(Structure[] obj)
         {
-            
+            _cameraLocked = true;
         }
         private void OnMenuCloseRequested()
         {
-            
+            _cameraLocked = false;
         }
 
         private void UpdateCameraMovement()
         {
             cameraTarget.position = _playerManager.transform.position;
+            if (_cameraLocked) return;
             
             cameraTarget.rotation *= Quaternion.Euler(-_input.MouseDelta.y * cameraLookSensitivity, _input.MouseDelta.x * cameraLookSensitivity, 0);
             Vector3 targetRotation = cameraTarget.rotation.eulerAngles;
@@ -85,12 +82,6 @@ namespace ProjectWallE
             
             targetRotation = new Vector3(x, targetRotation.y, 0);
             cameraTarget.rotation = Quaternion.Euler(targetRotation);
-        }
-
-        private void ToggleCameraMouseInput(bool toggle)
-        {
-            _robotInputAxisController.enabled = toggle;
-            _carInputAxisController.enabled = toggle;
         }
     }
 }

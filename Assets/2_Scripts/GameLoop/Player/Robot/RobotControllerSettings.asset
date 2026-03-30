@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c02dfb512785a9543be903cb7cf3d2ca, type: 3}
+  m_Name: RobotControllerSettings
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.SORobotControllerSettings
+  groundHeight: 0.6
+  maxCheckHeight: 0.8
+  springStrength: 150
+  springDamping: 12
+  gravityStrength: 20
+  terminalVelocity: 20
+  moveAccel: 20
+  dirChangeAccelFactor:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -1
+      value: 2
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.0007572379
+      value: 1.3164191
+      inSlope: -0.30529493
+      outSlope: -0.30529493
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.16710478
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: -0.2704833
+      outSlope: -0.2704833
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.22023146
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  maxMoveSpeed: 8
+  forcePointBelowCom: 0.2
+  groundMoveFactor: 1
+  airMoveFactor: 0.35
+  maxWalkableSlopeAngle: 45
+  slopeSlideAccel: 12
+  maxSlopeSlideSpeed: 15
+  slopeSlideMoveFactor: 0.1
+  jumpHeight: 3
+  jumpBuffer: 0.2
+  uprightStrength: 40
+  uprightDamping: 6
+  yawStrength: 150
+  yawDamping: 12

@@ -14,6 +14,8 @@ namespace _2_Scripts
 
         [HideInInspector] public bool isGroundedExtended;
         public RaycastHit extendedGroundHit;
+        
+        [HideInInspector] public LayerMask hitLayer;
 
         [HideInInspector] public bool isMoving;
 

@@ -78,3 +78,51 @@ MonoBehaviour:
     - sceneAsset: {fileID: 102900000, guid: 930919521036cc34b9023f5ac1d27770, type: 3}
       sceneName: DanielScene
       scenePath: Assets/1_Scenes/DanielScene.unity
+  - poolName: Enemy_Drone
+    maxPoolSize: 100
+    prefab: {fileID: 6471506668328617800, guid: 942ec3fb68d51bb418bece848d6bfd88, type: 3}
+    dontDestroyOnLoad: 0
+    usePoolHolder: 1
+    recycleActiveObjects: 0
+    preWarmPool: 1
+    preWarmPoolSize: 5
+    scenesToPreWarm:
+    - sceneAsset: {fileID: 102900000, guid: 930919521036cc34b9023f5ac1d27770, type: 3}
+      sceneName: DanielScene
+      scenePath: Assets/1_Scenes/DanielScene.unity
+  - poolName: Enemy_Roller
+    maxPoolSize: 100
+    prefab: {fileID: 6471506668328617800, guid: 83a877ad3335ba24198f58c9720f05c5, type: 3}
+    dontDestroyOnLoad: 0
+    usePoolHolder: 1
+    recycleActiveObjects: 0
+    preWarmPool: 1
+    preWarmPoolSize: 5
+    scenesToPreWarm:
+    - sceneAsset: {fileID: 102900000, guid: 930919521036cc34b9023f5ac1d27770, type: 3}
+      sceneName: DanielScene
+      scenePath: Assets/1_Scenes/DanielScene.unity
+  - poolName: Enemy_Rover
+    maxPoolSize: 100
+    prefab: {fileID: 6471506668328617800, guid: 311465a237bc47a4a80317173bf23667, type: 3}
+    dontDestroyOnLoad: 0
+    usePoolHolder: 1
+    recycleActiveObjects: 0
+    preWarmPool: 1
+    preWarmPoolSize: 5
+    scenesToPreWarm:
+    - sceneAsset: {fileID: 102900000, guid: 930919521036cc34b9023f5ac1d27770, type: 3}
+      sceneName: DanielScene
+      scenePath: Assets/1_Scenes/DanielScene.unity
+  - poolName: Enemy_Tank
+    maxPoolSize: 100
+    prefab: {fileID: 6471506668328617800, guid: 9e63c2e032022934290829d686f0c357, type: 3}
+    dontDestroyOnLoad: 0
+    usePoolHolder: 1
+    recycleActiveObjects: 0
+    preWarmPool: 1
+    preWarmPoolSize: 5
+    scenesToPreWarm:
+    - sceneAsset: {fileID: 102900000, guid: 930919521036cc34b9023f5ac1d27770, type: 3}
+      sceneName: DanielScene
+      scenePath: Assets/1_Scenes/DanielScene.unity
