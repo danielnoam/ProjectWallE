@@ -1,6 +1,7 @@
 using System.Collections;
 using DNExtensions.Systems.AudioLibrary;
 using DNExtensions.Systems.ObjectPooling;
+using DNExtensions.Utilities;
 using DNExtensions.Utilities.AutoGet;
 using DNExtensions.Utilities.CinemachineExtensions;
 using ProjectWallE.GameLoop;
@@ -19,7 +20,7 @@ public class Pod : MonoBehaviour
     
     [Header("Push")]
     [SerializeField] private float pushRange = 15f;
-    [SerializeField] private float pushPower = 15f;
+    [MinMaxRange(0, 100)] public RangedFloat pushStrength = new RangedFloat(3,15);
     
     [Header("Effects")]
     [SerializeField] private PoolableParticleSystem collisionParticle;
@@ -115,8 +116,11 @@ public class Pod : MonoBehaviour
             IPushable pushable = col.GetComponentInParent<IPushable>();
             if (pushable != null)
             {
+                float distance = Vector3.Distance(transform.position, col.transform.position);
+                float push = pushStrength.Lerp(1 - distance / pushRange);
+                
                 Vector3 direction = (col.transform.position - impactPoint).normalized;
-                pushable.Push(direction, pushPower);
+                pushable.Push(direction, push);
             }
         }
         

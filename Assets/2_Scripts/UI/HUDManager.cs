@@ -13,8 +13,9 @@ namespace ProjectWallE.UI
     {
         [Header("Game Status")]
         [SerializeField] private TextMeshProUGUI currentResourcesText;
-        [SerializeField] private TextMeshProUGUI objectivesText;
         [SerializeField] private TextMeshProUGUI structuresText;
+        [SerializeField] private TextMeshProUGUI objectivesText;
+        [SerializeField] private string objectivePrefix = "Protect Bases:";
         
         [Header("Player Status")]
         [SerializeField] private OptionalField<string> showFuelPrefix = new OptionalField<string>("Fuel: ", true);
@@ -145,7 +146,7 @@ namespace ProjectWallE.UI
         private void OnTimeUpdated(float timeRemaining)
         {
             TimeSpan timeSpan = TimeSpan.FromSeconds(timeRemaining);
-            string objectives = $"Survive:\n{timeSpan.Minutes:D2}:{timeSpan.Seconds:D2}";
+            string objectives = $"{objectivePrefix}\n{timeSpan.Minutes:D2}:{timeSpan.Seconds:D2}";
             UpdateObjectiveDisplay(objectives);
         }
 
