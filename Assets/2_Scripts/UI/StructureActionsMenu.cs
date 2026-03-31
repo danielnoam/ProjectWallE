@@ -1,7 +1,5 @@
-using System;
 using DNExtensions.Utilities.AutoGet;
 using ProjectWallE;
-using ProjectWallE.GameLoop.Player;
 using RadialMenu;
 using UnityEngine;
 
@@ -18,7 +16,7 @@ public class StructureActionsMenu : RadialMenu<StructureAction>
     {
         if (player)
         {
-            player.StructureBuilder.ActionsMenuRequested += HandleOpen;
+            player.StructureBuilder.ActionsMenuRequested += OnOpen;
             player.StructureBuilder.MenuCloseRequested += CloseMenu;
         }
     }
@@ -27,12 +25,12 @@ public class StructureActionsMenu : RadialMenu<StructureAction>
     {
         if (player)
         {
-            player.StructureBuilder.ActionsMenuRequested -= HandleOpen;
+            player.StructureBuilder.ActionsMenuRequested -= OnOpen;
             player.StructureBuilder.MenuCloseRequested -= CloseMenu;
         }
     }
 
-    private void HandleOpen(Structure structure)
+    private void OnOpen(Structure structure)
     {
         if (!structure) return;
         SetupMenu(structure.GetActions(), ConfigureElement);

@@ -17,8 +17,9 @@ public class EnemyManager : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private int maxEnemies = 50;
     [SerializeField] private ChanceList<Enemy> enemyTypes = new ChanceList<Enemy>();
-    
-    
+
+
+    private Transform _enemyHolder;
     private readonly ChanceList<EnemySpawnPoint> _enemySpawnPoints = new ChanceList<EnemySpawnPoint>();
     private readonly List<Enemy> _activeEnemies = new List<Enemy>();
 
@@ -32,6 +33,8 @@ public class EnemyManager : MonoBehaviour
             return;
         }
         Instance = this;
+        
+        _enemyHolder = new GameObject("EnemyHolder").transform;
     }
     
     #region Spawning
@@ -42,7 +45,7 @@ public class EnemyManager : MonoBehaviour
         spawnOffset.y = 0;
         Vector3 spawnPosition = spawnPoint.transform.position + spawnOffset;
         
-        Instantiate(enemy, spawnPosition, Quaternion.identity);
+        Instantiate(enemy, spawnPosition, Quaternion.identity, _enemyHolder);
     }
     
     public void SpawnEnemyWave(int enemiesToSpawn, ChanceList<Enemy> enemySource = null, EnemySpawnPoint spawnPoint = null)

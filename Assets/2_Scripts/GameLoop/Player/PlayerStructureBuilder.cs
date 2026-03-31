@@ -25,9 +25,9 @@ namespace ProjectWallE.GameLoop.Player
         private bool _canBuild;
         private bool _structureStatusVisible;
         private bool _menuOpen;
+        private bool _lastMenuWasBuildMenu;
         private Structure _targetedStructure;
         private Structure _lastMenuStructure;
-        private bool _lastMenuWasBuildMenu;
 
         public event Action<Structure[]> BuildMenuRequested;
         public event Action<Structure> ActionsMenuRequested;
@@ -70,14 +70,17 @@ namespace ProjectWallE.GameLoop.Player
         private void Update()
         {
             if (!playerManager || !playerManager.CanBuild) return;
-
+            
+            // Close menu
+            if (_menuOpen && Keyboard.current.qKey.wasReleasedThisFrame)
+            {
+                CloseMenus();
+            }
+            
+            // Open menu
             if (Keyboard.current.qKey.wasPressedThisFrame)
             {
                 OpenContextMenu();
-            }
-            else if (Keyboard.current.qKey.wasReleasedThisFrame)
-            {
-                CloseMenus();
             }
 
             CastBuildRay();

@@ -28,8 +28,11 @@ public class Pod : MonoBehaviour
     [SerializeField, AudioLibraryID] private string collisionSfx;
     [SerializeField, AutoGetSelf, HideInInspector] private CinemachineImpulseSource impulseSource;
     
-    private Vector3 _startPosition;
+    
+    
     private IDeployable _deployable;
+    private Transform _parent;
+    private Vector3 _startPosition;
     private Vector3 _targetPoint;
     private Vector3 _forward;
     private bool _hasCollided;
@@ -125,19 +128,27 @@ public class Pod : MonoBehaviour
         }
         
         // Deployable
-        var instance = Instantiate(_deployable as MonoBehaviour);
-        ((IDeployable)instance).Deploy(impactPoint, surfaceNormal, _forward);
-        
+        if (_parent)
+        {
+            var instance = Instantiate(_deployable as MonoBehaviour, _parent);
+            ((IDeployable)instance).Deploy(impactPoint, surfaceNormal, _forward);
+        }
+        else
+        {
+            var instance = Instantiate(_deployable as MonoBehaviour);
+            ((IDeployable)instance).Deploy(impactPoint, surfaceNormal, _forward);
+        }
         
         Destroy(gameObject);
     }
     
-    public void Initialize<T>(T deployable, Vector3 targetPoint, Vector3 forward) where T : MonoBehaviour, IDeployable
+    public void Initialize<T>(T deployable, Vector3 targetPoint, Vector3 forward, Transform parent) where T : MonoBehaviour, IDeployable
     {
         _startPosition = transform.position;
         _deployable = deployable;
         _targetPoint = targetPoint;
         _forward = forward;
+        _parent = parent;
         
         _moveCoroutine = StartCoroutine(MoveInArc());
     }

@@ -99,12 +99,14 @@ namespace ProjectWallE.GameLoop.Player
         {
             if (player && speedLinesSize)
             {
-                if (player.Velocity.magnitude > heighSpeedMagnitudeRange.minValue && !_speedLinesActive)
+                var velocity = player.Velocity.SetY(0f).magnitude;
+                
+                if (velocity > heighSpeedMagnitudeRange.minValue && !_speedLinesActive)
                 {
                     speedLinesVisibility.Show();
                     _speedLinesActive = true;
                 }
-                else if (player.Velocity.magnitude <= heighSpeedMagnitudeRange.minValue && _speedLinesActive)
+                else if (velocity <= heighSpeedMagnitudeRange.minValue && _speedLinesActive)
                 {
                     speedLinesVisibility.Hide();
                     _speedLinesActive = false;  
@@ -120,10 +122,11 @@ namespace ProjectWallE.GameLoop.Player
         {
             damageEffects?.Play(transform.position, _materials);
         }
-
         
         private void OnBoostStart()
         {
+            if (player.PlayerControllerType == PlayerControllerType.Robot) return;
+            
             carBoostEffect?.Play(transform.position, boostAudioSource);
         }
         

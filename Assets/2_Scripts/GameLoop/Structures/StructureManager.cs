@@ -20,7 +20,8 @@ public class StructureManager : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private Pod podPrefab;
     [SerializeField] private ChanceList<Transform> podSpawnPositions = new ChanceList<Transform>();
-    
+
+    private Transform _structureHolder;
     private readonly List<Structure> _structures = new List<Structure>();
     private readonly List<Generator> _generators = new List<Generator>();
     private readonly List<Turret> _turrets = new List<Turret>();
@@ -35,13 +36,15 @@ public class StructureManager : MonoBehaviour
         }
         
         Instance = this;
+        
+        _structureHolder = new GameObject("StructureHolder").transform;
     }
     
     public void DeployPod(Structure structure, Vector3 targetPosition, Vector3 forward)
     {
         var spawnPosition = podSpawnPositions.GetRandomItem();
         Pod pod = Instantiate(podPrefab, spawnPosition.position, Quaternion.LookRotation(spawnPosition.forward));
-        pod.Initialize(structure, targetPosition, forward);
+        pod.Initialize(structure, targetPosition, forward, _structureHolder);
     }
     
     #region Structure Registration

@@ -3,7 +3,6 @@ using DNExtensions.Utilities;
 using DNExtensions.Utilities.AutoGet;
 using UnityEngine;
 
-
 namespace ProjectWallE.GameLoop.Player
 {
     public class PlayerPusher : MonoBehaviour

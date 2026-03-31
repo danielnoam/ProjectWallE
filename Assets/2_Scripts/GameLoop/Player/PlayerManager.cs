@@ -42,6 +42,7 @@ namespace ProjectWallE
         private float _switchTimer;
         private float _lastDamageTime;
 
+        public PlayerControllerType PlayerControllerType => _playerControllerTypeEnum;
         public CarController CarController => carController;
         public RobotController RobotController => robotController;
         public PlayerStructureBuilder StructureBuilder => structureBuilder;

@@ -11,7 +11,7 @@ public class StructureBuildMenu : RadialMenu<Structure>
     {
         if (player)
         {
-            player.StructureBuilder.BuildMenuRequested += HandleOpen;
+            player.StructureBuilder.BuildMenuRequested += OnOpen;
             player.StructureBuilder.MenuCloseRequested += CloseMenu;
         }
     }
@@ -20,12 +20,12 @@ public class StructureBuildMenu : RadialMenu<Structure>
     {
         if (player)
         {
-            player.StructureBuilder.BuildMenuRequested -= HandleOpen;
+            player.StructureBuilder.BuildMenuRequested -= OnOpen;
             player.StructureBuilder.MenuCloseRequested -= CloseMenu;
         }
     }
 
-    private void HandleOpen(Structure[] structures)
+    private void OnOpen(Structure[] structures)
     {
         SetupMenu(structures, ConfigureElement);
         OpenMenu();
