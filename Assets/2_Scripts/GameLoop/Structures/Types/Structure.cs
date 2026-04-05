@@ -37,6 +37,10 @@ public struct StructureUIData
 [SelectionBase]
 public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
 {
+    public static event Action<Structure> OnStructureBuilt;
+    public static event Action<Structure> OnStructureUpgraded;
+    public static event Action<Structure> OnStructureDemolished;
+    
     [Header("Structure")]
     [SerializeField] private bool canDemolish;
     [SerializeField] protected Vector3 topPoint = Vector3.up;
@@ -118,6 +122,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
         CurrentHealth = CurrentLevelData.maxHealth;
         buildEffect?.Play();
         radarTarget?.Ping();
+        OnStructureBuilt?.Invoke(this);
         OnBuild();
     }
     
@@ -140,6 +145,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     
     private void Demolish()
     {
+        OnStructureDemolished?.Invoke(this);
         Destroy(gameObject);
     }
     
@@ -169,6 +175,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
         CurrentHealth = CurrentLevelData.maxHealth;
         upgradeEffect?.Play();
         OnUpgrade();
+        OnStructureUpgraded?.Invoke(this);
     }
 
 

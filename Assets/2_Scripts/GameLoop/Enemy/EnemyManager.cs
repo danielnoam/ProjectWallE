@@ -70,7 +70,6 @@ public class EnemyManager : MonoBehaviour
 
     #endregion
     
-
     #region Registration
 
     public void RegisterEnemy(Enemy enemy)

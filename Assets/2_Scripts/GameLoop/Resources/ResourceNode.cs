@@ -6,6 +6,8 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class ResourceNode : MonoBehaviour, IDamageable
 {
+    public static event Action<ResourceNode> OnDestroyed;
+    
     [Header("Settings")]
     [SerializeField] private float maxHealth = 150;
     [SerializeField] private int resourceAmount = 100;
@@ -33,6 +35,7 @@ public class ResourceNode : MonoBehaviour, IDamageable
         destroyEffect?.Play(transform.position);
         ResourceManager.Instance?.AddResources(resourceAmount);
         OnDeath?.Invoke(this);
+        OnDestroyed?.Invoke(this);
         Destroy(gameObject);
     }
 

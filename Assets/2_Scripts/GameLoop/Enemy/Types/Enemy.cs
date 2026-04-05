@@ -26,6 +26,9 @@ namespace ProjectWallE.GameLoop
     [RequireComponent(typeof(Rigidbody))]
     public abstract class Enemy : MonoBehaviour, IDamageable, IPushable, IPoolable
     {
+        public static event Action<Enemy> OnEnemyKilled;
+        
+        
         [Header("Settings")]
         [SerializeField] private float maxHealth = 100f;
         [SerializeField] private bool canBePushed = true;
@@ -180,6 +183,7 @@ namespace ProjectWallE.GameLoop
         {
             deathEffect?.Play(transform.position);
             OnDeath?.Invoke(this);
+            OnEnemyKilled?.Invoke(this);
             Destroy(gameObject);
         }
 

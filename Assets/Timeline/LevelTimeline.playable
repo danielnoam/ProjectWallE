@@ -251,6 +251,7 @@ MonoBehaviour:
     - {fileID: 6159556742653435264}
     - {fileID: 5928714566332443244}
     - {fileID: 7075503200882715566}
+    - {fileID: 6827295725405647289}
 --- !u!114 &5928714566332443244
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -289,6 +290,43 @@ MonoBehaviour:
   spawnPoint:
     exposedName: 484274ddc675ccf4ca4a18b8a0fd0641
     defaultValue: {fileID: 0}
+--- !u!114 &6827295725405647289
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
+  m_Name: Objective Marker
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
+  m_Time: 5.6
+  objectives:
+  - rid: 126016255878496351
+  - rid: 126016255878496353
+  - rid: 126016255878496365
+  - rid: 126016255878496366
+  references:
+    version: 2
+    RefIds:
+    - rid: 126016255878496351
+      type: {class: SwitchControllerObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        requirement: 0
+    - rid: 126016255878496353
+      type: {class: BoostObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        requiredDuration: 2
+    - rid: 126016255878496365
+      type: {class: DestroyResourceNodesObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        destroyCount: 5
+    - rid: 126016255878496366
+      type: {class: SpendResourcesObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        targetSpend: 500
 --- !u!114 &7075503200882715566
 MonoBehaviour:
   m_ObjectHideFlags: 1
