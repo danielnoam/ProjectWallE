@@ -1,9 +1,7 @@
 using DNExtensions.Utilities.AutoGet;
-using ProjectWallE.GameLoop.Player;
-using ProjectWallE.UI;
 using UnityEngine;
 
-namespace ProjectWallE
+namespace ProjectWallE.UI
 {
     public class StructureBuildMenu : RadialMenu<Structure>
     {

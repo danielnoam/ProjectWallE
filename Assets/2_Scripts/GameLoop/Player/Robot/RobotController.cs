@@ -336,6 +336,11 @@ namespace ProjectWallE
             _isGrounded = groundedNow;
             return groundedNow;
         }
+        
+        public bool IsGrounded()
+        {
+            return _isGrounded;
+        }
 
         #endregion
 

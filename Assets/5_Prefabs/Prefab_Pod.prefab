@@ -260,8 +260,14 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1160
   pushRange: 15
-  pushPower: 15
-  collisionParticle: {fileID: 3589259924837436033, guid: e6dd420ba061f104abb1af9566d0eb3d, type: 3}
+  pushStrength:
+    minValue: 3
+    maxValue: 15
+  collisionEffect:
+    effectType: 1
+    particle: {fileID: 3589259924837436033, guid: e6dd420ba061f104abb1af9566d0eb3d, type: 3}
+    triggerParticle: {fileID: 0}
+    soundId: PodCollision
   collisionImpulseSettings:
     impulseChannel: 1
     impulseType: 1
@@ -272,7 +278,6 @@ MonoBehaviour:
     dissipationDistance: 100
     dissipationRate: 0.25
     propagationSpeed: 343
-  collisionSfx: PodCollision
   impulseSource: {fileID: -6820564451760052507}
 --- !u!1001 &2377388537530615530
 PrefabInstance:

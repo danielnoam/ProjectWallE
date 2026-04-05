@@ -15,7 +15,12 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField] private DamageEffects damageEffects;
         [SerializeField, AudioLibraryID] private string changeStateSoundId;
         
-        [Header("FullScreen Effects")]
+        [Header("Tire Dirt")]
+        [SerializeField] private float tireEffectSpeedThreshold = 1f;
+        [SerializeField] private ParticleSystem[] robotTireEffects;
+        [SerializeField] private ParticleSystem[] carTireEffects;
+        
+        [Header("FullScreen")]
         [SerializeField, MinMaxRange(0f, 50f)] private RangedFloat heighSpeedMagnitudeRange = new RangedFloat(20f,30f);
         [SerializeField, MinMaxRange(0f, 1f)] private Vector2 speedLinesSizeRange = new Vector2(1f, 0.8f);
         [SerializeField, Range(0f,1f)] private float lowHealthThreshold = 0.3f;
@@ -33,6 +38,8 @@ namespace ProjectWallE.GameLoop.Player
         private bool _speedLinesActive;
         private bool _lowHealthActive;
         private Material[] _materials;
+        private bool[] _tireEffectsPlaying;
+        private ParticleSystem[] _activeTireEffects;
         
         private void OnValidate()
         {
@@ -93,6 +100,7 @@ namespace ProjectWallE.GameLoop.Player
         private void Update()
         {
             UpdateSpeedLines();
+            UpdateTireEffects();
         }
 
         private void UpdateSpeedLines()
@@ -139,6 +147,9 @@ namespace ProjectWallE.GameLoop.Player
         {
             carBoostEffect?.Stop(boostAudioSource);
             AudioLibrary.PlayOnSource(changeStateSoundId, changeStateAudioSource);
+            StopAllTireEffects();
+            _activeTireEffects = type == PlayerControllerType.Robot ? robotTireEffects : carTireEffects;
+            _tireEffectsPlaying = new bool[_activeTireEffects.Length];
         }
         
         private void OnHealthChanged(float currentHealth, float maxHealth)
@@ -154,6 +165,46 @@ namespace ProjectWallE.GameLoop.Player
             {
                 lowHealthEffect?.Hide();
                 _lowHealthActive = false;
+            }
+        }
+        
+        private void UpdateTireEffects()
+        {
+            if (_activeTireEffects == null) return;
+
+            bool isMoving = player.Velocity.sqrMagnitude > tireEffectSpeedThreshold * tireEffectSpeedThreshold;
+
+            for (int i = 0; i < _activeTireEffects.Length; i++)
+            {
+                if (!_activeTireEffects[i]) continue;
+
+                bool shouldPlay = isMoving && IsTireGrounded(i);
+
+                if (shouldPlay && !_tireEffectsPlaying[i])
+                {
+                    _activeTireEffects[i].Play();
+                    _tireEffectsPlaying[i] = true;
+                }
+                else if (!shouldPlay && _tireEffectsPlaying[i])
+                {
+                    _activeTireEffects[i].Stop();
+                    _tireEffectsPlaying[i] = false;
+                }
+            }
+        }
+        
+        private bool IsTireGrounded(int index)
+        {
+            return player.PlayerControllerType == PlayerControllerType.Robot ? player.RobotController.IsGrounded() : player.CarController.IsTireGrounded(index);
+        }
+
+        private void StopAllTireEffects()
+        {
+            if (_activeTireEffects == null) return;
+            for (int i = 0; i < _activeTireEffects.Length; i++)
+            {
+                _activeTireEffects[i]?.Stop();
+                if (_tireEffectsPlaying != null) _tireEffectsPlaying[i] = false;
             }
         }
         

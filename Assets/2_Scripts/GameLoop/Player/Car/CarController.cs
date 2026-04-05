@@ -483,6 +483,8 @@ namespace _2_Scripts
 
             return (float)groundedCount / _allTires.Count;
         }
+        
+        public bool IsTireGrounded(int index) => _allTires[index].isGroundedExact;
 
         #endregion
     }

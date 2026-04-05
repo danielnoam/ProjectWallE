@@ -37,7 +37,7 @@ namespace ProjectWallE.GameLoop
                     
                     if (particle)
                     {
-                        var effect = ObjectPooler.GetObjectFromPool(particle, position);
+                        var effect = ObjectPooler.GetObjectFromPool(particle, position, rotation);
                         effect?.Play();
                     }
                     break;
@@ -55,6 +55,11 @@ namespace ProjectWallE.GameLoop
                 AudioLibrary.PlayAtPosition(soundId, position);
             }
         }
+
+        public void Play(Vector3 position, AudioSource audioSource = null)
+        {
+            Play(position, Quaternion.identity, audioSource);
+        }
     }
     
     [Serializable]
@@ -66,12 +71,13 @@ namespace ProjectWallE.GameLoop
         public void Play(Vector3 position, AudioSource audioSource = null)
         {
             if (visualEffects != null && visualEffects.Length != 0)
+            {
                 foreach (var effect in visualEffects)
                 {
                     effect?.Play();
                 }
-
-
+            }
+            
             if (audioSource)
             {
                 AudioLibrary.PlayOnSource(soundId, audioSource);

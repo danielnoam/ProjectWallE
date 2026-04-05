@@ -1,6 +1,4 @@
 using System.Collections;
-using DNExtensions.Systems.AudioLibrary;
-using DNExtensions.Systems.ObjectPooling;
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.AutoGet;
 using DNExtensions.Utilities.CinemachineExtensions;
@@ -23,9 +21,8 @@ public class Pod : MonoBehaviour
     [MinMaxRange(0, 100)] public RangedFloat pushStrength = new RangedFloat(3,15);
     
     [Header("Effects")]
-    [SerializeField] private PoolableParticleSystem collisionParticle;
+    [SerializeField] private ParticleEffectAction collisionEffect;
     [SerializeField] private ImpulseSettings collisionImpulseSettings;
-    [SerializeField, AudioLibraryID] private string collisionSfx;
     [SerializeField, AutoGetSelf, HideInInspector] private CinemachineImpulseSource impulseSource;
     
     
@@ -102,12 +99,7 @@ public class Pod : MonoBehaviour
     {
         // Effects
         impulseSource?.GenerateImpulse(collisionImpulseSettings);
-        AudioLibrary.PlayAtPosition(collisionSfx, transform.position);
-        if (collisionParticle)
-        {
-            var particle = ObjectPooler.GetObjectFromPool(collisionParticle, impactPoint, Quaternion.LookRotation(surfaceNormal));
-            particle?.Play();
-        }
+        collisionEffect?.Play(transform.position);
         
         // Push && Damage
         var colliders = Physics.OverlapSphere(impactPoint, pushRange);
