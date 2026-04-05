@@ -8,36 +8,25 @@ namespace ProjectWallE.GameLoop.Player
     public class PlayerPusher : MonoBehaviour
     {
         [Header("Settings")] 
-        [SerializeField] private float pushPower = 1500f;
-        [SerializeField] private float pushDamage = 35f;
-        [SerializeField] private bool pushOnlyWhenBoosting = true;
+        [SerializeField] private float pushPower = 35f;
+        [SerializeField] private float pushDamage = 15f;
+        [SerializeField, Min(0f)] private float speedThreshold = 14f;
         [SerializeField] private SOLayerMask enemyLayer;
         [SerializeField] private CollisionRelay pushableCollider;
         [SerializeField, AutoGetSelf, HideInInspector] private PlayerManager playerManager;
 
         private bool _isCar;
-        private bool _isBoosting;
 
         private void OnEnable()
         {
            if (pushableCollider) pushableCollider.TriggerEntered += OnColliderEntered;
            if (playerManager) playerManager.OnControllerChanged += OnControllerChanged;
-           if (playerManager.CarController.CarBoost)
-           {
-               playerManager.CarController.CarBoost.OnBoostStart += OnBoostStart;
-               playerManager.CarController.CarBoost.OnBoostEnd += OnBoostEnd;
-           }
         }
 
         private void OnDisable()
         {
            if (pushableCollider) pushableCollider.TriggerEntered -= OnColliderEntered;
            if (playerManager) playerManager.OnControllerChanged -= OnControllerChanged;
-           if (playerManager.CarController.CarBoost)
-           {
-               playerManager.CarController.CarBoost.OnBoostStart -= OnBoostStart;
-               playerManager.CarController.CarBoost.OnBoostEnd -= OnBoostEnd;
-           }
         }
 
         private void OnControllerChanged(PlayerControllerType controllerType)
@@ -45,19 +34,14 @@ namespace ProjectWallE.GameLoop.Player
             _isCar = controllerType == PlayerControllerType.Car;
         }
         
-        private void OnBoostEnd()
-        {
-            _isBoosting = false;
-        }
-
-        private void OnBoostStart()
-        {
-            _isBoosting = true;
-        }
 
         private void OnColliderEntered(Collider other)
         {
-            if ((pushOnlyWhenBoosting && !_isBoosting) || !_isCar || (enemyLayer.Value & (1 << other.gameObject.layer)) == 0) return;
+            if (!_isCar || (enemyLayer.Value & (1 << other.gameObject.layer)) == 0) return;
+            
+            var velocity = playerManager.Velocity.SetY(0f).magnitude;
+            
+            if (velocity < speedThreshold)  return;
             
             var pushable = other.GetComponentInParent<IPushable>();
             if (pushable != null)
