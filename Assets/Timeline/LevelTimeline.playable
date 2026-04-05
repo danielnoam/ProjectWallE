@@ -306,8 +306,6 @@ MonoBehaviour:
   objectives:
   - rid: 126016255878496351
   - rid: 126016255878496353
-  - rid: 126016255878496365
-  - rid: 126016255878496366
   references:
     version: 2
     RefIds:
@@ -319,14 +317,6 @@ MonoBehaviour:
       type: {class: BoostObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         requiredDuration: 2
-    - rid: 126016255878496365
-      type: {class: DestroyResourceNodesObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
-      data:
-        destroyCount: 5
-    - rid: 126016255878496366
-      type: {class: SpendResourcesObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
-      data:
-        targetSpend: 500
 --- !u!114 &7075503200882715566
 MonoBehaviour:
   m_ObjectHideFlags: 1

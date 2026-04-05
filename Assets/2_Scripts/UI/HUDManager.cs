@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
+using System.Text;
 using DNExtensions.Systems.Shapes;
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.AutoGet;
 using DNExtensions.Utilities.CustomFields;
+using ProjectWallE.GameLoop;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,12 +30,13 @@ namespace ProjectWallE.UI
         [SerializeField] private Image basicAttackIcon;
         [SerializeField] private Image specialAttackIcon;
         
-        
         [Header("References")] 
         [SerializeField] private GameObject crosshair;
         [SerializeField, AutoGetChildren, HideInInspector] private RadarSystem radarSystem;
         [SerializeField, AutoGetScene, HideInInspector] private PlayerManager player;
 
+        private IReadOnlyList<BaseLevelObjective> _activeObjectives;
+        private readonly StringBuilder _objectiveBuilder = new();
 
         private void OnValidate()
         {
@@ -54,6 +58,8 @@ namespace ProjectWallE.UI
             LevelManager.OnTimeUpdated += OnTimeUpdated;
             LevelManager.OnLevelCompleted += OnLevelCompleted;
             LevelManager.OnLevelFailed += OnLevelFailed;
+            LevelManager.OnObjectivesStarted += OnObjectivesStarted;
+            LevelManager.OnObjectivesCompleted += OnObjectivesCompleted;
 
             if (player)
             {
@@ -80,6 +86,8 @@ namespace ProjectWallE.UI
             LevelManager.OnTimeUpdated -= OnTimeUpdated;
             LevelManager.OnLevelCompleted -= OnLevelCompleted;
             LevelManager.OnLevelFailed -= OnLevelFailed;
+            LevelManager.OnObjectivesStarted -= OnObjectivesStarted;
+            LevelManager.OnObjectivesCompleted -= OnObjectivesCompleted;
 
             if (player)
             {
@@ -98,7 +106,6 @@ namespace ProjectWallE.UI
                                   $"\nGenerators - {data.GeneratorsCount}";
         }
         
-        
         private void ResetTexts()
         {
             objectivesText.text = ""; 
@@ -111,17 +118,27 @@ namespace ProjectWallE.UI
             currentResourcesText.color = currentResourcesText.color.SetAlpha(1f);
         }
 
-
         private void OnLevelFailed()
         {
+            _activeObjectives = null;
             UpdateObjectiveDisplay("Fail");
         }
 
         private void OnLevelCompleted()
         {
+            _activeObjectives = null;
             UpdateObjectiveDisplay("Success");  
         }
 
+        private void OnObjectivesStarted(List<BaseLevelObjective> objectives)
+        {
+            _activeObjectives = objectives;
+        }
+
+        private void OnObjectivesCompleted()
+        {
+            _activeObjectives = null;
+        }
 
         private void OnControllerChanged(PlayerControllerType controllerType)
         {
@@ -141,13 +158,32 @@ namespace ProjectWallE.UI
                     throw new ArgumentOutOfRangeException(nameof(controllerType), controllerType, null);
             }
         }
-        
 
         private void OnTimeUpdated(float timeRemaining)
         {
+            if (_activeObjectives != null)
+            {
+                UpdateObjectivesDisplay();
+                return;
+            }
+
             TimeSpan timeSpan = TimeSpan.FromSeconds(timeRemaining);
             string objectives = $"{objectivePrefix}\n{timeSpan.Minutes:D2}:{timeSpan.Seconds:D2}";
             UpdateObjectiveDisplay(objectives);
+        }
+
+        private void UpdateObjectivesDisplay()
+        {
+            _objectiveBuilder.Clear();
+            _objectiveBuilder.AppendLine("Objectives:");
+
+            foreach (var objective in _activeObjectives)
+            {
+                string status = objective.IsCompleted ? "✓" : "○";
+                _objectiveBuilder.AppendLine($"{status} {objective.Description} - {objective.ProgressText}");
+            }
+
+            UpdateObjectiveDisplay(_objectiveBuilder.ToString());
         }
 
         private void UpdateResourcesDisplay(int currentResources)
@@ -195,6 +231,5 @@ namespace ProjectWallE.UI
             var normalizedCooldown = 1f - (currentCooldown / maxCooldown);
             basicAttackIcon.color = basicAttackIcon.color.SetAlpha(normalizedCooldown);
         }
-
     }
 }
