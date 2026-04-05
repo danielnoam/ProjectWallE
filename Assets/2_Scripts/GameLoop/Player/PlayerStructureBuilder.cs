@@ -1,6 +1,7 @@
 using System;
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.AutoGet;
+using PrimeTween;
 using ProjectWallE.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -28,6 +29,7 @@ namespace ProjectWallE.GameLoop.Player
         private bool _lastMenuWasBuildMenu;
         private Structure _targetedStructure;
         private Structure _lastMenuStructure;
+        private Sequence _timeSequence;
 
         public event Action<Structure[]> BuildMenuRequested;
         public event Action<Structure> ActionsMenuRequested;
@@ -70,22 +72,27 @@ namespace ProjectWallE.GameLoop.Player
         private void Update()
         {
             if (!playerManager || !playerManager.CanBuild) return;
-            
-            // Close menu
-            if (_menuOpen && Keyboard.current.qKey.wasReleasedThisFrame)
-            {
-                CloseMenus();
-            }
-            
-            // Open menu
-            if (Keyboard.current.qKey.wasPressedThisFrame)
+
+            CastBuildRay();
+
+            if (!_menuOpen && Keyboard.current.qKey.wasPressedThisFrame)
             {
                 OpenContextMenu();
             }
+            else if (_menuOpen)
+            {
+                if (Keyboard.current.qKey.wasReleasedThisFrame || Mouse.current.leftButton.wasPressedThisFrame)
+                {
+                    SelectHoveredAndClose();
+                }
+                else if (Mouse.current.rightButton.wasPressedThisFrame)
+                {
+                    CloseMenus();
+                }
 
-            CastBuildRay();
+            }
         }
-
+        
         private void OnDeath(IDamageable damageable)
         {
             CloseMenus();
@@ -101,15 +108,25 @@ namespace ProjectWallE.GameLoop.Player
             if (!action.IsAvailable) return;
             action.OnSelected?.Invoke();
         }
+        
+        private void SelectHoveredAndClose()
+        {
+            if (_lastMenuWasBuildMenu) buildMenu.TrySelectHovered();
+            else actionsMenu.TrySelectHovered();
+
+            CloseMenus();
+        }
 
         private void OpenContextMenu()
         {
             _menuOpen = true;
+            SetGameTimeScale(0f);
             RefreshOpenMenu();
         }
 
         private void CloseMenus()
         {
+            SetGameTimeScale(1f);
             MenuCloseRequested?.Invoke();
             BuildPrompt.Instance?.Hide();
             UpdateStructureStatusVisibility(null);
@@ -213,6 +230,17 @@ namespace ProjectWallE.GameLoop.Player
             if (!ResourceManager.Instance.TrySpendResources(structure.BuildCost)) return;
 
             StructureManager.Instance?.DeployPod(structure, hit.point, transform.forward);
+        }
+
+        private void SetGameTimeScale(float timeScale)
+        {
+            if (Mathf.Approximately(Time.timeScale, timeScale)) return;
+            if (_timeSequence.isAlive) _timeSequence.Stop();
+
+            var easeToUse = timeScale > 0f ? Ease.OutBack : Ease.Linear;
+            
+            _timeSequence = Sequence.Create(useUnscaledTime: true)
+                .Group(Tween.GlobalTimeScale(timeScale, 0.5f, easeToUse));
         }
     }
 }

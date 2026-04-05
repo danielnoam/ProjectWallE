@@ -50,7 +50,8 @@ namespace ProjectWallE
         public bool CanBuild => _currentController.canBuild;
         public bool CanShoot => _currentController.canShoot;
         public Vector3 Velocity => _rigidbody.linearVelocity;
-        
+        public bool IsAlive => _currentHealth > 0;
+
         public event Action<IDamageable> OnDeath;
         public event Action<float> OnDamaged;
         public event Action<PlayerControllerType> OnControllerChanged;

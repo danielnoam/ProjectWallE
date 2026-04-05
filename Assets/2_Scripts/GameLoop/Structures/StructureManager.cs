@@ -152,6 +152,7 @@ public class StructureManager : MonoBehaviour
         foreach (var item in list)
         {
             if (!item) continue;
+            if (item is IDamageable { IsAlive: false }) continue;
 
             float dist = Vector3.Distance(position, item.transform.position);
             if (dist > maxRange) continue;
@@ -174,6 +175,7 @@ public class StructureManager : MonoBehaviour
         foreach (var item in list)
         {
             if (!item) continue;
+            if (item is IDamageable { IsAlive: false }) continue;
 
             if (position.HasValue && Vector3.Distance(position.Value, item.transform.position) > maxRange) continue;
 

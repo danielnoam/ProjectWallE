@@ -25,7 +25,7 @@ namespace ProjectWallE.GameLoop
         [SerializeField, ShowIf(nameof(effectType), EffectType.Trigger)] private ParticleSystem triggerParticle;
         [SerializeField, AudioLibraryID] private string soundId;
 
-        public void Play(Vector3 position, AudioSource audioSource = null)
+        public void Play(Vector3 position, Quaternion rotation, AudioSource audioSource = null)
         {
             switch (effectType)
             {

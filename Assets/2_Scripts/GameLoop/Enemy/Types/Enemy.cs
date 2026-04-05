@@ -140,7 +140,9 @@ namespace ProjectWallE.GameLoop
 
         protected bool IsTargetValid(IDamageable target)
         {
-            return target is Component component && component && component.gameObject.activeInHierarchy;
+            if (target == null) return false;
+            
+            return target.gameObject.activeInHierarchy && target.IsAlive;
         }
 
         protected virtual void Initialize()

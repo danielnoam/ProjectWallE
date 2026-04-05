@@ -5,32 +5,31 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace RadialMenu
+namespace ProjectWallE.UI
 {
     public class RadialMenu<T> : MonoBehaviour where T : class
     {
-        [Header("Menu Settings")] 
-        public Color hoveredColor = Color.yellow;
-        public Color normalColor = Color.white;
+        [Header("Menu Settings")]
+        [SerializeField] private Color hoveredColor = Color.yellow;
+        [SerializeField] private Color normalColor = Color.white;
 
-        [Header("Input Settings")] 
-        public float selectionDeadzone = 50f;
-        public float maxRadius = 150;
+        [Header("Input Settings")]
+        [SerializeField] private float selectionDeadzone = 50f;
+        [SerializeField] private float maxRadius = 150f;
         [SerializeField, ReadOnly, Preview] private Vector2 mousePositionFromCenter;
 
-        [Header("References")] 
-        public CanvasGroup canvasGroup;
-        public TextMeshProUGUI selectedItemText;
-        public RadialMenuElement elementPrefab;
-        public Transform elementsContainer;
+        [Header("References")]
+        [SerializeField] private CanvasGroup canvasGroup;
+        [SerializeField] private TextMeshProUGUI selectedItemText;
+        [SerializeField] private RadialMenuElement elementPrefab;
+        [SerializeField] private Transform elementsContainer;
 
-        private readonly Dictionary<RadialMenuElement, T> _elementToItem = new Dictionary<RadialMenuElement, T>();
-        private readonly List<RadialMenuElement> _menuElements = new List<RadialMenuElement>();
+        private readonly Dictionary<RadialMenuElement, T> _elementToItem = new();
+        private readonly List<RadialMenuElement> _menuElements = new();
         private RadialMenuElement _hoveredElement;
         private Vector2 _accumulatedMouseDelta;
         private int _currentSegmentIndex = -1;
         private bool _isOpen;
-
 
         public event Action<T> OnItemSelected;
 
@@ -41,7 +40,7 @@ namespace RadialMenu
 
         private void Update()
         {
-            if (_isOpen) SelectionInputHandling();
+            if (_isOpen) UpdateHoverSelection();
         }
 
         private void OnDestroy()
@@ -69,6 +68,31 @@ namespace RadialMenu
             SetupMenu(items.ToArray(), configureElement);
         }
 
+        public bool TrySelectHovered()
+        {
+            if (!_hoveredElement) return false;
+            _hoveredElement.Select();
+            return true;
+        }
+
+        public void OpenMenu()
+        {
+            canvasGroup.alpha = 1f;
+            canvasGroup.blocksRaycasts = true;
+            canvasGroup.interactable = true;
+            _isOpen = true;
+        }
+
+        public void CloseMenu()
+        {
+            UnhoverElement();
+            _accumulatedMouseDelta = Vector2.zero;
+            canvasGroup.alpha = 0f;
+            canvasGroup.blocksRaycasts = false;
+            canvasGroup.interactable = false;
+            _isOpen = false;
+        }
+
         private void HoverElement(int index)
         {
             if (index < 0 || index >= _menuElements.Count) return;
@@ -79,7 +103,7 @@ namespace RadialMenu
             UnhoverElement();
             _hoveredElement = element;
             _hoveredElement.SetHovered();
-            if (selectedItemText) selectedItemText.text = element.elementInfo;
+            if (selectedItemText) selectedItemText.text = element.Info;
         }
 
         private void UnhoverElement()
@@ -94,10 +118,9 @@ namespace RadialMenu
         {
             if (!_elementToItem.TryGetValue(element, out T item)) return;
             OnItemSelected?.Invoke(item);
-            CloseMenu();
         }
 
-        private void SelectionInputHandling()
+        private void UpdateHoverSelection()
         {
             if (_menuElements.Count == 0) return;
 
@@ -122,8 +145,7 @@ namespace RadialMenu
 
             for (int i = 0; i < _menuElements.Count; i++)
             {
-                Vector2 elementScreenPos =
-                    RectTransformUtility.WorldToScreenPoint(null, _menuElements[i].transform.position);
+                Vector2 elementScreenPos = RectTransformUtility.WorldToScreenPoint(null, _menuElements[i].transform.position);
                 Vector2 menuCenter = RectTransformUtility.WorldToScreenPoint(null, elementsContainer.position);
                 Vector2 elementDirection = elementScreenPos - menuCenter;
                 float elementAngle = Mathf.Atan2(elementDirection.y, elementDirection.x) * Mathf.Rad2Deg;
@@ -141,9 +163,6 @@ namespace RadialMenu
                 _currentSegmentIndex = closestIndex;
                 HoverElement(closestIndex);
             }
-
-            if (Mouse.current.leftButton.wasPressedThisFrame && _hoveredElement)
-                _hoveredElement.Select();
         }
 
         private void ClearMenu()
@@ -159,24 +178,6 @@ namespace RadialMenu
 
             _menuElements.Clear();
             _elementToItem.Clear();
-        }
-
-        public void CloseMenu()
-        {
-            UnhoverElement();
-            _accumulatedMouseDelta = Vector2.zero;
-            canvasGroup.alpha = 0f;
-            canvasGroup.blocksRaycasts = false;
-            canvasGroup.interactable = false;
-            _isOpen = false;
-        }
-
-        public void OpenMenu()
-        {
-            canvasGroup.alpha = 1f;
-            canvasGroup.blocksRaycasts = true;
-            canvasGroup.interactable = true;
-            _isOpen = true;
         }
     }
 }

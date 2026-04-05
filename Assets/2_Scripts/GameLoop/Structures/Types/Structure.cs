@@ -63,6 +63,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     public Vector3 TopPoint => transform.position + transform.TransformVector(topPoint);
     public float MaxHealth => CurrentLevelData.maxHealth;
     public int BuildCost => Levels[0].cost;
+    public bool IsAlive => CurrentHealth > 0;
     
     public event Action<IDamageable> OnDeath;
     public event Action<float> OnDamaged;

@@ -199,7 +199,7 @@ public abstract class Turret : Structure
         foreach (var hitCollider in hitColliders)
         {
             var enemy = hitCollider.GetComponentInParent<Enemy>();
-            if (enemy)
+            if (enemy && enemy.IsAlive)
             {
                 StartAttackingTarget(enemy);
                 return true;

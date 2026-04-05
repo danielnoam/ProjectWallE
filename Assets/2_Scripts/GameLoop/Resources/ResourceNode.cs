@@ -16,6 +16,8 @@ public class ResourceNode : MonoBehaviour, IDamageable
     private float _currentHealth;
     private Material _material;
 
+    public bool IsAlive => _currentHealth > 0;
+    
     public event Action<IDamageable> OnDeath;
     public event Action<float> OnDamaged;
     

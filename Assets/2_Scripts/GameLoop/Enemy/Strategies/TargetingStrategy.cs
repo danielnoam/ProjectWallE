@@ -30,7 +30,7 @@ namespace ProjectWallE.GameLoop
         protected override IDamageable FindTarget(Vector3 position, float range)
         {
             var player = LevelManager.Instance?.Player;
-            if (!player) return null;
+            if (!player || !player.IsAlive) return null;
             
             if (inRange)
             {

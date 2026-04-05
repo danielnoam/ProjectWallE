@@ -7,6 +7,7 @@ public class EnemyDamageRelay : MonoBehaviour, IDamageable
 {
     [SerializeField] private EnemyHitZone hitZone = EnemyHitZone.Normal;
     
+    public bool IsAlive => true;
     public EnemyHitZone HitZone => hitZone;
     public Enemy Parent { get; private set; }
     public Material[] Materials { get; private set; }
