@@ -273,8 +273,12 @@ namespace _2_Scripts
         
         private void ApplyForwardAcceleration(float carSpeed, float topSpeed, float accelForce, float brakeForce)
         {
+            if (carSpeed > topSpeed) return;
+            
             foreach (var tire in _allTires)
             {
+                if(!tire.isGroundedExtended) continue;
+                
                 float normalizedSpeed = Mathf.Clamp01(Mathf.Abs(carSpeed) / topSpeed);
 
                 float availableAcceleration = carSpeed >= 0

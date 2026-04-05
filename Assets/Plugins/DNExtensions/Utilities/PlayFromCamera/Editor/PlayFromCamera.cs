@@ -117,6 +117,7 @@ namespace DNExtensions.Utilities.PlayFromCamera
                 {
                     rigidbody.linearVelocity = Vector3.zero;
                     rigidbody.angularVelocity = Vector3.zero;
+                    rigidbody.position = targetPos;
                 }
                 
                 return true;

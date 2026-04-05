@@ -1,4 +1,5 @@
 using _2_Scripts;
+using DNExtensions.Utilities.Inline;
 using UnityEngine;
 
 namespace ProjectWallE
@@ -6,7 +7,7 @@ namespace ProjectWallE
     [RequireComponent(typeof(RobotInput))]
     public class RobotController : MonoBehaviour, IPlayerController
     {
-        [SerializeField] private SORobotControllerSettings settings;
+        [SerializeField, Inline] private SORobotControllerSettings settings;
         [Space(10)]
         [SerializeField] private Transform groundRayPoint;
         [SerializeField] private Vector3 centerOfMassOffset;
