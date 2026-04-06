@@ -179,8 +179,7 @@ namespace ProjectWallE.UI
 
             foreach (var objective in _activeObjectives)
             {
-                string status = objective.IsCompleted ? "✓" : "○";
-                _objectiveBuilder.AppendLine($"{status} {objective.Description} - {objective.ProgressText}");
+                _objectiveBuilder.AppendLine($"○ {objective.Description} - {objective.ProgressText}");
             }
 
             UpdateObjectiveDisplay(_objectiveBuilder.ToString());

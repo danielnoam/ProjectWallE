@@ -1089,7 +1089,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.Player.PlayerPusher
   pushPower: 35
   pushDamage: 15
-  pushOnlyWhenBoosting: 1
+  speedThreshold: 14
   enemyLayer: {fileID: 11400000, guid: 2d607d7566d764844b32be4199186943, type: 2}
   pushableCollider: {fileID: 7684777718141572874}
   playerManager: {fileID: 2369243402749369746}
