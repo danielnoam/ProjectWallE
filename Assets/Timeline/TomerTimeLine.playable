@@ -1,0 +1,168 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-2831747386146784124
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55379675b0944e639e1ef8954a96c2a4, type: 3}
+  m_Name: Level Event Track
+  m_EditorClassIdentifier: Assembly-CSharp::LevelEventTrack
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 0
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 11400000}
+  m_Children: []
+  m_Clips: []
+  m_Markers:
+    m_Objects: []
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfda56da833e2384a9677cd3c976a436, type: 3}
+  m_Name: TomerTimeLine
+  m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.TimelineAsset
+  m_Version: 0
+  m_Tracks:
+  - {fileID: -2831747386146784124}
+  - {fileID: 5586992869872184875}
+  m_FixedDuration: 210.21666666666667
+  m_EditorSettings:
+    m_Framerate: 60
+    m_ScenePreview: 1
+  m_DurationMode: 1
+  m_MarkerTrack: {fileID: 0}
+--- !u!114 &3501194080883682793
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
+  m_Name: Objective Marker
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
+  m_Time: 1
+  objectives:
+  - rid: 1993976599894032386
+  references:
+    version: 2
+    RefIds:
+    - rid: 1993976599894032386
+      type: {class: SwitchControllerObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        requirement: 1
+--- !u!114 &5586992869872184875
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34df62f90e684524fad13c21a7389ee9, type: 3}
+  m_Name: Level Event Marker Track
+  m_EditorClassIdentifier: Assembly-CSharp::LevelEventMarkerTrack
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 0
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 11400000}
+  m_Children: []
+  m_Clips: []
+  m_Markers:
+    m_Objects:
+    - {fileID: 6827295725405647289}
+    - {fileID: 3501194080883682793}
+    - {fileID: 5691303165561134707}
+    - {fileID: 8979726575955328570}
+--- !u!114 &5691303165561134707
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
+  m_Name: Objective Marker
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
+  m_Time: 2
+  objectives:
+  - rid: 1993976599894032391
+  references:
+    version: 2
+    RefIds:
+    - rid: 1993976599894032391
+      type: {class: GoToPositionObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        targetPosition:
+          exposedName: 1c1ed3fc024312a448dfd8767f26320d
+          defaultValue: {fileID: 0}
+        radius: 10
+--- !u!114 &6827295725405647289
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
+  m_Name: Objective Marker
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
+  m_Time: 0.3
+  objectives:
+  - rid: 1993976599894032384
+  references:
+    version: 2
+    RefIds:
+    - rid: 1993976599894032384
+      type: {class: GoToPositionObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        targetPosition:
+          exposedName: a0d208d1084d7d24aa3503b4f3078220
+          defaultValue: {fileID: 0}
+        radius: 20
+--- !u!114 &8979726575955328570
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
+  m_Name: Objective Marker
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
+  m_Time: 3.4
+  objectives:
+  - rid: 1993976599894032392
+  references:
+    version: 2
+    RefIds:
+    - rid: 1993976599894032392
+      type: {class: BoostObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        requiredDuration: 0.5
