@@ -74,13 +74,30 @@ namespace ProjectWallE.GameLoop
 
         protected override void OnInitialize(IExposedPropertyTable resolver = null)
         {
+            var player = LevelManager.Instance.Player;
             LevelManager.Instance.Player.OnControllerChanged += OnControllerChanged;
+            
+            switch (requirement)
+            {
+                case SwitchRequirement.SwitchToCar:
+                {
+                    if (player.PlayerControllerType == PlayerControllerType.Car) Complete();
+                    break;
+                }
+                case SwitchRequirement.SwitchToRobot:
+                {
+                    if (player.PlayerControllerType == PlayerControllerType.Robot) Complete();
+                    break;
+                }
+            }
         }
 
         public override void Dispose()
         {
             if (LevelManager.Instance && LevelManager.Instance.Player)
+            {
                 LevelManager.Instance.Player.OnControllerChanged -= OnControllerChanged;
+            }
         }
 
         private void OnControllerChanged(PlayerControllerType type)
@@ -111,6 +128,8 @@ namespace ProjectWallE.GameLoop
 
         protected override void OnInitialize(IExposedPropertyTable resolver = null)
         {
+            _boostDuration = 0f;
+            _isBoosting = false;
             _carBoost = LevelManager.Instance.Player.CarController.CarBoost;
             _carBoost.OnBoostStart += OnBoostStart;
             _carBoost.OnBoostEnd += OnBoostEnd;
@@ -144,8 +163,8 @@ namespace ProjectWallE.GameLoop
 
         private void OnBoostEnd()
         {
-            _isBoosting = false;
             _boostDuration = 0f;
+            _isBoosting = false;
         }
     }
 
@@ -194,6 +213,7 @@ namespace ProjectWallE.GameLoop
 
         protected override void OnInitialize(IExposedPropertyTable resolver = null)
         {
+            _currentDistance = float.MaxValue;
             _resolvedTarget = targetPosition.Resolve(resolver);
             _player = LevelManager.Instance.Player.transform;
         }

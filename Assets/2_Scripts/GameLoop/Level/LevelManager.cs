@@ -117,10 +117,10 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
     {
         if (!_levelActive) return;
 
-        if (data.BasesCount <= 0)
-        {
-            FailLevel();
-        }
+        // if (data.BasesCount <= 0)
+        // {
+        //     FailLevel();
+        // }
     }
 
     private void CompleteLevel()

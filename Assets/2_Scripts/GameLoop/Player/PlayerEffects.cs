@@ -16,8 +16,9 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField, AudioLibraryID] private string changeStateSoundId;
         
         [Header("Tire Dirt")]
-        [SerializeField] private float tireEffectSpeedThreshold = 1f;
+        [SerializeField] private float tireEffectRobotSpeedThreshold = 3f;
         [SerializeField] private ParticleSystem[] robotTireEffects;
+        [SerializeField] private float tireEffectCarSpeedThreshold = 6f;
         [SerializeField] private ParticleSystem[] carTireEffects;
         
         [Header("FullScreen")]
@@ -107,22 +108,27 @@ namespace ProjectWallE.GameLoop.Player
         {
             if (player && speedLinesSize)
             {
-                var velocity = player.Velocity.SetY(0f).magnitude;
-                
-                if (velocity > heighSpeedMagnitudeRange.minValue && !_speedLinesActive)
+                var horizontalVelocity = player.Velocity.SetY(0f);
+                float sqrSpeed = horizontalVelocity.sqrMagnitude;
+                float minThresholdSqr = heighSpeedMagnitudeRange.minValue * heighSpeedMagnitudeRange.minValue;
+
+                if (sqrSpeed > minThresholdSqr && !_speedLinesActive)
                 {
                     speedLinesVisibility.Show();
                     _speedLinesActive = true;
                 }
-                else if (velocity <= heighSpeedMagnitudeRange.minValue && _speedLinesActive)
+                else if (sqrSpeed <= minThresholdSqr && _speedLinesActive)
                 {
                     speedLinesVisibility.Hide();
-                    _speedLinesActive = false;  
+                    _speedLinesActive = false;
                 }
 
-                var t = Mathf.InverseLerp(heighSpeedMagnitudeRange.minValue, heighSpeedMagnitudeRange.maxValue, player.Velocity.magnitude);
-                var size = Mathf.Lerp(speedLinesSizeRange.x, speedLinesSizeRange.y, t);
-                speedLinesSize.SetValue(size);
+                if (_speedLinesActive)
+                {
+                    var t = Mathf.InverseLerp(heighSpeedMagnitudeRange.minValue, heighSpeedMagnitudeRange.maxValue, horizontalVelocity.magnitude);
+                    var size = Mathf.Lerp(speedLinesSizeRange.x, speedLinesSizeRange.y, t);
+                    speedLinesSize.SetValue(size);
+                }
             }
         }
         
@@ -172,7 +178,11 @@ namespace ProjectWallE.GameLoop.Player
         {
             if (_activeTireEffects == null) return;
 
-            bool isMoving = player.Velocity.sqrMagnitude > tireEffectSpeedThreshold * tireEffectSpeedThreshold;
+            float threshold = player.PlayerControllerType == PlayerControllerType.Robot
+                ? tireEffectRobotSpeedThreshold
+                : tireEffectCarSpeedThreshold;
+            
+            bool isMoving = player.Velocity.sqrMagnitude > threshold * threshold;
 
             for (int i = 0; i < _activeTireEffects.Length; i++)
             {

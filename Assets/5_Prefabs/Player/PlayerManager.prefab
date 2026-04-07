@@ -50,7 +50,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1816209766619863888
 Transform:
   m_ObjectHideFlags: 0
@@ -547,7 +547,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1251613364947234956
 Transform:
   m_ObjectHideFlags: 0
@@ -1043,7 +1043,7 @@ MonoBehaviour:
     m_Bits: 136
   blockBuildLayerMask:
     serializedVersion: 2
-    m_Bits: 3408
+    m_Bits: 3392
   structureLayerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -1352,9 +1352,10 @@ MonoBehaviour:
     emissionColor: {fileID: 11400000, guid: a96c7138587d94644ace68611d614fe6, type: 2}
     hitSoundId: NormalHit
   changeStateSoundId: ChangeState
-  tireEffectSpeedThreshold: 3
+  tireEffectRobotSpeedThreshold: 5
   robotTireEffects:
   - {fileID: 6436861685030297602}
+  tireEffectCarSpeedThreshold: 8
   carTireEffects:
   - {fileID: 1322608540948452487}
   - {fileID: 3152115435382748368}

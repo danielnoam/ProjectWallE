@@ -7,7 +7,7 @@ using UnityEngine;
 public class SpawnStructureMarker : BaseLevelEventMarker
 {
     [Header("Structure")]
-    [PrefabSelector("Assets/Prefabs/Structures")] public Structure structureToSpawn;
+    [PrefabSelector("Assets/5_Prefabs/Structures")] public Structure structureToSpawn;
     public ExposedReference<StructureSpawnPoint> structureSpawnPoint;
     
     public override void Execute(IExposedPropertyTable resolver = null)

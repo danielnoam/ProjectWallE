@@ -18,7 +18,6 @@ namespace ProjectWallE.UI
         [SerializeField] private TextMeshProUGUI currentResourcesText;
         [SerializeField] private TextMeshProUGUI structuresText;
         [SerializeField] private TextMeshProUGUI objectivesText;
-        [SerializeField] private string objectivePrefix = "Protect Bases:";
         
         [Header("Player Status")]
         [SerializeField] private OptionalField<string> showFuelPrefix = new OptionalField<string>("Fuel: ", true);
@@ -164,12 +163,11 @@ namespace ProjectWallE.UI
             if (_activeObjectives != null)
             {
                 UpdateObjectivesDisplay();
-                return;
             }
-
-            TimeSpan timeSpan = TimeSpan.FromSeconds(timeRemaining);
-            string objectives = $"{objectivePrefix}\n{timeSpan.Minutes:D2}:{timeSpan.Seconds:D2}";
-            UpdateObjectiveDisplay(objectives);
+            else
+            {
+                UpdateObjectiveDisplay("No Objectives");
+            }
         }
 
         private void UpdateObjectivesDisplay()
