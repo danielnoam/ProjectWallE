@@ -5,9 +5,12 @@ namespace ProjectWallE.GameLoop
 {
     public class BuildNode : MonoBehaviour
     {
-        [Header("Node Settings")]
+        [Header("Settings")]
         [SerializeField, PrefabSelector("Assets/5_Prefabs/Structures")] private Structure[] allowedStructures;
         [SerializeField] private Vector3 snapOffset;
+        
+        [Header("References")]
+        [SerializeField] private Transform visuals;
 
         private Structure _occupant;
 
@@ -50,10 +53,26 @@ namespace ProjectWallE.GameLoop
         }
 
 #if UNITY_EDITOR
-        private void OnDrawGizmosSelected()
+        private void OnDrawGizmos()
         {
-            Gizmos.color = IsOccupied ? Color.red : Color.cyan;
-            Gizmos.DrawWireSphere(SnapPoint, 0.3f);
+            if (IsOccupied) return;
+
+            var sphereCollider = GetComponent<SphereCollider>();
+            float radius = sphereCollider ? sphereCollider.radius * transform.lossyScale.x : 0.3f;
+
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireSphere(transform.position, radius);
+
+            UnityEditor.Handles.Label(
+                transform.position.AddY(0.5f) + Vector3.up * radius , 
+                "Build Node",
+                new GUIStyle
+                {
+                    normal = new GUIStyleState { textColor = Color.cyan },
+                    fontSize = 10,
+                    fontStyle = FontStyle.Bold,
+                    alignment = TextAnchor.MiddleCenter
+                });
         }
 #endif
     }

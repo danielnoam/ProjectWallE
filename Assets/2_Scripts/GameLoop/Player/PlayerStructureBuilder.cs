@@ -21,6 +21,7 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField, AutoGetScene, HideInInspector] private StructureBuildMenu buildMenu;
         [SerializeField, AutoGetScene, HideInInspector] private StructureActionsMenu actionsMenu;
 
+        private BuildNode _targetedNode;
         private Camera _mainCamera;
         private Ray _buildRay;
         private bool _canBuild;
@@ -138,10 +139,11 @@ namespace ProjectWallE.GameLoop.Player
         private void CastBuildRay()
         {
             _buildRay = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-
+ 
             if (Physics.Raycast(_buildRay, out RaycastHit structureHit, buildRange, structureLayerMask) && structureHit.collider.TryGetComponent(out Structure structure))
             {
                 _targetedStructure = structure;
+                _targetedNode = null;
                 _canBuild = false;
                 UpdateBuildPrompt(_menuOpen ? structure.TopPoint : null);
                 UpdateStructureStatusVisibility(structure);
@@ -149,6 +151,7 @@ namespace ProjectWallE.GameLoop.Player
             else if (Physics.Raycast(_buildRay, buildRange, blockBuildLayerMask))
             {
                 _targetedStructure = null;
+                _targetedNode = null;
                 _canBuild = false;
                 UpdateBuildPrompt(null);
                 UpdateStructureStatusVisibility(null);
@@ -156,18 +159,30 @@ namespace ProjectWallE.GameLoop.Player
             else if (Physics.Raycast(_buildRay, out RaycastHit groundHit, buildRange, buildableLayerMask))
             {
                 _targetedStructure = null;
-                _canBuild = true;
-                UpdateBuildPrompt(_menuOpen ? groundHit.point : null);
                 UpdateStructureStatusVisibility(null);
+                
+                if (groundHit.collider.TryGetComponent(out BuildNode node))
+                {
+                    _targetedNode = node;
+                    _canBuild = !node.IsOccupied;
+                    UpdateBuildPrompt(_menuOpen ? node.SnapPoint : null);
+                }
+                else
+                {
+                    _targetedNode = null;
+                    _canBuild = true;
+                    UpdateBuildPrompt(_menuOpen ? groundHit.point : null);
+                }
             }
             else
             {
                 _targetedStructure = null;
+                _targetedNode = null;
                 _canBuild = false;
                 UpdateBuildPrompt(null);
                 UpdateStructureStatusVisibility(null);
             }
-
+ 
             if (_menuOpen) RefreshOpenMenu();
         }
 
@@ -202,7 +217,7 @@ namespace ProjectWallE.GameLoop.Player
                 if (!_lastMenuWasBuildMenu)
                 {
                     if (_lastMenuStructure) MenuCloseRequested?.Invoke();
-                    BuildMenuRequested?.Invoke(structuresArray);
+                    BuildMenuRequested?.Invoke(_targetedNode ? _targetedNode.AllowedStructures : structuresArray);
                     _lastMenuStructure = null;
                     _lastMenuWasBuildMenu = true;
                 }
@@ -226,10 +241,18 @@ namespace ProjectWallE.GameLoop.Player
         private void TryBuildStructure(Structure structure)
         {
             if (!_canBuild) return;
-            if (!Physics.Raycast(_buildRay, out RaycastHit hit, buildRange, buildableLayerMask)) return;
-            if (!ResourceManager.Instance.TrySpendResources(structure.BuildCost)) return;
-
-            StructureManager.Instance?.DeployPod(structure, hit.point, transform.forward);
+            
+            if (ResourceManager.Instance.TrySpendResources(structure.BuildCost))
+            {
+                if (_targetedNode)
+                {
+                    StructureManager.Instance?.DeployPod(structure, _targetedNode, transform.forward);
+                }
+                else if (Physics.Raycast(_buildRay, out RaycastHit hit, buildRange, buildableLayerMask))
+                {
+                    StructureManager.Instance?.DeployPod(structure, hit.point, transform.forward);
+                }
+            }
         }
 
         private void SetGameTimeScale(float timeScale)

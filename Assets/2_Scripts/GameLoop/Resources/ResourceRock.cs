@@ -4,9 +4,9 @@ using ProjectWallE.GameLoop;
 using UnityEngine;
 
 [DisallowMultipleComponent]
-public class ResourceNode : MonoBehaviour, IDamageable
+public class ResourceRock : MonoBehaviour, IDamageable
 {
-    public static event Action<ResourceNode> OnDestroyed;
+    public static event Action<ResourceRock> OnDestroyed;
     
     [Header("Settings")]
     [SerializeField] private float maxHealth = 150;

@@ -1,0 +1,146 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3503836410232390380
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 657412859967765425}
+  - component: {fileID: 7219908622059476715}
+  - component: {fileID: 7855641134077133471}
+  - component: {fileID: 8789927594329234569}
+  - component: {fileID: 4473577358690447872}
+  - component: {fileID: 4816830065826520106}
+  m_Layer: 0
+  m_Name: GameManagers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &657412859967765425
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3503836410232390380}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!320 &7219908622059476715
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3503836410232390380}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 0}
+  m_InitialState: 0
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings:
+  - key: {fileID: 5586992869872184875, guid: 5069225b6f6b71a42b4ce5e4069ce095, type: 2}
+    value: {fileID: 3503836410232390380}
+  m_ExposedReferences:
+    m_References:
+    - 0448e5d9742f1ea4da398fa95efc99c9: {fileID: 0}
+    - 3494ca3688fb8784c9f2d18f1d5927ee: {fileID: 0}
+    - 5fd921e99386b4b4aa06231416d43080: {fileID: 0}
+    - 8408ad12f250b574c862ab17e5513917: {fileID: 0}
+    - 775cfa97985dfb141a99bd1e71891138: {fileID: 0}
+    - 39d3772a72a8b694aac2fd893a0deadb: {fileID: 0}
+    - 6e1a360f9d2df3d44899b7c5b5e7af0a: {fileID: 0}
+    - 6ec9f4eed904e6343904cbdedca3d8d8: {fileID: 0}
+    - c4938d78d26a5e84ea63d31d43bdbca8: {fileID: 0}
+    - 484274ddc675ccf4ca4a18b8a0fd0641: {fileID: 0}
+--- !u!114 &7855641134077133471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3503836410232390380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d23fdd1387f41e29d5efdb9b5cb32ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceManager
+  startingResources: 1000
+--- !u!114 &8789927594329234569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3503836410232390380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39465b4a78a744898b2e9ab2cb832f31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyManager
+  maxEnemies: 100
+  enemyTypes:
+    internalItems:
+    - item: {fileID: 622395889724703068, guid: 311465a237bc47a4a80317173bf23667, type: 3}
+      chance: 60
+      isLocked: 0
+    - item: {fileID: -4769723865369596212, guid: 942ec3fb68d51bb418bece848d6bfd88, type: 3}
+      chance: 23
+      isLocked: 0
+    - item: {fileID: 622395889724703068, guid: 9e63c2e032022934290829d686f0c357, type: 3}
+      chance: 10
+      isLocked: 0
+    - item: {fileID: 622395889724703068, guid: 83a877ad3335ba24198f58c9720f05c5, type: 3}
+      chance: 7
+      isLocked: 0
+--- !u!114 &4473577358690447872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3503836410232390380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c30d34e780b7143459b55d4a06cd93ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StructureDispatcher
+  podPrefab: {fileID: 6064574791381144385, guid: 8f24e02f865ecf045bb82fe2995237a2, type: 3}
+  podSpawnPositions:
+    internalItems:
+    - item: {fileID: 0}
+      chance: 34
+      isLocked: 0
+    - item: {fileID: 0}
+      chance: 33
+      isLocked: 0
+    - item: {fileID: 0}
+      chance: 33
+      isLocked: 0
+--- !u!114 &4816830065826520106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3503836410232390380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2be2a7524b76488da57da260bee48d05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LevelManager
+  initializeDelay: 1
+  timeline: {fileID: 7219908622059476715}
+  player: {fileID: 0}

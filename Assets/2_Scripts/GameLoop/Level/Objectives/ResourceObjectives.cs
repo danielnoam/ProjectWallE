@@ -6,7 +6,7 @@ namespace ProjectWallE.GameLoop
 {
     [Serializable]
     [SerializableSelectorName("Destroy Resource Nodes", "Resource")]
-    public class DestroyResourceNodesObjective : BaseLevelObjective
+    public class DestroyResourceRocksObjective : BaseLevelObjective
     {
         [SerializeField, Min(1)] private int destroyCount = 5;
 
@@ -18,15 +18,15 @@ namespace ProjectWallE.GameLoop
         protected override void OnInitialize(IExposedPropertyTable resolver = null)
         {
             _currentCount = 0;
-            ResourceNode.OnDestroyed += OnNodeDestroyed;
+            ResourceRock.OnDestroyed += OnNodeDestroyed;
         }
 
         public override void Dispose()
         {
-            ResourceNode.OnDestroyed -= OnNodeDestroyed;
+            ResourceRock.OnDestroyed -= OnNodeDestroyed;
         }
 
-        private void OnNodeDestroyed(ResourceNode node)
+        private void OnNodeDestroyed(ResourceRock rock)
         {
             _currentCount++;
             if (_currentCount >= destroyCount)

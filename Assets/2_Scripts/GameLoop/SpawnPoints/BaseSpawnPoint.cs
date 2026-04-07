@@ -1,26 +1,37 @@
 using UnityEngine;
 
-[SelectionBase]
-[DisallowMultipleComponent]
-public abstract class BaseSpawnPoint : MonoBehaviour
+namespace ProjectWallE.GameLoop
 {
-    private void OnEnable()
+    [SelectionBase]
+    [DisallowMultipleComponent]
+    public abstract class BaseSpawnPoint : MonoBehaviour
     {
-        LevelManager.OnLevelInitializing += OnLevelInitializing;
-        LevelManager.OnLevelStarted += OnLevelStarted;
-        LevelManager.OnLevelCompleted += OnLevelFinished;
-        LevelManager.OnLevelFailed += OnLevelFinished;
-    }
+        private void OnEnable()
+        {
+            LevelManager.OnLevelInitializing += OnLevelInitializing;
+            LevelManager.OnLevelStarted += OnLevelStarted;
+            LevelManager.OnLevelCompleted += OnLevelFinished;
+            LevelManager.OnLevelFailed += OnLevelFinished;
+        }
 
-    private void OnDisable()
-    {
-        LevelManager.OnLevelInitializing -= OnLevelInitializing;
-        LevelManager.OnLevelStarted -= OnLevelStarted;
-        LevelManager.OnLevelCompleted -= OnLevelFinished;
-        LevelManager.OnLevelFailed -= OnLevelFinished;
-    }
+        private void OnDisable()
+        {
+            LevelManager.OnLevelInitializing -= OnLevelInitializing;
+            LevelManager.OnLevelStarted -= OnLevelStarted;
+            LevelManager.OnLevelCompleted -= OnLevelFinished;
+            LevelManager.OnLevelFailed -= OnLevelFinished;
+        }
 
-    protected virtual void OnLevelInitializing() { }
-    protected virtual void OnLevelStarted() { }
-    protected virtual void OnLevelFinished() { }
+        protected virtual void OnLevelInitializing()
+        {
+        }
+
+        protected virtual void OnLevelStarted()
+        {
+        }
+
+        protected virtual void OnLevelFinished()
+        {
+        }
+    }
 }
