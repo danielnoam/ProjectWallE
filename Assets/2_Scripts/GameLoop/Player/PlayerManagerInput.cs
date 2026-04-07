@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,6 +10,12 @@ namespace ProjectWallE
         
         public bool SwitchPressed { get; private set; }
         public Vector2 MouseDelta { get; private set; }
+        public bool Attack1Held { get; private set; }
+        public bool Attack1Released { get; private set; }
+        public bool Attack2Held { get; private set; }
+        public bool Attack2Released { get; private set; }
+        public bool ActionMenuPressed { get; private set; }
+        public bool ActionMenuReleased { get; private set; }
 
         private void OnEnable()
         {
@@ -41,6 +48,10 @@ namespace ProjectWallE
         void LateUpdate()
         {
             SwitchPressed = false;
+            ActionMenuPressed = false;
+            ActionMenuReleased = false;
+            Attack1Released = false;
+            Attack2Released = false;
         }
 
         public void OnSwitchController(InputAction.CallbackContext context)
@@ -48,9 +59,27 @@ namespace ProjectWallE
             if (context.started) SwitchPressed = true;
         }
 
+        public void OnAttack1(InputAction.CallbackContext context)
+        {
+            Attack1Held = context.ReadValueAsButton();
+            if (context.canceled) Attack1Released = true;
+        }
+
+        public void OnAttack2(InputAction.CallbackContext context)
+        {
+            Attack2Held = context.ReadValueAsButton();
+            if (context.canceled) Attack2Released = true;
+        }
+
         public void OnLook(InputAction.CallbackContext context)
         {
             MouseDelta = context.ReadValue<Vector2>();
+        }
+
+        public void OnActionMenu(InputAction.CallbackContext context)
+        {
+            if (context.started) ActionMenuPressed = true;
+            if (context.canceled) ActionMenuReleased = true;
         }
     }
 }

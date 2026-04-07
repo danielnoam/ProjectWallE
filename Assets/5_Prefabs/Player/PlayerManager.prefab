@@ -50,7 +50,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1816209766619863888
 Transform:
   m_ObjectHideFlags: 0
@@ -547,7 +547,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1251613364947234956
 Transform:
   m_ObjectHideFlags: 0
@@ -1053,6 +1053,7 @@ MonoBehaviour:
   - {fileID: 2308925685089836474, guid: eb9518b19b0f8d64fa00d3c4d128b9bf, type: 3}
   - {fileID: 4497719034383223877, guid: f8af469e485543e4bb4aedbcff5e5358, type: 3}
   playerManager: {fileID: 2369243402749369746}
+  input: {fileID: 12555983524666578}
   buildMenu: {fileID: 0}
   actionsMenu: {fileID: 0}
 --- !u!114 &8087270994143856722
@@ -1071,6 +1072,7 @@ MonoBehaviour:
   firePoint: {fileID: 6599197979102317477}
   enemyLayerMask: {fileID: 11400000, guid: 2d607d7566d764844b32be4199186943, type: 2}
   playerManager: {fileID: 2369243402749369746}
+  input: {fileID: 12555983524666578}
   basicFireRate: 0.1
   basicProjectileData: {fileID: 11400000, guid: b6fff52b19a3bf34fae6ef66121a0c95, type: 2}
   aoeFireRate: 1.5
