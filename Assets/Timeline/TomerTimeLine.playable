@@ -1,5 +1,70 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-9145333933806467142
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
+  m_Name: Spawn Enemy Wave Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
+  m_Time: 6.95
+  enemyCount: 6
+  enemyType: 1
+  enemies:
+    internalItems:
+    - item: {fileID: 622395889724703068, guid: 311465a237bc47a4a80317173bf23667, type: 3}
+      chance: 100
+      isLocked: 0
+  spawnType: 0
+  spawnPoint:
+    exposedName: 
+    defaultValue: {fileID: 0}
+--- !u!114 &-8106321468260954739
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
+  m_Name: Spawn Enemy Wave Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
+  m_Time: 11.433333333333334
+  enemyCount: 8
+  enemyType: 1
+  enemies:
+    internalItems:
+    - item: {fileID: 622395889724703068, guid: 311465a237bc47a4a80317173bf23667, type: 3}
+      chance: 100
+      isLocked: 0
+  spawnType: 0
+  spawnPoint:
+    exposedName: 
+    defaultValue: {fileID: 0}
+--- !u!114 &-6682765416599569745
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d09b01d4b9a242f59f452dd030b5551c, type: 3}
+  m_Name: Toggle Enemy Spawn Point Marker
+  m_EditorClassIdentifier: Assembly-CSharp::ToggleEnemySpawnPointMarker
+  m_Time: 9.416666666666666
+  enemySpawnPoint:
+    exposedName: fcadd405a0ff92246bb5a968c3399b68
+    defaultValue: {fileID: 0}
+  spawnPointState: 1
 --- !u!114 &-2831747386146784124
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -23,6 +88,48 @@ MonoBehaviour:
   m_Clips: []
   m_Markers:
     m_Objects: []
+--- !u!114 &-766553525110194642
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 844512bbcc774b44b3c5e64aee9d8fbb, type: 3}
+  m_Name: Spawn Structure Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnStructureMarker
+  m_Time: 5.016666666666667
+  structureToSpawn: {fileID: 6487620541022002554, guid: 3b1b64788b055e0498a63ea738b3ba50, type: 3}
+  structureSpawnPoint:
+    exposedName: 8e4ae66d1eec401419747f2556109af2
+    defaultValue: {fileID: 0}
+--- !u!114 &-753698649098552364
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
+  m_Name: Objective Marker
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
+  m_Time: 5.933333333333334
+  objectives:
+  - rid: 1993976625937514496
+  references:
+    version: 2
+    RefIds:
+    - rid: 1993976625937514496
+      type: {class: GoToPositionObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        targetPosition:
+          exposedName: 477ef17d6cde0b84bb7d748efbd51be9
+          defaultValue: {fileID: 0}
+        radius: 30
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45,6 +152,54 @@ MonoBehaviour:
     m_ScenePreview: 1
   m_DurationMode: 1
   m_MarkerTrack: {fileID: 0}
+--- !u!114 &1572475322290309063
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
+  m_Name: Objective Marker
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
+  m_Time: 3.7666666666666666
+  objectives:
+  - rid: 1993976625937514505
+  references:
+    version: 2
+    RefIds:
+    - rid: 1993976625937514505
+      type: {class: GoToPositionObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        targetPosition:
+          exposedName: 423cca83d9ef2bc42b46297f5713216a
+          defaultValue: {fileID: 0}
+        radius: 30
+--- !u!114 &2138337481656018860
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
+  m_Name: Objective Marker
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
+  m_Time: 7.933333333333334
+  objectives:
+  - rid: 1993976625937514497
+  references:
+    version: 2
+    RefIds:
+    - rid: 1993976625937514497
+      type: {class: KillEnemiesObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        enemyPrefab: {fileID: 0}
+        killCount: 6
 --- !u!114 &3501194080883682793
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -67,6 +222,30 @@ MonoBehaviour:
       type: {class: SwitchControllerObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         requirement: 1
+--- !u!114 &4621279658087295958
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
+  m_Name: Spawn Enemy Wave Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
+  m_Time: 11.599999999999998
+  enemyCount: 2
+  enemyType: 1
+  enemies:
+    internalItems:
+    - item: {fileID: -4769723865369596212, guid: 942ec3fb68d51bb418bece848d6bfd88, type: 3}
+      chance: 100
+      isLocked: 0
+  spawnType: 0
+  spawnPoint:
+    exposedName: 
+    defaultValue: {fileID: 0}
 --- !u!114 &5586992869872184875
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -94,6 +273,15 @@ MonoBehaviour:
     - {fileID: 3501194080883682793}
     - {fileID: 5691303165561134707}
     - {fileID: 8979726575955328570}
+    - {fileID: -753698649098552364}
+    - {fileID: -766553525110194642}
+    - {fileID: -9145333933806467142}
+    - {fileID: 2138337481656018860}
+    - {fileID: -6682765416599569745}
+    - {fileID: -8106321468260954739}
+    - {fileID: 4621279658087295958}
+    - {fileID: 1572475322290309063}
+    - {fileID: 8449979598081402622}
 --- !u!114 &5691303165561134707
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -144,6 +332,33 @@ MonoBehaviour:
           exposedName: a0d208d1084d7d24aa3503b4f3078220
           defaultValue: {fileID: 0}
         radius: 20
+--- !u!114 &8449979598081402622
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
+  m_Name: Objective Marker
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
+  m_Time: 8.933333333333334
+  objectives:
+  - rid: 1993976625937514506
+  - rid: 1993976625937514507
+  references:
+    version: 2
+    RefIds:
+    - rid: 1993976625937514506
+      type: {class: BuildStructureObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        structurePrefab: {fileID: 9177759699372231121, guid: 290c791e53f525645b9870cd63da954e, type: 3}
+    - rid: 1993976625937514507
+      type: {class: BuildStructureObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        structurePrefab: {fileID: 9177759699372231121, guid: 290c791e53f525645b9870cd63da954e, type: 3}
 --- !u!114 &8979726575955328570
 MonoBehaviour:
   m_ObjectHideFlags: 1

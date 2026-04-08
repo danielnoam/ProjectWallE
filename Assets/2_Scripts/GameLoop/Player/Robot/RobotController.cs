@@ -186,7 +186,8 @@ namespace ProjectWallE
                 ? Vector3.ProjectOnPlane(vel, hit.normal)
                 : new Vector3(vel.x, 0f, vel.z);
 
-            Vector3 desiredMoveVel = moveDir * settings.MaxMoveSpeed;
+            Vector3 desiredMoveVel = moveDir * (settings.MaxMoveSpeed * _input.Movement.magnitude);
+            Debug.Log(_input.Movement.magnitude);
             Vector3 dv = desiredMoveVel - currentMoveVel;
 
             float dirChangeFactor = 0f;

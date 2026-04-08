@@ -6,10 +6,12 @@ namespace ProjectWallE
 {
     public class PlayerManagerInput : MonoBehaviour, InputSystem_Actions.IPlayerManagerControlsActions
     {
-        public InputSystem_Actions Input { get; private set; }   
-        
+        public InputSystem_Actions Input { get; private set; }
+
         public bool SwitchPressed { get; private set; }
-        public Vector2 MouseDelta { get; private set; }
+        public Vector2 LookInput { get; private set; }
+        public bool IsGamepadLook { get; private set; }
+
         public bool Attack1Held { get; private set; }
         public bool Attack1Released { get; private set; }
         public bool Attack2Held { get; private set; }
@@ -26,8 +28,8 @@ namespace ProjectWallE
         {
             DisableInput();
         }
-        
-        void EnableInput()
+
+        private void EnableInput()
         {
             Input = new InputSystem_Actions();
             Input.Enable();
@@ -35,17 +37,19 @@ namespace ProjectWallE
             Input.PlayerManagerControls.Enable();
             Input.PlayerManagerControls.SetCallbacks(this);
         }
-    
-        void DisableInput()
+
+        private void DisableInput()
         {
+            if (Input == null) return;
+
             Input.PlayerManagerControls.Disable();
             Input.PlayerManagerControls.RemoveCallbacks(this);
-        
+
             Input.Dispose();
             Input = null;
         }
 
-        void LateUpdate()
+        private void LateUpdate()
         {
             SwitchPressed = false;
             ActionMenuPressed = false;
@@ -73,7 +77,12 @@ namespace ProjectWallE
 
         public void OnLook(InputAction.CallbackContext context)
         {
-            MouseDelta = context.ReadValue<Vector2>();
+            LookInput = context.ReadValue<Vector2>();
+
+            if (context.control?.device is Gamepad)
+                IsGamepadLook = true;
+            else if (context.control?.device is Mouse)
+                IsGamepadLook = false;
         }
 
         public void OnActionMenu(InputAction.CallbackContext context)
