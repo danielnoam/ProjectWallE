@@ -17,7 +17,7 @@ MonoBehaviour:
   suspensionDamping: 2
   steeringAngle: 35
   steeringStrength: 3
-  topSpeedSteeringFactor: 0.6
+  topSpeedSteeringFactor: 0.5
   steeringTiresFrictionCurve:
     serializedVersion: 2
     m_Curve:
@@ -106,14 +106,14 @@ MonoBehaviour:
   handbrakeBlendIn: 12
   handbrakeBlendOut: 10
   minLateralFrictionAccel: 6
-  minSlippingSpeed: 10
-  maxSlippingSpeed: 15
+  minSlippingSpeed: 12
+  maxSlippingSpeed: 20
   minGripAtMaxSlip: 0.3
   minGripWhenPartialGround: 0.1
   partialGroundGripPower: 2
-  gravityStrength: 10
-  terminalVelocity: 20
-  accelerationStrength: 20
+  gravityStrength: 15
+  terminalVelocity: 30
+  accelerationStrength: 12
   accelerationCurve:
     serializedVersion: 2
     m_Curve:
@@ -156,15 +156,15 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  topForwardSpeed: 20
-  topBackwardSpeed: 10
+  topForwardSpeed: 25
+  topBackwardSpeed: 12
   speedyLayer:
     serializedVersion: 2
     m_Bits: 2048
   speedySpeedMultiplier: 1.25
   speedyAccelMultiplier: 1.25
-  brakeStrength: 10
-  engineBrakeStrength: 1
+  brakeStrength: 15
+  engineBrakeStrength: 2
   airAlignmentStrength: 2
   airAlignmentDamping: 2
   airSteeringStrength: 2
