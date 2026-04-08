@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ProjectWallE.GameLoop
 {
-    public class BuildNode : MonoBehaviour
+    public class StructureNode : MonoBehaviour
     {
         [Header("Settings")]
         [SerializeField, PrefabSelector("Assets/5_Prefabs/Structures")] private Structure[] allowedStructures;
@@ -65,7 +65,7 @@ namespace ProjectWallE.GameLoop
 
             UnityEditor.Handles.Label(
                 transform.position.AddY(0.5f) + Vector3.up * radius , 
-                "Build Node",
+                "Structure Node",
                 new GUIStyle
                 {
                     normal = new GUIStyleState { textColor = Color.cyan },

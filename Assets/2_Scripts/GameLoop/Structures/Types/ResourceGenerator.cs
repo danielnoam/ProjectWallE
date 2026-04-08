@@ -16,12 +16,25 @@ public abstract class ResourceGenerator : Structure
     [Header("Resource Generator")]
     [SerializeReference, DrawSerializeReference] private ResourceGeneratorLevelData[] levels = Array.Empty<ResourceGeneratorLevelData>();
     
+    
+    private ResourceBoostZone _boostZone;
     private bool _generating;
     private Coroutine _generationCoroutine;
+    
+    private int ResourcePerInterval => _boostZone ? CurrentBaseLevelData.resourcesPerInterval * _boostZone.BoostMultiplier : CurrentBaseLevelData.resourcesPerInterval;
     private ResourceGeneratorLevelData CurrentBaseLevelData => (ResourceGeneratorLevelData)Levels[CurrentUpgradeLevel - 1];
+    
+    
+    
     
     public override StructureLevelData[] Levels => levels;
 
+    protected override void OnBuild()
+    {
+        CheckForBoostZone();
+        StartGenerating();
+    }
+    
     private void Update()
     {
         StateInfo = $"Health: {CurrentHealth:N0}/{MaxHealth}";
@@ -48,13 +61,25 @@ public abstract class ResourceGenerator : Structure
             _generationCoroutine = null;
         }
     }
+    
+    private void CheckForBoostZone()
+    {
+        var colliders = Physics.OverlapSphere(transform.position, 5f);
+        foreach (var col in colliders)
+        {
+            if (!col.TryGetComponent(out ResourceBoostZone boostZone)) continue;
+            _boostZone = boostZone;
+            return;
+        }
+    }
+
 
     private IEnumerator GenerateResources()
     {
         while (_generating)
         {
             yield return new WaitForSeconds(CurrentBaseLevelData.generationInterval);
-            ResourceManager.Instance?.AddResources(CurrentBaseLevelData.resourcesPerInterval);
+            ResourceManager.Instance?.AddResources(ResourcePerInterval);
         }
     }
 }

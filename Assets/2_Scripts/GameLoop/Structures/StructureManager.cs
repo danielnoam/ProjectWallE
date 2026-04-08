@@ -49,7 +49,7 @@ namespace ProjectWallE.GameLoop
             pod.Initialize(structure, targetPosition, forward, _structureHolder);
         }
 
-        public void DeployPod(Structure structure, BuildNode node, Vector3 forward)
+        public void DeployPod(Structure structure, StructureNode node, Vector3 forward)
         {
             var spawnPosition = podSpawnPositions.GetRandomItem();
             Pod pod = Instantiate(podPrefab, spawnPosition.position, Quaternion.LookRotation(spawnPosition.forward));

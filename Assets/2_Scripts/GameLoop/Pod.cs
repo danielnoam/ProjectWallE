@@ -27,7 +27,7 @@ namespace ProjectWallE.GameLoop
         [SerializeField, AutoGetSelf, HideInInspector] private CinemachineImpulseSource impulseSource;
 
 
-        private BuildNode _buildNode;
+        private StructureNode _structureNode;
         private IDeployable _deployable;
         private Transform _parent;
         private Vector3 _startPosition;
@@ -123,9 +123,9 @@ namespace ProjectWallE.GameLoop
             MonoBehaviour instance = _parent ? Instantiate(_deployable as MonoBehaviour, _parent) : Instantiate(_deployable as MonoBehaviour);
             ((IDeployable)instance).Deploy(impactPoint, surfaceNormal, _forward);
 
-            if (_buildNode && instance.TryGetComponent(out Structure structure))
+            if (_structureNode && instance.TryGetComponent(out Structure structure))
             {
-                _buildNode.Occupy(structure);
+                _structureNode.Occupy(structure);
             }
 
             Destroy(gameObject);
@@ -143,9 +143,9 @@ namespace ProjectWallE.GameLoop
             _moveCoroutine = StartCoroutine(MoveInArc());
         }
 
-        public void Initialize<T>(T deployable, Vector3 targetPoint, Vector3 forward, Transform parent, BuildNode buildNode) where T : MonoBehaviour, IDeployable
+        public void Initialize<T>(T deployable, Vector3 targetPoint, Vector3 forward, Transform parent, StructureNode structureNode) where T : MonoBehaviour, IDeployable
         {
-            _buildNode = buildNode;
+            _structureNode = structureNode;
             Initialize(deployable, targetPoint, forward, parent);
         }
     }

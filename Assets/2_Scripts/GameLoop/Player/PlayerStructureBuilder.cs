@@ -21,7 +21,7 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField, AutoGetScene, HideInInspector] private StructureBuildMenu buildMenu;
         [SerializeField, AutoGetScene, HideInInspector] private StructureActionsMenu actionsMenu;
 
-        private BuildNode _targetedNode;
+        private StructureNode _targetedNode;
         private Camera _mainCamera;
         private Ray _buildRay;
         private bool _canBuild;
@@ -161,7 +161,7 @@ namespace ProjectWallE.GameLoop.Player
                 _targetedStructure = null;
                 UpdateStructureStatusVisibility(null);
                 
-                if (groundHit.collider.TryGetComponent(out BuildNode node))
+                if (groundHit.collider.TryGetComponent(out StructureNode node))
                 {
                     _targetedNode = node;
                     _canBuild = !node.IsOccupied;

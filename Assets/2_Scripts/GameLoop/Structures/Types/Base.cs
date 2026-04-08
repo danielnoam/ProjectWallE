@@ -8,11 +8,6 @@ public class Base : ResourceGenerator
     [SerializeField] private Transform crystalsTransform;
     
     
-    protected override void OnBuild()
-    {
-        StartGenerating();
-    }
-
     protected override void OnFix()
     {
         StartGenerating();

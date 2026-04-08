@@ -11,8 +11,8 @@ public class Generator : ResourceGenerator
     
     protected override void OnBuild()
     {
+        base.OnBuild();
         StartPumpingAnimation();
-        StartGenerating();
     }
 
     protected override void OnFix()
