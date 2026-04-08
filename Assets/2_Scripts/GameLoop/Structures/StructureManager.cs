@@ -23,11 +23,17 @@ namespace ProjectWallE.GameLoop
         [SerializeField] private Pod podPrefab;
         [SerializeField] private ChanceList<Transform> podSpawnPositions = new ChanceList<Transform>();
 
+        [Header("Structures")]
+        [SerializeField] private Structure[] allStructures;
+
         private Transform _structureHolder;
+        private Transform _ghostHolder;
         private readonly List<Structure> _structures = new List<Structure>();
         private readonly List<Generator> _generators = new List<Generator>();
         private readonly List<Turret> _turrets = new List<Turret>();
         private readonly List<Base> _bases = new List<Base>();
+        private readonly Dictionary<Structure, GameObject> _ghostInstances = new();
+        private GameObject _activeGhost;
 
         private void Awake()
         {
@@ -40,6 +46,43 @@ namespace ProjectWallE.GameLoop
             Instance = this;
 
             _structureHolder = new GameObject("StructureHolder").transform;
+            _ghostHolder = new GameObject("GhostHolder").transform;
+            InitializeGhosts();
+        }
+
+        private void InitializeGhosts()
+        {
+            foreach (var structure in allStructures)
+            {
+                GameObject ghostPrefab = structure.StructureUIData.GhostPrefab;
+                if (!ghostPrefab) continue;
+
+                GameObject ghost = Instantiate(ghostPrefab, _ghostHolder);
+                ghost.SetActive(false);
+                _ghostInstances[structure] = ghost;
+            }
+        }
+
+        public GameObject ShowGhost(Structure structure)
+        {
+            if (_activeGhost) _activeGhost.SetActive(false);
+
+            if (!_ghostInstances.TryGetValue(structure, out GameObject ghost))
+            {
+                _activeGhost = null;
+                return null;
+            }
+
+            ghost.SetActive(true);
+            _activeGhost = ghost;
+            return ghost;
+        }
+
+        public void HideGhost()
+        {
+            if (!_activeGhost) return;
+            _activeGhost.SetActive(false);
+            _activeGhost = null;
         }
 
         public void DeployPod(Structure structure, Vector3 targetPosition, Vector3 forward)
@@ -102,7 +145,6 @@ namespace ProjectWallE.GameLoop
                 case Generator generator:
                     UnregisterGenerator(generator);
                     break;
-
             }
 
             OnStructureDestroyed?.Invoke(new StructuresData

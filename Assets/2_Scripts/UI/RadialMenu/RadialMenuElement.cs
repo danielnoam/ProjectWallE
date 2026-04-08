@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,8 +16,6 @@ namespace ProjectWallE.UI
         private bool _isDisabled;
 
         public string Info { get; private set; }
-
-        public event Action<RadialMenuElement> OnSelect;
 
         public void SetUp(Color normalColor, Color hoveredColor)
         {
@@ -54,11 +51,6 @@ namespace ProjectWallE.UI
             if (!_isHovered) return;
             _isHovered = false;
             if (backgroundImage) backgroundImage.color = _isDisabled ? _disabledColor : _normalColor;
-        }
-
-        public void Select()
-        {
-            OnSelect?.Invoke(this);
         }
 
         private void SetDisabled(bool disabled)

@@ -32,6 +32,7 @@ namespace ProjectWallE.UI
         private bool _isOpen;
 
         public event Action<T> OnItemSelected;
+        public event Action<T> OnItemHoverChanged;
 
         private void Awake()
         {
@@ -47,51 +48,7 @@ namespace ProjectWallE.UI
         {
             ClearMenu();
         }
-
-        public void SetupMenu(T[] items, Action<RadialMenuElement, T> configureElement)
-        {
-            ClearMenu();
-
-            foreach (var item in items)
-            {
-                RadialMenuElement newElement = Instantiate(elementPrefab, elementsContainer);
-                newElement.SetUp(normalColor, hoveredColor);
-                configureElement?.Invoke(newElement, item);
-                newElement.OnSelect += OnElementSelected;
-                _elementToItem[newElement] = item;
-                _menuElements.Add(newElement);
-            }
-        }
-
-        public void SetupMenu(List<T> items, Action<RadialMenuElement, T> configureElement)
-        {
-            SetupMenu(items.ToArray(), configureElement);
-        }
-
-        public bool TrySelectHovered()
-        {
-            if (!_hoveredElement) return false;
-            _hoveredElement.Select();
-            return true;
-        }
-
-        public void OpenMenu()
-        {
-            canvasGroup.alpha = 1f;
-            canvasGroup.blocksRaycasts = true;
-            canvasGroup.interactable = true;
-            _isOpen = true;
-        }
-
-        public void CloseMenu()
-        {
-            UnhoverElement();
-            _accumulatedMouseDelta = Vector2.zero;
-            canvasGroup.alpha = 0f;
-            canvasGroup.blocksRaycasts = false;
-            canvasGroup.interactable = false;
-            _isOpen = false;
-        }
+        
 
         private void HoverElement(int index)
         {
@@ -104,6 +61,11 @@ namespace ProjectWallE.UI
             _hoveredElement = element;
             _hoveredElement.SetHovered();
             if (selectedItemText) selectedItemText.text = element.Info;
+
+            if (_elementToItem.TryGetValue(element, out T item))
+            {
+                OnItemHoverChanged?.Invoke(item);
+            }
         }
 
         private void UnhoverElement()
@@ -112,12 +74,7 @@ namespace ProjectWallE.UI
             if (selectedItemText) selectedItemText.text = "";
             _hoveredElement.SetNormal();
             _hoveredElement = null;
-        }
-
-        private void OnElementSelected(RadialMenuElement element)
-        {
-            if (!_elementToItem.TryGetValue(element, out T item)) return;
-            OnItemSelected?.Invoke(item);
+            OnItemHoverChanged?.Invoke(null);
         }
 
         private void UpdateHoverSelection()
@@ -169,15 +126,56 @@ namespace ProjectWallE.UI
         {
             foreach (var element in _menuElements)
             {
-                if (element)
-                {
-                    element.OnSelect -= OnElementSelected;
-                    Destroy(element.gameObject);
-                }
+                if (element) Destroy(element.gameObject);
             }
 
             _menuElements.Clear();
             _elementToItem.Clear();
+        }
+        
+        public void SetupMenu(T[] items, Action<RadialMenuElement, T> configureElement)
+        {
+            ClearMenu();
+
+            foreach (var item in items)
+            {
+                RadialMenuElement newElement = Instantiate(elementPrefab, elementsContainer);
+                newElement.SetUp(normalColor, hoveredColor);
+                configureElement?.Invoke(newElement, item);
+                _elementToItem[newElement] = item;
+                _menuElements.Add(newElement);
+            }
+        }
+
+        public void SetupMenu(List<T> items, Action<RadialMenuElement, T> configureElement)
+        {
+            SetupMenu(items.ToArray(), configureElement);
+        }
+
+        public bool TrySelectHovered()
+        {
+            if (!_hoveredElement) return false;
+            if (!_elementToItem.TryGetValue(_hoveredElement, out T item)) return false;
+            OnItemSelected?.Invoke(item);
+            return true;
+        }
+
+        public void OpenMenu()
+        {
+            canvasGroup.alpha = 1f;
+            canvasGroup.blocksRaycasts = true;
+            canvasGroup.interactable = true;
+            _isOpen = true;
+        }
+
+        public void CloseMenu()
+        {
+            UnhoverElement();
+            _accumulatedMouseDelta = Vector2.zero;
+            canvasGroup.alpha = 0f;
+            canvasGroup.blocksRaycasts = false;
+            canvasGroup.interactable = false;
+            _isOpen = false;
         }
     }
 }

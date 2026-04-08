@@ -115,6 +115,7 @@ MonoBehaviour:
     upgradeIcon: {fileID: 21300000, guid: 2a7332bdc5467fe4e84ca21fdc48ecaa, type: 3}
     fixIcon: {fileID: 21300000, guid: c523318af4a1ca943932d905d83eed0b, type: 3}
     demolishIcon: {fileID: 21300000, guid: 697bc25bd45233c47bf2e585f87d35b2, type: 3}
+    ghostPrefab: {fileID: 8131957681905621239, guid: 186cb3f789c9b654bb257a493a47de54, type: 3}
   damageEffects:
     punchStrength: 1
     punchDuration: 0.15
@@ -239,13 +240,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -7511558181221131132, guid: 2c04c3aa83b1d3744a99a73b50984aab, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 8f766c2ed6500a94ca5427956ad34d54, type: 2}
     - target: {fileID: -6500637147470278188, guid: 2c04c3aa83b1d3744a99a73b50984aab, type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: -6500637147470278188, guid: 2c04c3aa83b1d3744a99a73b50984aab, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -3432381147609604386, guid: 2c04c3aa83b1d3744a99a73b50984aab, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -273,7 +274,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 8f766c2ed6500a94ca5427956ad34d54, type: 2}
     - target: {fileID: 2535023681541924026, guid: 2c04c3aa83b1d3744a99a73b50984aab, type: 3}
       propertyPath: m_Layer
-      value: 11
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7660654695438471464, guid: 2c04c3aa83b1d3744a99a73b50984aab, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'

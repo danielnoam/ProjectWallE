@@ -147,6 +147,7 @@ MonoBehaviour:
     upgradeIcon: {fileID: 21300000, guid: 2a7332bdc5467fe4e84ca21fdc48ecaa, type: 3}
     fixIcon: {fileID: 21300000, guid: c523318af4a1ca943932d905d83eed0b, type: 3}
     demolishIcon: {fileID: 21300000, guid: 697bc25bd45233c47bf2e585f87d35b2, type: 3}
+    ghostPrefab: {fileID: 4043771111272889121, guid: 45fec0fe4c4cd5c4494cfb13ea1ac769, type: 3}
   damageEffects:
     punchStrength: 1
     punchDuration: 0.15
@@ -251,34 +252,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: d3b3f0d90e8a1ae40b7014b58331cee8, type: 2}
-    - target: {fileID: -7525268049708648169, guid: 11d0b4ca14fdff8419fcf81ae14b4217, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 97f6f496be545354e9997b5f67139ccc, type: 2}
-    - target: {fileID: -7272911518199237601, guid: 11d0b4ca14fdff8419fcf81ae14b4217, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: -5984962060210090711, guid: 11d0b4ca14fdff8419fcf81ae14b4217, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
     - target: {fileID: -3902934552970637921, guid: 11d0b4ca14fdff8419fcf81ae14b4217, type: 3}
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
-    - target: {fileID: -3133498875991405556, guid: 11d0b4ca14fdff8419fcf81ae14b4217, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: -3056041028626425089, guid: 11d0b4ca14fdff8419fcf81ae14b4217, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: d3b3f0d90e8a1ae40b7014b58331cee8, type: 2}
-    - target: {fileID: -2859109400176981367, guid: 11d0b4ca14fdff8419fcf81ae14b4217, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 8f766c2ed6500a94ca5427956ad34d54, type: 2}
     - target: {fileID: -1801510895125977572, guid: 11d0b4ca14fdff8419fcf81ae14b4217, type: 3}
       propertyPath: m_Layer
       value: 6

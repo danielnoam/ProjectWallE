@@ -31,11 +31,11 @@ namespace ProjectWallE.GameLoop.Player
         private Structure _targetedStructure;
         private Structure _lastMenuStructure;
         private Sequence _timeSequence;
+        private GameObject _activeGhost;
 
         public event Action<Structure[]> BuildMenuRequested;
         public event Action<Structure> ActionsMenuRequested;
         public event Action MenuCloseRequested;
-
 
         private void OnValidate()
         {
@@ -49,7 +49,11 @@ namespace ProjectWallE.GameLoop.Player
 
         private void OnEnable()
         {
-            if (buildMenu) buildMenu.OnItemSelected += TryBuildStructure;
+            if (buildMenu)
+            {
+                buildMenu.OnItemSelected += TryBuildStructure;
+                buildMenu.OnItemHoverChanged += OnBuildItemHoverChanged;
+            }
             if (actionsMenu) actionsMenu.OnItemSelected += OnStructureActionSelected;
             if (playerManager)
             {
@@ -58,10 +62,13 @@ namespace ProjectWallE.GameLoop.Player
             }
         }
 
-
         private void OnDisable()
         {
-            if (buildMenu) buildMenu.OnItemSelected -= TryBuildStructure;
+            if (buildMenu)
+            {
+                buildMenu.OnItemSelected -= TryBuildStructure;
+                buildMenu.OnItemHoverChanged -= OnBuildItemHoverChanged;
+            }
             if (actionsMenu) actionsMenu.OnItemSelected -= OnStructureActionSelected;
             if (playerManager)
             {
@@ -75,6 +82,7 @@ namespace ProjectWallE.GameLoop.Player
             if (!playerManager || !playerManager.CanBuild) return;
 
             CastBuildRay();
+            UpdateGhostPosition();
 
             if (!_menuOpen && Keyboard.current.qKey.wasPressedThisFrame)
             {
@@ -90,10 +98,9 @@ namespace ProjectWallE.GameLoop.Player
                 {
                     CloseMenus();
                 }
-
             }
         }
-        
+
         private void OnDeath(IDamageable damageable)
         {
             CloseMenus();
@@ -109,7 +116,44 @@ namespace ProjectWallE.GameLoop.Player
             if (!action.IsAvailable) return;
             action.OnSelected?.Invoke();
         }
-        
+
+        private void OnBuildItemHoverChanged(Structure structure)
+        {
+            if (!StructureManager.Instance) return;
+
+            if (structure)
+            {
+                _activeGhost = StructureManager.Instance.ShowGhost(structure);
+            }
+            else
+            {
+                StructureManager.Instance.HideGhost();
+                _activeGhost = null;
+            }
+        }
+
+        private void UpdateGhostPosition()
+        {
+            if (!_activeGhost) return;
+
+            if (_targetedNode)
+            {
+                _activeGhost.transform.position = _targetedNode.transform.position;
+                _activeGhost.transform.rotation = Quaternion.LookRotation(
+                    Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized, Vector3.up);
+            }
+            else if (Physics.Raycast(_buildRay, out RaycastHit hit, buildRange, buildableLayerMask))
+            {
+                Vector3 projectedForward = Vector3.ProjectOnPlane(transform.forward, hit.normal).normalized;
+                Quaternion rotation = projectedForward.sqrMagnitude > 0.001f
+                    ? Quaternion.LookRotation(projectedForward, hit.normal)
+                    : Quaternion.identity;
+
+                _activeGhost.transform.position = hit.point;
+                _activeGhost.transform.rotation = rotation;
+            }
+        }
+
         private void SelectHoveredAndClose()
         {
             if (_lastMenuWasBuildMenu) buildMenu.TrySelectHovered();
@@ -131,6 +175,8 @@ namespace ProjectWallE.GameLoop.Player
             MenuCloseRequested?.Invoke();
             BuildPrompt.Instance?.Hide();
             UpdateStructureStatusVisibility(null);
+            StructureManager.Instance?.HideGhost();
+            _activeGhost = null;
             _menuOpen = false;
             _lastMenuStructure = null;
             _lastMenuWasBuildMenu = false;

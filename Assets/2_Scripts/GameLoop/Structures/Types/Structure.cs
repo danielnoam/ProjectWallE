@@ -25,12 +25,14 @@ public struct StructureUIData
     [SerializeField] private Sprite upgradeIcon;
     [SerializeField] private Sprite fixIcon;
     [SerializeField] private Sprite demolishIcon;
+    [SerializeField] private GameObject ghostPrefab;
     
     public string Label => label;
     public Sprite Icon => icon;
     public Sprite UpgradeIcon => upgradeIcon;
     public Sprite FixIcon => fixIcon;
     public Sprite DemolishIcon => demolishIcon;
+    public GameObject GhostPrefab => ghostPrefab;
 }
 
 [DisallowMultipleComponent]
