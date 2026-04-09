@@ -24,7 +24,7 @@ namespace ProjectWallE.GameLoop
 
     [SelectionBase]
     [RequireComponent(typeof(Rigidbody))]
-    public abstract class Enemy : MonoBehaviour, IDamageable, IPushable, IPoolable
+    public abstract class Enemy : MonoBehaviour, IDamageable, IPushable, IPoolable, IDeployable
     {
         public static event Action<Enemy> OnEnemyKilled;
         
@@ -53,7 +53,7 @@ namespace ProjectWallE.GameLoop
         [SerializeField] private Renderer visibilityRenderer;
         
         
-        [SerializeField, AutoGetSelf, HideInInspector] private protected Rigidbody rigidBody;
+        [SerializeField, AutoGetSelf, HideInInspector] protected Rigidbody rigidBody;
         private readonly List<EnemyDamageRelay> _relays = new();
         private float _currentHealth;
 
@@ -128,12 +128,7 @@ namespace ProjectWallE.GameLoop
         {
             OnFixedUpdate();
         }
-
-        private void OnCollisionEnter(Collision collision)
-        {
-            if (collision.gameObject.TryGetComponent(out Pod _))
-                Die();
-        }
+        
 
         private void OnTargetDeath(IDamageable deadTarget)
         {
@@ -257,6 +252,11 @@ namespace ProjectWallE.GameLoop
             CurrentTarget = null;
             attackStrategy?.Reset();
         }
+        
+        public void Deploy(Vector3 position, Vector3 surfaceNormal, Vector3 forward)
+        {
+  
+        }
 
         public void OnPoolRecycle() { }
 
@@ -286,5 +286,6 @@ namespace ProjectWallE.GameLoop
                 effect?.OnDrawGizmos(transform);
         }
 #endif
+        
     }
 }

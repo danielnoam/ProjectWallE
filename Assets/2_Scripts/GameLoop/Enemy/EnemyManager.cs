@@ -14,7 +14,7 @@ public class EnemyManager : MonoBehaviour
     public static EnemyManager Instance { get; private set; }
     
     [Header("Settings")]
-    [SerializeField] private int maxEnemies = 50;
+    [SerializeField] private int maxEnemies = 100;
     [SerializeField] private ChanceList<Enemy> enemyTypes = new ChanceList<Enemy>();
     
     private Transform _enemyHolder;
@@ -38,10 +38,10 @@ public class EnemyManager : MonoBehaviour
     private void SpawnEnemy(Enemy enemy, EnemySpawnPoint spawnPoint)
     {
         Vector3 spawnOffset = Random.insideUnitSphere * spawnPoint.SpawnPointRange;
-        spawnOffset.y = 0;
-        Vector3 spawnPosition = spawnPoint.transform.position + spawnOffset;
+        spawnOffset.y = spawnPoint.SpawnHeight;
+        Vector3 spawnPosition = spawnPoint.transform.position.Add(spawnOffset);
         
-        Instantiate(enemy, spawnPosition, Quaternion.identity, _enemyHolder);
+        DeploymentManager.Instance?.DeployEnemy(enemy, spawnPosition, _enemyHolder);
     }
     
     public void SpawnEnemyWave(int enemiesToSpawn, ChanceList<Enemy> enemySource = null, EnemySpawnPoint spawnPoint = null)

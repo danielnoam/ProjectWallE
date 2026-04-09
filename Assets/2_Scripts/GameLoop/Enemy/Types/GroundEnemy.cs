@@ -10,11 +10,19 @@ namespace ProjectWallE.GameLoop
         [SerializeField, AutoGetSelf, HideInInspector] private NavMeshAgent navMeshAgent;
 
         protected override Vector3 Velocity => navMeshAgent.velocity;
-
+        
+        
         protected override void Initialize()
         {
+            navMeshAgent.enabled = false;
+
+            if (NavMesh.SamplePosition(rigidBody.position, out NavMeshHit hit, 50f, NavMesh.AllAreas))
+            {
+                rigidBody.position = hit.position;
+            }
+
+            navMeshAgent.enabled = true;
             base.Initialize();
-            navMeshAgent.updateRotation = !AimingControlsBodyRotation;
         }
 
         protected override void OnUpdate()

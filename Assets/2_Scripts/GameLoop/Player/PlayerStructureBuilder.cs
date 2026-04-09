@@ -292,11 +292,11 @@ namespace ProjectWallE.GameLoop.Player
             {
                 if (_targetedNode)
                 {
-                    StructureManager.Instance?.DeployPod(structure, _targetedNode, transform.forward);
+                    DeploymentManager.Instance?.DeployStructureOnNode(structure, _targetedNode);
                 }
                 else if (Physics.Raycast(_buildRay, out RaycastHit hit, buildRange, buildableLayerMask))
                 {
-                    StructureManager.Instance?.DeployPod(structure, hit.point, transform.forward);
+                    DeploymentManager.Instance?.DeployStructureOnGround(structure, hit.point, transform.forward, hit.normal);
                 }
             }
         }

@@ -1,3 +1,4 @@
+using DNExtensions.Utilities.Button;
 using UnityEngine;
 
 namespace ProjectWallE.GameLoop
@@ -32,6 +33,18 @@ namespace ProjectWallE.GameLoop
 
         protected virtual void OnLevelFinished()
         {
+        }
+        
+        [Button(ButtonPlayMode.OnlyWhenNotPlaying)]
+        private void AlignToGround()
+        {
+            if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out RaycastHit hit, 10f))
+            {
+                transform.position = hit.point;
+                Vector3 projectedForward = Vector3.ProjectOnPlane(transform.forward, hit.normal).normalized;
+                if (projectedForward.sqrMagnitude < 0.001f) projectedForward = Vector3.ProjectOnPlane(Vector3.forward, hit.normal).normalized;
+                transform.rotation = Quaternion.LookRotation(projectedForward, hit.normal);
+            }
         }
     }
 }

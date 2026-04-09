@@ -33,7 +33,7 @@ namespace ProjectWallE.GameLoop
         {
             if (spawnAtStart)
             {
-                Invoke(nameof(SpawnStartStructure), Random.Range(0f, 0.5f));
+                SpawnStartStructure();
             }
         }
 
@@ -42,7 +42,7 @@ namespace ProjectWallE.GameLoop
             if (!structure || _hasSpawned) return;
 
             _hasSpawned = true;
-            StructureManager.Instance?.DeployPod(structure, transform.position, Vector3.forward);
+            DeploymentManager.Instance?.DeployStructureOnGround(structure, transform.position, transform.forward, transform.up);
         }
 
 #if UNITY_EDITOR

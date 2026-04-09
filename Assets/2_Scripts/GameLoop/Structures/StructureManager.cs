@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using DNExtensions.Utilities;
 using UnityEngine;
 
 namespace ProjectWallE.GameLoop
@@ -19,14 +18,9 @@ namespace ProjectWallE.GameLoop
         public static event Action<StructuresData> OnStructureCreated;
         public static event Action<StructuresData> OnStructureDestroyed;
 
-        [Header("Settings")] 
-        [SerializeField] private Pod podPrefab;
-        [SerializeField] private ChanceList<Transform> podSpawnPositions = new ChanceList<Transform>();
-
         [Header("Structures")]
         [SerializeField] private Structure[] allStructures;
 
-        private Transform _structureHolder;
         private Transform _ghostHolder;
         private readonly List<Structure> _structures = new List<Structure>();
         private readonly List<Generator> _generators = new List<Generator>();
@@ -37,15 +31,13 @@ namespace ProjectWallE.GameLoop
 
         private void Awake()
         {
-            if (Instance != null && Instance != this)
+            if (Instance && Instance != this)
             {
                 Destroy(gameObject);
                 return;
             }
 
             Instance = this;
-
-            _structureHolder = new GameObject("StructureHolder").transform;
             _ghostHolder = new GameObject("GhostHolder").transform;
             InitializeGhosts();
         }
@@ -84,21 +76,7 @@ namespace ProjectWallE.GameLoop
             _activeGhost.SetActive(false);
             _activeGhost = null;
         }
-
-        public void DeployPod(Structure structure, Vector3 targetPosition, Vector3 forward)
-        {
-            var spawnPosition = podSpawnPositions.GetRandomItem();
-            Pod pod = Instantiate(podPrefab, spawnPosition.position, Quaternion.LookRotation(spawnPosition.forward));
-            pod.Initialize(structure, targetPosition, forward, _structureHolder);
-        }
-
-        public void DeployPod(Structure structure, StructureNode node, Vector3 forward)
-        {
-            var spawnPosition = podSpawnPositions.GetRandomItem();
-            Pod pod = Instantiate(podPrefab, spawnPosition.position, Quaternion.LookRotation(spawnPosition.forward));
-            pod.Initialize(structure, node.SnapPoint, forward, _structureHolder, node);
-        }
-
+        
         #region Structure Registration
 
         public void RegisterStructure(Structure structure)

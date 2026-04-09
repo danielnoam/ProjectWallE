@@ -1,7 +1,9 @@
-
 using UnityEngine;
 
-public interface IDeployable
+namespace ProjectWallE.GameLoop
 {
-    void Deploy(Vector3 impactPoint, Vector3 surfaceNormal, Vector3 forward);
+    public interface IDeployable
+    {
+        void Deploy(Vector3 position, Vector3 surfaceNormal, Vector3 forward);
+    }
 }

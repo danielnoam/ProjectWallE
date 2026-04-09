@@ -1,5 +1,3 @@
-using System;
-using DNExtensions;
 using UnityEditor;
 using UnityEngine;
 
@@ -10,8 +8,10 @@ namespace ProjectWallE.GameLoop
         [Header("Settings")] 
         [SerializeField] private bool isActive = true;
         [SerializeField] private float spawnPointRange = 10f;
+        [SerializeField] private float spawnHeight = 5f;
 
         public float SpawnPointRange => spawnPointRange;
+        public float SpawnHeight => spawnHeight;
 
         private void OnValidate()
         {
@@ -52,24 +52,19 @@ namespace ProjectWallE.GameLoop
 
         private void OnDrawGizmos()
         {
-            if (isActive)
+            Handles.color = isActive ? Color.red : Color.gray;
+            Handles.DrawWireDisc(transform.position, Vector3.up, spawnPointRange);
+
+            if (SpawnHeight != 0)
             {
-                Gizmos.color = Color.red;
-                Gizmos.DrawWireSphere(transform.position, spawnPointRange);
-
+                Vector3 topPoint = transform.position + Vector3.up * SpawnHeight;
+                Handles.DrawLine(transform.position, topPoint);
+                Handles.DrawWireDisc(topPoint, Vector3.up, 0.5f);
             }
-            else
-            {
-                Gizmos.color = Color.gray;
-                Gizmos.DrawWireSphere(transform.position, spawnPointRange);
-            }
-
-
 
             var enemyString = $"Enemy Spawn Point: {(isActive ? "Active" : "Not Active")}";
-
             Handles.Label(
-                transform.position + Vector3.up * (spawnPointRange + 1f),
+                transform.position + Vector3.up * 10,
                 enemyString,
                 new GUIStyle()
                 {

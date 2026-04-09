@@ -45,18 +45,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c30d34e780b7143459b55d4a06cd93ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureDispatcher
-  podPrefab: {fileID: 6064574791381144385, guid: 8f24e02f865ecf045bb82fe2995237a2, type: 3}
-  podSpawnPositions:
-    internalItems:
-    - item: {fileID: 0}
-      chance: 34
-      isLocked: 0
-    - item: {fileID: 0}
-      chance: 33
-      isLocked: 0
-    - item: {fileID: 0}
-      chance: 33
-      isLocked: 0
   allStructures:
   - {fileID: 6487620541022002554, guid: 3b1b64788b055e0498a63ea738b3ba50, type: 3}
   - {fileID: 2308925685089836474, guid: eb9518b19b0f8d64fa00d3c4d128b9bf, type: 3}
@@ -172,6 +160,7 @@ Transform:
   - {fileID: 2904148511760659139}
   - {fileID: 3422018339412630424}
   - {fileID: 4081047278312226139}
+  - {fileID: 8943066122226039738}
   - {fileID: 3553430490081365388}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -220,6 +209,63 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceManager
   startingResources: 1000
+--- !u!1 &5820277044482427704
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8943066122226039738}
+  - component: {fileID: 578717146691185239}
+  m_Layer: 0
+  m_Name: DeploymentManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8943066122226039738
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5820277044482427704}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 657412859967765425}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &578717146691185239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5820277044482427704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8bc02f2ad6546cda0e682df0e257a43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.DeploymentManager
+  podPrefab: {fileID: 6064574791381144385, guid: 8f24e02f865ecf045bb82fe2995237a2, type: 3}
+  skyDropHeight: 300
+  shipSpawnPositions:
+    internalItems:
+    - item: {fileID: 0}
+      chance: 83
+      isLocked: 0
+    - item: {fileID: 0}
+      chance: 8
+      isLocked: 0
+    - item: {fileID: 0}
+      chance: 9
+      isLocked: 0
 --- !u!1 &5934484726131419139
 GameObject:
   m_ObjectHideFlags: 0

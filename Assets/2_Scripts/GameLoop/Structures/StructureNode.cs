@@ -62,6 +62,7 @@ namespace ProjectWallE.GameLoop
 
             Gizmos.color = Color.cyan;
             Gizmos.DrawWireSphere(transform.position, radius);
+            Gizmos.DrawWireSphere(transform.position + transform.TransformVector(snapOffset), 0.3f);
 
             UnityEditor.Handles.Label(
                 transform.position.AddY(0.5f) + Vector3.up * radius , 

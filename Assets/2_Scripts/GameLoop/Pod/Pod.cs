@@ -7,21 +7,20 @@ using UnityEngine;
 
 namespace ProjectWallE.GameLoop
 {
-    [RequireComponent(typeof(Collider))]
     [RequireComponent(typeof(CinemachineImpulseSource))]
     public class Pod : MonoBehaviour
     {
-        [Header("Settings")] 
+        [Header("Settings")]
         [SerializeField] private float arcHeight = 125f;
-        [SerializeField] private float travelDuration = 3f;
         [SerializeField] private float rotationSpeed = 300f;
-        [SerializeField] private LayerMask collisionMask;
+        [SerializeField, MinMaxRange(0, 10)] private RangedFloat travelDuration = new RangedFloat(3,5);
 
-        [Header("Push")] 
-        [SerializeField] private float pushRange = 15f;
-        [MinMaxRange(0, 100)] public RangedFloat pushStrength = new RangedFloat(3, 15);
+        [Header("Impact")]
+        [SerializeField] private float pushRange = 10f;
+        [SerializeField] private float impactDamage = 100f;
+        [SerializeField, MinMaxRange(0, 100)] private RangedFloat pushStrength = new RangedFloat(3, 15);
 
-        [Header("Effects")] 
+        [Header("Effects")]
         [SerializeField] private ParticleEffectAction collisionEffect;
         [SerializeField] private ImpulseSettings collisionImpulseSettings;
         [SerializeField, AutoGetSelf, HideInInspector] private CinemachineImpulseSource impulseSource;
@@ -33,35 +32,20 @@ namespace ProjectWallE.GameLoop
         private Vector3 _startPosition;
         private Vector3 _targetPoint;
         private Vector3 _forward;
-        private bool _hasCollided;
-        private Coroutine _moveCoroutine;
+        private Vector3 _surfaceNormal;
+        private bool _damageOnImpact;
 
-
-        private void OnCollisionEnter(Collision collision)
-        {
-            if (((1 << collision.gameObject.layer) & collisionMask) == 0 || _hasCollided) return;
-            _hasCollided = true;
-
-            if (_moveCoroutine != null)
-            {
-                StopCoroutine(_moveCoroutine);
-            }
-
-            Vector3 impactPoint = collision.contacts[0].point;
-            Vector3 surfaceNormal = collision.contacts[0].normal;
-
-            Land(impactPoint, surfaceNormal);
-        }
 
         private IEnumerator MoveInArc()
         {
             float elapsed = 0f;
             Vector3 previousPosition = _startPosition;
+            float duration = travelDuration.RandomValue;
 
-            while (elapsed < travelDuration && !_hasCollided)
+            while (elapsed < duration)
             {
                 elapsed += Time.deltaTime;
-                float t = elapsed / travelDuration;
+                float t = elapsed / duration;
                 Vector3 position = Vector3.Lerp(_startPosition, _targetPoint, t);
 
                 position.y += arcHeight * Mathf.Sin(t * Mathf.PI);
@@ -82,48 +66,41 @@ namespace ProjectWallE.GameLoop
                 yield return null;
             }
 
-            if (!_hasCollided)
-            {
-                if (Physics.Raycast(_targetPoint, Vector3.down, out RaycastHit hit, 200f, collisionMask))
-                {
-                    Land(hit.point, hit.normal);
-                }
-                else
-                {
-                    Land(_targetPoint, Vector3.up);
-                }
-            }
+            Land();
         }
 
-
-        private void Land(Vector3 impactPoint, Vector3 surfaceNormal)
+        private void Land()
         {
-            // Effects
             impulseSource?.GenerateImpulse(collisionImpulseSettings);
-            collisionEffect?.Play(transform.position);
+            collisionEffect?.Play(_targetPoint);
 
-            // Push && Damage
-            var colliders = Physics.OverlapSphere(impactPoint, pushRange);
-            foreach (Collider col in colliders)
+            if (_damageOnImpact)
             {
-                Enemy enemy = col.GetComponentInParent<IDamageable>() as Enemy;
-                enemy?.TakeDamage(100f);
-
-                IPushable pushable = col.GetComponentInParent<IPushable>();
-                if (pushable != null)
+                var colliders = Physics.OverlapSphere(_targetPoint, pushRange);
+                foreach (Collider col in colliders)
                 {
-                    float distance = Vector3.Distance(transform.position, col.transform.position);
-                    float push = pushStrength.Lerp(1 - distance / pushRange);
+                    Enemy enemy = col.GetComponentInParent<IDamageable>() as Enemy;
+                    enemy?.TakeDamage(impactDamage);
 
-                    Vector3 direction = (col.transform.position - impactPoint).normalized;
-                    pushable.Push(direction, push);
+                    IPushable pushable = col.GetComponentInParent<IPushable>();
+                    if (pushable != null)
+                    {
+                        float distance = Vector3.Distance(_targetPoint, col.transform.position);
+                        float push = pushStrength.Lerp(1 - distance / pushRange);
+
+                        Vector3 direction = (col.transform.position - _targetPoint).normalized;
+                        pushable.Push(direction, push);
+                    }
                 }
             }
+            
 
-            MonoBehaviour instance = _parent ? Instantiate(_deployable as MonoBehaviour, _parent) : Instantiate(_deployable as MonoBehaviour);
-            ((IDeployable)instance).Deploy(impactPoint, surfaceNormal, _forward);
+            MonoBehaviour instance = _parent
+                ? Instantiate(_deployable as MonoBehaviour, _targetPoint, Quaternion.LookRotation(_forward), _parent)
+                : Instantiate(_deployable as MonoBehaviour, _targetPoint, Quaternion.LookRotation(_forward));
+            ((IDeployable)instance).Deploy(_targetPoint, _surfaceNormal, _forward);
 
-            if (_structureNode && instance.TryGetComponent(out Structure structure))
+            if (_structureNode && instance is Structure structure)
             {
                 _structureNode.Occupy(structure);
             }
@@ -131,22 +108,23 @@ namespace ProjectWallE.GameLoop
             Destroy(gameObject);
         }
 
-        public void Initialize<T>(T deployable, Vector3 targetPoint, Vector3 forward, Transform parent)
-            where T : MonoBehaviour, IDeployable
+        public void Initialize<T>(T deployable, Vector3 targetPoint, Vector3 forward, Transform parent, bool damageOnImpact = true, Vector3 surfaceNormal = default) where T : MonoBehaviour, IDeployable
         {
             _startPosition = transform.position;
             _deployable = deployable;
             _targetPoint = targetPoint;
             _forward = forward;
             _parent = parent;
+            _damageOnImpact = damageOnImpact;
+            _surfaceNormal = surfaceNormal == default ? Vector3.up : surfaceNormal;
 
-            _moveCoroutine = StartCoroutine(MoveInArc());
+            StartCoroutine(MoveInArc());
         }
 
-        public void Initialize<T>(T deployable, Vector3 targetPoint, Vector3 forward, Transform parent, StructureNode structureNode) where T : MonoBehaviour, IDeployable
+        public void Initialize<T>(T deployable, Transform parent, StructureNode structureNode) where T : MonoBehaviour, IDeployable
         {
             _structureNode = structureNode;
-            Initialize(deployable, targetPoint, forward, parent);
+            Initialize(deployable, _structureNode.SnapPoint, _structureNode.transform.forward, parent, surfaceNormal: _structureNode.transform.up);
         }
     }
 }
