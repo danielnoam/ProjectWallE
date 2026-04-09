@@ -123,7 +123,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
         CurrentUpgradeLevel = 1;
         CurrentHealth = CurrentLevelData.maxHealth;
         buildEffect?.Play();
-        radarTarget?.Ping();
+        radarTarget?.PingBlip();
         OnStructureBuilt?.Invoke(this);
         OnBuild();
     }
@@ -136,7 +136,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
         brokenEffect?.SetBroken(transform.position);
         StructureManager.Instance?.UnregisterStructure(this);
         OnDeath?.Invoke(this);
-        radarTarget?.Ping(Color.red);
+        radarTarget?.PingBlip(Color.red);
         OnBreak();
     }
     
@@ -195,17 +195,19 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
             Break();
         }
     }
-    
-    
-    public void Deploy(Vector3 position, Vector3 surfaceNormal, Vector3 forward)
+
+    public void Deploy(DeploymentRequest request)
     {
-        Vector3 projectedForward = Vector3.ProjectOnPlane(position, surfaceNormal).normalized;
+        Vector3 projectedForward = Vector3.ProjectOnPlane(request.TargetPosition, request.TargetSurfaceNormal).normalized;
         Quaternion yawRotation = projectedForward.sqrMagnitude > 0.001f
-            ? Quaternion.LookRotation(projectedForward, surfaceNormal)
+            ? Quaternion.LookRotation(projectedForward, request.TargetSurfaceNormal)
             : Quaternion.identity;
 
-        transform.position = position - yawRotation * bottomPoint;
+        transform.position = request.TargetPosition - yawRotation * bottomPoint;
         transform.rotation = yawRotation;
+        
+        if (request.Node) request.Node.Occupy(this);
+        
         Build();
     }
     

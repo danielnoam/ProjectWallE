@@ -42,7 +42,7 @@ namespace ProjectWallE.GameLoop
             if (!structure || _hasSpawned) return;
 
             _hasSpawned = true;
-            DeploymentManager.Instance?.DeployStructureOnGround(structure, transform.position, transform.forward, transform.up);
+            StructureManager.Instance?.DeployStructureOnGround(structure, transform.position, transform.forward, transform.up);
         }
 
 #if UNITY_EDITOR

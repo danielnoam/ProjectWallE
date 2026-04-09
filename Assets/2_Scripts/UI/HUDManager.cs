@@ -31,8 +31,8 @@ namespace ProjectWallE.UI
         
         [Header("References")] 
         [SerializeField] private GameObject crosshair;
-        [SerializeField, AutoGetChildren, HideInInspector] private RadarSystem radarSystem;
-        [SerializeField, AutoGetScene, HideInInspector] private PlayerManager player;
+        [SerializeField, AutoGetChildren] private RadarSystem radarSystem;
+        [SerializeField, AutoGetScene] private PlayerManager player;
 
         private IReadOnlyList<BaseLevelObjective> _activeObjectives;
         private readonly StringBuilder _objectiveBuilder = new();

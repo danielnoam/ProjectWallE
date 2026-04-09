@@ -105,6 +105,7 @@ namespace ProjectWallE
         {
             _currentController?.ApplyMovement();
         }
+        
 
 
         #region Controller Switch
@@ -212,5 +213,6 @@ namespace ProjectWallE
             Gizmos.color = Color.red;
             Gizmos.DrawRay(transform.position, Vector3.up * robotHeightCheck);
         }
+        
     }
 }

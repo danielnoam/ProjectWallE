@@ -1,4 +1,4 @@
-using System;
+using ProjectWallE.GameLoop;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -7,6 +7,10 @@ namespace ProjectWallE
     [RequireComponent(typeof(PlayerManagerInput))]
     public class CameraManager : MonoBehaviour
     {
+        [Header("Pod")]
+        [SerializeField] private CinemachineCamera podCamera;
+        
+        [Header("Player")]
         [SerializeField] private CinemachineCamera robotCamera;
         [SerializeField] private CinemachineCamera carCamera;
         [SerializeField] private Transform cameraTarget;
@@ -15,6 +19,7 @@ namespace ProjectWallE
         
         private PlayerManager _playerManager;
         private PlayerManagerInput _input;
+        private Pod _activePod;
         
         private bool _cameraLocked;
 
@@ -26,30 +31,60 @@ namespace ProjectWallE
 
         private void OnEnable()
         {
-            if (_playerManager == null) return;
-            _playerManager.OnControllerChanged += OnControllerSwitch;
-            _playerManager.StructureBuilder.ActionsMenuRequested += OnMenuActionRequested;
-            _playerManager.StructureBuilder.BuildMenuRequested += OnBuildMenuRequested;
-            _playerManager.StructureBuilder.MenuCloseRequested += OnMenuCloseRequested;
+            DeploymentManager.OnPodDeployed += OnPodDeployed;
+            
+            if (_playerManager != null)
+            {
+                _playerManager.OnControllerChanged += OnControllerSwitch;
+                _playerManager.StructureBuilder.ActionsMenuRequested += OnMenuActionRequested;
+                _playerManager.StructureBuilder.BuildMenuRequested += OnBuildMenuRequested;
+                _playerManager.StructureBuilder.MenuCloseRequested += OnMenuCloseRequested;
+            }
         }
         
+
         private void OnDisable()
-        {           
-            if (_playerManager == null) return;
-            _playerManager.OnControllerChanged -= OnControllerSwitch;
+        {
+            DeploymentManager.OnPodDeployed -= OnPodDeployed;
+            
+            if (_playerManager != null) _playerManager.OnControllerChanged -= OnControllerSwitch;
         }
 
         private void LateUpdate()
         {
             UpdateCameraMovement();
         }
+        
+        private void OnPodDeployed(DeploymentRequest request, Pod pod)
+        {
+            if (!request.UseCamera) return;
+
+            _activePod = pod;
+            _activePod.OnLand += OnLand;
+    
+            podCamera.LookAt = pod.transform;
+    
+            SwitchActiveCamera(podCamera);
+        }
+
+        private void OnLand()
+        {
+            if (_activePod)
+            {
+                podCamera.LookAt = null;
+                _activePod.OnLand -= OnLand;
+            }
+            _activePod = null;
+            SwitchActiveCamera(_playerManager.PlayerControllerType == PlayerControllerType.Robot ? robotCamera : carCamera);
+        }
 
         private void OnControllerSwitch(PlayerControllerType controllerType)
         {
+            if (_activePod) return;
+            
             bool isRobot = controllerType == PlayerControllerType.Robot;
             
-            robotCamera.Priority.Value = isRobot ? 1 : 0;
-            carCamera.Priority.Value = isRobot ? 0 : 1;
+            SwitchActiveCamera(isRobot ? robotCamera : carCamera);
         }
         
         private void OnMenuActionRequested(Structure obj)
@@ -82,6 +117,15 @@ namespace ProjectWallE
             
             targetRotation = new Vector3(x, targetRotation.y, 0);
             cameraTarget.rotation = Quaternion.Euler(targetRotation);
+        }
+
+        private void SwitchActiveCamera(CinemachineCamera cam)
+        {
+            podCamera.Priority.Value = 0;
+            carCamera.Priority.Value = 0;
+            robotCamera.Priority.Value = 0;
+            
+            cam.Priority.Value = 1;
         }
     }
 }

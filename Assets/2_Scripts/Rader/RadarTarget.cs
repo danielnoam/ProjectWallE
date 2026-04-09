@@ -3,10 +3,11 @@ using UnityEngine;
 public class RadarTarget : MonoBehaviour
 {
     [Header("Settings")]
+    [SerializeField] private bool autoRegisterOnEnable = true;
+    [SerializeField] private bool showOutOfRange;
     [SerializeField] private Sprite blipSprite;
     [SerializeField] private Color blipColor = Color.white;
     [SerializeField, Range(0.1f, 2.0f)] private float blipSizeMultiplier = 1.0f;
-    [SerializeField] private bool showOutOfRange;
 
     [Header("Ping")]
     [SerializeField, Min(0.1f)] private float pingDuration = 1f;
@@ -28,10 +29,26 @@ public class RadarTarget : MonoBehaviour
     public float PunchDuration => punchDuration;
     public float PunchSizeMultiplier => punchSizeMultiplier;
 
-    private void OnEnable() => RadarSystem.Instance?.Register(this);
-    private void OnDisable() => RadarSystem.Instance?.Unregister(this);
+    private void OnEnable()
+    {
+        if (autoRegisterOnEnable) EnableBlip();
+    }
+    private void OnDisable()
+    {
+        DisableBlip();
+    }
+    
+    public void EnableBlip()
+    {
+        RadarSystem.Instance?.Register(this);
+    }
 
-    public void Ping(Color? colorOverride = null)
+    public void DisableBlip()
+    {
+        RadarSystem.Instance?.Unregister(this);
+    }
+
+    public void PingBlip(Color? colorOverride = null)
     {
         RadarSystem.Instance?.PingTarget(this, colorOverride);
     }

@@ -253,9 +253,9 @@ namespace ProjectWallE.GameLoop
             attackStrategy?.Reset();
         }
         
-        public void Deploy(Vector3 position, Vector3 surfaceNormal, Vector3 forward)
+        public void Deploy(DeploymentRequest request)
         {
-  
+
         }
 
         public void OnPoolRecycle() { }

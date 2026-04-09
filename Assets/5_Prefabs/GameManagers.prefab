@@ -105,12 +105,14 @@ PlayableDirector:
   m_GameObject: {fileID: 3062497052717991773}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 0}
+  m_PlayableAsset: {fileID: 11400000, guid: 5069225b6f6b71a42b4ce5e4069ce095, type: 2}
   m_InitialState: 0
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
   m_InitialTime: 0
-  m_SceneBindings: []
+  m_SceneBindings:
+  - key: {fileID: 5586992869872184875, guid: 5069225b6f6b71a42b4ce5e4069ce095, type: 2}
+    value: {fileID: 3062497052717991773}
   m_ExposedReferences:
     m_References: []
 --- !u!114 &7217090782691645017
@@ -253,19 +255,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8bc02f2ad6546cda0e682df0e257a43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.DeploymentManager
-  podPrefab: {fileID: 6064574791381144385, guid: 8f24e02f865ecf045bb82fe2995237a2, type: 3}
   skyDropHeight: 300
-  shipSpawnPositions:
-    internalItems:
-    - item: {fileID: 0}
-      chance: 83
-      isLocked: 0
-    - item: {fileID: 0}
-      chance: 8
-      isLocked: 0
-    - item: {fileID: 0}
-      chance: 9
-      isLocked: 0
+  podPrefab: {fileID: 6064574791381144385, guid: 8f24e02f865ecf045bb82fe2995237a2, type: 3}
 --- !u!1 &5934484726131419139
 GameObject:
   m_ObjectHideFlags: 0

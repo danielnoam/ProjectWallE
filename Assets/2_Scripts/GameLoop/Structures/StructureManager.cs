@@ -21,6 +21,7 @@ namespace ProjectWallE.GameLoop
         [Header("Structures")]
         [SerializeField] private Structure[] allStructures;
 
+        private Transform _structureHolder;
         private Transform _ghostHolder;
         private readonly List<Structure> _structures = new List<Structure>();
         private readonly List<Generator> _generators = new List<Generator>();
@@ -39,8 +40,31 @@ namespace ProjectWallE.GameLoop
 
             Instance = this;
             _ghostHolder = new GameObject("GhostHolder").transform;
+            _structureHolder = new GameObject("StructureHolder").transform;
             InitializeGhosts();
         }
+        
+        public void DeployStructureOnGround(Structure structure, Vector3 targetPosition, Vector3 forward, Vector3 surfaceNormal)
+        {
+            var request = new DeploymentRequest(targetPosition, forward, _structureHolder)
+            {
+                TargetSurfaceNormal = surfaceNormal,
+                UseCamera = structure is Base
+            };
+            DeploymentManager.Instance?.DeployFromShip(structure, request);
+        }
+
+        public void DeployStructureOnNode(Structure structure, StructureNode node)
+        {
+            var request = new DeploymentRequest(node.SnapPoint, node.transform.forward, _structureHolder)
+            {
+                TargetSurfaceNormal = node.transform.up,
+                Node = node
+            };
+            DeploymentManager.Instance?.DeployFromShip(structure, request);
+        }
+
+        #region Ghost
 
         private void InitializeGhosts()
         {
@@ -54,7 +78,7 @@ namespace ProjectWallE.GameLoop
                 _ghostInstances[structure] = ghost;
             }
         }
-
+        
         public GameObject ShowGhost(Structure structure)
         {
             if (_activeGhost) _activeGhost.SetActive(false);
@@ -76,6 +100,8 @@ namespace ProjectWallE.GameLoop
             _activeGhost.SetActive(false);
             _activeGhost = null;
         }
+
+        #endregion
         
         #region Structure Registration
 

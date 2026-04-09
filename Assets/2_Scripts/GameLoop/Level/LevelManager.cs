@@ -25,8 +25,8 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
     [Header("Settings")]
     [Tooltip("Time before the time line starts")]
     [SerializeField] private float initializeDelay = 4f;
-    [SerializeField, AutoGetSelf, HideInInspector] private PlayableDirector timeline;
-    [SerializeField, AutoGetScene, HideInInspector] private PlayerManager player;
+    [SerializeField, AutoGetSelf] private PlayableDirector timeline;
+    [SerializeField, AutoGetScene] private PlayerManager player;
 
     private bool _levelActive;
     private List<BaseLevelObjective> _activeObjectives;

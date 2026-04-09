@@ -218,6 +218,7 @@ namespace ProjectWallE.GameLoop
         [SerializeField] private string materialProperty = "_Emission_Color";
         [SerializeField] private Renderer[] emissiveRenderers;
         [SerializeField, AudioLibraryID] private string brokenSoundId; 
+        [SerializeField] private VisualEffect smokeEffect;
 
         private int _propertyId;
         private Material[] _materials;
@@ -251,6 +252,8 @@ namespace ProjectWallE.GameLoop
                 Tween.MaterialProperty(mat, _propertyId, brokenColor, duration, ease);
             }
             
+            smokeEffect?.Play();
+            
             AudioLibrary.PlayAtPosition(brokenSoundId, position);
         }
 
@@ -261,6 +264,8 @@ namespace ProjectWallE.GameLoop
             {
                 Tween.MaterialProperty(_materials[i], _propertyId, _baseColors[i], duration, ease);
             }
+            
+            smokeEffect?.Stop();
         }
     }
     

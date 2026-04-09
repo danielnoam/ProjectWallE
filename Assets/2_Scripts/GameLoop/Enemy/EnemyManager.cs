@@ -18,7 +18,7 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private ChanceList<Enemy> enemyTypes = new ChanceList<Enemy>();
     
     private Transform _enemyHolder;
-    private readonly ChanceList<EnemySpawnPoint> _enemySpawnPoints = new ChanceList<EnemySpawnPoint>();
+    private readonly ChanceList<EnemySpawnPoint> _activeSpawnPoints = new ChanceList<EnemySpawnPoint>();
     private readonly List<Enemy> _activeEnemies = new List<Enemy>();
     
     private void Awake()
@@ -41,7 +41,12 @@ public class EnemyManager : MonoBehaviour
         spawnOffset.y = spawnPoint.SpawnHeight;
         Vector3 spawnPosition = spawnPoint.transform.position.Add(spawnOffset);
         
-        DeploymentManager.Instance?.DeployEnemy(enemy, spawnPosition, _enemyHolder);
+        var request = new DeploymentRequest(spawnPosition, Vector3.forward, _enemyHolder)
+        {
+            DamageOnImpact = false
+        };
+        
+        DeploymentManager.Instance?.DeployFromSky(enemy, request);
     }
     
     public void SpawnEnemyWave(int enemiesToSpawn, ChanceList<Enemy> enemySource = null, EnemySpawnPoint spawnPoint = null)
@@ -50,8 +55,8 @@ public class EnemyManager : MonoBehaviour
 
         if (!spawnPoint)
         {
-            if (_enemySpawnPoints.Count == 0) return;
-            spawnPoint = _enemySpawnPoints.GetRandomItem();
+            if (_activeSpawnPoints.Count == 0) return;
+            spawnPoint = _activeSpawnPoints.GetRandomItem();
         }
 
         var source = enemySource ?? enemyTypes;
@@ -84,19 +89,19 @@ public class EnemyManager : MonoBehaviour
     
     public void RegisterSpawnPoint(EnemySpawnPoint spawnPoint)
     {
-        if (_enemySpawnPoints.ToList().Contains(spawnPoint)) return;
+        if (_activeSpawnPoints.ToList().Contains(spawnPoint)) return;
         
-        _enemySpawnPoints.AddItem(spawnPoint);
-        _enemySpawnPoints.NormalizeChances();
+        _activeSpawnPoints.AddItem(spawnPoint);
+        _activeSpawnPoints.NormalizeChances();
     }
     
     public void UnregisterSpawnPoint(EnemySpawnPoint spawnPoint)
     {
-        if (!_enemySpawnPoints.ToList().Contains(spawnPoint)) return;
+        if (!_activeSpawnPoints.ToList().Contains(spawnPoint)) return;
         
-        var index = _enemySpawnPoints.IndexOf(spawnPoint);
-        _enemySpawnPoints.RemoveAt(index);
-        _enemySpawnPoints.NormalizeChances();
+        var index = _activeSpawnPoints.IndexOf(spawnPoint);
+        _activeSpawnPoints.RemoveAt(index);
+        _activeSpawnPoints.NormalizeChances();
     }
 
     #endregion
