@@ -13,11 +13,13 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField] private AnimatorStateField switchToRobot;
 
         [Header("Arm IK")]
-        [SerializeField] private float shoulderOffset = 1.2f;
-        [SerializeField] private float targetDistance = 3f;
-        [SerializeField] private float transitionSpeed = 5f;
+        [SerializeField] private float shoulderOffset = 0.7f;
+        [SerializeField] private float targetDistance = 1.5f;
+        [SerializeField] private float transitionSpeed = 3f;
 
         [Header("References")]
+        [SerializeField] private Rig rig;
+        [SerializeField] private MultiAimConstraint headAim;
         [SerializeField] private TwoBoneIKConstraint armIK;
         [SerializeField] private Transform torso;
         [SerializeField] private Transform shoulder;
@@ -33,6 +35,7 @@ namespace ProjectWallE.GameLoop.Player
         {
             _cam = Camera.main;
             _ikTarget = new GameObject("ArmIK_Target").transform;
+            headAim.data.sourceObjects = new WeightedTransformArray { new WeightedTransform(_ikTarget, 1f) };
             armIK.data.target = _ikTarget;
         }
 
@@ -48,16 +51,16 @@ namespace ProjectWallE.GameLoop.Player
 
         private void LateUpdate()
         {
-            UpdateArmIKTarget();
+            UpdateIKTarget();
         }
 
-        private void UpdateArmIKTarget()
+        private void UpdateIKTarget()
         {
             if (!_cam) return;
             
-            armIK.weight = Mathf.MoveTowards(armIK.weight, _targetWeight, transitionSpeed * Time.deltaTime);
+            rig.weight = Mathf.MoveTowards(rig.weight, _targetWeight, transitionSpeed * Time.deltaTime);
             
-            if (armIK.weight > 0.01f)
+            if (rig.weight > 0.01f)
             {
                 float dot = Vector3.Dot(torso.forward, _cam.transform.forward);
                 float dynamicOffset = Mathf.Lerp(shoulderOffset * 3f, shoulderOffset, (dot + 1f) * 0.5f);

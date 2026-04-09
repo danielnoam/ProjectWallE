@@ -62,6 +62,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5659159148574246714}
+  - {fileID: 3107291414340500672}
   m_Father: {fileID: 4410211601627553717}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5954175916313304975
@@ -1150,12 +1151,9 @@ GameObject:
   - component: {fileID: 4410211601627553717}
   - component: {fileID: 3887851470892790252}
   - component: {fileID: 2802502089686830403}
-  - component: {fileID: 8104896233199378666}
-  - component: {fileID: 3404806522171678059}
-  - component: {fileID: 3576337536456230308}
-  - component: {fileID: 4948167179135989057}
-  - component: {fileID: 6740650985369683722}
   - component: {fileID: 1023129824596148253}
+  - component: {fileID: 6740650985369683722}
+  - component: {fileID: 4948167179135989057}
   m_Layer: 9
   m_Name: Gfx
   m_TagString: Untagged
@@ -1219,157 +1217,6 @@ MonoBehaviour:
   - m_Rig: {fileID: 5954175916313304975}
     m_Active: 1
   m_Effectors: []
---- !u!114 &8104896233199378666
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6733501558051180430}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 286c0a9b65940bc46a4af2e3e8df3264, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FullscreenVignetteController
-  material: {fileID: 2100000, guid: 6e808c978bf70bc488a47a310c10d16d, type: 2}
-  propertyName: _Visibility
-  showValue: 1
-  hideValue: 0
-  duration: 0.5
-  ease: 4
-  punchCount: 1
-  punchDuration: 0.25
-  punchEase: 1
---- !u!114 &3404806522171678059
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6733501558051180430}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 286c0a9b65940bc46a4af2e3e8df3264, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FullscreenVignetteController
-  material: {fileID: 2100000, guid: 11a4b36f82c657b429a3edb70f119268, type: 2}
-  propertyName: _Visibility
-  showValue: 1
-  hideValue: 0
-  duration: 0.5
-  ease: 4
-  punchCount: 1
-  punchDuration: 0.25
-  punchEase: 1
---- !u!114 &3576337536456230308
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6733501558051180430}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 286c0a9b65940bc46a4af2e3e8df3264, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FullscreenVignetteController
-  material: {fileID: 2100000, guid: 11a4b36f82c657b429a3edb70f119268, type: 2}
-  propertyName: _Mask_Size
-  showValue: 1
-  hideValue: 0
-  duration: 0.5
-  ease: 4
-  punchCount: 1
-  punchDuration: 0.25
-  punchEase: 1
---- !u!114 &4948167179135989057
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6733501558051180430}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27d3d691044dfda42b95c239ad6be28b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.PlayerAnimator
-  shootEffect:
-    visualEffects:
-    - {fileID: 5782453471879991033}
-    - {fileID: 3686714904999105487}
-    soundId: Shoot
-  carBoostEffect:
-    visualEffects:
-    - {fileID: 5454407353768600682}
-    - {fileID: 3246170288374732677}
-    soundId: Boost
-  wheelsAirReleaseEffect:
-    visualEffects:
-    - {fileID: 3149229671974226224}
-    - {fileID: 2909571650443864060}
-    - {fileID: 4038127333170522525}
-    - {fileID: 4973269791065966836}
-    soundId: AirRelease
-  damageEffects:
-    punchStrength: 1
-    punchDuration: 0.15
-    punchEase: 1
-    emissionColor: {fileID: 11400000, guid: a96c7138587d94644ace68611d614fe6, type: 2}
-    hitSoundId: NormalHit
-  changeStateSoundId: ChangeState
-  tireEffectRobotSpeedThreshold: 5
-  robotTireEffects:
-  - {fileID: 6436861685030297602}
-  tireEffectCarSpeedThreshold: 8
-  carTireEffects:
-  - {fileID: 1322608540948452487}
-  - {fileID: 3152115435382748368}
-  heighSpeedMagnitudeRange:
-    minValue: 15
-    maxValue: 30
-  speedLinesSizeRange: {x: 1, y: 0.9}
-  lowHealthThreshold: 0.3
-  lowHealthEffect: {fileID: 8104896233199378666}
-  speedLinesVisibility: {fileID: 3404806522171678059}
-  speedLinesSize: {fileID: 3576337536456230308}
-  airReleaseAudioSource: {fileID: 1757885287560848928}
-  changeStateAudioSource: {fileID: 3113016758275396871}
-  boostAudioSource: {fileID: 8467015804595106265}
-  player: {fileID: 2369243402749369746}
---- !u!114 &6740650985369683722
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6733501558051180430}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b3f9ec7ed694f9daff943f7cf3f8103, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.Player.PlayerAnimator
-  switchToCar:
-    animator: {fileID: 3887851470892790252}
-    assetController: {fileID: 0}
-    source: 0
-    stateName: Switch To Car
-    stateHash: 184466374
-    assigned: 1
-  switchToRobot:
-    animator: {fileID: 3887851470892790252}
-    assetController: {fileID: 0}
-    source: 0
-    stateName: Switch To Robot
-    stateHash: -1799443727
-    assigned: 1
-  shoulderOffset: 0.7
-  targetDistance: 1.5
-  transitionSpeed: 3
-  armIK: {fileID: 4500353503960407862}
-  torso: {fileID: 8452754408248861801}
-  shoulder: {fileID: 2060917029085337360}
-  player: {fileID: 2369243402749369746}
 --- !u!114 &1023129824596148253
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1453,6 +1300,174 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &6740650985369683722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6733501558051180430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b3f9ec7ed694f9daff943f7cf3f8103, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.Player.PlayerAnimator
+  switchToCar:
+    animator: {fileID: 3887851470892790252}
+    assetController: {fileID: 0}
+    source: 0
+    stateName: Switch To Car
+    stateHash: 184466374
+    assigned: 1
+  switchToRobot:
+    animator: {fileID: 3887851470892790252}
+    assetController: {fileID: 0}
+    source: 0
+    stateName: Switch To Robot
+    stateHash: -1799443727
+    assigned: 1
+  shoulderOffset: 0.7
+  targetDistance: 1.5
+  transitionSpeed: 3
+  rig: {fileID: 5954175916313304975}
+  headAim: {fileID: 6942121746160544653}
+  armIK: {fileID: 4500353503960407862}
+  torso: {fileID: 8452754408248861801}
+  shoulder: {fileID: 2060917029085337360}
+  player: {fileID: 2369243402749369746}
+--- !u!114 &4948167179135989057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6733501558051180430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27d3d691044dfda42b95c239ad6be28b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.PlayerAnimator
+  shootEffect:
+    visualEffects:
+    - {fileID: 5782453471879991033}
+    - {fileID: 3686714904999105487}
+    soundId: Shoot
+  carBoostEffect:
+    visualEffects:
+    - {fileID: 5454407353768600682}
+    - {fileID: 3246170288374732677}
+    soundId: Boost
+  wheelsAirReleaseEffect:
+    visualEffects:
+    - {fileID: 3149229671974226224}
+    - {fileID: 2909571650443864060}
+    - {fileID: 4038127333170522525}
+    - {fileID: 4973269791065966836}
+    soundId: AirRelease
+  damageEffects:
+    punchStrength: 1
+    punchDuration: 0.15
+    punchEase: 1
+    emissionColor: {fileID: 11400000, guid: a96c7138587d94644ace68611d614fe6, type: 2}
+    hitSoundId: NormalHit
+  changeStateSoundId: ChangeState
+  tireEffectRobotSpeedThreshold: 5
+  robotTireEffects:
+  - {fileID: 6436861685030297602}
+  tireEffectCarSpeedThreshold: 8
+  carTireEffects:
+  - {fileID: 1322608540948452487}
+  - {fileID: 3152115435382748368}
+  airReleaseAudioSource: {fileID: 1757885287560848928}
+  changeStateAudioSource: {fileID: 3113016758275396871}
+  boostAudioSource: {fileID: 8467015804595106265}
+  player: {fileID: 2369243402749369746}
+--- !u!1 &6916443636318400613
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3107291414340500672}
+  - component: {fileID: 6942121746160544653}
+  m_Layer: 9
+  m_Name: HeadIK
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3107291414340500672
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6916443636318400613}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5852170115000021510}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6942121746160544653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6916443636318400613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3c430f382484144e925c097c2d33cfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Animation.Rigging::UnityEngine.Animations.Rigging.MultiAimConstraint
+  m_Weight: 1
+  m_Data:
+    m_ConstrainedObject: {fileID: 7531296676428198028}
+    m_SourceObjects:
+      m_Length: 1
+      m_Item0:
+        transform: {fileID: 0}
+        weight: 1
+      m_Item1:
+        transform: {fileID: 0}
+        weight: 0
+      m_Item2:
+        transform: {fileID: 0}
+        weight: 0
+      m_Item3:
+        transform: {fileID: 0}
+        weight: 0
+      m_Item4:
+        transform: {fileID: 0}
+        weight: 0
+      m_Item5:
+        transform: {fileID: 0}
+        weight: 0
+      m_Item6:
+        transform: {fileID: 0}
+        weight: 0
+      m_Item7:
+        transform: {fileID: 0}
+        weight: 0
+    m_Offset: {x: -7.6, y: -3.64, z: 0}
+    m_MinLimit: -180
+    m_MaxLimit: 24
+    m_AimAxis: 4
+    m_UpAxis: 2
+    m_WorldUpType: 0
+    m_WorldUpObject: {fileID: 0}
+    m_WorldUpAxis: 2
+    m_MaintainOffset: 0
+    m_ConstrainedAxes:
+      x: 1
+      y: 1
+      z: 1
 --- !u!1 &7170555774389211336
 GameObject:
   m_ObjectHideFlags: 0
@@ -2332,6 +2347,11 @@ Transform:
 --- !u!4 &5551766686356579174 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -592735261500776297, guid: e52f8b427d6061341988baf63e42d520, type: 3}
+  m_PrefabInstance: {fileID: 4237315540022215665}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7531296676428198028 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5929396159118406525, guid: e52f8b427d6061341988baf63e42d520, type: 3}
   m_PrefabInstance: {fileID: 4237315540022215665}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &7683637889020800601 stripped
