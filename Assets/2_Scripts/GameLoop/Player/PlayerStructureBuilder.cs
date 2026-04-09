@@ -156,8 +156,8 @@ namespace ProjectWallE.GameLoop.Player
 
         private void SelectHoveredAndClose()
         {
-            if (_lastMenuWasBuildMenu) buildMenu.TrySelectHovered();
-            else actionsMenu.TrySelectHovered();
+            if (_lastMenuWasBuildMenu) buildMenu?.TrySelectHovered();
+            else actionsMenu?.TrySelectHovered();
 
             CloseMenus();
         }
