@@ -5,7 +5,7 @@ using ProjectWallE.GameLoop;
 using UnityEngine;
 
 [Serializable]
-public class ObjectiveMarker : BaseLevelEventMarker
+public class StartObjectivesMarker : BaseLevelEventMarker
 {
     [SerializeReference, SerializableSelector(Foldout = false)] public List<BaseLevelObjective> objectives = new();
 

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [DisallowMultipleComponent]
@@ -8,7 +9,9 @@ public class ResourceBoostZone : MonoBehaviour
     [SerializeField] private int boostMultiplier = 2;
     
     public int BoostMultiplier => boostMultiplier;
+
     
+
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {

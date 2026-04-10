@@ -200,31 +200,37 @@ namespace ProjectWallE.GameLoop
     [SerializableSelectorName("Go To Position", "Player")]
     public class GoToPositionObjective : BaseLevelObjective
     {
+
+
         [Header("Target")]
-        public ExposedReference<Transform> targetPosition;
+        public ExposedReference<ObjectiveGameMarker> targetMarker;
         [SerializeField, Min(1f)] private float radius = 5f;
 
-        private Transform _resolvedTarget;
+        private ObjectiveGameMarker _marker;
         private Transform _player;
         private float _currentDistance;
-
+        
         public override string Description => "Go to the target area";
         public override string ProgressText => IsCompleted ? "Complete" : $"{_currentDistance:F1}m away";
 
         protected override void OnInitialize(IExposedPropertyTable resolver = null)
         {
             _currentDistance = float.MaxValue;
-            _resolvedTarget = targetPosition.Resolve(resolver);
+            _marker = targetMarker.Resolve(resolver);
             _player = LevelManager.Instance.Player.transform;
+            _marker?.OnObjectiveStarted();
         }
 
-        public override void Dispose() { }
+        public override void Dispose()
+        {
+            _marker?.OnObjectiveCompleted();
+        }
 
         public override void Tick(float deltaTime)
         {
-            if (!_resolvedTarget || !_player) return;
+            if (!_marker || !_player) return;
 
-            _currentDistance = Vector3.Distance(_player.position, _resolvedTarget.position);
+            _currentDistance = Vector3.Distance(_player.position, _marker.transform.position);
             if (_currentDistance <= radius)
             {
                 Complete();

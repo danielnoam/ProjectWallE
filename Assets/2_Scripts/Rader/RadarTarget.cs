@@ -1,3 +1,4 @@
+using DNExtensions.Utilities.Button;
 using UnityEngine;
 
 public class RadarTarget : MonoBehaviour
@@ -38,21 +39,24 @@ public class RadarTarget : MonoBehaviour
         DisableBlip();
     }
     
+    [Button]
     public void EnableBlip()
     {
         RadarSystem.Instance?.Register(this);
     }
 
+    [Button]
     public void DisableBlip()
     {
         RadarSystem.Instance?.Unregister(this);
     }
-
+    
     public void PingBlip(Color? colorOverride = null)
     {
         RadarSystem.Instance?.PingTarget(this, colorOverride);
     }
     
+    [Button]
     public void PunchBlip(Color color) 
     {
         RadarSystem.Instance?.PunchTarget(this, color);

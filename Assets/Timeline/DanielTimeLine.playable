@@ -128,6 +128,31 @@ MonoBehaviour:
     m_DisplayName: SpawnEnemyEvent
   m_Markers:
     m_Objects: []
+--- !u!114 &-2784054928127541824
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
+  m_Name: Start Objectives Marker
+  m_EditorClassIdentifier: Assembly-CSharp::StartObjectivesMarker
+  m_Time: 9.366666666666667
+  objectives:
+  - rid: 126016365803864150
+  references:
+    version: 2
+    RefIds:
+    - rid: 126016365803864150
+      type: {class: GoToPositionObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        targetMarker:
+          exposedName: 990340cabb49e544bbc6f8d37dd74de1
+          defaultValue: {fileID: 0}
+        radius: 5
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,6 +276,7 @@ MonoBehaviour:
     - {fileID: 6159556742653435264}
     - {fileID: 5928714566332443244}
     - {fileID: 7075503200882715566}
+    - {fileID: -2784054928127541824}
 --- !u!114 &5928714566332443244
 MonoBehaviour:
   m_ObjectHideFlags: 1

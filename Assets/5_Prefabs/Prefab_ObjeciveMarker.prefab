@@ -10,8 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 3423094330277192011}
   - component: {fileID: 654480375333482949}
+  - component: {fileID: 8556568562421680397}
+  - component: {fileID: 947976188058488180}
   m_Layer: 0
-  m_Name: Prefab_marker
+  m_Name: Prefab_ObjeciveMarker
   m_TagString: Untagged
   m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -48,4 +50,40 @@ MonoBehaviour:
     note: Marker
     isEditable: 1
   showInSceneView: 1
-  textColor: {r: 0.4625756, g: 0.82466114, b: 0.990566, a: 1}
+  textColor: {r: 1, g: 0.9490196, b: 0, a: 1}
+--- !u!114 &8556568562421680397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8108797269066176244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06535a561c25490abaa0eb30b94e8fdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RadarTarget
+  autoRegisterOnEnable: 0
+  showOutOfRange: 1
+  blipSprite: {fileID: 0}
+  blipColor: {r: 1, g: 0.94974387, b: 0, a: 1}
+  blipSizeMultiplier: 1.5
+  pingDuration: 1
+  pingSizeMultiplier: 10
+  pingStartAlpha: 1
+  punchDuration: 0.15
+  punchSizeMultiplier: 1.25
+--- !u!114 &947976188058488180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8108797269066176244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37558772e25b49d1822f4065b4657e11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.ObjectiveGameMarker
+  note: {fileID: 654480375333482949}
+  radarTarget: {fileID: 8556568562421680397}

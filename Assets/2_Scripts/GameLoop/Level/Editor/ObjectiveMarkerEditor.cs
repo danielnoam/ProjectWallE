@@ -3,7 +3,7 @@ using UnityEditor.Timeline;
 using UnityEngine;
 using UnityEngine.Timeline;
 
-[CustomTimelineEditor(typeof(ObjectiveMarker))]
+[CustomTimelineEditor(typeof(StartObjectivesMarker))]
 internal class ObjectiveMarkerEditor : MarkerEditor
 {
     private static readonly Color ObjectiveColor = new Color(1f, 0.85f, 0.2f, 0.9f);
@@ -21,7 +21,7 @@ internal class ObjectiveMarkerEditor : MarkerEditor
 
     public override MarkerDrawOptions GetMarkerOptions(IMarker marker)
     {
-        var objective = marker as ObjectiveMarker;
+        var objective = marker as StartObjectivesMarker;
         int count = objective?.objectives?.Count ?? 0;
 
         return new MarkerDrawOptions
