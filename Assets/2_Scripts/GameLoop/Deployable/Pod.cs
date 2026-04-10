@@ -77,7 +77,7 @@ namespace ProjectWallE.GameLoop
         private void Land()
         {
             impulseSource?.GenerateImpulse(collisionImpulseSettings);
-            collisionEffect?.Play(_request.TargetPosition);
+            collisionEffect?.Play(_request.TargetPosition, Quaternion.LookRotation(_request.TargetSurfaceNormal));
 
             if (_request.DamageOnImpact)
             {

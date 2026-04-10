@@ -29,6 +29,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
+  - {fileID: 5388354653302015390}
   - {fileID: 2843063540513005825}
   m_Father: {fileID: 4702061526223266198}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -230,12 +231,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructurePod
   arcHeight: 125
-  travelDuration: 3
   rotationSpeed: 300
-  collisionMask:
-    serializedVersion: 2
-    m_Bits: 1160
+  travelDuration:
+    minValue: 3
+    maxValue: 5
   pushRange: 10
+  impactDamage: 100
   pushStrength:
     minValue: 3
     maxValue: 10
@@ -340,4 +341,66 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ef90507d6c6519044baf5008b1b2ba42, type: 3}
   m_PrefabInstance: {fileID: 2377388537530615530}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &5132592212334292042
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7216336550379708717}
+    m_Modifications:
+    - target: {fileID: 1008218551346850260, guid: bf215811cdd17f041857d6f1f1f322ff, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1008218551346850260, guid: bf215811cdd17f041857d6f1f1f322ff, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.88
+      objectReference: {fileID: 0}
+    - target: {fileID: 1008218551346850260, guid: bf215811cdd17f041857d6f1f1f322ff, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1008218551346850260, guid: bf215811cdd17f041857d6f1f1f322ff, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1008218551346850260, guid: bf215811cdd17f041857d6f1f1f322ff, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1008218551346850260, guid: bf215811cdd17f041857d6f1f1f322ff, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1008218551346850260, guid: bf215811cdd17f041857d6f1f1f322ff, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1008218551346850260, guid: bf215811cdd17f041857d6f1f1f322ff, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1008218551346850260, guid: bf215811cdd17f041857d6f1f1f322ff, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1008218551346850260, guid: bf215811cdd17f041857d6f1f1f322ff, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6243657775903263468, guid: bf215811cdd17f041857d6f1f1f322ff, type: 3}
+      propertyPath: m_Name
+      value: VisualEffect_PodFire
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bf215811cdd17f041857d6f1f1f322ff, type: 3}
+--- !u!4 &5388354653302015390 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1008218551346850260, guid: bf215811cdd17f041857d6f1f1f322ff, type: 3}
+  m_PrefabInstance: {fileID: 5132592212334292042}
   m_PrefabAsset: {fileID: 0}

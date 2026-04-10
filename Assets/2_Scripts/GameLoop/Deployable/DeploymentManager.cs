@@ -27,6 +27,8 @@ namespace ProjectWallE.GameLoop
         }
     }
     
+    
+    [DefaultExecutionOrder(-100)]
     public class DeploymentManager : MonoBehaviour
     {
         public static DeploymentManager Instance { get; private set; }

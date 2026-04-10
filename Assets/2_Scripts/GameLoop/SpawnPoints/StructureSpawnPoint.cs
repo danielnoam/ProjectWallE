@@ -29,7 +29,7 @@ namespace ProjectWallE.GameLoop
 
         private void SpawnStartStructure() => SpawnStructure(structurePrefab);
 
-        protected override void OnLevelInitializing()
+        protected override void OnLevelStarted()
         {
             if (spawnAtStart)
             {
@@ -37,6 +37,7 @@ namespace ProjectWallE.GameLoop
             }
         }
 
+        
         public void SpawnStructure(Structure structure)
         {
             if (!structure || _hasSpawned) return;
