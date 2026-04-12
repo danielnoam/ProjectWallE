@@ -296,7 +296,7 @@ namespace ProjectWallE.GameLoop
         [SerializeField, AudioLibraryID] private string buildSoundId; 
         [SerializeField] private OptionalField<SimpleAnimatorClipField> playAnimation;
 
-        public void Play()
+        public void Play(Action onAnimationFinish = null)
         {
             if (!gfx) return;
             
@@ -305,7 +305,11 @@ namespace ProjectWallE.GameLoop
 
             if (playAnimation.IsSetAndHasValue())
             {
-                playAnimation.Value.PlayOnce();
+                playAnimation.Value.PlayOnce(0, onAnimationFinish);
+            }
+            else
+            {
+                onAnimationFinish?.Invoke();
             }
         }
     }

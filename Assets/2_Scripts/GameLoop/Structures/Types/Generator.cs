@@ -6,8 +6,8 @@ using UnityEngine;
 public class Generator : ResourceGenerator
 {
     [Header("Animation")]
-    [SerializeField] private AnimatorStateField pumpingState;
-    [SerializeField] private AnimatorStateField idleState;
+    [SerializeField] private SimpleAnimatorClipField pumpingState;
+    [SerializeField] private SimpleAnimatorClipField idleState;
     
     protected override void OnBuild()
     {
@@ -29,11 +29,11 @@ public class Generator : ResourceGenerator
     
     private void StartPumpingAnimation()
     {
-        pumpingState.Animator?.Play(pumpingState.StateName);
+        pumpingState.Play();
     }
     
     private void StopPumpingAnimation()
     {
-        idleState.Animator?.Play(idleState.StateName);
+        idleState.Play();
     }
 }

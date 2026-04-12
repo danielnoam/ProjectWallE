@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9a53b1ca0a9491e95b1a0d46de56eec, type: 3}
+  m_Name: AudioCategory_Structures
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.Systems.AudioLibrary.SOAudioCategory
+  label: Structures
+  audioMixerGroup: {fileID: -8484508710474354332, guid: 6d307fcdc9063864f92ead1a27b76789, type: 2}
+  audioMappings:
+  - id: GunTurretShoot
+    audioObject: {fileID: 11400000, guid: 2004c9b8ce5d1df4cb4a1dcebed717c8, type: 2}
+  - id: MortarTurretShoot
+    audioObject: {fileID: 11400000, guid: cd7da39796d8bc74286eab909deb0b63, type: 2}
+  - id: Damaged
+    audioObject: {fileID: 11400000, guid: ec989ad2e07058240a9f5f5d5da3f5da, type: 2}
+  - id: Broken
+    audioObject: {fileID: 11400000, guid: 1598f6c420234554381ed219ed385f07, type: 2}
+  - id: Upgrade
+    audioObject: {fileID: 11400000, guid: aac0d13211cb5154da87e5985f92770b, type: 2}
+  - id: Fix
+    audioObject: {fileID: 11400000, guid: dfb7f9670f9c7e04db06a5d0552a0c9c, type: 2}
+  - id: Build
+    audioObject: {fileID: 11400000, guid: bd8a653c827f94040ad0154a12af3481, type: 2}

@@ -11,7 +11,8 @@ namespace ProjectWallE.GameLoop.Player
     public class PlayerEffects : MonoBehaviour
     {
         [Header("Effects")]
-        [SerializeField] private VisualEffectAction shootEffect;
+        [SerializeField] private VisualEffectAction shoot1Effect;
+        [SerializeField] private VisualEffectAction shoot2Effect;
         [SerializeField] private VisualEffectAction carBoostEffect;
         [SerializeField] private VisualEffectAction wheelsAirReleaseEffect;
         [SerializeField] private DamageEffects damageEffects;
@@ -68,8 +69,8 @@ namespace ProjectWallE.GameLoop.Player
                     player.CarController.CarBoost.OnBoostStart += OnBoostStart;
                     player.CarController.CarBoost.OnBoostEnd += OnBoostEnd;
                 }
-                player.Shooter.OnAttack1 += PlayMuzzleFlash;
-                player.Shooter.OnAttack2 += PlayMuzzleFlash;
+                player.Shooter.OnAttack1 += PlayShoot1Effect;
+                player.Shooter.OnAttack2 += PlayShoot2Effect;
             }
         }
 
@@ -84,8 +85,8 @@ namespace ProjectWallE.GameLoop.Player
                     player.CarController.CarBoost.OnBoostStart -= OnBoostStart;
                     player.CarController.CarBoost.OnBoostEnd -= OnBoostEnd;
                 }
-                player.Shooter.OnAttack1 -= PlayMuzzleFlash;
-                player.Shooter.OnAttack2 -= PlayMuzzleFlash;
+                player.Shooter.OnAttack1 -= PlayShoot1Effect;
+                player.Shooter.OnAttack2 -= PlayShoot2Effect;
             }
         }
 
@@ -168,9 +169,14 @@ namespace ProjectWallE.GameLoop.Player
             }
         }
         
-        private void PlayMuzzleFlash()
+        private void PlayShoot1Effect()
         {
-            shootEffect?.Play(transform.position);
+            shoot1Effect?.Play(transform.position);
+        }
+        
+        private void PlayShoot2Effect()
+        {
+            shoot2Effect?.Play(transform.position);
         }
 
         public void EnableWheelsAirRelease()

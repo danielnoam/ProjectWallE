@@ -122,10 +122,9 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
         StructureManager.Instance?.RegisterStructure(this);
         CurrentUpgradeLevel = 1;
         CurrentHealth = CurrentLevelData.maxHealth;
-        buildEffect?.Play();
+        buildEffect?.Play(OnBuild);
         radarTarget?.PingBlip();
         OnStructureBuilt?.Invoke(this);
-        OnBuild();
     }
     
 
@@ -140,11 +139,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
         OnBreak();
     }
     
-    private bool CanUpgrade() 
-    {
-        return CurrentUpgradeLevel < Levels.Length;
-    }
-    
+    [Button(ButtonPlayMode.OnlyWhenPlaying)]
     private void Demolish()
     {
         OnStructureDemolished?.Invoke(this);
@@ -178,6 +173,11 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
         upgradeEffect?.Play();
         OnUpgrade();
         OnStructureUpgraded?.Invoke(this);
+    }
+    
+    private bool CanUpgrade() 
+    {
+        return CurrentUpgradeLevel < Levels.Length;
     }
 
 

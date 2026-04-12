@@ -155,12 +155,12 @@ MonoBehaviour:
     punchDuration: 0.15
     punchEase: 1
     emissionColor: {fileID: 11400000, guid: a96c7138587d94644ace68611d614fe6, type: 2}
-    hitSoundId: NormalHit
+    hitSoundId: Damaged
   buildEffect:
     duration: 0.3
     ease: 27
     gfx: {fileID: 6756884417540177175}
-    buildSoundId: 
+    buildSoundId: Build
     playAnimation:
       isSet: 1
       hideValueIfSet: 0
@@ -174,7 +174,7 @@ MonoBehaviour:
     punchStrength: 0.9
     ease: 27
     gfx: {fileID: 6756884417540177175}
-    upgradeSoundId: 
+    upgradeSoundId: Upgrade
   brokenEffect:
     duration: 0.3
     ease: 4
@@ -183,7 +183,7 @@ MonoBehaviour:
     emissiveRenderers:
     - {fileID: 9097640428187871019}
     - {fileID: 9037642151175868296}
-    brokenSoundId: 
+    brokenSoundId: Broken
     smokeEffect: {fileID: 3152708691405188290}
   radarTarget: {fileID: 6290268805781187500}
   levels:
@@ -199,7 +199,7 @@ MonoBehaviour:
   shootEffect:
     visualEffects:
     - {fileID: 284114131515050947}
-    soundId: Shoot
+    soundId: GunTurretShoot
   references:
     version: 2
     RefIds:

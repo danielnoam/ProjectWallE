@@ -25,11 +25,11 @@ Transform:
   m_GameObject: {fileID: 263893076665094181}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.58, y: 0.748, z: 0.759}
+  m_LocalPosition: {x: 0.215, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1251613364947234956}
+  m_Father: {fileID: 4622429249202919993}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &463343487076534761
 GameObject:
@@ -630,7 +630,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4045004396600311935}
-  - {fileID: 6599197979102317477}
   m_Father: {fileID: 2207471271178187077}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &809513574024408617
@@ -1408,11 +1407,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27d3d691044dfda42b95c239ad6be28b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.PlayerAnimator
-  shootEffect:
+  shoot1Effect:
     visualEffects:
     - {fileID: 5782453471879991033}
     - {fileID: 3686714904999105487}
-    soundId: Shoot
+    soundId: Shoot1
+  shoot2Effect:
+    visualEffects:
+    - {fileID: 5782453471879991033}
+    - {fileID: 3686714904999105487}
+    soundId: Shoot2
   carBoostEffect:
     visualEffects:
     - {fileID: 5454407353768600682}
@@ -2397,6 +2401,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 779677588487833707, guid: e52f8b427d6061341988baf63e42d520, type: 3}
       insertIndex: -1
       addedObject: {fileID: 9097342232182277181}
+    - targetCorrespondingSourceObject: {fileID: -365967077227767352, guid: e52f8b427d6061341988baf63e42d520, type: 3}
+      insertIndex: 0
+      addedObject: {fileID: 6599197979102317477}
     - targetCorrespondingSourceObject: {fileID: -365967077227767352, guid: e52f8b427d6061341988baf63e42d520, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7699221074186694521}

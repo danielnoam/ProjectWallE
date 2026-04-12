@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2260805326800439458}
   - component: {fileID: 6748665373679740288}
   - component: {fileID: 2308925685089836474}
+  - component: {fileID: 2218465062466442339}
   m_Layer: 6
   m_Name: Prefab_StructureGenerator
   m_TagString: Untagged
@@ -91,7 +92,7 @@ Animator:
   m_GameObject: {fileID: 3026512305252668660}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: a8870012f65f29d4fa3f8708677083fd, type: 2}
+  m_Controller: {fileID: 9100000, guid: 9e822b53aa61a0e4eb40ae213f5478d4, type: 2}
   m_CullingMode: 2
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -146,26 +147,26 @@ MonoBehaviour:
     punchDuration: 0.15
     punchEase: 1
     emissionColor: {fileID: 11400000, guid: a96c7138587d94644ace68611d614fe6, type: 2}
-    hitSoundId: NormalHit
+    hitSoundId: Damaged
   buildEffect:
     duration: 0.3
     ease: 27
     gfx: {fileID: 2170286402575911496}
-    buildSoundId: 
+    buildSoundId: Build
     playAnimation:
-      isSet: 0
+      isSet: 1
       hideValueIfSet: 0
       value:
-        simpleAnimator: {fileID: 0}
-        clipName: 
-        clipIndex: 0
-        assigned: 0
+        simpleAnimator: {fileID: 2218465062466442339}
+        clipName: GeneratorBuild
+        clipIndex: 2
+        assigned: 1
   upgradeEffect:
     duration: 0.2
     punchStrength: 0.9
     ease: 27
     gfx: {fileID: 2170286402575911496}
-    upgradeSoundId: 
+    upgradeSoundId: Upgrade
   brokenEffect:
     duration: 0.3
     ease: 4
@@ -173,25 +174,21 @@ MonoBehaviour:
     materialProperty: _Base_Color
     emissiveRenderers:
     - {fileID: 692746655692641454}
-    brokenSoundId: 
+    brokenSoundId: Broken
     smokeEffect: {fileID: 2091463746251743764}
   radarTarget: {fileID: 7082771360031461201}
   levels:
   - rid: 4437626180964712524
   - rid: 4437626180964712525
   pumpingState:
-    animator: {fileID: 2260805326800439458}
-    assetController: {fileID: 0}
-    source: 0
-    stateName: Generator Pumping
-    stateHash: 1836203704
+    simpleAnimator: {fileID: 2218465062466442339}
+    clipName: GeneratorPumping
+    clipIndex: 1
     assigned: 1
   idleState:
-    animator: {fileID: 2260805326800439458}
-    assetController: {fileID: 0}
-    source: 0
-    stateName: Generator Idle
-    stateHash: 818605322
+    simpleAnimator: {fileID: 2218465062466442339}
+    clipName: GeneratorIdle
+    clipIndex: 0
     assigned: 1
   references:
     version: 2
@@ -212,6 +209,26 @@ MonoBehaviour:
         fixCostPerHealthPoint: 1
         generationInterval: 1
         resourcesPerInterval: 2
+--- !u!114 &2218465062466442339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3026512305252668660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 565d1cf57cd14de7abd62398f84ce08a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.Utilities.SimpleAnimator
+  playOnStart:
+    isSet: 0
+    hideValueIfSet: 0
+    value: 0
+  clips:
+  - {fileID: 7400000, guid: d8f012a2bbaa68b4f95245e07a942d6c, type: 2}
+  - {fileID: 7400000, guid: dca38faa1cabe754d965957c9a8da8e5, type: 2}
+  - {fileID: 7400000, guid: 9e5e623cc6dc021449a44ad862b5a257, type: 2}
 --- !u!1 &8451801116168845029
 GameObject:
   m_ObjectHideFlags: 0

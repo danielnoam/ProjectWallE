@@ -80,10 +80,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06535a561c25490abaa0eb30b94e8fdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RadarTarget
+  autoRegisterOnEnable: 1
+  showOutOfRange: 1
   blipSprite: {fileID: 0}
   blipColor: {r: 0.7308548, g: 1, b: 0.38679236, a: 1}
   blipSizeMultiplier: 2
-  showOutOfRange: 1
   pingDuration: 1
   pingSizeMultiplier: 10
   pingStartAlpha: 1
@@ -153,12 +154,12 @@ MonoBehaviour:
     punchDuration: 0.15
     punchEase: 1
     emissionColor: {fileID: 11400000, guid: a96c7138587d94644ace68611d614fe6, type: 2}
-    hitSoundId: NormalHit
+    hitSoundId: Damaged
   buildEffect:
     duration: 0.3
     ease: 27
     gfx: {fileID: 6592863634933569427}
-    buildSoundId: 
+    buildSoundId: Build
     playAnimation:
       isSet: 0
       hideValueIfSet: 0
@@ -172,7 +173,7 @@ MonoBehaviour:
     punchStrength: 0.9
     ease: 27
     gfx: {fileID: 6592863634933569427}
-    upgradeSoundId: 
+    upgradeSoundId: Upgrade
   brokenEffect:
     duration: 0.3
     ease: 4
@@ -181,7 +182,8 @@ MonoBehaviour:
     emissiveRenderers:
     - {fileID: 3132724331002020593}
     - {fileID: 53038199937898807}
-    brokenSoundId: 
+    brokenSoundId: Broken
+    smokeEffect: {fileID: 0}
   radarTarget: {fileID: -6891724181451812259}
   levels:
   - rid: 4437626180964712523
