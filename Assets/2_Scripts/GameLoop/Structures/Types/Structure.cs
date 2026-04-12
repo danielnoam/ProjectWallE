@@ -51,6 +51,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     [SerializeField] private DamageEffects damageEffects;
     [SerializeField] private StructureBuildEffect buildEffect;
     [SerializeField] private StructureUpgradeEffect upgradeEffect;
+    [SerializeField] private StructureUpgradeEffect fixEffect;
     [SerializeField] private StructureBreakEffect brokenEffect;
 
     [SerializeField, AutoGetSelf, HideInInspector] private RadarTarget radarTarget;
@@ -153,6 +154,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
 
         if (CurrentHealth <= 0) brokenEffect?.SetNormal();
         CurrentHealth = MaxHealth;
+        fixEffect?.Play();
         OnFix();
     }
 
