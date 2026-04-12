@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7733275894302226080}
+  - component: {fileID: 9114194173751132255}
+  - component: {fileID: 965011164600973264}
   - component: {fileID: 7098364094042899997}
   - component: {fileID: 513425454734431131}
   - component: {fileID: 6748665373679740288}
@@ -36,6 +38,46 @@ Transform:
   - {fileID: 2170286402575911496}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &9114194173751132255
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3026512305252668660}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 9e822b53aa61a0e4eb40ae213f5478d4, type: 2}
+  m_CullingMode: 2
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &965011164600973264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3026512305252668660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 565d1cf57cd14de7abd62398f84ce08a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.Utilities.SimpleAnimator
+  playOnStart:
+    isSet: 0
+    hideValueIfSet: 0
+    value: 0
+  clips:
+  - {fileID: 7400000, guid: 483b443ad18802440b783753031c5f90, type: 2}
 --- !u!114 &7098364094042899997
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,13 +171,13 @@ MonoBehaviour:
     gfx: {fileID: 2170286402575911496}
     buildSoundId: Build
     playAnimation:
-      isSet: 0
+      isSet: 1
       hideValueIfSet: 0
       value:
-        simpleAnimator: {fileID: 0}
-        clipName: 
+        simpleAnimator: {fileID: 965011164600973264}
+        clipName: RampBuild
         clipIndex: 0
-        assigned: 0
+        assigned: 1
   upgradeEffect:
     duration: 0.2
     punchStrength: 0.9

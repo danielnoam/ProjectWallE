@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 7082771360031461201}
   - component: {fileID: 4448602738787213311}
   - component: {fileID: 2260805326800439458}
+  - component: {fileID: 2218465062466442339}
   - component: {fileID: 6748665373679740288}
   - component: {fileID: 2308925685089836474}
-  - component: {fileID: 2218465062466442339}
   m_Layer: 6
   m_Name: Prefab_StructureGenerator
   m_TagString: Untagged
@@ -104,6 +104,26 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2218465062466442339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3026512305252668660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 565d1cf57cd14de7abd62398f84ce08a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.Utilities.SimpleAnimator
+  playOnStart:
+    isSet: 0
+    hideValueIfSet: 0
+    value: 0
+  clips:
+  - {fileID: 7400000, guid: d8f012a2bbaa68b4f95245e07a942d6c, type: 2}
+  - {fileID: 7400000, guid: dca38faa1cabe754d965957c9a8da8e5, type: 2}
+  - {fileID: 7400000, guid: 9e5e623cc6dc021449a44ad862b5a257, type: 2}
 --- !u!208 &6748665373679740288
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -209,26 +229,6 @@ MonoBehaviour:
         fixCostPerHealthPoint: 1
         generationInterval: 1
         resourcesPerInterval: 2
---- !u!114 &2218465062466442339
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3026512305252668660}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 565d1cf57cd14de7abd62398f84ce08a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.Utilities.SimpleAnimator
-  playOnStart:
-    isSet: 0
-    hideValueIfSet: 0
-    value: 0
-  clips:
-  - {fileID: 7400000, guid: d8f012a2bbaa68b4f95245e07a942d6c, type: 2}
-  - {fileID: 7400000, guid: dca38faa1cabe754d965957c9a8da8e5, type: 2}
-  - {fileID: 7400000, guid: 9e5e623cc6dc021449a44ad862b5a257, type: 2}
 --- !u!1 &8451801116168845029
 GameObject:
   m_ObjectHideFlags: 0

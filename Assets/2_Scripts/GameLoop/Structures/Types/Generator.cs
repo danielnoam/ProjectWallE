@@ -12,28 +12,18 @@ public class Generator : ResourceGenerator
     protected override void OnBuild()
     {
         base.OnBuild();
-        StartPumpingAnimation();
+        pumpingState.Play();
     }
 
     protected override void OnFix()
     {
-        StartPumpingAnimation();
+        idleState.Play();
         StartGenerating();
     }
 
     protected override void OnBreak()
     {
-        StopPumpingAnimation();
-        StopGenerating();
-    }
-    
-    private void StartPumpingAnimation()
-    {
-        pumpingState.Play();
-    }
-    
-    private void StopPumpingAnimation()
-    {
         idleState.Play();
+        StopGenerating();
     }
 }
