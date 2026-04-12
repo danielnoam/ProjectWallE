@@ -101,7 +101,9 @@ namespace ProjectWallE.GameLoop
             };
 
             foreach (var effect in effects)
+            {
                 effect?.Tick(context);
+            }
 
             if (targetPos.HasValue)
             {

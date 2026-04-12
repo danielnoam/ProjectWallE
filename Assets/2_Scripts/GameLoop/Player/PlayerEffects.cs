@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using DNExtensions.Systems.AudioLibrary;
 using DNExtensions.Utilities.AutoGet;
+using DNExtensions.Utilities.Button;
+using DNExtensions.Utilities.CinemachineExtensions;
+using Unity.Cinemachine;
 using UnityEngine;
 
 namespace ProjectWallE.GameLoop.Player
@@ -13,6 +16,9 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField] private VisualEffectAction wheelsAirReleaseEffect;
         [SerializeField] private DamageEffects damageEffects;
         [SerializeField, AudioLibraryID] private string changeStateSoundId;
+        
+        [Header("Camera")]
+        [SerializeField] private ImpulseSettings damageImpulseSettings;
 
         [Header("Tire Dirt")]
         [SerializeField] private float tireEffectRobotSpeedThreshold = 5f;
@@ -24,6 +30,7 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField] private AudioSource airReleaseAudioSource;
         [SerializeField] private AudioSource changeStateAudioSource;
         [SerializeField] private AudioSource boostAudioSource;
+        [SerializeField, AutoGetSelf] private CinemachineImpulseSource impulseSource;
         [SerializeField, AutoGetParent, HideInInspector] private PlayerManager player;
 
         private Material[] _materials;
@@ -87,8 +94,11 @@ namespace ProjectWallE.GameLoop.Player
             UpdateTireEffects();
         }
 
+        [Button]
         private void OnDamaged(float damage)
         {
+            if (damage <= 0) return;
+            impulseSource?.GenerateImpulse(damageImpulseSettings);
             damageEffects?.Play(transform.position, _materials);
         }
 
@@ -157,7 +167,7 @@ namespace ProjectWallE.GameLoop.Player
                 if (_tireEffectsPlaying != null) _tireEffectsPlaying[i] = false;
             }
         }
-
+        
         private void PlayMuzzleFlash()
         {
             shootEffect?.Play(transform.position);

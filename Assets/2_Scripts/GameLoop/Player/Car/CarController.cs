@@ -45,7 +45,7 @@ namespace _2_Scripts
 
         public CarBoost CarBoost => carBoost;
         public Vector3 CenterOfMassOffset => centerOfMassOffset;
-        public bool canBuild { get; private set; } = false;
+        public bool canBuild { get; private set; } = true;
         public bool canShoot { get; private set; } = false;
 
         private void OnValidate()

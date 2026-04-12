@@ -11,6 +11,7 @@ namespace ProjectWallE.GameLoop.Player
         [Header("Animations")]
         [SerializeField] private AnimatorStateField switchToCar;
         [SerializeField] private AnimatorStateField switchToRobot;
+        [SerializeField] private AnimatorStateField shootGun;
 
         [Header("Arm IK")]
         [SerializeField] private float shoulderOffset = 0.7f;
@@ -41,12 +42,22 @@ namespace ProjectWallE.GameLoop.Player
 
         private void OnEnable()
         {
-            if (player) player.OnControllerChanged += OnControllerChanged;
+            if (player)
+            {
+                player.Shooter.OnAttack1 += ShooterOnOnAttack1;
+                player.Shooter.OnAttack2 += ShooterOnOnAttack1;
+                player.OnControllerChanged += OnControllerChanged;
+            }
         }
 
         private void OnDisable()
         {
-            if (player) player.OnControllerChanged -= OnControllerChanged;
+            if (player)
+            {
+                player.Shooter.OnAttack1 -= ShooterOnOnAttack1;
+                player.Shooter.OnAttack2 -= ShooterOnOnAttack1;
+                player.OnControllerChanged -= OnControllerChanged;
+            }
         }
 
         private void LateUpdate()
@@ -74,14 +85,19 @@ namespace ProjectWallE.GameLoop.Player
             switch (type)
             {
                 case PlayerControllerType.Car:
-                    switchToCar.Animator?.Play(switchToCar.StateName);
+                    switchToCar.Play();
                     break;
                 case PlayerControllerType.Robot:
-                    switchToRobot.Animator?.Play(switchToRobot.StateName);
+                    switchToRobot.Play();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
+        }
+        
+        private void ShooterOnOnAttack1()
+        {
+            shootGun.Play();
         }
         
         public void ToggleArmIK(bool enable)

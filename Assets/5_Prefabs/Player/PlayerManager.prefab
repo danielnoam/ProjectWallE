@@ -89,9 +89,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1816209766619863888}
   - component: {fileID: 7324132098159540433}
-  - component: {fileID: 2635220521126351491}
   - component: {fileID: 6607225680324455528}
+  - component: {fileID: 2635220521126351491}
   - component: {fileID: 8828607242384971384}
+  - component: {fileID: 1068083695947454335}
   m_Layer: 9
   m_Name: Car
   m_TagString: Untagged
@@ -114,6 +115,7 @@ Transform:
   m_Children:
   - {fileID: 3111835496907694697}
   - {fileID: 3352623459842719466}
+  - {fileID: 3222883746440047820}
   m_Father: {fileID: 2207471271178187077}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &7324132098159540433
@@ -137,6 +139,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.64, y: 0.88, z: 2.37}
   m_Center: {x: 0, y: 0.08, z: 0.3}
+--- !u!114 &6607225680324455528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1220957186002310486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a4f4dc608b9d8748a574ac009603e4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.CarInput
 --- !u!114 &2635220521126351491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,18 +207,6 @@ MonoBehaviour:
     suspensionSmoothness: 10
     wheelRadius: 1.5
   carBoost: {fileID: 8828607242384971384}
---- !u!114 &6607225680324455528
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1220957186002310486}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a4f4dc608b9d8748a574ac009603e4f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.CarInput
 --- !u!114 &8828607242384971384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -223,6 +225,24 @@ MonoBehaviour:
   rechargeCooldown: 2
   rechargeRate: 20
   minFuelToStartBoost: 20
+--- !u!114 &1068083695947454335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1220957186002310486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4779402bf85d4c919382953221d1406c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.Player.PlayerPusher
+  pushPower: 35
+  pushDamage: 15
+  speedThreshold: 14
+  enemyLayer: {fileID: 11400000, guid: 2d607d7566d764844b32be4199186943, type: 2}
+  pushableCollider: {fileID: 7684777718141572874}
+  playerManager: {fileID: 2369243402749369746}
 --- !u!1 &1454431223474630902
 GameObject:
   m_ObjectHideFlags: 0
@@ -587,8 +607,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1251613364947234956}
   - component: {fileID: 809513574024408617}
-  - component: {fileID: 1860573053989788979}
   - component: {fileID: 7896212860394190335}
+  - component: {fileID: 1860573053989788979}
   m_Layer: 9
   m_Name: Robot
   m_TagString: Untagged
@@ -636,6 +656,18 @@ CapsuleCollider:
   m_Height: 2.68
   m_Direction: 1
   m_Center: {x: 0, y: 0.36, z: 0}
+--- !u!114 &7896212860394190335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2823248555016632271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 793ffa22da3a2bb4fa10f574ed69a574, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.RobotInput
 --- !u!114 &1860573053989788979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -662,18 +694,6 @@ MonoBehaviour:
     suspensionReturnSpeed: 15
     swivelTurnSpeed: 5
     wheelRadius: 1.5
---- !u!114 &7896212860394190335
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2823248555016632271}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 793ffa22da3a2bb4fa10f574ed69a574, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.RobotInput
 --- !u!1 &2937362613244798961
 GameObject:
   m_ObjectHideFlags: 0
@@ -891,12 +911,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5333877841920383617}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2207471271178187077}
+  m_Father: {fileID: 1816209766619863888}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &9079013393005987448
 BoxCollider:
@@ -980,7 +1000,6 @@ GameObject:
   - component: {fileID: 2369243402749369746}
   - component: {fileID: 2737165017878004224}
   - component: {fileID: 8087270994143856722}
-  - component: {fileID: 4580229760322147779}
   m_Layer: 9
   m_Name: PlayerManager
   m_TagString: Player
@@ -1004,7 +1023,6 @@ Transform:
   - {fileID: 1816209766619863888}
   - {fileID: 1251613364947234956}
   - {fileID: 4410211601627553717}
-  - {fileID: 3222883746440047820}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &9192427627125825943
@@ -1122,24 +1140,6 @@ MonoBehaviour:
   basicProjectileData: {fileID: 11400000, guid: b6fff52b19a3bf34fae6ef66121a0c95, type: 2}
   aoeFireRate: 1.5
   specialProjectileData: {fileID: 11400000, guid: e07c3359bef11e948816f1eeec402754, type: 2}
---- !u!114 &4580229760322147779
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5821086676760150823}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4779402bf85d4c919382953221d1406c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.Player.PlayerPusher
-  pushPower: 35
-  pushDamage: 15
-  speedThreshold: 14
-  enemyLayer: {fileID: 11400000, guid: 2d607d7566d764844b32be4199186943, type: 2}
-  pushableCollider: {fileID: 7684777718141572874}
-  playerManager: {fileID: 2369243402749369746}
 --- !u!1 &6733501558051180430
 GameObject:
   m_ObjectHideFlags: 0
@@ -1152,6 +1152,7 @@ GameObject:
   - component: {fileID: 3887851470892790252}
   - component: {fileID: 2802502089686830403}
   - component: {fileID: 1023129824596148253}
+  - component: {fileID: 7249080232195334628}
   - component: {fileID: 6740650985369683722}
   - component: {fileID: 4948167179135989057}
   m_Layer: 9
@@ -1300,6 +1301,59 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!114 &7249080232195334628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6733501558051180430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseSource
+  ImpulseDefinition:
+    ImpulseChannel: 1
+    ImpulseShape: 2
+    CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    ImpulseDuration: 0.2
+    ImpulseType: 0
+    DissipationRate: 0.25
+    RawSignal: {fileID: 0}
+    AmplitudeGain: 1
+    FrequencyGain: 1
+    RepeatMode: 0
+    Randomize: 1
+    TimeEnvelope:
+      AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      AttackTime: 0
+      SustainTime: 0.2
+      DecayTime: 0.7
+      ScaleWithImpact: 1
+      HoldForever: 0
+    ImpactRadius: 100
+    DirectionMode: 0
+    DissipationMode: 2
+    DissipationDistance: 100
+    PropagationSpeed: 343
+  DefaultVelocity: {x: 0, y: -1, z: 0}
 --- !u!114 &6740650985369683722
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1325,6 +1379,13 @@ MonoBehaviour:
     source: 0
     stateName: Switch To Robot
     stateHash: -1799443727
+    assigned: 1
+  shootGun:
+    animator: {fileID: 3887851470892790252}
+    assetController: {fileID: 0}
+    source: 0
+    stateName: Player Shoot
+    stateHash: -323826672
     assigned: 1
   shoulderOffset: 0.7
   targetDistance: 1.5
@@ -1371,6 +1432,16 @@ MonoBehaviour:
     emissionColor: {fileID: 11400000, guid: a96c7138587d94644ace68611d614fe6, type: 2}
     hitSoundId: NormalHit
   changeStateSoundId: ChangeState
+  damageImpulseSettings:
+    impulseChannel: 1
+    impulseType: 0
+    impulseShape: 4
+    duration: 0.1
+    intensity: 0.2
+    velocity: {x: 1, y: 1, z: 1}
+    dissipationDistance: 0
+    dissipationRate: 0
+    propagationSpeed: 0
   tireEffectRobotSpeedThreshold: 5
   robotTireEffects:
   - {fileID: 6436861685030297602}
@@ -1381,6 +1452,7 @@ MonoBehaviour:
   airReleaseAudioSource: {fileID: 1757885287560848928}
   changeStateAudioSource: {fileID: 3113016758275396871}
   boostAudioSource: {fileID: 8467015804595106265}
+  impulseSource: {fileID: 7249080232195334628}
   player: {fileID: 2369243402749369746}
 --- !u!1 &6916443636318400613
 GameObject:
@@ -2021,6 +2093,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 59ab1f84806b3c84c8bd11be2c9d53dc, type: 2}
+    - target: {fileID: -7029780720395613490, guid: e52f8b427d6061341988baf63e42d520, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: fffac006f2eb16c468a29638392904c4, type: 2}
     - target: {fileID: -6711039499588042544, guid: e52f8b427d6061341988baf63e42d520, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -2053,11 +2129,19 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: -4792906896206934982, guid: e52f8b427d6061341988baf63e42d520, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: -4629962016692981777, guid: e52f8b427d6061341988baf63e42d520, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: fffac006f2eb16c468a29638392904c4, type: 2}
     - target: {fileID: -3447608808150277731, guid: e52f8b427d6061341988baf63e42d520, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: -3427894059161153080, guid: e52f8b427d6061341988baf63e42d520, type: 3}
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
@@ -2078,6 +2162,10 @@ PrefabInstance:
       value: 9
       objectReference: {fileID: 0}
     - target: {fileID: -2220802714883223110, guid: e52f8b427d6061341988baf63e42d520, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: -1861681467005676744, guid: e52f8b427d6061341988baf63e42d520, type: 3}
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
@@ -2109,6 +2197,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: fffac006f2eb16c468a29638392904c4, type: 2}
+    - target: {fileID: 396267429143826333, guid: e52f8b427d6061341988baf63e42d520, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 405003665940374451, guid: e52f8b427d6061341988baf63e42d520, type: 3}
       propertyPath: m_Layer
       value: 9
@@ -2133,10 +2225,18 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: d3cd804d3e1d47a45ad8a4ea4e913346, type: 2}
+    - target: {fileID: 1895894936710917258, guid: e52f8b427d6061341988baf63e42d520, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 2028498631578916894, guid: e52f8b427d6061341988baf63e42d520, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: fffac006f2eb16c468a29638392904c4, type: 2}
+    - target: {fileID: 2202167858490975137, guid: e52f8b427d6061341988baf63e42d520, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 2475558662495332389, guid: e52f8b427d6061341988baf63e42d520, type: 3}
       propertyPath: m_Layer
       value: 9
@@ -2165,6 +2265,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 260130cb5b14d4f42a45816df75683a8, type: 2}
+    - target: {fileID: 4081537325130878946, guid: e52f8b427d6061341988baf63e42d520, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 4113033310981020343, guid: e52f8b427d6061341988baf63e42d520, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -2197,6 +2301,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 5446198611315299407, guid: e52f8b427d6061341988baf63e42d520, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: c9a7ae9486cd95b43b5ac7df926e24e1, type: 2}
     - target: {fileID: 5855985914014386581, guid: e52f8b427d6061341988baf63e42d520, type: 3}
       propertyPath: m_Layer
       value: 9
@@ -2237,6 +2345,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 7184825526726994939, guid: e52f8b427d6061341988baf63e42d520, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: fffac006f2eb16c468a29638392904c4, type: 2}
     - target: {fileID: 7339275805878116458, guid: e52f8b427d6061341988baf63e42d520, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
