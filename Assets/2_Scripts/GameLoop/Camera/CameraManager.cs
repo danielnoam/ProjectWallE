@@ -1,3 +1,4 @@
+using DNExtensions.Utilities.CinemachineExtensions;
 using ProjectWallE.GameLoop;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -12,10 +13,17 @@ namespace ProjectWallE
         [SerializeField] private float gamepadLookSensitivity = 180f;
         [SerializeField, Range(1, 89)] private float cameraVerticalClamp = 80f;
         
+        [Header("Shake Settings")]
+        [SerializeField] private ImpulseSettings damageImpulseSettings;
+        [SerializeField] private RotationShakeSettings attack1ShakeSettings;
+        [SerializeField] private RotationShakeSettings attack2ShakeSettings;
+        
         [Header("References")]
         [SerializeField] private CinemachineCamera podCamera;
         [SerializeField] private CinemachineCamera robotCamera;
         [SerializeField] private CinemachineCamera carCamera;
+        [SerializeField] private CinemachineImpulseSource impulseSource;
+        [SerializeField] private CinemachineRotationShake rotationShake;
         [SerializeField] private Transform cameraTarget;
 
         private PlayerManager _playerManager;
@@ -47,9 +55,12 @@ namespace ProjectWallE
             if (_playerManager != null)
             {
                 _playerManager.OnControllerChanged += OnControllerSwitch;
+                _playerManager.OnDamaged += OnDamaged;
                 _playerManager.StructureBuilder.ActionsMenuRequested += OnMenuActionRequested;
                 _playerManager.StructureBuilder.BuildMenuRequested += OnBuildMenuRequested;
                 _playerManager.StructureBuilder.MenuCloseRequested += OnMenuCloseRequested;
+                _playerManager.Shooter.OnAttack1 += OnAttack1;
+                _playerManager.Shooter.OnAttack2 += OnAttack2;
             }
         }
         
@@ -58,7 +69,16 @@ namespace ProjectWallE
         {
             DeploymentManager.OnPodDeployed -= OnPodDeployed;
             
-            if (_playerManager != null) _playerManager.OnControllerChanged -= OnControllerSwitch;
+            if (_playerManager != null)
+            {
+                _playerManager.OnControllerChanged -= OnControllerSwitch;
+                _playerManager.OnDamaged -= OnDamaged;
+                _playerManager.StructureBuilder.ActionsMenuRequested -= OnMenuActionRequested;
+                _playerManager.StructureBuilder.BuildMenuRequested -= OnBuildMenuRequested;
+                _playerManager.StructureBuilder.MenuCloseRequested -= OnMenuCloseRequested;
+                _playerManager.Shooter.OnAttack1 -= OnAttack1;
+                _playerManager.Shooter.OnAttack2 -= OnAttack2;
+            }
         }
 
         private void LateUpdate()
@@ -90,6 +110,22 @@ namespace ProjectWallE
             }
             _activePod = null;
             SwitchActiveCamera(_playerManager.PlayerControllerType == PlayerControllerType.Robot ? robotCamera : carCamera);
+        }
+        
+        private void OnDamaged(float damage)
+        {
+            if (damage <= 0) return;
+            impulseSource?.GenerateImpulse(damageImpulseSettings);
+        }
+        
+        private void OnAttack1()
+        {
+            rotationShake.Shake(attack1ShakeSettings);
+        }
+        
+        private void OnAttack2()
+        {
+            rotationShake.Shake(attack2ShakeSettings);
         }
 
         private void OnControllerSwitch(PlayerControllerType controllerType)

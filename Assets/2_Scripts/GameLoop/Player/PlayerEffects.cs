@@ -1,9 +1,6 @@
 using System.Collections.Generic;
 using DNExtensions.Systems.AudioLibrary;
 using DNExtensions.Utilities.AutoGet;
-using DNExtensions.Utilities.Button;
-using DNExtensions.Utilities.CinemachineExtensions;
-using Unity.Cinemachine;
 using UnityEngine;
 
 namespace ProjectWallE.GameLoop.Player
@@ -17,9 +14,6 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField] private VisualEffectAction wheelsAirReleaseEffect;
         [SerializeField] private DamageEffects damageEffects;
         [SerializeField, AudioLibraryID] private string changeStateSoundId;
-        
-        [Header("Camera")]
-        [SerializeField] private ImpulseSettings damageImpulseSettings;
 
         [Header("Tire Dirt")]
         [SerializeField] private float tireEffectRobotSpeedThreshold = 5f;
@@ -31,7 +25,6 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField] private AudioSource airReleaseAudioSource;
         [SerializeField] private AudioSource changeStateAudioSource;
         [SerializeField] private AudioSource boostAudioSource;
-        [SerializeField, AutoGetSelf] private CinemachineImpulseSource impulseSource;
         [SerializeField, AutoGetParent, HideInInspector] private PlayerManager player;
 
         private Material[] _materials;
@@ -69,8 +62,8 @@ namespace ProjectWallE.GameLoop.Player
                     player.CarController.CarBoost.OnBoostStart += OnBoostStart;
                     player.CarController.CarBoost.OnBoostEnd += OnBoostEnd;
                 }
-                player.Shooter.OnAttack1 += PlayShoot1Effect;
-                player.Shooter.OnAttack2 += PlayShoot2Effect;
+                player.Shooter.OnAttack1 += OnAttack1;
+                player.Shooter.OnAttack2 += OnAttack2;
             }
         }
 
@@ -85,8 +78,8 @@ namespace ProjectWallE.GameLoop.Player
                     player.CarController.CarBoost.OnBoostStart -= OnBoostStart;
                     player.CarController.CarBoost.OnBoostEnd -= OnBoostEnd;
                 }
-                player.Shooter.OnAttack1 -= PlayShoot1Effect;
-                player.Shooter.OnAttack2 -= PlayShoot2Effect;
+                player.Shooter.OnAttack1 -= OnAttack1;
+                player.Shooter.OnAttack2 -= OnAttack2;
             }
         }
 
@@ -94,12 +87,10 @@ namespace ProjectWallE.GameLoop.Player
         {
             UpdateTireEffects();
         }
-
-        [Button]
+        
         private void OnDamaged(float damage)
         {
             if (damage <= 0) return;
-            impulseSource?.GenerateImpulse(damageImpulseSettings);
             damageEffects?.Play(transform.position, _materials);
         }
 
@@ -112,6 +103,16 @@ namespace ProjectWallE.GameLoop.Player
         private void OnBoostEnd()
         {
             carBoostEffect?.Stop(boostAudioSource);
+        }
+        
+        private void OnAttack1()
+        {
+            shoot1Effect?.Play(transform.position);
+        }
+        
+        private void OnAttack2()
+        {
+            shoot2Effect?.Play(transform.position);
         }
 
         private void OnControllerChanged(PlayerControllerType type)
@@ -167,16 +168,6 @@ namespace ProjectWallE.GameLoop.Player
                 _activeTireEffects[i]?.Stop();
                 if (_tireEffectsPlaying != null) _tireEffectsPlaying[i] = false;
             }
-        }
-        
-        private void PlayShoot1Effect()
-        {
-            shoot1Effect?.Play(transform.position);
-        }
-        
-        private void PlayShoot2Effect()
-        {
-            shoot2Effect?.Play(transform.position);
         }
 
         public void EnableWheelsAirRelease()

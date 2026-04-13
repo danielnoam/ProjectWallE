@@ -41,6 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5894009229741046547}
   - component: {fileID: 8247674475958822448}
+  - component: {fileID: 5091377115681546788}
   - component: {fileID: 4703800134880027271}
   m_Layer: 0
   m_Name: CameraManager
@@ -81,6 +82,59 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7b48352f822c0e4db03d7eb6e61eb05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.PlayerManagerInput
+--- !u!114 &5091377115681546788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 579845851143152959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseSource
+  ImpulseDefinition:
+    ImpulseChannel: 1
+    ImpulseShape: 2
+    CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    ImpulseDuration: 0.2
+    ImpulseType: 0
+    DissipationRate: 0.25
+    RawSignal: {fileID: 0}
+    AmplitudeGain: 1
+    FrequencyGain: 1
+    RepeatMode: 0
+    Randomize: 1
+    TimeEnvelope:
+      AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      AttackTime: 0
+      SustainTime: 0.2
+      DecayTime: 0.7
+      ScaleWithImpact: 1
+      HoldForever: 0
+    ImpactRadius: 100
+    DirectionMode: 0
+    DissipationMode: 2
+    DissipationDistance: 100
+    PropagationSpeed: 343
+  DefaultVelocity: {x: 0, y: -1, z: 0}
 --- !u!114 &4703800134880027271
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93,12 +147,110 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5011ad94c720d84db8ead0869d1b244, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.CameraManager
+  mouseLookSensitivity: 0.08
+  gamepadLookSensitivity: 180
+  cameraVerticalClamp: 70
+  damageImpulseSettings:
+    impulseChannel: 1
+    impulseType: 0
+    impulseShape: 4
+    duration: 0.1
+    intensity: 0.2
+    velocity: {x: 1, y: 1, z: 1}
+    dissipationDistance: 0
+    dissipationRate: 0
+    propagationSpeed: 0
+  attack1ShakeSettings:
+    intensity: 0.5
+    duration: 0.3
+    frequency: 1
+    pitch:
+      minValue: -1
+      maxValue: 1
+    yaw:
+      minValue: -1
+      maxValue: 1
+    roll:
+      minValue: 0
+      maxValue: 0
+    decayCurve: 5
+    customCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: -0.005329132
+        value: 0.7365074
+        inSlope: 2.321716
+        outSlope: 2.321716
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.32779983
+      - serializedVersion: 3
+        time: 0.18655145
+        value: 0.9960848
+        inSlope: -1
+        outSlope: -1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: -1
+        outSlope: -1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  attack2ShakeSettings:
+    intensity: 4
+    duration: 0.4
+    frequency: 1
+    pitch:
+      minValue: -1
+      maxValue: 1
+    yaw:
+      minValue: -1
+      maxValue: 1
+    roll:
+      minValue: -0.5
+      maxValue: 0.5
+    decayCurve: 2
+    customCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: -1
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: -1
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
   podCamera: {fileID: 2963086718193019341}
   robotCamera: {fileID: 7233852917656614652}
   carCamera: {fileID: 4409293533636080035}
+  impulseSource: {fileID: 5091377115681546788}
+  rotationShake: {fileID: 633543289020702690}
   cameraTarget: {fileID: 1143171619415265352}
-  cameraLookSensitivity: 0.1
-  cameraVerticalClamp: 70
 --- !u!1 &2971591483419805130
 GameObject:
   m_ObjectHideFlags: 0
@@ -127,8 +279,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2971591483419805130}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.04, y: 33.04, z: -7.6}
+  m_LocalRotation: {x: -0.02601146, y: -0.9003971, z: -0.05347267, w: 0.4309863}
+  m_LocalPosition: {x: -22.346985, y: 31.64519, z: 48.872314}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -396,7 +548,7 @@ MonoBehaviour:
     AmplitudeGain: 1
     FrequencyGain: 1
     Duration: 1
-    m_NoiseOffsets: {x: 0, y: 0, z: 0}
+    m_NoiseOffsets: {x: 996.36536, y: 830.5702, z: -746.90125}
 --- !u!114 &119158848503708915
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -593,7 +745,7 @@ MonoBehaviour:
     AmplitudeGain: 1
     FrequencyGain: 1
     Duration: 1
-    m_NoiseOffsets: {x: 0, y: 0, z: 0}
+    m_NoiseOffsets: {x: 212.58606, y: 540.37665, z: -524.67395}
 --- !u!114 &7246144306868107611
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -646,6 +798,7 @@ GameObject:
   - component: {fileID: 286418199684431279}
   - component: {fileID: 1696182858850473878}
   - component: {fileID: 5883823590677584160}
+  - component: {fileID: 633543289020702690}
   m_Layer: 0
   m_Name: RobotCam
   m_TagString: Untagged
@@ -760,7 +913,7 @@ MonoBehaviour:
     AmplitudeGain: 1
     FrequencyGain: 1
     Duration: 1
-    m_NoiseOffsets: {x: 0, y: 0, z: 0}
+    m_NoiseOffsets: {x: -79.27121, y: -454.44455, z: 62.574493}
 --- !u!114 &5883823590677584160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -800,3 +953,15 @@ MonoBehaviour:
     NearLimit: 5
     FarLimit: 30
     MaxQualityBoost: 0.2
+--- !u!114 &633543289020702690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8055988144172934902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65920b8446998934b8fba51aeea83b40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.Utilities.CinemachineExtensions.CinemachineRotationShake

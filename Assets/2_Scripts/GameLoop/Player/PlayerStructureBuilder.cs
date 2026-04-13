@@ -287,8 +287,22 @@ namespace ProjectWallE.GameLoop.Player
         private void TryBuildStructure(Structure structure)
         {
             if (!_canBuild) return;
-            
-            if (ResourceManager.Instance.TrySpendResources(structure.BuildCost))
+
+            if (ResourceManager.Instance)
+            {
+                if (ResourceManager.Instance.TrySpendResources(structure.BuildCost))
+                {
+                    if (_targetedNode)
+                    {
+                        StructureManager.Instance?.DeployStructureOnNode(structure, _targetedNode);
+                    }
+                    else if (Physics.Raycast(_buildRay, out RaycastHit hit, buildRange, buildableLayerMask))
+                    {
+                        StructureManager.Instance?.DeployStructureOnGround(structure, hit.point, transform.forward, hit.normal);
+                    }
+                }
+            }
+            else
             {
                 if (_targetedNode)
                 {

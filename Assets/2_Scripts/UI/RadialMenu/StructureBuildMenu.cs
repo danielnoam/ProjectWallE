@@ -33,7 +33,8 @@ namespace ProjectWallE.UI
 
         private static void ConfigureElement(RadialMenuElement element, Structure structure)
         {
-            bool canAfford = ResourceManager.Instance.CanAfford(structure.BuildCost);
+            bool canAfford = !ResourceManager.Instance || ResourceManager.Instance.CanAfford(structure.BuildCost);
+            
             element.Configure(
                 $"{structure.StructureUIData.Label}\nCost: {structure.BuildCost}",
                 structure.StructureUIData.Icon,
