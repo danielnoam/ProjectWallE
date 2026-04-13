@@ -80,10 +80,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06535a561c25490abaa0eb30b94e8fdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RadarTarget
+  autoRegisterOnEnable: 1
+  showOutOfRange: 0
   blipSprite: {fileID: 0}
   blipColor: {r: 1, g: 0.25490198, b: 0.25490198, a: 1}
   blipSizeMultiplier: 1
-  showOutOfRange: 0
   pingDuration: 1
   pingSizeMultiplier: 10
   pingStartAlpha: 1
@@ -171,7 +172,7 @@ MonoBehaviour:
     punchStrength: 1
     punchDuration: 0.15
     punchEase: 1
-    emissionColor: {fileID: 11400000, guid: ef8eb77c9e380be48a477d6f92e3d209, type: 2}
+    emissionColor: {fileID: 11400000, guid: 8bf95861b5525384394ed765bdbfb105, type: 2}
     hitSoundId: NormalHit
   criticalDamageEffects:
     punchStrength: 1

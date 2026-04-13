@@ -200,7 +200,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
 
     public void Deploy(DeploymentRequest request)
     {
-        Vector3 projectedForward = Vector3.ProjectOnPlane(request.TargetPosition, request.TargetSurfaceNormal).normalized;
+        Vector3 projectedForward = Vector3.ProjectOnPlane(request.TargetForward, request.TargetSurfaceNormal).normalized;
         Quaternion yawRotation = projectedForward.sqrMagnitude > 0.001f
             ? Quaternion.LookRotation(projectedForward, request.TargetSurfaceNormal)
             : Quaternion.identity;

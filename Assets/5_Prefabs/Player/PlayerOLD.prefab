@@ -271,6 +271,7 @@ MonoBehaviour:
   - {fileID: 2308925685089836474, guid: eb9518b19b0f8d64fa00d3c4d128b9bf, type: 3}
   - {fileID: 4497719034383223877, guid: f8af469e485543e4bb4aedbcff5e5358, type: 3}
   playerManager: {fileID: 0}
+  input: {fileID: 0}
   buildMenu: {fileID: 0}
   actionsMenu: {fileID: 0}
 --- !u!114 &3096581857322889708
@@ -285,12 +286,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2da3f03942bd4251800628fa5b420e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerShooter
-  fireRate: 0.2
   aimOffset: {x: 0, y: 0, z: 0}
   firePoint: {fileID: 0}
-  projectileData: {fileID: 11400000, guid: 8ffdf2f42528d434f91c7d9b565e08fd, type: 2}
   enemyLayerMask: {fileID: 11400000, guid: 2d607d7566d764844b32be4199186943, type: 2}
   playerManager: {fileID: 0}
+  input: {fileID: 0}
+  basicFireRate: 0.1
+  basicProjectileData: {fileID: 0}
+  aoeFireRate: 1.5
+  specialProjectileData: {fileID: 0}
 --- !u!114 &1420463494464290521
 MonoBehaviour:
   m_ObjectHideFlags: 0

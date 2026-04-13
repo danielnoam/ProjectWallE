@@ -15,6 +15,7 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField] private Transform firePoint;
         [SerializeField] private SOLayerMask enemyLayerMask;
         [SerializeField, AutoGetSelf, HideInInspector] private PlayerManager playerManager;
+        [SerializeField, AutoGetSelf, HideInInspector] private PlayerManagerInput input;
         
         [Header("Basic Attack")]
         [SerializeField] private float basicFireRate = 0.1f;
@@ -36,6 +37,10 @@ namespace ProjectWallE.GameLoop.Player
         public event Action<float, float> OnBasicCooldownUpdated;
         public event Action<float, float> OnSpecialCooldownUpdated;
 
+        private void OnValidate()
+        {
+            AutoGetSystem.Process(this);
+        }
 
         private void Awake()
         {
@@ -83,12 +88,12 @@ namespace ProjectWallE.GameLoop.Player
             {
                 if (playerManager.CanShoot && !_inMenu)
                 {
-                    if (Mouse.current.leftButton.isPressed && _basicCooldown <= 0)
+                    if (input.Attack1Held && _basicCooldown <= 0)
                     {
                         ShootBasic();
                     }
                 
-                    if (Mouse.current.rightButton.isPressed && _specialCooldown <= 0)
+                    if (input.Attack2Held && _specialCooldown <= 0)
                     {
                         ShootSpecial();
                     }

@@ -41,15 +41,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 573442b838fdcba4080f80f33b114fd4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -77.39
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 573442b838fdcba4080f80f33b114fd4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.3775253
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 573442b838fdcba4080f80f33b114fd4, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 46.7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 573442b838fdcba4080f80f33b114fd4, type: 3}
       propertyPath: m_LocalRotation.w
@@ -85,7 +85,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 89388bf0b84b31249beb9a529b6b1e60, type: 2}
     - target: {fileID: 919132149155446097, guid: 573442b838fdcba4080f80f33b114fd4, type: 3}
       propertyPath: m_Name
-      value: Prefab_ResourceNode1
+      value: Prefab_ResourceRock1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 573442b838fdcba4080f80f33b114fd4, type: 3}
       propertyPath: m_Layer
@@ -163,6 +163,8 @@ MonoBehaviour:
     emissionColor: {fileID: 11400000, guid: 208c7c901ce76184cbbfd84d0e9bd8b1, type: 2}
     hitSoundId: ProjectileCollision
   destroyEffect:
+    effectType: 1
     particle: {fileID: 8719693749157704221, guid: 1b3442425d82af9499ec794800098825, type: 3}
+    triggerParticle: {fileID: 0}
     soundId: ProjectileCollision
   rend: {fileID: 5072832496208480937}

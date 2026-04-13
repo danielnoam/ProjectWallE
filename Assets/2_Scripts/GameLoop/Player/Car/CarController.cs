@@ -284,9 +284,11 @@ namespace _2_Scripts
                 float availableAcceleration = carSpeed >= 0
                     ? settings.AccelerationCurve.Evaluate(normalizedSpeed) * accelForce
                     : brakeForce;
+                
+                Vector3 accelDir = Vector3.ProjectOnPlane(tire.tireTransform.forward, tire.extendedGroundHit.normal);
 
                 _playerRb.AddForceAtPosition(
-                    tire.tireTransform.forward * (availableAcceleration * _playerRb.mass / _allTires.Count),
+                    accelDir * (availableAcceleration * _playerRb.mass / _allTires.Count),
                     tire.tireTransform.position);
             }
         }
@@ -304,9 +306,11 @@ namespace _2_Scripts
                 float availableAcceleration = carSpeed <= 0
                     ? settings.AccelerationCurve.Evaluate(normalizedSpeed) * accelForce
                     : brakeForce;
+                
+                Vector3 accelDir = Vector3.ProjectOnPlane(-tire.tireTransform.forward, tire.extendedGroundHit.normal);
 
                 _playerRb.AddForceAtPosition(
-                    -tire.tireTransform.forward * (availableAcceleration * _playerRb.mass / steeringTires.Length),
+                    accelDir * (availableAcceleration * _playerRb.mass / steeringTires.Length),
                     tire.tireTransform.position);
             }
         }
@@ -317,8 +321,10 @@ namespace _2_Scripts
             {
                 if (!tire.isGroundedExtended) continue;
 
+                Vector3 accelDir = Vector3.ProjectOnPlane(-tire.tireTransform.forward, tire.extendedGroundHit.normal);
+                
                 _playerRb.AddForceAtPosition(
-                    tire.tireTransform.forward * (-Mathf.Sign(carSpeed) * settings.EngineBrakeStrength * _playerRb.mass / _allTires.Count),
+                    accelDir * (Mathf.Sign(carSpeed) * settings.EngineBrakeStrength * _playerRb.mass / _allTires.Count),
                     tire.tireTransform.position);
             }
         }

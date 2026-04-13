@@ -22,7 +22,7 @@ public class ResourceBoostZone : MonoBehaviour
             Gizmos.DrawWireSphere(transform.position, sphereCollider.radius * transform.lossyScale.x);
             
             UnityEditor.Handles.Label(
-                transform.position + Vector3.up * (sphereCollider.radius + 0.5f) * transform.lossyScale.x,
+                transform.position + Vector3.up * (sphereCollider.radius + 0.1f) * transform.lossyScale.x,
                 $"Resource Boost Zone *{boostMultiplier}",
                 new GUIStyle()
                 {

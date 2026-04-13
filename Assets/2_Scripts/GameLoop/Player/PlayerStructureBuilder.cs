@@ -4,7 +4,6 @@ using DNExtensions.Utilities.AutoGet;
 using PrimeTween;
 using ProjectWallE.UI;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace ProjectWallE.GameLoop.Player
 {
@@ -18,6 +17,7 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField] private LayerMask structureLayerMask;
         [SerializeField, PrefabSelector("Assets/Prefabs/Structures")] private Structure[] structuresArray;
         [SerializeField, AutoGetSelf, HideInInspector] private PlayerManager playerManager;
+        [SerializeField, AutoGetSelf, HideInInspector] private PlayerManagerInput input;
         [SerializeField, AutoGetScene, HideInInspector] private StructureBuildMenu buildMenu;
         [SerializeField, AutoGetScene, HideInInspector] private StructureActionsMenu actionsMenu;
 
@@ -84,17 +84,17 @@ namespace ProjectWallE.GameLoop.Player
             CastBuildRay();
             UpdateGhostPosition();
 
-            if (!_menuOpen && Keyboard.current.qKey.wasPressedThisFrame)
+            if (!_menuOpen && input.ActionMenuPressed)
             {
                 OpenContextMenu();
             }
             else if (_menuOpen)
             {
-                if (Keyboard.current.qKey.wasReleasedThisFrame || Mouse.current.leftButton.wasPressedThisFrame)
+                if (input.ActionMenuReleased || input.Attack1Released)
                 {
                     SelectHoveredAndClose();
                 }
-                else if (Mouse.current.rightButton.wasPressedThisFrame)
+                else if (input.Attack2Released)
                 {
                     CloseMenus();
                 }
