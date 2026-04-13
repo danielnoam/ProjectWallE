@@ -1,3 +1,4 @@
+using DNExtensions.Utilities;
 using UnityEngine;
 
 namespace ProjectWallE
@@ -31,6 +32,9 @@ namespace ProjectWallE
         private float maxSlippingSpeed = 15f;
         [SerializeField, Range(0,1), Tooltip("the minimum factor which is applied after reaching maxSlippingSpeed")] 
         private float minGripAtMaxSlip = 0.5f;
+        [Tooltip("the range of the slope angle where the grip is factored by minGripAtMaxSlopeAngle according to the range")]
+        [SerializeField, MinMaxRange(0, 90)] private RangedFloat gripSlopeAngleRange;
+        [SerializeField, Range(0, 1)] private float minGripAtMaxSlopeAngle = 0.3f;
 
         [Header("Takeoff / partial-ground tuning")]
         [SerializeField] private float minGripWhenPartialGround = 0.15f;
@@ -45,6 +49,8 @@ namespace ProjectWallE
         [SerializeField] private AnimationCurve accelerationCurve;
         [SerializeField] private float topForwardSpeed;
         [SerializeField] private float topBackwardSpeed;
+        [Tooltip("At the max angle the accel force will be at 0%, at the min angle the accel force will be at 100%")]
+        [SerializeField, MinMaxRange(0, 90)] private RangedFloat accelAngleRange;
         
         [Header("Speedy Layer Settings")]
         [SerializeField] private LayerMask speedyLayer;
@@ -80,6 +86,8 @@ namespace ProjectWallE
         public float MinSlippingSpeed => minSlippingSpeed;
         public float MaxSlippingSpeed => maxSlippingSpeed;
         public float MinGripAtMaxSlip => minGripAtMaxSlip;
+        public RangedFloat GripSlopeAngleRange => gripSlopeAngleRange;
+        public float MinGripAtMaxSlopeAngle => minGripAtMaxSlopeAngle;
 
         public float MinGripWhenPartialGround => minGripWhenPartialGround;
         public float PartialGroundGripPower => partialGroundGripPower;
@@ -91,6 +99,7 @@ namespace ProjectWallE
         public AnimationCurve AccelerationCurve => accelerationCurve;
         public float TopForwardSpeed => topForwardSpeed;
         public float TopBackwardSpeed => topBackwardSpeed;
+        public RangedFloat AccelAngleRange => accelAngleRange;
 
         public LayerMask SpeedyLayer => speedyLayer;
         public float SpeedySpeedMultiplier => speedySpeedMultiplier;

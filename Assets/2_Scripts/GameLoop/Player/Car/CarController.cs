@@ -6,6 +6,13 @@ using UnityEngine;
 
 namespace _2_Scripts
 {
+    public enum CarLongitudinalState
+    {
+        Idle,
+        Forward,
+        Backward,
+    }
+
     [RequireComponent(typeof(CarInput), typeof(CarBoost))]
     public class CarController : MonoBehaviour, IPlayerController
     {
@@ -31,12 +38,14 @@ namespace _2_Scripts
         private const float ExtendedGroundCheckExtraDistance = 0.1f;
         
         private Vector3 _groundPlaneNormal;
+        
+        private CarLongitudinalState _longitudinalState;
 
         private float _currentSteering;
         private float _groundedRatio;
-        private float _airborneBlend;
+        private float _airborneFactor;
         private float _handbrake01;
-        private float _slippingBlend;
+        private float _slippingFactor;
 
         /// <summary>
         /// controls how much dv affects the gravity (bigger = less control)
@@ -182,7 +191,7 @@ namespace _2_Scripts
             _groundedRatio = GetGroundedRatio(out _);
 
             float planted = Mathf.Pow(_groundedRatio, settings.PartialGroundGripPower);
-            _airborneBlend = Mathf.Lerp(settings.MinGripWhenPartialGround, 1f, planted);
+            _airborneFactor = Mathf.Lerp(settings.MinGripWhenPartialGround, 1f, planted);
 
             float targetHb = _carInput.HandBreakHeld ? 1f : 0f;
             float rate = targetHb > _handbrake01 ? settings.HandbrakeBlendIn : settings.HandbrakeBlendOut;
@@ -191,8 +200,14 @@ namespace _2_Scripts
             Vector3 planarVelocity = Vector3.ProjectOnPlane(_playerRb.linearVelocity, planeNormal);
             float slippingSpeed = Vector3.Dot(transform.right, planarVelocity);
             float absSlipSpeed = Mathf.Abs(slippingSpeed);
-            float t = Mathf.InverseLerp(settings.MinSlippingSpeed, settings.MaxSlippingSpeed, absSlipSpeed);
-            _slippingBlend = Mathf.Lerp(1f, settings.MinGripAtMaxSlip, t);
+            float t1 = Mathf.InverseLerp(settings.MinSlippingSpeed, settings.MaxSlippingSpeed, absSlipSpeed);
+            float speedSlipFactor = Mathf.Lerp(1f, settings.MinGripAtMaxSlip, t1);
+            
+            float planeAngle = Vector3.Angle(planeNormal, Vector3.up);
+            float t2 = Mathf.InverseLerp(settings.GripSlopeAngleRange.minValue, settings.GripSlopeAngleRange.maxValue, planeAngle);
+            float slopeSlipFactor = IsOnSpeedyLayer() ? 1f: Mathf.Lerp(1, settings.MinGripAtMaxSlopeAngle, t2);
+            
+            _slippingFactor = Mathf.Min(speedSlipFactor, slopeSlipFactor);
         }
 
         private void ApplyFrictionPerTiresType(Tire[] tires, AnimationCurve frictionCurve)
@@ -205,8 +220,8 @@ namespace _2_Scripts
                 float steeringVel = Vector3.Dot(tire.tireTransform.right, tireVel);
 
                 float gripFactor = CalcCurrentTireGripFactor(tire, frictionCurve, tireVel);
-                gripFactor *= _airborneBlend;
-                gripFactor *= _slippingBlend;
+                gripFactor *= _airborneFactor;
+                gripFactor *= _slippingFactor;
                 gripFactor = Mathf.Lerp(gripFactor, settings.HandBrakeGrip, _handbrake01);
 
                 float desiredVelChange = -steeringVel * gripFactor;
@@ -253,7 +268,8 @@ namespace _2_Scripts
         private void ApplyLongitudinalMovement()
         {
             float carSpeed = Vector3.Dot(transform.forward, _playerRb.linearVelocity);
-
+            
+            UpdateLongitudinalState();
             GetLongitudinalValues(out float topForwardSpeed, out float topBackwardSpeed,
                                   out float accelForce, out float brakeForce);
 
@@ -307,6 +323,8 @@ namespace _2_Scripts
                     ? settings.AccelerationCurve.Evaluate(normalizedSpeed) * accelForce
                     : brakeForce;
                 
+                
+                
                 Vector3 accelDir = Vector3.ProjectOnPlane(-tire.tireTransform.forward, tire.extendedGroundHit.normal);
 
                 _playerRb.AddForceAtPosition(
@@ -342,7 +360,7 @@ namespace _2_Scripts
             bool isSpeedyLayer = IsOnSpeedyLayer();
 
             float speedMultiplier = isSpeedyLayer ? settings.SpeedySpeedMultiplier : 1f;
-            float accelMultiplier = isSpeedyLayer ? settings.SpeedyAccelMultiplier : 1f;
+            float accelMultiplier = isSpeedyLayer ? settings.SpeedyAccelMultiplier : GetAccelAngleStrength();
 
             topForwardSpeed = settings.TopForwardSpeed * speedMultiplier;
             topBackwardSpeed = settings.TopBackwardSpeed * speedMultiplier;
@@ -363,6 +381,33 @@ namespace _2_Scripts
                 isSpeedyLayer = true;
             }
             return isSpeedyLayer;
+        }
+
+        private float GetAccelAngleStrength()
+        {
+            float moveDir = _longitudinalState is CarLongitudinalState.Backward ?
+                -1f : 1f;
+            
+            float carAccelAngle = 90 - Vector3.Angle(moveDir * transform.forward, Vector3.up);
+            float strength = 1f;
+            
+            if(settings.AccelAngleRange.Contains(carAccelAngle))
+                strength = Mathf.InverseLerp(settings.AccelAngleRange.maxValue, settings.AccelAngleRange.minValue, carAccelAngle);
+            else if (carAccelAngle < settings.AccelAngleRange.minValue)
+                strength = 1;
+            else if (carAccelAngle > settings.AccelAngleRange.maxValue)
+                strength = 0;
+            return strength;
+        }
+
+        private void UpdateLongitudinalState()
+        {
+            switch (_carInput.Acceleration)
+            {
+                case > 0.01f: _longitudinalState = CarLongitudinalState.Forward; break;
+                case < -0.01f: _longitudinalState = CarLongitudinalState.Backward; break;
+                default: _longitudinalState = CarLongitudinalState.Idle; break;
+            }
         }
 
         #endregion
