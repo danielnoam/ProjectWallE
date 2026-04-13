@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 112b5f81215549d982d6424af1c2b370, type: 3}
-  m_Name: ProjectileData_Normal
+  m_Name: ProjectileData_EnemyDrone
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileData
   maxLifetime: 10
   damageType: 0
-  damage: 10
+  damage: 3
   pushStrength: 0
   aoeRadius: 5
   damageRange:
@@ -24,7 +24,7 @@ MonoBehaviour:
     minValue: 0
     maxValue: 25
   movementType: 0
-  speed: 50
+  speed: 85
   prefab: {fileID: 8338543337846540916, guid: 63924ffbc4055854e89c01d29a67c183, type: 3}
   hitParticle: {fileID: 8195002406593029198, guid: 9d833e0335f9b0548b713e0ce34d2739, type: 3}
   collisionSFX: ProjectileCollision

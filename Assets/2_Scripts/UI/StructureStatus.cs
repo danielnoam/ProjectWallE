@@ -74,7 +74,7 @@ namespace ProjectWallE.UI
         {
             if (_structure) _structure.OnDamaged -= OnDamaged;
             _structure = null;
-            canvasGroup.alpha = 0;
+            if (canvasGroup) canvasGroup.alpha = 0;
         }
     }
 }

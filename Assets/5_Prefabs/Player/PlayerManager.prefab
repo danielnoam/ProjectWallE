@@ -243,6 +243,135 @@ MonoBehaviour:
   enemyLayer: {fileID: 11400000, guid: 2d607d7566d764844b32be4199186943, type: 2}
   pushableCollider: {fileID: 7684777718141572874}
   playerManager: {fileID: 2369243402749369746}
+--- !u!1 &1286681627207206405
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6632801430395274896}
+  - component: {fileID: 885638804207550830}
+  m_Layer: 9
+  m_Name: MovementAS
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6632801430395274896
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286681627207206405}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6193792910539710173}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &885638804207550830
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286681627207206405}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1454431223474630902
 GameObject:
   m_ObjectHideFlags: 0
@@ -404,6 +533,7 @@ Transform:
   - {fileID: 1934439508863671371}
   - {fileID: 546761289242085514}
   - {fileID: 1160329288635512372}
+  - {fileID: 6632801430395274896}
   m_Father: {fileID: 4410211601627553717}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2160678104528011609
@@ -1137,7 +1267,7 @@ MonoBehaviour:
   enemyLayerMask: {fileID: 11400000, guid: 2d607d7566d764844b32be4199186943, type: 2}
   playerManager: {fileID: 2369243402749369746}
   input: {fileID: 12555983524666578}
-  basicFireRate: 0.1
+  basicFireRate: 0.2
   basicProjectileData: {fileID: 11400000, guid: b6fff52b19a3bf34fae6ef66121a0c95, type: 2}
   aoeFireRate: 1.5
   specialProjectileData: {fileID: 11400000, guid: e07c3359bef11e948816f1eeec402754, type: 2}
@@ -1384,16 +1514,8 @@ MonoBehaviour:
     emissionColor: {fileID: 11400000, guid: a96c7138587d94644ace68611d614fe6, type: 2}
     hitSoundId: NormalHit
   changeStateSoundId: ChangeState
-  damageImpulseSettings:
-    impulseChannel: 1
-    impulseType: 0
-    impulseShape: 4
-    duration: 0.1
-    intensity: 0.2
-    velocity: {x: 1, y: 1, z: 1}
-    dissipationDistance: 0
-    dissipationRate: 0
-    propagationSpeed: 0
+  robotMoveSoundId: 
+  carMoveSoundId: 
   tireEffectRobotSpeedThreshold: 5
   robotTireEffects:
   - {fileID: 6436861685030297602}
@@ -1404,6 +1526,7 @@ MonoBehaviour:
   airReleaseAudioSource: {fileID: 1757885287560848928}
   changeStateAudioSource: {fileID: 3113016758275396871}
   boostAudioSource: {fileID: 8467015804595106265}
+  movementAudioSource: {fileID: 885638804207550830}
   player: {fileID: 2369243402749369746}
 --- !u!1 &6916443636318400613
 GameObject:

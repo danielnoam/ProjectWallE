@@ -18,19 +18,7 @@ MonoBehaviour:
   hidePoolHolders: 0
   showDebugMessages: 0
   pools:
-  - poolName: Projetile_Player
-    maxPoolSize: 50
-    prefab: {fileID: 7389837232072127272, guid: 3c09a670e7ef45449a66861350c5473d, type: 3}
-    dontDestroyOnLoad: 0
-    usePoolHolder: 1
-    recycleActiveObjects: 1
-    preWarmPool: 1
-    preWarmPoolSize: 15
-    scenesToPreWarm:
-    - sceneAsset: {fileID: 102900000, guid: 930919521036cc34b9023f5ac1d27770, type: 3}
-      sceneName: DanielScene
-      scenePath: Assets/1_Scenes/DanielScene.unity
-  - poolName: Particle_Small
+  - poolName: Particle_Normal
     maxPoolSize: 50
     prefab: {fileID: 7389837232072127272, guid: 63924ffbc4055854e89c01d29a67c183, type: 3}
     dontDestroyOnLoad: 0
@@ -123,6 +111,66 @@ MonoBehaviour:
     preWarmPool: 0
     preWarmPoolSize: 0
     scenesToPreWarm:
+    - sceneAsset: {fileID: 102900000, guid: 930919521036cc34b9023f5ac1d27770, type: 3}
+      sceneName: DanielScene
+      scenePath: Assets/1_Scenes/DanielScene.unity
+  - poolName: Projetile_Big
+    maxPoolSize: 50
+    prefab: {fileID: 7389837232072127272, guid: 5bd177565f170f8498a68ad83c8892d2, type: 3}
+    dontDestroyOnLoad: 0
+    usePoolHolder: 1
+    recycleActiveObjects: 1
+    preWarmPool: 0
+    preWarmPoolSize: 0
+    scenesToPreWarm:
+    - sceneAsset: {fileID: 102900000, guid: 164ae12fe25119d498523c1abfe21722, type: 3}
+      sceneName: MainLevel
+      scenePath: Assets/1_Scenes/MainLevel.unity
+    - sceneAsset: {fileID: 102900000, guid: 930919521036cc34b9023f5ac1d27770, type: 3}
+      sceneName: DanielScene
+      scenePath: Assets/1_Scenes/DanielScene.unity
+  - poolName: Projetile_Player
+    maxPoolSize: 50
+    prefab: {fileID: 7389837232072127272, guid: 3c09a670e7ef45449a66861350c5473d, type: 3}
+    dontDestroyOnLoad: 0
+    usePoolHolder: 1
+    recycleActiveObjects: 1
+    preWarmPool: 1
+    preWarmPoolSize: 15
+    scenesToPreWarm:
+    - sceneAsset: {fileID: 102900000, guid: 164ae12fe25119d498523c1abfe21722, type: 3}
+      sceneName: MainLevel
+      scenePath: Assets/1_Scenes/MainLevel.unity
+    - sceneAsset: {fileID: 102900000, guid: 930919521036cc34b9023f5ac1d27770, type: 3}
+      sceneName: DanielScene
+      scenePath: Assets/1_Scenes/DanielScene.unity
+  - poolName: Projetile_Enemy
+    maxPoolSize: 50
+    prefab: {fileID: 7389837232072127272, guid: 63924ffbc4055854e89c01d29a67c183, type: 3}
+    dontDestroyOnLoad: 0
+    usePoolHolder: 1
+    recycleActiveObjects: 1
+    preWarmPool: 1
+    preWarmPoolSize: 15
+    scenesToPreWarm:
+    - sceneAsset: {fileID: 102900000, guid: 164ae12fe25119d498523c1abfe21722, type: 3}
+      sceneName: MainLevel
+      scenePath: Assets/1_Scenes/MainLevel.unity
+    - sceneAsset: {fileID: 102900000, guid: 930919521036cc34b9023f5ac1d27770, type: 3}
+      sceneName: DanielScene
+      scenePath: Assets/1_Scenes/DanielScene.unity
+  - poolName: Projetile_GunTurret
+    maxPoolSize: 50
+    prefab: {fileID: 7389837232072127272, guid: a1752dc8415671e44971b23bf4feb726, type: 3}
+    dontDestroyOnLoad: 0
+    usePoolHolder: 1
+    recycleActiveObjects: 1
+    preWarmPool: 1
+    preWarmPoolSize: 15
+    scenesToPreWarm:
+    - sceneAsset: {fileID: 102900000, guid: 164ae12fe25119d498523c1abfe21722, type: 3}
+      sceneName: MainLevel
+      scenePath: Assets/1_Scenes/MainLevel.unity
     - sceneAsset: {fileID: 102900000, guid: 930919521036cc34b9023f5ac1d27770, type: 3}
       sceneName: DanielScene
       scenePath: Assets/1_Scenes/DanielScene.unity
