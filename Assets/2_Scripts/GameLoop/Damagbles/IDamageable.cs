@@ -3,6 +3,7 @@ using UnityEngine;
 
 public interface IDamageable
 {
+    Team Team { get; }
     public Transform transform { get; }
     public GameObject gameObject { get; }
     bool IsAlive { get; }

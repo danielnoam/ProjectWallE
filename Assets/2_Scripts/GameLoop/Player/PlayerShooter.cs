@@ -1,5 +1,4 @@
 using System;
-using DNExtensions.Systems.Scriptables;
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.AutoGet;
 using UnityEngine;
@@ -13,7 +12,6 @@ namespace ProjectWallE.GameLoop.Player
         [Header("Settings")] 
         [SerializeField] private Vector3 aimOffset = Vector3.zero;
         [SerializeField] private Transform firePoint;
-        [SerializeField] private SOLayerMask enemyLayerMask;
         [SerializeField, AutoGetSelf, HideInInspector] private PlayerManager playerManager;
         [SerializeField, AutoGetSelf, HideInInspector] private PlayerManagerInput input;
         
@@ -134,7 +132,7 @@ namespace ProjectWallE.GameLoop.Player
             _basicCooldown = basicFireRate;
             Vector3 position = firePoint ? firePoint.position : transform.position;
             Vector3 direction = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)).direction;
-            basicProjectileData.Spawn(enemyLayerMask.Value, position, direction.Add(aimOffset), default, playerManager);
+            basicProjectileData?.Spawn(position, direction.Add(aimOffset), default, playerManager);
             OnAttack1?.Invoke();
             OnBasicCooldownUpdated?.Invoke(_basicCooldown, basicFireRate);
         }
@@ -146,7 +144,7 @@ namespace ProjectWallE.GameLoop.Player
             _specialCooldown = aoeFireRate;
             Vector3 position = firePoint ? firePoint.position : transform.position;
             Vector3 direction = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)).direction;
-            specialProjectileData.Spawn(enemyLayerMask.Value, position, direction.Add(aimOffset), default, playerManager);
+            specialProjectileData?.Spawn(position, direction.Add(aimOffset), default, playerManager);
             OnAttack2?.Invoke();
             OnSpecialCooldownUpdated?.Invoke(_specialCooldown, aoeFireRate);
         }

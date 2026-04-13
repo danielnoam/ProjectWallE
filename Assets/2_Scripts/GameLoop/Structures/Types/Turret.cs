@@ -106,7 +106,7 @@ public abstract class Turret : Structure
     private void Fire(Vector3 targetPosition)
     {
         var direction = (targetPosition - firePoint.position).normalized;
-        CurrentTurretLevelData.soProjectileData?.Spawn(hitLayers.Value, firePoint.position, direction, targetPosition, this);
+        CurrentTurretLevelData.soProjectileData?.Spawn(firePoint.position, direction, targetPosition, this);
         shootEffect?.Play(firePoint.position);
         _attackTimer = 0f;
     }

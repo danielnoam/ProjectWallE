@@ -71,6 +71,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     public float MaxHealth => CurrentLevelData.maxHealth;
     public int BuildCost => Levels[0].cost;
     public bool IsAlive => CurrentHealth > 0;
+    public Team Team => Team.Player;
     
     public event Action<IDamageable> OnDeath;
     public event Action<float> OnDamaged;

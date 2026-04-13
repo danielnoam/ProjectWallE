@@ -51,6 +51,7 @@ namespace ProjectWallE
         public bool CanShoot => _currentController.canShoot;
         public Vector3 Velocity => _rigidbody.linearVelocity;
         public bool IsAlive => _currentHealth > 0;
+        public Team Team => Team.Player;
 
         public event Action<IDamageable> OnDeath;
         public event Action<float> OnDamaged;

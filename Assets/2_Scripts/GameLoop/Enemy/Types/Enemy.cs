@@ -32,7 +32,7 @@ namespace ProjectWallE.GameLoop
         [Header("Settings")]
         [SerializeField] private float maxHealth = 100f;
         [SerializeField] private bool canBePushed = true;
-        [SerializeField, SOSelector("Assets/Data")] private SOLayerMask hitLayers;
+        [SerializeField, SOSelector("Assets/6_Data")] private SOLayerMask hitLayers;
 
         [Header("Targeting")]
         [SerializeField] private float targetFindRange = 75f;
@@ -63,7 +63,9 @@ namespace ProjectWallE.GameLoop
         protected bool RequiresDirectApproach => attackStrategy?.RequiresDirectApproach ?? false;
         protected virtual Vector3 Velocity => rigidBody.linearVelocity;
 
+
         public bool IsAlive => _currentHealth > 0;
+        public Team Team => Team.Enemy;
 
         public event Action<IDamageable> OnDeath;
         public event Action<float> OnDamaged;

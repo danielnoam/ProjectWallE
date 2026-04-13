@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using DNExtensions.Systems.AudioLibrary;
-using DNExtensions.Systems.Scriptables;
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.SerializableSelector;
 using UnityEngine;
@@ -36,7 +35,7 @@ namespace ProjectWallE.GameLoop
     {
         [SerializeField] private float attackCooldown = 1f;
         [SerializeField] private Transform firePoint;
-        [SerializeField, SOSelector("Assets/Data")] private SOProjectileData soProjectileData;
+        [SerializeField, SOSelector("Assets/6_Data")] private SOProjectileData soProjectileData;
         [SerializeField] private VisualEffectAction shootEffect;
 
         private float _attackTimer;
@@ -53,7 +52,7 @@ namespace ProjectWallE.GameLoop
             if (!(_attackTimer < attackCooldown))
             {
                 var direction = (context.TargetPosition - context.Position).normalized;
-                soProjectileData?.Spawn(context.HitLayers, firePoint.position, direction, context.TargetPosition);
+                soProjectileData?.Spawn(firePoint.position, direction, context.TargetPosition);
                 shootEffect?.Play(firePoint.position);
                 _attackTimer = 0f;
             }
