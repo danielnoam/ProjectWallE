@@ -168,7 +168,8 @@ MonoBehaviour:
       type: {class: WheelEffect, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         wheels:
-        - transform: {fileID: 6789345302792274751}
+        - suspension: {fileID: 6789345302792274751}
+          wheel: {fileID: 277713790143893632}
         wheelRadius: 0.8
         suspensionTravel: 1
         suspensionStiffness: 35
@@ -383,6 +384,11 @@ PrefabInstance:
 --- !u!23 &206706519288862166 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 1588066396962892842, guid: 6930883bdc246d0468845291cef00251, type: 3}
+  m_PrefabInstance: {fileID: 1501861976589826556}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &277713790143893632 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1660997831421094268, guid: 6930883bdc246d0468845291cef00251, type: 3}
   m_PrefabInstance: {fileID: 1501861976589826556}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &833487158734437824 stripped

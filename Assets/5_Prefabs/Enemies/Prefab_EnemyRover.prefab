@@ -235,8 +235,10 @@ MonoBehaviour:
       type: {class: WheelEffect, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         wheels:
-        - transform: {fileID: 1932143315978848111}
-        - transform: {fileID: 7213171834896227090}
+        - suspension: {fileID: 5742409801631996707}
+          wheel: {fileID: 1932143315978848111}
+        - suspension: {fileID: 2398041960755128004}
+          wheel: {fileID: 7213171834896227090}
         wheelRadius: 0.55
         suspensionTravel: 0.4
         suspensionStiffness: 10
@@ -544,6 +546,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2888864087182475357, guid: 35ea43580c3aa6b4ca9ae7e68f4272e5, type: 3}
   m_PrefabInstance: {fileID: 3658915827697420082}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &2398041960755128004 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1405293482402111990, guid: 35ea43580c3aa6b4ca9ae7e68f4272e5, type: 3}
+  m_PrefabInstance: {fileID: 3658915827697420082}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &3573712007619767282 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 243041194690276544, guid: 35ea43580c3aa6b4ca9ae7e68f4272e5, type: 3}
@@ -627,6 +634,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDamageRelay
   hitZone: 0
+--- !u!4 &5742409801631996707 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -182897415613146095, guid: 35ea43580c3aa6b4ca9ae7e68f4272e5, type: 3}
+  m_PrefabInstance: {fileID: 3658915827697420082}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5793963329041179422 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -2112365813379488724, guid: 35ea43580c3aa6b4ca9ae7e68f4272e5, type: 3}
