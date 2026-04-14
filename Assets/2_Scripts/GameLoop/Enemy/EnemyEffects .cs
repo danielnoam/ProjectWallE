@@ -99,11 +99,12 @@ namespace ProjectWallE.GameLoop
 
             for (int i = 0; i < wheels.Length; i++)
             {
-                var wheel = wheels[i];
-                if (!wheel.transform) continue;
+                var w = wheels[i];
+                if (!w.suspension) continue;
 
-                UpdateSuspension(wheel, i, context.DeltaTime);
-                wheel.transform.Rotate(Vector3.right, spinAngle, Space.Self);
+                UpdateSuspension(w, i, context.DeltaTime);
+
+                if (w.wheel) w.wheel.Rotate(Vector3.right, spinAngle, Space.Self);
             }
         }
 
@@ -114,8 +115,8 @@ namespace ProjectWallE.GameLoop
 
             for (int i = 0; i < wheels.Length; i++)
             {
-                if (wheels[i].transform)
-                    _restLocalY[i] = wheels[i].transform.localPosition.y;
+                if (wheels[i].suspension)
+                    _restLocalY[i] = wheels[i].suspension.localPosition.y;
             }
 
             _initialized = true;
@@ -123,13 +124,13 @@ namespace ProjectWallE.GameLoop
 
         private void UpdateSuspension(WheelData wheel, int index, float deltaTime)
         {
-            var anchor = wheel.transform.parent;
+            var anchor = wheel.suspension.parent;
             if (!anchor) return;
 
             Vector3 rayOrigin = anchor.TransformPoint(new Vector3(
-                wheel.transform.localPosition.x,
+                wheel.suspension.localPosition.x,
                 _restLocalY[index] + suspensionTravel * 0.5f,
-                wheel.transform.localPosition.z));
+                wheel.suspension.localPosition.z));
 
             float targetLocalY;
 
@@ -143,7 +144,7 @@ namespace ProjectWallE.GameLoop
                 targetLocalY = _restLocalY[index] - suspensionTravel * 0.5f;
             }
 
-            float currentY = wheel.transform.localPosition.y;
+            float currentY = wheel.suspension.localPosition.y;
             float springForce = (targetLocalY - currentY) * suspensionStiffness;
             _suspensionVelocities[index] += springForce * deltaTime;
             _suspensionVelocities[index] *= Mathf.Max(0f, 1f - suspensionDamping * deltaTime);
@@ -151,9 +152,9 @@ namespace ProjectWallE.GameLoop
             float newY = currentY + _suspensionVelocities[index] * deltaTime;
             newY = Mathf.Clamp(newY, _restLocalY[index] - suspensionTravel * 0.5f, _restLocalY[index] + suspensionTravel * 0.5f);
 
-            var localPos = wheel.transform.localPosition;
+            var localPos = wheel.suspension.localPosition;
             localPos.y = newY;
-            wheel.transform.localPosition = localPos;
+            wheel.suspension.localPosition = localPos;
         }
 
 #if UNITY_EDITOR
@@ -163,22 +164,23 @@ namespace ProjectWallE.GameLoop
 
             foreach (var wheel in wheels)
             {
-                if (!wheel.transform) continue;
+                var wheelTransform = wheel.suspension ? wheel.suspension : wheel.wheel;
+                if (!wheelTransform) continue;
 
-                var anchor = wheel.transform.parent;
+                var anchor = wheelTransform.parent;
                 if (!anchor) continue;
 
-                float restY = wheel.transform.localPosition.y;
+                float restY = wheelTransform.localPosition.y;
 
                 Vector3 topLimit = anchor.TransformPoint(new Vector3(
-                    wheel.transform.localPosition.x,
+                    wheelTransform.localPosition.x,
                     restY + suspensionTravel * 0.5f,
-                    wheel.transform.localPosition.z));
+                    wheelTransform.localPosition.z));
 
                 Vector3 bottomLimit = anchor.TransformPoint(new Vector3(
-                    wheel.transform.localPosition.x,
+                    wheelTransform.localPosition.x,
                     restY - suspensionTravel * 0.5f,
-                    wheel.transform.localPosition.z));
+                    wheelTransform.localPosition.z));
 
                 Gizmos.color = Color.yellow;
                 Gizmos.DrawLine(topLimit, bottomLimit);
@@ -198,7 +200,7 @@ namespace ProjectWallE.GameLoop
                 }
 
                 Gizmos.color = Color.cyan;
-                Gizmos.DrawWireSphere(wheel.transform.position, wheelRadius);
+                Gizmos.DrawWireSphere(wheelTransform.position, wheelRadius);
             }
         }
 #endif
@@ -207,6 +209,7 @@ namespace ProjectWallE.GameLoop
     [Serializable]
     public class WheelData
     {
-        public Transform transform;
+        public Transform suspension;
+        public Transform wheel;
     }
 }

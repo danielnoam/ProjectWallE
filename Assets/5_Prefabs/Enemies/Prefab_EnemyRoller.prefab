@@ -48,10 +48,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06535a561c25490abaa0eb30b94e8fdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RadarTarget
+  autoRegisterOnEnable: 1
+  showOutOfRange: 0
   blipSprite: {fileID: 0}
   blipColor: {r: 1, g: 0.25490198, b: 0.25490198, a: 1}
   blipSizeMultiplier: 1
-  showOutOfRange: 0
   pingDuration: 1
   pingSizeMultiplier: 10
   pingStartAlpha: 1
@@ -175,7 +176,7 @@ MonoBehaviour:
         raycastDistance: 1.5
         groundMask:
           serializedVersion: 2
-          m_Bits: 1032
+          m_Bits: 3080
     - rid: 6000861270941368436
       type: {class: SuicideAttack, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
