@@ -1463,9 +1463,15 @@ MonoBehaviour:
     stateName: Player Shoot
     stateHash: -323826672
     assigned: 1
-  shoulderOffset: 0.7
-  targetDistance: 1.5
+  armTargetShoulderOffset: 0.7
+  armTargetDistance: 1.5
+  headTargetDistance: 1.5
   transitionSpeed: 3
+  shakeAmount: 0.5
+  shakeDecay: 1
+  maxShake: 2
+  shakeDirection: {x: 0, y: 1, z: 0}
+  directionBias: 0.25
   rig: {fileID: 5954175916313304975}
   headAim: {fileID: 6942121746160544653}
   armIK: {fileID: 4500353503960407862}
@@ -1600,9 +1606,9 @@ MonoBehaviour:
       m_Item7:
         transform: {fileID: 0}
         weight: 0
-    m_Offset: {x: -7.6, y: -3.64, z: 0}
+    m_Offset: {x: 0, y: 0, z: 0}
     m_MinLimit: -180
-    m_MaxLimit: 24
+    m_MaxLimit: 25
     m_AimAxis: 4
     m_UpAxis: 2
     m_WorldUpType: 0

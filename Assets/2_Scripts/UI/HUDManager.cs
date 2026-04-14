@@ -54,10 +54,10 @@ namespace ProjectWallE.UI
             StructureManager.OnStructureDestroyed += UpdateStructuresText;
             LevelManager.OnLevelInitializing += ResetTexts;
             LevelManager.OnLevelStarted += OnLevelStarted;
-            LevelManager.OnTimeUpdated += OnTimeUpdated;
+            LevelManager.OnLeveTimeLineUpdated += OnLeveTimeLineUpdated;
             LevelManager.OnLevelCompleted += OnLevelCompleted;
             LevelManager.OnLevelFailed += OnLevelFailed;
-            LevelManager.OnObjectivesStarted += OnObjectivesStarted;
+            LevelManager.OnObjectivesAdded += OnObjectivesAdded;
             LevelManager.OnObjectivesCompleted += OnObjectivesCompleted;
 
             if (player)
@@ -82,10 +82,10 @@ namespace ProjectWallE.UI
             StructureManager.OnStructureDestroyed -= UpdateStructuresText;
             LevelManager.OnLevelInitializing -= ResetTexts;
             LevelManager.OnLevelStarted -= OnLevelStarted;
-            LevelManager.OnTimeUpdated -= OnTimeUpdated;
+            LevelManager.OnLeveTimeLineUpdated -= OnLeveTimeLineUpdated;
             LevelManager.OnLevelCompleted -= OnLevelCompleted;
             LevelManager.OnLevelFailed -= OnLevelFailed;
-            LevelManager.OnObjectivesStarted -= OnObjectivesStarted;
+            LevelManager.OnObjectivesAdded -= OnObjectivesAdded;
             LevelManager.OnObjectivesCompleted -= OnObjectivesCompleted;
 
             if (player)
@@ -129,7 +129,7 @@ namespace ProjectWallE.UI
             UpdateObjectiveDisplay("Success");  
         }
 
-        private void OnObjectivesStarted(List<BaseLevelObjective> objectives)
+        private void OnObjectivesAdded(List<BaseLevelObjective> objectives)
         {
             _activeObjectives = objectives;
         }
@@ -158,7 +158,7 @@ namespace ProjectWallE.UI
             }
         }
 
-        private void OnTimeUpdated(float timeRemaining)
+        private void OnLeveTimeLineUpdated(float timeRemaining)
         {
             if (_activeObjectives != null)
             {

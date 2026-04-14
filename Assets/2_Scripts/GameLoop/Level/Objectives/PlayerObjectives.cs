@@ -1,4 +1,5 @@
 using System;
+using DNExtensions.Utilities;
 using DNExtensions.Utilities.SerializableSelector;
 using ProjectWallE.GameLoop.Player;
 using UnityEngine;
@@ -173,6 +174,8 @@ namespace ProjectWallE.GameLoop
     public class SurviveObjective : BaseLevelObjective
     {
         [SerializeField, Min(1f)] private float duration = 30f;
+        [SerializeField] private bool spawnEnemies;
+        [SerializeField, ShowIf("spawnEnemies")] private EnemySpawnerConfig spawner;
 
         private float _elapsed;
 
@@ -182,6 +185,7 @@ namespace ProjectWallE.GameLoop
         protected override void OnInitialize(IExposedPropertyTable resolver = null)
         {
             _elapsed = 0f;
+            if (spawnEnemies) spawner.Initialize(resolver);
         }
 
         public override void Dispose() { }
@@ -192,7 +196,9 @@ namespace ProjectWallE.GameLoop
             if (_elapsed >= duration)
             {
                 Complete();
+                return;
             }
+            if (spawnEnemies) spawner.Tick(deltaTime);
         }
     }
 
@@ -200,8 +206,6 @@ namespace ProjectWallE.GameLoop
     [SerializableSelectorName("Go To Position", "Player")]
     public class GoToPositionObjective : BaseLevelObjective
     {
-
-
         [Header("Target")]
         public ExposedReference<ObjectiveGameMarker> targetMarker;
         [SerializeField, Min(1f)] private float radius = 5f;

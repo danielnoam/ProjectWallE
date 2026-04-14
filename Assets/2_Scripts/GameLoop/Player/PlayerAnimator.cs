@@ -13,10 +13,18 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField] private AnimatorStateField switchToRobot;
         [SerializeField] private AnimatorStateField shootGun;
 
-        [Header("Arm IK")]
-        [SerializeField] private float shoulderOffset = 0.7f;
-        [SerializeField] private float targetDistance = 1.5f;
+        [Header("IK")]
+        [SerializeField] private float armTargetShoulderOffset = 0.7f;
+        [SerializeField] private float armTargetDistance = 1.5f;
+        [SerializeField] private float headTargetDistance = 1.5f;
         [SerializeField] private float transitionSpeed = 3f;
+        
+        [Header("Arm Shoot Shake")]
+        [SerializeField] private float shakeAmount = 0.05f;
+        [SerializeField] private float shakeDecay = 5f;
+        [SerializeField] private float maxShake = 0.15f;
+        [SerializeField] private Vector3 shakeDirection = Vector3.up;
+        [SerializeField, Range(0f, 1f)] private float directionBias = 0.5f;
 
         [Header("References")]
         [SerializeField] private Rig rig;
@@ -26,26 +34,31 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField] private Transform shoulder;
         [SerializeField, AutoGetParent, HideInInspector] private PlayerManager player;
 
-        private Transform _ikTarget;
+        private Transform _armIkTarget;
+        private Transform _headIkTarget;
         private Camera _cam;
         private float _targetWeight = 1f;
+        private Vector3 _shakeOffset;
 
         private void OnValidate() => AutoGetSystem.Process(this);
 
         private void Awake()
         {
             _cam = Camera.main;
-            _ikTarget = new GameObject("ArmIK_Target").transform;
-            headAim.data.sourceObjects = new WeightedTransformArray { new WeightedTransform(_ikTarget, 1f) };
-            armIK.data.target = _ikTarget;
+            
+            _armIkTarget = new GameObject("PlayerArmIK_Target").transform;
+            armIK.data.target = _armIkTarget;
+            
+            _headIkTarget = new GameObject("PlayerHeadIK_Target").transform;
+            headAim.data.sourceObjects = new WeightedTransformArray { new WeightedTransform(_headIkTarget, 1f) };
         }
 
         private void OnEnable()
         {
             if (player)
             {
-                player.Shooter.OnAttack1 += ShooterOnOnAttack1;
-                player.Shooter.OnAttack2 += ShooterOnOnAttack1;
+                player.Shooter.OnAttack1 += OnAttack1;
+                player.Shooter.OnAttack2 += OnAttack1;
                 player.OnControllerChanged += OnControllerChanged;
             }
         }
@@ -54,30 +67,46 @@ namespace ProjectWallE.GameLoop.Player
         {
             if (player)
             {
-                player.Shooter.OnAttack1 -= ShooterOnOnAttack1;
-                player.Shooter.OnAttack2 -= ShooterOnOnAttack1;
+                player.Shooter.OnAttack1 -= OnAttack1;
+                player.Shooter.OnAttack2 -= OnAttack1;
                 player.OnControllerChanged -= OnControllerChanged;
             }
         }
 
         private void LateUpdate()
         {
-            UpdateIKTarget();
+            UpdateRigWeight();
+            UpdateArmIK();
+            UpdateHeadIK();
+            ApplyShake();
         }
 
-        private void UpdateIKTarget()
+        private void UpdateRigWeight()
         {
-            if (!_cam) return;
-            
             rig.weight = Mathf.MoveTowards(rig.weight, _targetWeight, transitionSpeed * Time.deltaTime);
-            
-            if (rig.weight > 0.01f)
-            {
-                float dot = Vector3.Dot(torso.forward, _cam.transform.forward);
-                float dynamicOffset = Mathf.Lerp(shoulderOffset * 3f, shoulderOffset, (dot + 1f) * 0.5f);
-                _ikTarget.position = shoulder.position + _cam.transform.forward * targetDistance + torso.right * dynamicOffset;
-                _ikTarget.rotation = _cam.transform.rotation * Quaternion.Euler(0f, -90f, 0f);
-            }
+        }
+
+        private void UpdateArmIK()
+        {
+            if (!_cam || rig.weight <= 0.01f) return;
+
+            float dot = Vector3.Dot(torso.forward, _cam.transform.forward);
+            float dynamicOffset = Mathf.Lerp(armTargetShoulderOffset * 3f, armTargetShoulderOffset, (dot + 1f) * 0.5f);
+            _armIkTarget.position = shoulder.position + _cam.transform.forward * armTargetDistance + torso.right * dynamicOffset;
+            _armIkTarget.rotation = _cam.transform.rotation * Quaternion.Euler(0f, -90f, 0f);
+        }
+
+        private void UpdateHeadIK()
+        {
+            if (!_cam || rig.weight <= 0.01f) return;
+
+            _headIkTarget.position = _cam.transform.position + _cam.transform.forward * headTargetDistance;
+        }
+
+        private void ApplyShake()
+        {
+            _shakeOffset = Vector3.Lerp(_shakeOffset, Vector3.zero, shakeDecay * Time.deltaTime);
+            _armIkTarget.position += _shakeOffset;
         }
 
         private void OnControllerChanged(PlayerControllerType type)
@@ -95,9 +124,12 @@ namespace ProjectWallE.GameLoop.Player
             }
         }
         
-        private void ShooterOnOnAttack1()
+        private void OnAttack1()
         {
             shootGun.Play();
+    
+            Vector3 biased = Vector3.Lerp(UnityEngine.Random.insideUnitSphere, shakeDirection.normalized, directionBias);
+            _shakeOffset = Vector3.ClampMagnitude(_shakeOffset + biased * shakeAmount, maxShake);
         }
         
         public void ToggleArmIK(bool enable)

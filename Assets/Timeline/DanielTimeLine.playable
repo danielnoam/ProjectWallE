@@ -143,6 +143,7 @@ MonoBehaviour:
   m_Time: 9.366666666666667
   objectives:
   - rid: 126016365803864150
+  - rid: 126016452965957720
   references:
     version: 2
     RefIds:
@@ -153,6 +154,22 @@ MonoBehaviour:
           exposedName: 990340cabb49e544bbc6f8d37dd74de1
           defaultValue: {fileID: 0}
         radius: 5
+    - rid: 126016452965957720
+      type: {class: KillEnemiesObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        enemyPrefab: {fileID: 0}
+        killCount: 10
+        spawnEnemies: 0
+        spawner:
+          spawnInterval: 3
+          enemiesPerWave: 3
+          enemyType: 0
+          enemies:
+            internalItems: []
+          spawnPosition: 0
+          spawnPoint:
+            exposedName: 
+            defaultValue: {fileID: 0}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0

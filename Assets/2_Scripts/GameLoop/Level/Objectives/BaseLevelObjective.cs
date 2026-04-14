@@ -21,14 +21,35 @@ namespace ProjectWallE.GameLoop
         }
 
         protected abstract void OnInitialize(IExposedPropertyTable resolver = null);
-        public abstract void Dispose();
-        public virtual void Tick(float deltaTime) { }
-
+        
         protected void Complete()
         {
             if (_isCompleted) return;
             _isCompleted = true;
             _onComplete?.Invoke();
         }
+        
+        
+        public abstract void Dispose();
+
+        public virtual void Tick(float deltaTime)
+        {
+            
+        }
+        
+        // clones the objective so runtime fields will be clean per reference
+        public BaseLevelObjective Clone() 
+        {
+            return (BaseLevelObjective)MemberwiseClone();
+        }
+        
+        public void ForceComplete()
+        {
+            Complete();
+        }
+
+
+
+
     }
 }
