@@ -139,5 +139,49 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8448292002262912561}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4704131213688510150}
   m_SourcePrefab: {fileID: 100100000, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
+--- !u!23 &608168846447058131 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -2862484433118043519, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
+  m_PrefabInstance: {fileID: 5780035616977092178}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6699005579576951555 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
+  m_PrefabInstance: {fileID: 5780035616977092178}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8448292002262912561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6699005579576951555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aed10b6dc779cd14ebf2c35ac914320f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::HologramGlitch
+  rend: {fileID: 608168846447058131}
+--- !u!114 &4704131213688510150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6699005579576951555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d18db5e15904b80ae734722ddd0e851, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.GhostStructure
+  canBuildColor: {fileID: 11400000, guid: 046258290a5e9d04f99f84b915c4387c, type: 2}
+  blockBuildColor: {fileID: 11400000, guid: 0d466add85d7d5346a070321146708c6, type: 2}
+  material: {fileID: 2100000, guid: 75bc54c4b0ad3614184c59931e286a0a, type: 2}

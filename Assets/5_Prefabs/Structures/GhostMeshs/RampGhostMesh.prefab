@@ -18,7 +18,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2c04c3aa83b1d3744a99a73b50984aab, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.72
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2c04c3aa83b1d3744a99a73b50984aab, type: 3}
       propertyPath: m_LocalRotation.w
@@ -103,5 +103,49 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2c04c3aa83b1d3744a99a73b50984aab, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2474813109294397732}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2c04c3aa83b1d3744a99a73b50984aab, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -4553558319297828399}
   m_SourcePrefab: {fileID: 100100000, guid: 2c04c3aa83b1d3744a99a73b50984aab, type: 3}
+--- !u!23 &6678956001082796863 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 2354123271067373209, guid: 2c04c3aa83b1d3744a99a73b50984aab, type: 3}
+  m_PrefabInstance: {fileID: 8943002880448882086}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8131957681905621239 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 2c04c3aa83b1d3744a99a73b50984aab, type: 3}
+  m_PrefabInstance: {fileID: 8943002880448882086}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2474813109294397732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8131957681905621239}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aed10b6dc779cd14ebf2c35ac914320f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::HologramGlitch
+  rend: {fileID: 6678956001082796863}
+--- !u!114 &-4553558319297828399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8131957681905621239}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d18db5e15904b80ae734722ddd0e851, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.GhostStructure
+  canBuildColor: {fileID: 11400000, guid: 046258290a5e9d04f99f84b915c4387c, type: 2}
+  blockBuildColor: {fileID: 11400000, guid: 0d466add85d7d5346a070321146708c6, type: 2}
+  material: {fileID: 2100000, guid: 75bc54c4b0ad3614184c59931e286a0a, type: 2}

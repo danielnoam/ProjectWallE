@@ -1233,6 +1233,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStructureBuilder
   buildRange: 100
+  downBuildRange: 10
+  maxBuildAngle: 45
   buildableLayerMask:
     serializedVersion: 2
     m_Bits: 137
@@ -1465,7 +1467,7 @@ MonoBehaviour:
     assigned: 1
   armTargetShoulderOffset: 0.7
   armTargetDistance: 1.5
-  headTargetDistance: 1.5
+  headTargetDistance: 55
   transitionSpeed: 3
   shakeAmount: 0.5
   shakeDecay: 1

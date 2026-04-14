@@ -27,8 +27,8 @@ namespace ProjectWallE.GameLoop
         private readonly List<Generator> _generators = new List<Generator>();
         private readonly List<Turret> _turrets = new List<Turret>();
         private readonly List<Base> _bases = new List<Base>();
-        private readonly Dictionary<Structure, GameObject> _ghostInstances = new();
-        private GameObject _activeGhost;
+        private readonly Dictionary<Structure, GhostStructure> _ghostInstances = new();
+        private GhostStructure _activeGhost;
 
         private void Awake()
         {
@@ -70,35 +70,43 @@ namespace ProjectWallE.GameLoop
         {
             foreach (var structure in allStructures)
             {
-                GameObject ghostPrefab = structure.StructureUIData.GhostPrefab;
+                var ghostPrefab = structure.StructureUIData.GhostPrefab;
                 if (!ghostPrefab) continue;
 
-                GameObject ghost = Instantiate(ghostPrefab, _ghostHolder);
-                ghost.SetActive(false);
+                var ghost = Instantiate(ghostPrefab, _ghostHolder);
+                ghost.gameObject.SetActive(false);
                 _ghostInstances[structure] = ghost;
             }
         }
         
-        public GameObject ShowGhost(Structure structure)
+        public void SetGhost(Structure structure)
         {
-            if (_activeGhost) _activeGhost.SetActive(false);
+            if (_activeGhost) _activeGhost.gameObject.SetActive(false);
 
-            if (!_ghostInstances.TryGetValue(structure, out GameObject ghost))
+            if (!_ghostInstances.TryGetValue(structure, out GhostStructure ghost))
             {
                 _activeGhost = null;
-                return null;
+                return;
             }
-
-            ghost.SetActive(true);
+            
             _activeGhost = ghost;
-            return ghost;
         }
 
         public void HideGhost()
         {
             if (!_activeGhost) return;
-            _activeGhost.SetActive(false);
+            
+            _activeGhost.gameObject.SetActive(false);
             _activeGhost = null;
+        }
+        
+        public void ShowGhost(Vector3 position, Quaternion rotation, bool canBuild)
+        {
+            if (!_activeGhost) return;
+    
+            _activeGhost.gameObject.SetActive(true);
+            _activeGhost.transform.SetPositionAndRotation(position, rotation);
+            _activeGhost.SetCanBuild(canBuild);
         }
 
         #endregion
