@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using DNExtensions.Systems.Shapes;
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.AutoGet;
-using DNExtensions.Utilities.CustomFields;
 using ProjectWallE.GameLoop;
 using TMPro;
 using UnityEngine;
@@ -17,15 +15,14 @@ namespace ProjectWallE.UI
         [Header("Game Status")]
         [SerializeField] private TextMeshProUGUI currentResourcesText;
         [SerializeField] private TextMeshProUGUI structuresText;
+
+        [Header("Objectives")]
+        [SerializeField] private GameObject objectivesHolder;
         [SerializeField] private TextMeshProUGUI objectivesText;
         
         [Header("Player Status")]
-        [SerializeField] private OptionalField<string> showFuelPrefix = new OptionalField<string>("Fuel: ", true);
-        [SerializeField] private Image fuelBar;
-        [SerializeField] private TextMeshProUGUI fuelText;
-        [SerializeField] private OptionalField<string> showHealthPrefix = new OptionalField<string>("Health: ", true);
-        [SerializeField] private Image healthBar;
-        [SerializeField] private TextMeshProUGUI healthText;
+        [SerializeField] private FillBar fuelBar;
+        [SerializeField] private FillBar healthBar;
         [SerializeField] private Image basicAttackIcon;
         [SerializeField] private Image specialAttackIcon;
         
@@ -73,8 +70,8 @@ namespace ProjectWallE.UI
                 
                 radarSystem.worldCenter.SetTransform(player.transform);
                 if (Camera.main) radarSystem.rotationTarget.Value = Camera.main.transform;
-                UpdateFuelBar(100,100);
-                UpdateHealthBar(100, 100);
+                fuelBar.SetImmediate(100, 100);
+                healthBar.SetImmediate(100, 100);
             }
         }
         
@@ -130,37 +127,40 @@ namespace ProjectWallE.UI
         
         private void ResetTexts()
         {
-            objectivesText.text = ""; 
-            currentResourcesText.text = "Resources:"; 
-            structuresText.text = "Structures:";
+            currentResourcesText.text = "Resources: 0"; 
+            currentResourcesText.gameObject.SetActive(false);
+            structuresText.text = "Structures: None";
             structuresText.gameObject.SetActive(false);
+            objectivesHolder?.SetActive(false);
         }
         
         private void OnLevelStarted()
         {
-            currentResourcesText.color = currentResourcesText.color.SetAlpha(1f);
+            currentResourcesText.gameObject.SetActive(true);
         }
 
         private void OnLevelFailed()
         {
             _activeObjectives = null;
-            UpdateObjectiveDisplay("Fail");
+            objectivesHolder?.SetActive(false);
         }
 
         private void OnLevelCompleted()
         {
             _activeObjectives = null;
-            UpdateObjectiveDisplay("Success");  
+            objectivesText?.gameObject.SetActive(false);
         }
 
         private void OnObjectivesAdded(List<BaseLevelObjective> objectives)
         {
             _activeObjectives = objectives;
+            objectivesHolder?.SetActive(true);
         }
 
         private void OnObjectivesCompleted()
         {
             _activeObjectives = null;
+            objectivesHolder?.SetActive(false);
         }
 
         private void OnControllerChanged(PlayerControllerType controllerType)
@@ -168,13 +168,9 @@ namespace ProjectWallE.UI
             switch (controllerType)
             {
                 case PlayerControllerType.Robot:
-                    fuelText.color = fuelText.color.SetAlpha(0.2f);
-                    fuelBar.color = fuelBar.color.SetAlpha(0.2f);
                     crosshair.gameObject.SetActive(true);
                     break;
                 case PlayerControllerType.Car:
-                    fuelText.color = fuelText.color.SetAlpha(1f);
-                    fuelBar.color = fuelBar.color.SetAlpha(1f);
                     crosshair.gameObject.SetActive(false);
                     break;
                 default:
@@ -188,23 +184,20 @@ namespace ProjectWallE.UI
             {
                 UpdateObjectivesDisplay();
             }
-            else
-            {
-                UpdateObjectiveDisplay("No Objectives");
-            }
         }
 
         private void UpdateObjectivesDisplay()
         {
             _objectiveBuilder.Clear();
-            _objectiveBuilder.AppendLine("Objectives:");
 
             foreach (var objective in _activeObjectives)
             {
-                _objectiveBuilder.AppendLine($"○ {objective.Description} - {objective.ProgressText}");
+                _objectiveBuilder.AppendLine(objective.IsCompleted
+                    ? $"√ {objective.Description}"
+                    : $"○ {objective.Description} - {objective.ProgressText}");
             }
 
-            UpdateObjectiveDisplay(_objectiveBuilder.ToString());
+            if (objectivesText) objectivesText.text = _objectiveBuilder.ToString();
         }
 
         private void UpdateResourcesDisplay(int currentResources)
@@ -212,29 +205,17 @@ namespace ProjectWallE.UI
             if (!currentResourcesText) return;
             currentResourcesText.text = $"Resources: {currentResources}";
         }
-
-        private void UpdateObjectiveDisplay(string objectives)
-        {
-            if (!objectivesText) return;
-            objectivesText.text = objectives;
-        }
+        
 
         private void UpdateFuelBar(float currentFuel, float maxFuel)
         {
-            if (fuelBar) fuelBar.fillAmount = currentFuel / maxFuel;
-            if (fuelText)
-            {
-                fuelText.text = showFuelPrefix.isSet ? $"{showFuelPrefix.Value}{currentFuel:N0}/{maxFuel}" : $"{currentFuel:N0}/{maxFuel}";
-            }
+            if (fuelBar) fuelBar.SetValue(currentFuel, maxFuel);
         }
+
 
         private void UpdateHealthBar(float currentHealth, float maxHealth)
         {
-            if (healthBar) healthBar.fillAmount = currentHealth / maxHealth;
-            if (healthText)
-            {
-                healthText.text = showHealthPrefix.isSet ? $"{showHealthPrefix.Value}{currentHealth:N0}/{maxHealth}" : $"{currentHealth:N0}/{maxHealth}";
-            }
+            if (healthBar) healthBar.SetValue(currentHealth, maxHealth);
         }
         
         private void OnSpecialCooldownUpdated(float currentCooldown, float maxCooldown)

@@ -215,7 +215,7 @@ namespace ProjectWallE.GameLoop
         private float _currentDistance;
         
         public override string Description => "Go to the target area";
-        public override string ProgressText => IsCompleted ? "Complete" : $"{_currentDistance:F1}m away";
+        public override string ProgressText => IsCompleted ? "Complete" : $"{_currentDistance:F1}m";
 
         protected override void OnInitialize(IExposedPropertyTable resolver = null)
         {
@@ -237,6 +237,7 @@ namespace ProjectWallE.GameLoop
             _currentDistance = Vector3.Distance(_player.position, _marker.transform.position);
             if (_currentDistance <= radius)
             {
+                _marker?.OnObjectiveCompleted();
                 Complete();
             }
         }

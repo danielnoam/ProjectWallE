@@ -175,6 +175,7 @@ namespace ProjectWallE.UI
             canvasGroup.alpha = 0f;
             canvasGroup.blocksRaycasts = false;
             canvasGroup.interactable = false;
+            selectedItemText.text = "";
             _isOpen = false;
         }
     }
