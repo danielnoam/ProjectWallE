@@ -11,13 +11,11 @@ namespace _2_Scripts
 
         [HideInInspector] public bool isGroundedExact;
         public RaycastHit exactGroundHit;
-
         [HideInInspector] public bool isGroundedExtended;
         public RaycastHit extendedGroundHit;
-        
         [HideInInspector] public LayerMask hitLayer;
-
         [HideInInspector] public bool isMoving;
+        [HideInInspector] public float normalForceMag = 0f;
 
         public void Initialize()
         {

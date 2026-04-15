@@ -32,9 +32,12 @@ namespace ProjectWallE
         private float maxSlippingSpeed = 15f;
         [SerializeField, Range(0,1), Tooltip("the minimum factor which is applied after reaching maxSlippingSpeed")] 
         private float minGripAtMaxSlip = 0.5f;
-        [Tooltip("the range of the slope angle where the grip is factored by minGripAtMaxSlopeAngle according to the range")]
-        [SerializeField, MinMaxRange(0, 90)] private RangedFloat gripSlopeAngleRange;
-        [SerializeField, Range(0, 1)] private float minGripAtMaxSlopeAngle = 0.3f;
+        [Tooltip("the range of the normal force on the tire where we dont apply the modifier " +
+                 "(this is a normalized value where 1 is the force of gravity divided by the wheel count")]
+        [SerializeField, MinMaxRange(0, 2f)] private RangedFloat unaffectedNormalForceRange;
+        [Tooltip("the factor we apply to the grip according to the unaffectedNormalForceRange " +
+                 "(minimum value to 1 when we are below the range and 1 to max value when we are above the max range)")]
+        [SerializeField, MinMaxRange(0,1.5f)] RangedFloat gripByNormalForceFactor;
 
         [Header("Takeoff / partial-ground tuning")]
         [SerializeField] private float minGripWhenPartialGround = 0.15f;
@@ -86,8 +89,9 @@ namespace ProjectWallE
         public float MinSlippingSpeed => minSlippingSpeed;
         public float MaxSlippingSpeed => maxSlippingSpeed;
         public float MinGripAtMaxSlip => minGripAtMaxSlip;
-        public RangedFloat GripSlopeAngleRange => gripSlopeAngleRange;
-        public float MinGripAtMaxSlopeAngle => minGripAtMaxSlopeAngle;
+        public RangedFloat GripByNormalForceFactor => gripByNormalForceFactor;
+        public RangedFloat UnaffectedNormalForceRange => unaffectedNormalForceRange;
+        
 
         public float MinGripWhenPartialGround => minGripWhenPartialGround;
         public float PartialGroundGripPower => partialGroundGripPower;

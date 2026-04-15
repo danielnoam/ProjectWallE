@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DNExtensions.Utilities;
 using DNExtensions.Utilities.Inline;
 using ProjectWallE;
 using UnityEngine;
@@ -26,7 +27,7 @@ namespace _2_Scripts
         [SerializeField] private Vector3 centerOfMassOffset;
         [Space(10)]
         [SerializeField] private CarControllerVisuals visuals;
-
+        
         [HideInInspector] [SerializeField] private CarBoost carBoost;
 
         private CarInput _carInput;
@@ -131,6 +132,7 @@ namespace _2_Scripts
                     float suspensionForce =
                         (-offset * settings.SuspensionStrength) -
                         (velAlongSpring * settings.SuspensionDamping);
+                    tire.normalForceMag = suspensionForce;
 
                     _playerRb.AddForceAtPosition(
                         springDir * (suspensionForce * _playerRb.mass),
@@ -142,6 +144,7 @@ namespace _2_Scripts
                 else
                 {
                     visuals.UpdateTireSuspensionVisuals(false, i, 0f);
+                    tire.normalForceMag = 0f;
                 }
 
                 i++;
@@ -201,13 +204,7 @@ namespace _2_Scripts
             float slippingSpeed = Vector3.Dot(transform.right, planarVelocity);
             float absSlipSpeed = Mathf.Abs(slippingSpeed);
             float t1 = Mathf.InverseLerp(settings.MinSlippingSpeed, settings.MaxSlippingSpeed, absSlipSpeed);
-            float speedSlipFactor = Mathf.Lerp(1f, settings.MinGripAtMaxSlip, t1);
-            
-            float planeAngle = Vector3.Angle(planeNormal, Vector3.up);
-            float t2 = Mathf.InverseLerp(settings.GripSlopeAngleRange.minValue, settings.GripSlopeAngleRange.maxValue, planeAngle);
-            float slopeSlipFactor = IsOnSpeedyLayer() ? 1f: Mathf.Lerp(1, settings.MinGripAtMaxSlopeAngle, t2);
-            
-            _slippingFactor = Mathf.Min(speedSlipFactor, slopeSlipFactor);
+             _slippingFactor = Mathf.Lerp(1f, settings.MinGripAtMaxSlip, t1);
         }
 
         private void ApplyFrictionPerTiresType(Tire[] tires, AnimationCurve frictionCurve)
@@ -258,7 +255,29 @@ namespace _2_Scripts
                 1f);
 
             float gripFactor = frictionCurve.Evaluate(Mathf.Abs(slippingAmount));
+            gripFactor = Mathf.Clamp(gripFactor * GetNormalForceGripFactor(tire), frictionCurve.Evaluate(1f), 1);
             return gripFactor;
+        }
+
+        private float GetNormalForceGripFactor(Tire tire)
+        {
+            float normalizedNormalForce = tire.normalForceMag / settings.GravityStrength * _allTires.Count;
+            float factor = 1f;
+            
+            if (settings.UnaffectedNormalForceRange.Contains(normalizedNormalForce))
+                factor = 1f;
+            else if (normalizedNormalForce < settings.UnaffectedNormalForceRange.minValue)
+            {
+                float t = Mathf.InverseLerp(0, settings.UnaffectedNormalForceRange.minValue, normalizedNormalForce);
+                factor = Mathf.Lerp(settings.GripByNormalForceFactor.minValue, 1f, t);
+            }
+            else if (normalizedNormalForce > settings.UnaffectedNormalForceRange.maxValue)
+            {
+                float t = Mathf.InverseLerp(settings.UnaffectedNormalForceRange.maxValue, 2f, normalizedNormalForce);
+                factor = Mathf.Lerp(1f, settings.GripByNormalForceFactor.maxValue, t);
+            }
+            Debug.Log(factor);
+            return factor;
         }
 
         #endregion

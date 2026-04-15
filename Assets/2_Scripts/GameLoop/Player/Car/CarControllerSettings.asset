@@ -50,7 +50,7 @@ MonoBehaviour:
       outWeight: 0.095829636
     - serializedVersion: 3
       time: 1
-      value: 0.040636618
+      value: 0.027330954
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -92,7 +92,7 @@ MonoBehaviour:
       outWeight: 0.095829636
     - serializedVersion: 3
       time: 1
-      value: 0.04001215
+      value: 0.027330954
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -105,14 +105,16 @@ MonoBehaviour:
   handBrakeGrip: 0.03
   handbrakeBlendIn: 12
   handbrakeBlendOut: 10
-  minLateralFrictionAccel: 6
-  minSlippingSpeed: 6
+  minLateralFrictionAccel: 10
+  minSlippingSpeed: 8
   maxSlippingSpeed: 20
   minGripAtMaxSlip: 0.3
-  gripSlopeAngleRange:
-    minValue: 30
-    maxValue: 80
-  minGripAtMaxSlopeAngle: 0.3
+  unaffectedNormalForceRange:
+    minValue: 0.7
+    maxValue: 1.2
+  gripByNormalForceFactor:
+    minValue: 0.21074381
+    maxValue: 1
   minGripWhenPartialGround: 0.1
   partialGroundGripPower: 2
   gravityStrength: 15
