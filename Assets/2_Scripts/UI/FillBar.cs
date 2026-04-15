@@ -50,7 +50,7 @@ namespace ProjectWallE.UI
             trailFill.color = isDrain ? drainColor : fillColor;
             UpdateText(current, max);
 
-            if (valueChangeDuration <= 0 && trailChangeDuration <= 0)
+            if (valueChangeDuration <= 0 && trailChangeDuration <= 0 || !isDrain)
             {
                 barFill.fillAmount = targetFill;
                 trailFill.fillAmount = targetFill;
@@ -91,7 +91,7 @@ namespace ProjectWallE.UI
         private void UpdateText(float current, float max)
         {
             if (!valueText) return;
-            valueText.text = prefix.isSet ? $"{prefix.Value}{current:N0}/{max:N0}" : $"{current:N0}/{max:N0}";
+            valueText.text = prefix.isSet ? $"{prefix.Value}{current:N0} / {max:N0}" : $"{current:N0} / {max:N0}";
         }
     }
 }

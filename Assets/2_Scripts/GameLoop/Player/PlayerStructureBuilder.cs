@@ -145,7 +145,7 @@ namespace ProjectWallE.GameLoop.Player
         private void OpenContextMenu()
         {
             _menuOpen = true;
-            SetGameTimeScale(0f);
+            SetGameTimeScale(0.05f);
             RefreshOpenMenu();
         }
 
@@ -320,7 +320,7 @@ namespace ProjectWallE.GameLoop.Player
             if (Mathf.Approximately(Time.timeScale, timeScale)) return;
             if (_timeSequence.isAlive) _timeSequence.Stop();
 
-            var easeToUse = timeScale > 0f ? Ease.OutBack : Ease.Linear;
+            var easeToUse = timeScale > 0.05f ? Ease.OutBack : Ease.Linear;
             
             _timeSequence = Sequence.Create(useUnscaledTime: true)
                 .Group(Tween.GlobalTimeScale(timeScale, 0.5f, easeToUse));

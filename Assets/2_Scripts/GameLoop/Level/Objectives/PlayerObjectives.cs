@@ -214,7 +214,7 @@ namespace ProjectWallE.GameLoop
         private Transform _player;
         private float _currentDistance;
         
-        public override string Description => "Go to the target area";
+        public override string Description => "Go to target";
         public override string ProgressText => IsCompleted ? "Complete" : $"{_currentDistance:F1}m";
 
         protected override void OnInitialize(IExposedPropertyTable resolver = null)

@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using DNExtensions.Utilities;
 using DNExtensions.Utilities.AutoGet;
 using ProjectWallE.GameLoop;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace ProjectWallE.UI
 {
@@ -23,8 +21,8 @@ namespace ProjectWallE.UI
         [Header("Player Status")]
         [SerializeField] private FillBar fuelBar;
         [SerializeField] private FillBar healthBar;
-        [SerializeField] private Image basicAttackIcon;
-        [SerializeField] private Image specialAttackIcon;
+        [SerializeField] private CooldownIcon basicAttackIcon;
+        [SerializeField] private CooldownIcon specialAttackIcon;
         
         [Header("References")] 
         [SerializeField] private GameObject crosshair;
@@ -50,7 +48,6 @@ namespace ProjectWallE.UI
             StructureManager.OnStructureCreated += UpdateStructuresText;
             StructureManager.OnStructureDestroyed += UpdateStructuresText;
             LevelManager.OnLevelInitializing += ResetTexts;
-            LevelManager.OnLevelStarted += OnLevelStarted;
             LevelManager.OnLeveTimeLineUpdated += OnLeveTimeLineUpdated;
             LevelManager.OnLevelCompleted += OnLevelCompleted;
             LevelManager.OnLevelFailed += OnLevelFailed;
@@ -83,7 +80,6 @@ namespace ProjectWallE.UI
             StructureManager.OnStructureCreated -= UpdateStructuresText;
             StructureManager.OnStructureDestroyed -= UpdateStructuresText;
             LevelManager.OnLevelInitializing -= ResetTexts;
-            LevelManager.OnLevelStarted -= OnLevelStarted;
             LevelManager.OnLeveTimeLineUpdated -= OnLeveTimeLineUpdated;
             LevelManager.OnLevelCompleted -= OnLevelCompleted;
             LevelManager.OnLevelFailed -= OnLevelFailed;
@@ -120,24 +116,19 @@ namespace ProjectWallE.UI
 
         private void UpdateStructuresText(StructuresData data)
         {
-            structuresText.text = $"Bases - {data.BasesCount}" +
-                                  $"\nTurrets - {data.TurretsCount}" +
-                                  $"\nGenerators - {data.GeneratorsCount}";
+            structuresText.text = $"Bases: {data.BasesCount}" +
+                                  $"\nTurrets: {data.TurretsCount}" +
+                                  $"\nGenerators: {data.GeneratorsCount}";
         }
         
         private void ResetTexts()
         {
             currentResourcesText.text = "Resources: 0"; 
-            currentResourcesText.gameObject.SetActive(false);
             structuresText.text = "Structures: None";
             structuresText.gameObject.SetActive(false);
             objectivesHolder?.SetActive(false);
         }
         
-        private void OnLevelStarted()
-        {
-            currentResourcesText.gameObject.SetActive(true);
-        }
 
         private void OnLevelFailed()
         {
@@ -177,6 +168,16 @@ namespace ProjectWallE.UI
                     throw new ArgumentOutOfRangeException(nameof(controllerType), controllerType, null);
             }
         }
+        
+        private void OnBasicCooldownUpdated(float currentCooldown, float maxCooldown)
+        {
+            if (basicAttackIcon) basicAttackIcon.UpdateCooldown(currentCooldown, maxCooldown);
+        }
+
+        private void OnSpecialCooldownUpdated(float currentCooldown, float maxCooldown)
+        {
+            if (specialAttackIcon) specialAttackIcon.UpdateCooldown(currentCooldown, maxCooldown);
+        }
 
         private void OnLeveTimeLineUpdated(float timeRemaining)
         {
@@ -212,26 +213,9 @@ namespace ProjectWallE.UI
             if (fuelBar) fuelBar.SetValue(currentFuel, maxFuel);
         }
 
-
         private void UpdateHealthBar(float currentHealth, float maxHealth)
         {
             if (healthBar) healthBar.SetValue(currentHealth, maxHealth);
-        }
-        
-        private void OnSpecialCooldownUpdated(float currentCooldown, float maxCooldown)
-        {
-            if (!specialAttackIcon) return;
-            
-            var normalizedCooldown = 1f - (currentCooldown / maxCooldown);
-            specialAttackIcon.color = specialAttackIcon.color.SetAlpha(normalizedCooldown);
-        }
-
-        private void OnBasicCooldownUpdated(float currentCooldown, float maxCooldown)
-        {
-            if (!basicAttackIcon) return;
-            
-            var normalizedCooldown = 1f - (currentCooldown / maxCooldown);
-            basicAttackIcon.color = basicAttackIcon.color.SetAlpha(normalizedCooldown);
         }
     }
 }

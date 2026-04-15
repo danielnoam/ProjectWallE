@@ -115,16 +115,31 @@ namespace ProjectWallE.GameLoop.Player
             if (_basicCooldown > 0)
             {
                 _basicCooldown -= Time.deltaTime;
-                OnBasicCooldownUpdated?.Invoke(_basicCooldown, basicFireRate);
+                if (_basicCooldown <= 0)
+                {
+                    _basicCooldown = 0;
+                    OnBasicCooldownUpdated?.Invoke(0, basicFireRate);
+                }
+                else
+                {
+                    OnBasicCooldownUpdated?.Invoke(_basicCooldown, basicFireRate);
+                }
             }
 
             if (_specialCooldown > 0)
             {
                 _specialCooldown -= Time.deltaTime;
-                OnSpecialCooldownUpdated?.Invoke(_specialCooldown, aoeFireRate);
+                if (_specialCooldown <= 0)
+                {
+                    _specialCooldown = 0;
+                    OnSpecialCooldownUpdated?.Invoke(0, aoeFireRate);
+                }
+                else
+                {
+                    OnSpecialCooldownUpdated?.Invoke(_specialCooldown, aoeFireRate);
+                }
             }
         }
-
         private void ShootBasic()
         {
             if (!basicProjectileData) return;

@@ -99,7 +99,7 @@ NavMeshAgent:
   m_Acceleration: 20
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 3
+  m_StoppingDistance: 4
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -181,7 +181,7 @@ MonoBehaviour:
     - rid: 6000861270941368436
       type: {class: SuicideAttack, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
-        attackRange: 5
+        attackRange: 6
         armedDuration: 2
         aoeRadius: 10
         damageRange:
