@@ -21,10 +21,10 @@ namespace ProjectWallE.UI
         
         [Header("Player Status")]
         [SerializeField] private OptionalField<string> showFuelPrefix = new OptionalField<string>("Fuel: ", true);
-        [SerializeField] private SDFRectangle fuelBar;
+        [SerializeField] private Image fuelBar;
         [SerializeField] private TextMeshProUGUI fuelText;
         [SerializeField] private OptionalField<string> showHealthPrefix = new OptionalField<string>("Health: ", true);
-        [SerializeField] private SDFRectangle healthBar;
+        [SerializeField] private Image healthBar;
         [SerializeField] private TextMeshProUGUI healthText;
         [SerializeField] private Image basicAttackIcon;
         [SerializeField] private Image specialAttackIcon;
@@ -64,6 +64,9 @@ namespace ProjectWallE.UI
             {
                 player.OnControllerChanged += OnControllerChanged;
                 player.OnHealthChanged += UpdateHealthBar;
+                player.StructureBuilder.ActionsMenuRequested += OnActionsMenuRequested;
+                player.StructureBuilder.BuildMenuRequested += OnBuildMenuRequested;
+                player.StructureBuilder.MenuCloseRequested += OnMenuCloseRequested;
                 player.CarController.CarBoost.OnFuelChange += UpdateFuelBar;
                 player.Shooter.OnBasicCooldownUpdated += OnBasicCooldownUpdated;
                 player.Shooter.OnSpecialCooldownUpdated += OnSpecialCooldownUpdated;
@@ -74,6 +77,8 @@ namespace ProjectWallE.UI
                 UpdateHealthBar(100, 100);
             }
         }
+        
+
 
         private void OnDisable()
         {
@@ -92,12 +97,30 @@ namespace ProjectWallE.UI
             {
                 player.OnControllerChanged -= OnControllerChanged;
                 player.OnHealthChanged -= UpdateHealthBar;
+                player.StructureBuilder.ActionsMenuRequested -= OnActionsMenuRequested;
+                player.StructureBuilder.BuildMenuRequested -= OnBuildMenuRequested;
+                player.StructureBuilder.MenuCloseRequested -= OnMenuCloseRequested;
                 player.CarController.CarBoost.OnFuelChange -= UpdateFuelBar;
                 player.Shooter.OnBasicCooldownUpdated -= OnBasicCooldownUpdated;
                 player.Shooter.OnSpecialCooldownUpdated -= OnSpecialCooldownUpdated;
             }
         }
+
+        private void OnActionsMenuRequested(Structure structure)
+        {
+            structuresText.gameObject.SetActive(true);
+        }
         
+        private void OnBuildMenuRequested(Structure[] structures)
+        {
+            structuresText.gameObject.SetActive(true);
+        }
+        
+        private void OnMenuCloseRequested()
+        {
+          structuresText.gameObject.SetActive(false);
+        }
+
         private void UpdateStructuresText(StructuresData data)
         {
             structuresText.text = $"Bases - {data.BasesCount}" +
@@ -108,8 +131,9 @@ namespace ProjectWallE.UI
         private void ResetTexts()
         {
             objectivesText.text = ""; 
-            currentResourcesText.text = ""; 
-            structuresText.text = "";
+            currentResourcesText.text = "Resources:"; 
+            structuresText.text = "Structures:";
+            structuresText.gameObject.SetActive(false);
         }
         
         private void OnLevelStarted()
@@ -144,13 +168,13 @@ namespace ProjectWallE.UI
             switch (controllerType)
             {
                 case PlayerControllerType.Robot:
-                    fuelBar.color = Color.black;
                     fuelText.color = fuelText.color.SetAlpha(0.2f);
+                    fuelBar.color = fuelBar.color.SetAlpha(0.2f);
                     crosshair.gameObject.SetActive(true);
                     break;
                 case PlayerControllerType.Car:
-                    fuelBar.color = Color.white;
                     fuelText.color = fuelText.color.SetAlpha(1f);
+                    fuelBar.color = fuelBar.color.SetAlpha(1f);
                     crosshair.gameObject.SetActive(false);
                     break;
                 default:
