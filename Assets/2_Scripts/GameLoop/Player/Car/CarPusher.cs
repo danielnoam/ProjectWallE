@@ -12,7 +12,7 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField] private float pushPower = 35f;
         [SerializeField] private float pushDamage = 15f;
         [SerializeField, Min(0f)] private float speedThreshold = 14f;
-        [SerializeField] private SOLayerMask enemyLayer;
+        [SerializeField] private LayerMask enemyLayer;
         [SerializeField] private CollisionRelay pushableCollider;
         [SerializeField, AutoGetParent, HideInInspector] private PlayerManager playerManager;
 
@@ -34,7 +34,7 @@ namespace ProjectWallE.GameLoop.Player
 
         private void OnColliderEntered(Collider other)
         {
-            if ((enemyLayer.Value & (1 << other.gameObject.layer)) == 0) return;
+            if ((enemyLayer & (1 << other.gameObject.layer)) == 0) return;
             
             var velocity = playerManager.Velocity.SetY(0f).magnitude;
             

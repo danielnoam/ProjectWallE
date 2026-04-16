@@ -27,6 +27,7 @@ namespace ProjectWallE.GameLoop
     public abstract class Enemy : MonoBehaviour, IDamageable, IPushable, IPoolable, IDeployable
     {
         public static event Action<Enemy> OnEnemyKilled;
+        public static event Action<IDamageable> OnEnemyDamaged;
         
         
         [Header("Settings")]
@@ -203,6 +204,7 @@ namespace ProjectWallE.GameLoop
         {
             _currentHealth -= damage;
             OnDamaged?.Invoke(damage);
+            OnEnemyDamaged?.Invoke(attacker);
 
             if (attacker != null && attacker != CurrentTarget && ShouldRetaliate(attacker))
             {

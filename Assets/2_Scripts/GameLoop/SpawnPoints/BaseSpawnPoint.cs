@@ -38,7 +38,7 @@ namespace ProjectWallE.GameLoop
         [Button(ButtonPlayMode.OnlyWhenNotPlaying)]
         private void AlignToGround()
         {
-            if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out RaycastHit hit, 10f))
+            if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out RaycastHit hit, 25f))
             {
                 transform.position = hit.point;
                 Vector3 projectedForward = Vector3.ProjectOnPlane(transform.forward, hit.normal).normalized;

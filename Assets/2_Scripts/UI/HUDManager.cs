@@ -25,7 +25,6 @@ namespace ProjectWallE.UI
         [SerializeField] private CooldownIcon specialAttackIcon;
         
         [Header("References")] 
-        [SerializeField] private GameObject crosshair;
         [SerializeField, AutoGetChildren] private RadarSystem radarSystem;
         [SerializeField, AutoGetScene] private PlayerManager player;
 
@@ -56,7 +55,6 @@ namespace ProjectWallE.UI
 
             if (player)
             {
-                player.OnControllerChanged += OnControllerChanged;
                 player.OnHealthChanged += UpdateHealthBar;
                 player.StructureBuilder.ActionsMenuRequested += OnActionsMenuRequested;
                 player.StructureBuilder.BuildMenuRequested += OnBuildMenuRequested;
@@ -88,7 +86,6 @@ namespace ProjectWallE.UI
 
             if (player)
             {
-                player.OnControllerChanged -= OnControllerChanged;
                 player.OnHealthChanged -= UpdateHealthBar;
                 player.StructureBuilder.ActionsMenuRequested -= OnActionsMenuRequested;
                 player.StructureBuilder.BuildMenuRequested -= OnBuildMenuRequested;
@@ -153,21 +150,7 @@ namespace ProjectWallE.UI
             _activeObjectives = null;
             objectivesHolder?.SetActive(false);
         }
-
-        private void OnControllerChanged(PlayerControllerType controllerType)
-        {
-            switch (controllerType)
-            {
-                case PlayerControllerType.Robot:
-                    crosshair.gameObject.SetActive(true);
-                    break;
-                case PlayerControllerType.Car:
-                    crosshair.gameObject.SetActive(false);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(controllerType), controllerType, null);
-            }
-        }
+        
         
         private void OnBasicCooldownUpdated(float currentCooldown, float maxCooldown)
         {

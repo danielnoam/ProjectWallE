@@ -10,8 +10,8 @@ namespace ProjectWallE.UI
         [SerializeField] private Image backgroundImage;
 
         private Color _normalColor = Color.white;
-        private Color _hoveredColor = Color.yellow;
-        private readonly Color _disabledColor = new Color(0.4f, 0.4f, 0.4f, 0.5f);
+        private Color _hoveredColor = Color.orange;
+        private readonly Color _disabledColor = new Color(0.4f, 0.4f, 0.4f, 1f);
         private bool _isHovered;
         private bool _isDisabled;
 

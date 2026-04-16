@@ -13,8 +13,7 @@ namespace ProjectWallE.UI
         
         [Header("Settings")]
         [SerializeField] private Vector3 offset;
-        [SerializeField] private SDFRectangle healthBar;
-        [SerializeField] private TextMeshProUGUI healthText;
+        [SerializeField] private FillBar healthBar;
         [SerializeField] private TextMeshProUGUI structureName;
         [SerializeField, AutoGetSelf, HideInInspector] private CanvasGroup canvasGroup;
 
@@ -53,9 +52,7 @@ namespace ProjectWallE.UI
                 structureName.text = _structure.Levels.Length > 1 ? $"{_structure.StructureUIData.Label} ({_structure.CurrentUpgradeLevel})" : $"{_structure.StructureUIData.Label}";
             }
             
-            healthText.text = _structure.CurrentHealth <= 0 ? "Broken" : $"{_structure.CurrentHealth:F0}/{_structure.MaxHealth}";
-            
-            healthBar.fillAmount = _structure.CurrentHealth / _structure.MaxHealth;
+            healthBar.SetValue(_structure.CurrentHealth, _structure.MaxHealth);
         }
         
         public void Show(Structure structure)
@@ -64,6 +61,7 @@ namespace ProjectWallE.UI
             
             _structure = structure;
             _structure.OnDamaged += OnDamaged;
+            healthBar.SetImmediate(_structure.CurrentHealth, _structure.MaxHealth);
             UpdateStatus();
             transform.position = _structure.TopPoint.Add(offset);
             canvasGroup.alpha = 1;

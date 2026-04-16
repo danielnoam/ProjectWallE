@@ -60,7 +60,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RadialMenuElement
   iconImage: {fileID: 4187996323131976286}
   backgroundImage: {fileID: 7768993527642360480}
-  elementInfo: 
 --- !u!1 &5088589237162829451
 GameObject:
   m_ObjectHideFlags: 0
@@ -96,7 +95,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -10, y: -10}
+  m_SizeDelta: {x: -30, y: -30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4622354225873883932
 CanvasRenderer:
@@ -202,9 +201,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -2135585597343286014, guid: 878e5a2da2e11eb4cb63a2d694b2464c, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1

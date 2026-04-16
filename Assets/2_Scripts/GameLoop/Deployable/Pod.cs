@@ -13,8 +13,8 @@ namespace ProjectWallE.GameLoop
     {
         [Header("Settings")]
         [SerializeField] private float arcHeight = 125f;
-        [SerializeField] private float rotationSpeed = 300f;
-        [SerializeField, MinMaxRange(0, 10)] private RangedFloat travelDuration = new RangedFloat(3, 5);
+        [SerializeField, MinMaxRange(0, 360)] private RangedFloat rotationSpeedRange = new RangedFloat(200, 300);
+        [SerializeField, MinMaxRange(0, 10)] private RangedFloat travelDurationRange = new RangedFloat(3, 5);
 
         [Header("Impact")]
         [SerializeField] private float pushRange = 10f;
@@ -45,7 +45,8 @@ namespace ProjectWallE.GameLoop
         {
             float elapsed = 0f;
             Vector3 previousPosition = _startPosition;
-            float duration = travelDuration.RandomValue;
+            float duration = travelDurationRange.RandomValue;
+            float rotationSpeed = rotationSpeedRange.RandomValue;
 
             while (elapsed < duration)
             {

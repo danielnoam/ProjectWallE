@@ -4,13 +4,11 @@ using DNExtensions.Utilities.AutoGet;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-
 namespace ProjectWallE.GameLoop.Player
 {
     public class PlayerShooter : MonoBehaviour
     {
         [Header("Settings")] 
-        [SerializeField] private Vector3 aimOffset = Vector3.zero;
         [SerializeField] private Transform firePoint;
         [SerializeField, AutoGetSelf, HideInInspector] private PlayerManager playerManager;
         [SerializeField, AutoGetSelf, HideInInspector] private PlayerManagerInput input;
@@ -26,23 +24,15 @@ namespace ProjectWallE.GameLoop.Player
         private bool _inMenu;
         private float _basicCooldown;
         private float _specialCooldown;
-        private Camera _mainCamera;
-
 
         public event Action OnAttack1;
         public event Action OnAttack2;
-
         public event Action<float, float> OnBasicCooldownUpdated;
         public event Action<float, float> OnSpecialCooldownUpdated;
 
         private void OnValidate()
         {
             AutoGetSystem.Process(this);
-        }
-
-        private void Awake()
-        {
-            _mainCamera = Camera.main;
         }
 
         private void OnEnable()
@@ -140,14 +130,15 @@ namespace ProjectWallE.GameLoop.Player
                 }
             }
         }
+
         private void ShootBasic()
         {
             if (!basicProjectileData) return;
             
             _basicCooldown = basicFireRate;
             Vector3 position = firePoint ? firePoint.position : transform.position;
-            Vector3 direction = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)).direction;
-            basicProjectileData?.Spawn(position, direction.Add(aimOffset), default, playerManager);
+            Vector3 direction = playerManager.Aimer.GetDirectionFrom(position);
+            basicProjectileData?.Spawn(position, direction, default, playerManager);
             OnAttack1?.Invoke();
             OnBasicCooldownUpdated?.Invoke(_basicCooldown, basicFireRate);
         }
@@ -158,8 +149,8 @@ namespace ProjectWallE.GameLoop.Player
             
             _specialCooldown = aoeFireRate;
             Vector3 position = firePoint ? firePoint.position : transform.position;
-            Vector3 direction = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)).direction;
-            specialProjectileData?.Spawn(position, direction.Add(aimOffset), default, playerManager);
+            Vector3 direction = playerManager.Aimer.GetDirectionFrom(position);
+            specialProjectileData?.Spawn(position, direction, default, playerManager);
             OnAttack2?.Invoke();
             OnSpecialCooldownUpdated?.Invoke(_specialCooldown, aoeFireRate);
         }

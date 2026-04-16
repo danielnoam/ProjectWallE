@@ -131,7 +131,7 @@ MonoBehaviour:
   - rid: 6000861155382526049
   - rid: 6000861155382526050
   retaliationStrategy:
-    rid: 6000861380839735453
+    rid: 126016499364397138
   aimingStrategy:
     rid: 6000861270941368434
   attackStrategy:
@@ -161,6 +161,11 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: 126016499364397138
+      type: {class: ConditionalRetaliation, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        loyalTo: 1
+        retaliateAgainst: 1
     - rid: 6000861155382526048
       type: {class: NearestBaseTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
@@ -219,9 +224,6 @@ MonoBehaviour:
       data:
         inRange: 0
         weight: 50
-    - rid: 6000861380839735453
-      type: {class: NoRetaliation, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
-      data: 
 --- !u!1 &7432827019393584379
 GameObject:
   m_ObjectHideFlags: 0

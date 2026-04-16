@@ -240,7 +240,9 @@ MonoBehaviour:
   pushPower: 35
   pushDamage: 15
   speedThreshold: 14
-  enemyLayer: {fileID: 11400000, guid: 2d607d7566d764844b32be4199186943, type: 2}
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 1280
   pushableCollider: {fileID: 7684777718141572874}
   playerManager: {fileID: 2369243402749369746}
 --- !u!1 &1286681627207206405
@@ -1127,6 +1129,7 @@ GameObject:
   - component: {fileID: 9192427627125825943}
   - component: {fileID: 12555983524666578}
   - component: {fileID: 2369243402749369746}
+  - component: {fileID: 8689997031806120504}
   - component: {fileID: 2737165017878004224}
   - component: {fileID: 8087270994143856722}
   m_Layer: 9
@@ -1220,6 +1223,24 @@ MonoBehaviour:
   robotController: {fileID: 1860573053989788979}
   structureBuilder: {fileID: 2737165017878004224}
   shooter: {fileID: 8087270994143856722}
+  aimer: {fileID: 8689997031806120504}
+--- !u!114 &8689997031806120504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5821086676760150823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da0eaeb2ecab45808076227ead415af8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.Player.PlayerAimer
+  minAimDistance: 4
+  maxAimDistance: 200
+  aimMask:
+    serializedVersion: 2
+    m_Bits: 3400
 --- !u!114 &2737165017878004224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1232,7 +1253,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c11d9fa34184d6d94982c447b5d9109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStructureBuilder
-  buildRange: 100
+  buildRange: 50
   downBuildRange: 10
   maxBuildAngle: 45
   buildableLayerMask:
@@ -1264,7 +1285,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2da3f03942bd4251800628fa5b420e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerShooter
-  aimOffset: {x: 0, y: 0, z: 0}
   firePoint: {fileID: 6599197979102317477}
   playerManager: {fileID: 2369243402749369746}
   input: {fileID: 12555983524666578}
@@ -1467,7 +1487,6 @@ MonoBehaviour:
     assigned: 1
   armTargetShoulderOffset: 0.7
   armTargetDistance: 1.5
-  headTargetDistance: 55
   transitionSpeed: 3
   shakeAmount: 0.5
   shakeDecay: 1

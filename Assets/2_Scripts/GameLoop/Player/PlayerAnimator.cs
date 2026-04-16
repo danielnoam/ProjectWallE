@@ -16,7 +16,6 @@ namespace ProjectWallE.GameLoop.Player
         [Header("IK")]
         [SerializeField] private float armTargetShoulderOffset = 0.7f;
         [SerializeField] private float armTargetDistance = 1.5f;
-        [SerializeField] private float headTargetDistance = 1.5f;
         [SerializeField] private float transitionSpeed = 3f;
         
         [Header("Arm Shoot Shake")]
@@ -36,7 +35,6 @@ namespace ProjectWallE.GameLoop.Player
 
         private Transform _armIkTarget;
         private Transform _headIkTarget;
-        private Camera _cam;
         private float _targetWeight = 1f;
         private Vector3 _shakeOffset;
 
@@ -44,8 +42,6 @@ namespace ProjectWallE.GameLoop.Player
 
         private void Awake()
         {
-            _cam = Camera.main;
-            
             _armIkTarget = new GameObject("PlayerArmIK_Target").transform;
             armIK.data.target = _armIkTarget;
             
@@ -88,19 +84,23 @@ namespace ProjectWallE.GameLoop.Player
 
         private void UpdateArmIK()
         {
-            if (!_cam || rig.weight <= 0.01f) return;
+            if (!player || rig.weight <= 0.01f) return;
 
-            float dot = Vector3.Dot(torso.forward, _cam.transform.forward);
+            Vector3 aimPoint = player.Aimer.AimPoint;
+            Vector3 toAim = (aimPoint - shoulder.position).normalized;
+
+            float dot = Vector3.Dot(torso.forward, toAim);
             float dynamicOffset = Mathf.Lerp(armTargetShoulderOffset * 3f, armTargetShoulderOffset, (dot + 1f) * 0.5f);
-            _armIkTarget.position = shoulder.position + _cam.transform.forward * armTargetDistance + torso.right * dynamicOffset;
-            _armIkTarget.rotation = _cam.transform.rotation * Quaternion.Euler(0f, -90f, 0f);
+            
+            _armIkTarget.position = shoulder.position + toAim * armTargetDistance + torso.right * dynamicOffset;
+            _armIkTarget.rotation = Quaternion.LookRotation(toAim) * Quaternion.Euler(0f, -90f, 0f);
         }
 
         private void UpdateHeadIK()
         {
-            if (!_cam || rig.weight <= 0.01f) return;
+            if (!player || rig.weight <= 0.01f) return;
 
-            _headIkTarget.position = _cam.transform.position + _cam.transform.forward * headTargetDistance;
+            _headIkTarget.position = player.Aimer.AimPoint;
         }
 
         private void ApplyShake()

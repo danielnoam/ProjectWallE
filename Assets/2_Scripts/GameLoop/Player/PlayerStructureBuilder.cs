@@ -24,7 +24,6 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField, AutoGetScene, HideInInspector] private StructureActionsMenu actionsMenu;
 
         private StructureNode _targetedNode;
-        private Camera _mainCamera;
         private Ray _buildRay;
         private Vector3 _buildPoint;
         private Vector3 _buildNormal;
@@ -43,11 +42,6 @@ namespace ProjectWallE.GameLoop.Player
         private void OnValidate()
         {
             AutoGetSystem.Process(this);
-        }
-
-        private void Awake()
-        {
-            _mainCamera = Camera.main;
         }
 
         private void OnEnable()
@@ -132,7 +126,6 @@ namespace ProjectWallE.GameLoop.Player
                 StructureManager.Instance.HideGhost();
             }
         }
-        
 
         private void SelectHoveredAndClose()
         {
@@ -163,10 +156,9 @@ namespace ProjectWallE.GameLoop.Player
 
         private void CastBuildRay()
         {
-            _buildRay = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
- 
+            _buildRay = playerManager.Aimer.CameraRay;
 
-            if (Physics.Raycast(_buildRay, out RaycastHit structureHit, buildRange, structureLayerMask) && structureHit.collider.TryGetComponent(out Structure structure)) // structure
+            if (Physics.Raycast(_buildRay, out RaycastHit structureHit, buildRange, structureLayerMask) && structureHit.collider.TryGetComponent(out Structure structure))
             {
                 _targetedStructure = structure;
                 _targetedNode = null;
@@ -175,7 +167,7 @@ namespace ProjectWallE.GameLoop.Player
                 UpdateStructureStatusVisibility(structure);
                 StructureManager.Instance?.HideGhost();
             }
-            else if (Physics.Raycast(_buildRay, buildRange, blockBuildLayerMask)) // blocked
+            else if (Physics.Raycast(_buildRay, buildRange, blockBuildLayerMask))
             {
                 _targetedStructure = null;
                 _targetedNode = null;
@@ -183,7 +175,7 @@ namespace ProjectWallE.GameLoop.Player
                 UpdateBuildPrompt(null);
                 UpdateStructureStatusVisibility(null);
             }
-            else if (Physics.Raycast(_buildRay, out RaycastHit groundHit, buildRange, buildableLayerMask)) // build
+            else if (Physics.Raycast(_buildRay, out RaycastHit groundHit, buildRange, buildableLayerMask))
             {
                 _targetedStructure = null;
                 UpdateStructureStatusVisibility(null);
@@ -196,7 +188,7 @@ namespace ProjectWallE.GameLoop.Player
                     _canBuild = !node.IsOccupied;
                     UpdateBuildPrompt(_menuOpen ? node.SnapPoint : null);
                     Quaternion rotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized, Vector3.up);
-                    StructureManager.Instance?.ShowGhost(node.transform.position,rotation, _canBuild);
+                    StructureManager.Instance?.ShowGhost(node.transform.position, rotation, _canBuild);
                 }
                 else
                 {
@@ -210,7 +202,7 @@ namespace ProjectWallE.GameLoop.Player
                     StructureManager.Instance?.ShowGhost(groundHit.point, rotation, _canBuild);
                 }
             }
-            else // nothing
+            else
             {
                 _targetedStructure = null;
                 _targetedNode = null;

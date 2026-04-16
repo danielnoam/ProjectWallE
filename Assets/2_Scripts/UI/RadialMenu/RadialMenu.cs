@@ -10,8 +10,8 @@ namespace ProjectWallE.UI
     public class RadialMenu<T> : MonoBehaviour where T : class
     {
         [Header("Menu Settings")]
-        [SerializeField] private Color hoveredColor = Color.yellow;
         [SerializeField] private Color normalColor = Color.white;
+        [SerializeField] private Color hoveredColor = Color.orange;
 
         [Header("Input Settings")]
         [SerializeField] private float selectionDeadzone = 50f;
