@@ -196,15 +196,22 @@ MonoBehaviour:
       type: {class: WheelEffect, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         wheels:
-        - suspension: {fileID: 5613410380955316241}
-          wheel: {fileID: 7189874713700873805}
-        - suspension: {fileID: 6623763509666616002}
-          wheel: {fileID: 3252847663948057436}
         - suspension: {fileID: 8158116120549119839}
           wheel: {fileID: 4775094314684241153}
+          canSteer: 1
         - suspension: {fileID: 5941214896945081938}
           wheel: {fileID: 6879745415796938424}
+          canSteer: 1
+        - suspension: {fileID: 5613410380955316241}
+          wheel: {fileID: 7189874713700873805}
+          canSteer: 0
+        - suspension: {fileID: 6623763509666616002}
+          wheel: {fileID: 3252847663948057436}
+          canSteer: 0
         wheelRadius: 1.2
+        maxSteerAngle: 30
+        steerSpeed: 360
+        minSpeedForSteering: 0.5
         suspensionTravel: 1.38
         suspensionStiffness: 25
         suspensionDamping: 5

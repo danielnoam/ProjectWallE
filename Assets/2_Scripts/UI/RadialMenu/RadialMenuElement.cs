@@ -9,9 +9,11 @@ namespace ProjectWallE.UI
         [SerializeField] private Image iconImage;
         [SerializeField] private Image backgroundImage;
 
+        [Header("Settings")]
+        [SerializeField, Range(0f, 1f)] private float disabledAlpha = 0.4f;
+
         private Color _normalColor = Color.white;
         private Color _hoveredColor = Color.orange;
-        private readonly Color _disabledColor = new Color(0.4f, 0.4f, 0.4f, 1f);
         private bool _isHovered;
         private bool _isDisabled;
 
@@ -21,13 +23,14 @@ namespace ProjectWallE.UI
         {
             _normalColor = normalColor;
             _hoveredColor = hoveredColor;
-            if (backgroundImage) backgroundImage.color = normalColor;
+            ApplyVisuals();
         }
 
         public void Configure(string info, Sprite icon, bool isAvailable)
         {
             Info = info;
-            SetDisabled(!isAvailable);
+            _isDisabled = !isAvailable;
+            ApplyVisuals();
 
             if (icon)
             {
@@ -43,20 +46,22 @@ namespace ProjectWallE.UI
         {
             if (_isHovered) return;
             _isHovered = true;
-            if (backgroundImage) backgroundImage.color = _isDisabled ? _disabledColor : _hoveredColor;
+            ApplyVisuals();
         }
 
         public void SetNormal()
         {
             if (!_isHovered) return;
             _isHovered = false;
-            if (backgroundImage) backgroundImage.color = _isDisabled ? _disabledColor : _normalColor;
+            ApplyVisuals();
         }
 
-        private void SetDisabled(bool disabled)
+        private void ApplyVisuals()
         {
-            _isDisabled = disabled;
-            if (backgroundImage) backgroundImage.color = _isDisabled ? _disabledColor : _normalColor;
+            if (!backgroundImage) return;
+            Color target = _isHovered ? _hoveredColor : _normalColor;
+            target.a = _isDisabled ? disabledAlpha : 1f;
+            backgroundImage.color = target;
         }
     }
 }

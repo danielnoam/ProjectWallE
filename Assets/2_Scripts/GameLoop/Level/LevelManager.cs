@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DNExtensions.Utilities.AutoGet;
+using PrimeTween;
 using ProjectWallE;
 using ProjectWallE.GameLoop;
 using UnityEngine;
@@ -51,6 +52,8 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
             return;
         }
         Instance = this;
+        
+        PrimeTweenConfig.SetTweensCapacity(1000);
     }
 
     private void OnEnable()

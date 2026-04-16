@@ -98,6 +98,7 @@ namespace ProjectWallE.GameLoop
             {
                 DeltaTime = Time.deltaTime,
                 Position = transform.position,
+                Rotation = transform.rotation,
                 Velocity = Velocity,
                 TargetPosition = targetPos,
                 IsVisible = isVisible

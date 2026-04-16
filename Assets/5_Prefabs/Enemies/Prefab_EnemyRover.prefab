@@ -237,9 +237,14 @@ MonoBehaviour:
         wheels:
         - suspension: {fileID: 5742409801631996707}
           wheel: {fileID: 1932143315978848111}
+          canSteer: 1
         - suspension: {fileID: 2398041960755128004}
           wheel: {fileID: 7213171834896227090}
+          canSteer: 1
         wheelRadius: 0.55
+        maxSteerAngle: 30
+        steerSpeed: 360
+        minSpeedForSteering: 0.5
         suspensionTravel: 0.4
         suspensionStiffness: 10
         suspensionDamping: 5

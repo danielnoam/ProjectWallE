@@ -8,6 +8,7 @@ namespace ProjectWallE.GameLoop
     {
         public float DeltaTime;
         public Vector3 Position;
+        public Quaternion Rotation;
         public Vector3 Velocity;
         public Vector3? TargetPosition;
         public bool IsVisible;
@@ -77,12 +78,22 @@ namespace ProjectWallE.GameLoop
     {
         [SerializeField] private WheelData[] wheels;
         [SerializeField] private float wheelRadius = 0.3f;
+        
+        [Header("Steer")]
+        [SerializeField] private float maxSteerAngle = 30f;
+        [SerializeField] private float steerSpeed = 360f;
+        [SerializeField] private float minSpeedForSteering = 0.5f;
+        
+        [Header("Suspension")]
         [SerializeField] private float suspensionTravel = 0.4f;
         [SerializeField] private float suspensionStiffness = 20f;
         [SerializeField] private float suspensionDamping = 5f;
+        
+        [Header("Ground Detection")]
         [SerializeField] private float raycastDistance = 1.5f;
         [SerializeField] private LayerMask groundMask;
 
+        private Quaternion[] _restLocalRotations;
         private float[] _suspensionVelocities;
         private float[] _restLocalY;
         private bool _initialized;
@@ -94,8 +105,17 @@ namespace ProjectWallE.GameLoop
 
             if (!_initialized) InitializeWheels();
 
-            float speed = new Vector3(context.Velocity.x, 0, context.Velocity.z).magnitude;
+            Vector3 flatVelocity = new Vector3(context.Velocity.x, 0, context.Velocity.z);
+            float speed = flatVelocity.magnitude;
             float spinAngle = (speed / wheelRadius) * Mathf.Rad2Deg * context.DeltaTime;
+
+            float targetSteer = 0f;
+            if (speed > minSpeedForSteering)
+            {
+                Vector3 localVel = Quaternion.Inverse(context.Rotation) * flatVelocity;
+                targetSteer = Mathf.Atan2(localVel.x, localVel.z) * Mathf.Rad2Deg;
+                targetSteer = Mathf.Clamp(targetSteer, -maxSteerAngle, maxSteerAngle);
+            }
 
             for (int i = 0; i < wheels.Length; i++)
             {
@@ -104,6 +124,13 @@ namespace ProjectWallE.GameLoop
 
                 UpdateSuspension(w, i, context.DeltaTime);
 
+                if (w.canSteer)
+                {
+                    Quaternion targetRot = _restLocalRotations[i] * Quaternion.Euler(0f, targetSteer, 0f);
+                    w.suspension.localRotation = Quaternion.RotateTowards(
+                        w.suspension.localRotation, targetRot, steerSpeed * context.DeltaTime);
+                }
+
                 if (w.wheel) w.wheel.Rotate(Vector3.right, spinAngle, Space.Self);
             }
         }
@@ -111,12 +138,17 @@ namespace ProjectWallE.GameLoop
         private void InitializeWheels()
         {
             _suspensionVelocities = new float[wheels.Length];
+            _restLocalRotations = new Quaternion[wheels.Length];
             _restLocalY = new float[wheels.Length];
-
+            
             for (int i = 0; i < wheels.Length; i++)
             {
                 if (wheels[i].suspension)
+                {
                     _restLocalY[i] = wheels[i].suspension.localPosition.y;
+                    _restLocalRotations[i] = wheels[i].suspension.localRotation;
+                }
+
             }
 
             _initialized = true;
@@ -211,5 +243,6 @@ namespace ProjectWallE.GameLoop
     {
         public Transform suspension;
         public Transform wheel;
+        public bool canSteer;
     }
 }
