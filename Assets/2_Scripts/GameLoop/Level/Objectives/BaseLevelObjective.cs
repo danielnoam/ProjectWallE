@@ -56,7 +56,7 @@ namespace ProjectWallE.GameLoop
             _isDisposed = false;
             _onComplete = onComplete;
             ResolvedMarker = objectiveMarker.Resolve(resolver);
-            ResolvedMarker?.OnObjectiveStarted(showInGame, showOnRadar);
+            if (ResolvedMarker) ResolvedMarker.OnObjectiveStarted(showInGame, showOnRadar);
             OnInitialize(resolver);
         }
 
@@ -69,7 +69,7 @@ namespace ProjectWallE.GameLoop
         {
             if (_isDisposed) return;
             _isDisposed = true;
-            ResolvedMarker?.OnObjectiveCompleted(showInGame, showOnRadar);
+            if (ResolvedMarker) ResolvedMarker.OnObjectiveCompleted(showInGame, showOnRadar);
             OnDispose();
         }
     }
