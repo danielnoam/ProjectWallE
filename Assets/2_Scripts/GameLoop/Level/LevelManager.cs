@@ -55,7 +55,6 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
 
     private void OnEnable()
     {
-        StructureManager.OnStructureDestroyed += OnStructureDestroyed;
         if (timeline)
         {
             timeline.stopped += OnTimelineStopped;
@@ -64,7 +63,6 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
 
     private void OnDestroy()
     {
-        StructureManager.OnStructureDestroyed -= OnStructureDestroyed;
         if (timeline)
         {
             timeline.stopped -= OnTimelineStopped;
@@ -106,17 +104,7 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
 
         CompleteLevel();
     }
-
-    private void OnStructureDestroyed(StructuresData data)
-    {
-        if (!_levelActive) return;
-
-        // if (data.BasesCount <= 0)
-        // {
-        //     FailLevel();
-        // }
-    }
-
+    
     private void CompleteLevel()
     {
         if (!_levelActive) return;
@@ -136,12 +124,11 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
         timeline.Stop();
         OnLevelFailed?.Invoke();
     }
-    
 
     private void TickObjectives()
     {
         if (_activeObjectives == null) return;
-        
+
         float deltaTime = Time.deltaTime;
         foreach (var objective in _activeObjectives)
         {
@@ -160,19 +147,21 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
         _activeObjectives = null;
         _completedCount = 0;
     }
-    
-    private void OnObjectiveCompleted()
+
+    private void OnObjectiveCompleted(BaseLevelObjective objective)
     {
+        objective.Dispose();
         _completedCount++;
 
-        if (_completedCount >= _activeObjectives.Count)
+        if (_activeObjectives != null && _completedCount >= _activeObjectives.Count)
         {
-            DisposeObjectives();
+            _activeObjectives = null;
+            _completedCount = 0;
             OnObjectivesCompleted?.Invoke();
             timeline.Resume();
         }
     }
-    
+
     public void StartObjectives(List<BaseLevelObjective> objectives, IExposedPropertyTable resolver)
     {
         if (objectives == null || objectives.Count == 0) return;
@@ -184,7 +173,7 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
         foreach (var objective in objectives)
         {
             var clone = objective.Clone();
-            clone.Initialize(OnObjectiveCompleted, resolver);
+            clone.Initialize(() => OnObjectiveCompleted(clone), resolver);
             _activeObjectives.Add(clone);
         }
 

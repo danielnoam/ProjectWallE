@@ -1547,6 +1547,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.UI.InGameCrosshair
   maxDistance: 75
   distanceSmoothTime: 0.04
+  lerpPosition: 1
+  positionLerpSpeed: 40
   scaleWithDistance: 1
   minMaxScaleMultiplier:
     minValue: 0.2
@@ -2281,8 +2283,8 @@ MonoBehaviour:
   m_ChildAlignment: 0
   radius: 265
   offset: {x: 0, y: 0}
-  startAngle: 30
-  endAngle: 270
+  startAngle: 270
+  endAngle: 30
   onlyLayoutVisible: 1
   controlChildSize: 0
   childSize: {x: 50, y: 50}
@@ -2897,7 +2899,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -100, y: -100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7683314732835595649
 CanvasRenderer:
@@ -3295,8 +3297,8 @@ MonoBehaviour:
   m_ChildAlignment: 0
   radius: 265
   offset: {x: 0, y: 0}
-  startAngle: 0
-  endAngle: 360
+  startAngle: 270
+  endAngle: 30
   onlyLayoutVisible: 1
   controlChildSize: 0
   childSize: {x: 50, y: 50}

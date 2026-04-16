@@ -90,19 +90,27 @@ MonoBehaviour:
   objectives:
   - rid: 126016365803864150
   - rid: 126016452965957720
+  - rid: 126016503823728723
   references:
     version: 2
     RefIds:
     - rid: 126016365803864150
       type: {class: GoToPositionObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
-        targetMarker:
-          exposedName: 990340cabb49e544bbc6f8d37dd74de1
+        objectiveMarker:
+          exposedName: a147ff8e925234545ad606365f5c5115
           defaultValue: {fileID: 0}
+        showInGame: 1
+        showOnRadar: 1
         radius: 5
     - rid: 126016452965957720
       type: {class: KillEnemiesObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
+        objectiveMarker:
+          exposedName: 
+          defaultValue: {fileID: 0}
+        showInGame: 1
+        showOnRadar: 1
         enemyPrefab: {fileID: 0}
         killCount: 10
         spawnEnemies: 1
@@ -116,6 +124,16 @@ MonoBehaviour:
           spawnPoint:
             exposedName: 
             defaultValue: {fileID: 0}
+    - rid: 126016503823728723
+      type: {class: FireObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        objectiveMarker:
+          exposedName: 
+          defaultValue: {fileID: 0}
+        showInGame: 1
+        showOnRadar: 1
+        attackType: 0
+        attackCount: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0

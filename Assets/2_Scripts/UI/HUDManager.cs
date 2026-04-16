@@ -44,8 +44,7 @@ namespace ProjectWallE.UI
         private void OnEnable()
         {
             ResourceManager.OnResourcesChanged += UpdateResourcesDisplay;
-            StructureManager.OnStructureCreated += UpdateStructuresText;
-            StructureManager.OnStructureDestroyed += UpdateStructuresText;
+            StructureManager.OnStructureCountChanged += UpdateStructuresText;
             LevelManager.OnLevelInitializing += ResetTexts;
             LevelManager.OnLeveTimeLineUpdated += OnLeveTimeLineUpdated;
             LevelManager.OnLevelCompleted += OnLevelCompleted;
@@ -75,8 +74,7 @@ namespace ProjectWallE.UI
         private void OnDisable()
         {
             ResourceManager.OnResourcesChanged -= UpdateResourcesDisplay;
-            StructureManager.OnStructureCreated -= UpdateStructuresText;
-            StructureManager.OnStructureDestroyed -= UpdateStructuresText;
+            StructureManager.OnStructureCountChanged -= UpdateStructuresText;
             LevelManager.OnLevelInitializing -= ResetTexts;
             LevelManager.OnLeveTimeLineUpdated -= OnLeveTimeLineUpdated;
             LevelManager.OnLevelCompleted -= OnLevelCompleted;
@@ -115,7 +113,8 @@ namespace ProjectWallE.UI
         {
             structuresText.text = $"Bases: {data.BasesCount}" +
                                   $"\nTurrets: {data.TurretsCount}" +
-                                  $"\nGenerators: {data.GeneratorsCount}";
+                                  $"\nGenerators: {data.GeneratorsCount}" +
+                                  $"\nRamps: {data.RampsCount}";
         }
         
         private void ResetTexts()

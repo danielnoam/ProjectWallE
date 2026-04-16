@@ -8,6 +8,7 @@ namespace ProjectWallE.GameLoop
     [SerializableSelectorName("Destroy Resource Nodes", "Resource")]
     public class DestroyResourceRocksObjective : BaseLevelObjective
     {
+        [Header("Settings")]
         [SerializeField, Min(1)] private int destroyCount = 5;
 
         private int _currentCount;
@@ -21,7 +22,7 @@ namespace ProjectWallE.GameLoop
             ResourceRock.OnDestroyed += OnNodeDestroyed;
         }
 
-        public override void Dispose()
+        protected override void OnDispose()
         {
             ResourceRock.OnDestroyed -= OnNodeDestroyed;
         }
@@ -40,6 +41,7 @@ namespace ProjectWallE.GameLoop
     [SerializableSelectorName("Reach Resource Amount", "Resource")]
     public class ReachResourceAmountObjective : BaseLevelObjective
     {
+        [Header("Settings")]
         [SerializeField, Min(1)] private int targetAmount = 500;
  
         public override string Description => $"Collect {targetAmount} resources";
@@ -56,7 +58,7 @@ namespace ProjectWallE.GameLoop
             ResourceManager.OnResourcesChanged += OnResourcesChanged;
         }
  
-        public override void Dispose()
+        protected override void OnDispose()
         {
             ResourceManager.OnResourcesChanged -= OnResourcesChanged;
         }
@@ -74,6 +76,7 @@ namespace ProjectWallE.GameLoop
     [SerializableSelectorName("Spend Resources", "Resource")]
     public class SpendResourcesObjective : BaseLevelObjective
     {
+        [Header("Settings")]
         [SerializeField, Min(1)] private int targetSpend = 500;
  
         private int _totalSpent;
@@ -89,7 +92,7 @@ namespace ProjectWallE.GameLoop
             ResourceManager.OnResourcesChanged += OnResourcesChanged;
         }
  
-        public override void Dispose()
+        protected override void OnDispose()
         {
             ResourceManager.OnResourcesChanged -= OnResourcesChanged;
         }

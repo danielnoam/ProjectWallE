@@ -42,6 +42,8 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     public static event Action<Structure> OnStructureBuilt;
     public static event Action<Structure> OnStructureUpgraded;
     public static event Action<Structure> OnStructureDemolished;
+    public static event Action<Structure> OnStructureBroken;
+    public static event Action<Structure> OnStructureRevived;
     
     [Header("Structure")]
     [SerializeField] private bool canDemolish;
@@ -121,11 +123,11 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     
     private void Build()
     {
-        StructureManager.Instance?.RegisterStructure(this);
         CurrentUpgradeLevel = 1;
         CurrentHealth = CurrentLevelData.maxHealth;
         buildEffect?.Play(OnBuild);
         radarTarget?.PingBlip();
+        StructureManager.Instance?.RegisterStructure(this);
         OnStructureBuilt?.Invoke(this);
     }
     
@@ -135,8 +137,8 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     {
         CurrentHealth = 0f;
         brokenEffect?.SetBroken(transform.position);
-        StructureManager.Instance?.UnregisterStructure(this);
         OnDeath?.Invoke(this);
+        OnStructureBroken?.Invoke(this);
         radarTarget?.PingBlip(Color.red);
         OnBreak();
     }
@@ -153,10 +155,12 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     {
         if (ResourceManager.Instance && !ResourceManager.Instance.TrySpendResources((int)FixCost)) return;
 
-        if (CurrentHealth <= 0) brokenEffect?.SetNormal();
+        bool wasBroken = CurrentHealth <= 0;
+        if (wasBroken) brokenEffect?.SetNormal();
         CurrentHealth = MaxHealth;
         fixEffect?.Play();
         OnFix();
+        if (wasBroken) OnStructureRevived?.Invoke(this);
     }
 
     [Button(ButtonPlayMode.OnlyWhenPlaying)]
@@ -170,12 +174,14 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
 
         if (ResourceManager.Instance && !ResourceManager.Instance.TrySpendResources(UpgradeCost)) return;
 
-        if (CurrentHealth <= 0) brokenEffect?.SetNormal();
+        bool wasBroken = CurrentHealth <= 0;
+        if (wasBroken) brokenEffect?.SetNormal();
         CurrentUpgradeLevel++;
         CurrentHealth = CurrentLevelData.maxHealth;
         upgradeEffect?.Play();
         OnUpgrade();
         OnStructureUpgraded?.Invoke(this);
+        if (wasBroken) OnStructureRevived?.Invoke(this);
     }
     
     private bool CanUpgrade() 

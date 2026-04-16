@@ -13,6 +13,8 @@ namespace ProjectWallE.UI
         [Header("Position")]
         [SerializeField] private float maxDistance = 50f;
         [SerializeField] private float distanceSmoothTime = 0.04f;
+        [SerializeField] private bool lerpPosition;
+        [SerializeField, Range(5f, 50f), EnableIf("lerpPosition")] private float positionLerpSpeed = 25f;
 
         [Header("Scale")]
         [SerializeField] private bool scaleWithDistance = true;
@@ -36,6 +38,7 @@ namespace ProjectWallE.UI
         [SerializeField] private Image hitMarkerImage;
         [SerializeField, AutoGetScene] private PlayerManager player;
 
+        private Vector3 _currentPosition;
         private Vector3 _reticleBaseScale;
         private Tween _reticlePunchTween;
         private Vector3 _hitMarkerBaseScale;
@@ -110,7 +113,18 @@ namespace ProjectWallE.UI
 
             _currentDistance = Mathf.SmoothDamp(_currentDistance, targetDistance, ref _distanceVelocity, distanceSmoothTime, Mathf.Infinity, Time.unscaledDeltaTime);
 
-            transform.position = aimer.CameraRay.GetPoint(_currentDistance);
+            Vector3 targetPosition = aimer.CameraRay.GetPoint(_currentDistance);
+
+            if (lerpPosition)
+            {
+                _currentPosition = Vector3.Lerp(_currentPosition, targetPosition, positionLerpSpeed * Time.unscaledDeltaTime);
+                transform.position = _currentPosition;
+            }
+            else
+            {
+                transform.position = targetPosition;
+            }
+
             transform.rotation = _cam.transform.rotation;
 
             if (scaleWithDistance && visual)
@@ -161,12 +175,13 @@ namespace ProjectWallE.UI
         {
             _isActive = value;
             if (visual) visual.SetActive(value);
-
+            
             if (value && player)
             {
                 var aimer = player.Aimer;
                 _currentDistance = aimer.HasHit ? Mathf.Min(aimer.LastHit.distance, maxDistance) : maxDistance;
                 _distanceVelocity = 0f;
+                _currentPosition = aimer.CameraRay.GetPoint(_currentDistance);
             }
         }
 
