@@ -31,7 +31,7 @@ namespace _2_Scripts
         private const float ExtendedGroundCheckExtraDistance = 0.1f;
         
         private Vector3 _groundPlaneNormal;
-
+        private bool _wasBraking;
         private float _currentSteering;
         private float _groundedRatio;
         private float _airborneBlend;
@@ -47,6 +47,8 @@ namespace _2_Scripts
         public Vector3 CenterOfMassOffset => centerOfMassOffset;
         public bool canBuild { get; private set; } = true;
         public bool canShoot { get; private set; } = false;
+
+        public event Action OnBrakeStarted;
 
         private void OnValidate()
         {
@@ -183,7 +185,13 @@ namespace _2_Scripts
 
             float planted = Mathf.Pow(_groundedRatio, settings.PartialGroundGripPower);
             _airborneBlend = Mathf.Lerp(settings.MinGripWhenPartialGround, 1f, planted);
-
+            
+            if (!_wasBraking && _carInput.HandBreakHeld)
+            {
+                OnBrakeStarted?.Invoke();
+            }
+            _wasBraking = _carInput.HandBreakHeld;
+            
             float targetHb = _carInput.HandBreakHeld ? 1f : 0f;
             float rate = targetHb > _handbrake01 ? settings.HandbrakeBlendIn : settings.HandbrakeBlendOut;
             _handbrake01 = Mathf.Lerp(_handbrake01, targetHb, rate * Time.fixedDeltaTime);

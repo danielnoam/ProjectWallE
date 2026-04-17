@@ -11,9 +11,14 @@ namespace ProjectWallE.UI
 {
     public class HUDManager : MonoBehaviour
     { 
-        [Header("Status")]
-        [SerializeField] private TextMeshProUGUI currentResourcesText;
-        [SerializeField] private TextMeshProUGUI structuresText;
+        [Header("Resources")]
+        [SerializeField] private CountIcon resourcesIcon;
+        [SerializeField] private CountIcon basesIcon;
+        [SerializeField] private CountIcon turretsIcon;
+        [SerializeField] private CountIcon generatorsIcon;
+        [SerializeField] private CountIcon rampsIcon;
+        
+        [Header("Objective")]
         [SerializeField] private GameObject objectivesHolder;
         [SerializeField] private TextMeshProUGUI objectivesText;
         [SerializeField] protected SOFontStyle objectiveStatusFontStyle;
@@ -24,13 +29,13 @@ namespace ProjectWallE.UI
         [SerializeField] private FillBar healthBar;
         
         [Header("Actions")]
-        [SerializeField] private CooldownIcon switchIcon;
-        [SerializeField] private CooldownIcon buildIcon;
-        [SerializeField] private CooldownIcon basicAttackIcon;
-        [SerializeField] private CooldownIcon specialAttackIcon;
-        [SerializeField] private CooldownIcon jumpIcon;
-        [SerializeField] private CooldownIcon boostIcon;
-        [SerializeField] private CooldownIcon brakeIcon;
+        [SerializeField] private ActionIcon switchIcon;
+        [SerializeField] private ActionIcon buildIcon;
+        [SerializeField] private ActionIcon basicAttackIcon;
+        [SerializeField] private ActionIcon specialAttackIcon;
+        [SerializeField] private ActionIcon jumpIcon;
+        [SerializeField] private ActionIcon boostIcon;
+        [SerializeField] private ActionIcon brakeIcon;
         
         [Header("References")] 
         [SerializeField, AutoGetChildren] private RadarSystem radarSystem;
@@ -67,8 +72,10 @@ namespace ProjectWallE.UI
                 player.StructureBuilder.ActionsMenuRequested += OnActionsMenuRequested;
                 player.StructureBuilder.BuildMenuRequested += OnBuildMenuRequested;
                 player.StructureBuilder.MenuCloseRequested += OnMenuCloseRequested;
+                player.CarController.OnBrakeStarted += OnBrakeStarted;
                 player.CarController.CarBoost.OnFuelChange += UpdateFuelBar;
                 player.CarController.CarBoost.OnBoostStart += OnBoostStart;
+                player.RobotController.OnJumped += OnJumped;
                 player.Shooter.OnBasicCooldownUpdated += OnBasicCooldownUpdated;
                 player.Shooter.OnSpecialCooldownUpdated += OnSpecialCooldownUpdated;
                 
@@ -100,16 +107,28 @@ namespace ProjectWallE.UI
                 player.StructureBuilder.ActionsMenuRequested -= OnActionsMenuRequested;
                 player.StructureBuilder.BuildMenuRequested -= OnBuildMenuRequested;
                 player.StructureBuilder.MenuCloseRequested -= OnMenuCloseRequested;
+                player.CarController.OnBrakeStarted -= OnBrakeStarted;
                 player.CarController.CarBoost.OnFuelChange -= UpdateFuelBar;
                 player.CarController.CarBoost.OnBoostStart -= OnBoostStart;
+                player.RobotController.OnJumped -= OnJumped;
                 player.Shooter.OnBasicCooldownUpdated -= OnBasicCooldownUpdated;
                 player.Shooter.OnSpecialCooldownUpdated -= OnSpecialCooldownUpdated;
             }
         }
 
+        private void OnBrakeStarted()
+        {
+            if (brakeIcon && brakeIcon.isActiveAndEnabled) brakeIcon.PunchIcon();
+        }
+        
         private void OnBoostStart()
         {
             if (boostIcon && boostIcon.isActiveAndEnabled) boostIcon.PunchIcon();
+        }
+        
+        private void OnJumped()
+        {
+            if (jumpIcon && jumpIcon.isActiveAndEnabled) jumpIcon.PunchIcon();
         }
 
         private void OnControllerChanged(PlayerControllerType type)
@@ -142,38 +161,36 @@ namespace ProjectWallE.UI
 
         private void OnActionsMenuRequested(Structure structure)
         {
-            structuresText.gameObject.SetActive(true);
+            basesIcon?.gameObject.SetActive(true);
+            turretsIcon?.gameObject.SetActive(true);
+            generatorsIcon?.gameObject.SetActive(true);
+            rampsIcon?.gameObject.SetActive(true);
             if (buildIcon && buildIcon.isActiveAndEnabled) buildIcon.PunchIcon();
         }
         
         private void OnBuildMenuRequested(Structure[] structures)
         {
-            structuresText.gameObject.SetActive(true);
+            basesIcon?.gameObject.SetActive(true);
+            turretsIcon?.gameObject.SetActive(true);
+            generatorsIcon?.gameObject.SetActive(true);
+            rampsIcon?.gameObject.SetActive(true);
             if (buildIcon && buildIcon.isActiveAndEnabled) buildIcon.PunchIcon();
         }
         
         private void OnMenuCloseRequested()
         {
-          structuresText.gameObject.SetActive(false);
+            basesIcon?.gameObject.SetActive(false);
+            turretsIcon?.gameObject.SetActive(false);
+            generatorsIcon?.gameObject.SetActive(false);
+            rampsIcon?.gameObject.SetActive(false);
         }
 
         private void UpdateStructuresText(StructuresData data)
         {
-            structuresText.text = $"Bases: {data.BasesCount}" +
-                                  $"\nTurrets: {data.TurretsCount}" +
-                                  $"\nGenerators: {data.GeneratorsCount}" +
-                                  $"\nRamps: {data.RampsCount}";
-        }
-        
-        private void ResetTexts()
-        {
-            currentResourcesText.text = "Resources: 0"; 
-            structuresText.text = $"Bases: 0" +
-                                  $"\nTurrets: 0" +
-                                  $"\nGenerators: 0" +
-                                  $"\nRamps: 0";
-            structuresText.gameObject.SetActive(false);
-            objectivesHolder?.SetActive(false);
+            basesIcon?.SetCount(data.BasesCount);
+            turretsIcon?.SetCount(data.TurretsCount);
+            generatorsIcon?.SetCount(data.GeneratorsCount);
+            rampsIcon?.SetCount(data.RampsCount);
         }
         
 
@@ -236,11 +253,9 @@ namespace ProjectWallE.UI
 
         private void UpdateResourcesDisplay(int currentResources)
         {
-            if (!currentResourcesText) return;
-            currentResourcesText.text = $"Resources: {currentResources}";
+            resourcesIcon?.SetCount(currentResources);
         }
         
-
         private void UpdateFuelBar(float currentFuel, float maxFuel)
         {
             if (fuelBar) fuelBar.SetValue(currentFuel, maxFuel);
@@ -249,6 +264,16 @@ namespace ProjectWallE.UI
         private void UpdateHealthBar(float currentHealth, float maxHealth)
         {
             if (healthBar) healthBar.SetValue(currentHealth, maxHealth);
+        }
+        
+        private void ResetTexts()
+        {
+            resourcesIcon?.SetCountImmediate(0);
+            basesIcon?.SetCountImmediate(0);
+            turretsIcon?.SetCountImmediate(0);
+            generatorsIcon?.SetCountImmediate(0);
+            rampsIcon?.SetCountImmediate(0);
+            objectivesHolder?.SetActive(false);
         }
     }
 }

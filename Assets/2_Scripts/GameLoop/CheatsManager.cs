@@ -22,28 +22,23 @@ namespace ProjectWallE.GameLoop
         {
             if (Keyboard.current.f5Key.wasPressedThisFrame)
             {
-                RestartLevel();
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
 
-            if (Keyboard.current.f1Key.wasPressedThisFrame)
+            if (Keyboard.current.f4Key.wasPressedThisFrame)
             {
-                ForceCompleteObjectives();
+                var objectives = LevelManager.Instance?.ActiveObjectives;
+                if (objectives == null) return;
+
+                foreach (var objective in objectives)
+                {
+                    objective?.ForceComplete();
+                }
             }
-        }
-
-        private void RestartLevel()
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
-
-        private void ForceCompleteObjectives()
-        {
-            var objectives = LevelManager.Instance?.ActiveObjectives;
-            if (objectives == null) return;
-
-            foreach (var objective in objectives)
+            
+            if (Keyboard.current.f3Key.wasPressedThisFrame)
             {
-                objective?.ForceComplete();
+                ResourceManager.Instance?.AddResources(500);
             }
         }
     }

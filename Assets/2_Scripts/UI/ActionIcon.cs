@@ -5,7 +5,7 @@ using PrimeTween;
 
 namespace ProjectWallE.UI
 {
-    public class CooldownIcon : MonoBehaviour
+    public class ActionIcon : MonoBehaviour
     {
         [Header("Settings")]
         [SerializeField] private float minScale = 0.75f;
