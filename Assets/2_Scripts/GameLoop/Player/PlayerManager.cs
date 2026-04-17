@@ -95,6 +95,8 @@ namespace ProjectWallE
 
         private void Update()
         {
+            _currentController.ApplyUpdate();
+            
             if (_input.SwitchPressed && Time.time > _switchTimer + switchCooldown) SwitchControllerEnum();
             
             SwitchBehavior();
@@ -103,7 +105,7 @@ namespace ProjectWallE
 
         private void FixedUpdate()
         {
-            _currentController?.ApplyMovement();
+            _currentController?.ApplyFixedUpdate();
         }
         
 

@@ -87,7 +87,7 @@ namespace ProjectWallE
             visuals?.UpdateWheelRollingVisual(_playerRb.linearVelocity);
         }
 
-        public void ApplyMovement()
+        public void ApplyFixedUpdate()
         {
             bool isGrounded = IsGrounded(out RaycastHit hit);
 
@@ -96,6 +96,11 @@ namespace ProjectWallE
             UpdateGroundHeight(isGrounded, hit);
             UpdateLocomotion(hit);
             UpdateRotation();
+        }
+
+        public void ApplyUpdate()
+        {
+            
         }
 
         #region Locomotion

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.Inline;
@@ -41,6 +42,8 @@ namespace _2_Scripts
         private Vector3 _groundPlaneNormal;
         
         private CarLongitudinalState _longitudinalState;
+        
+        private Coroutine _lateFixedUpdateCoroutine;
 
         private float _currentSteering;
         private float _groundedRatio;
@@ -95,13 +98,32 @@ namespace _2_Scripts
             visuals?.ResetVisuals();
         }
 
+        private void OnEnable()
+        {
+            _lateFixedUpdateCoroutine = StartCoroutine(RunLateFixedUpdate());
+        }
+
+        private void OnDisable()
+        {
+            StopCoroutine(_lateFixedUpdateCoroutine);
+        }
+
         void Update()
         {
             UpdateTiresGroundState(out Vector3 planeNormal);
             _groundPlaneNormal = planeNormal;
         }
+        
+        private void LateFixedUpdate()
+        {
+            foreach (var tire in _allTires)
+            {
+                tire.lastVelocity = _playerRb.GetPointVelocity(tire.tireTransform.position);
+            }
+        }
 
-        public void ApplyMovement()
+
+        public void ApplyFixedUpdate()
         {
 
             ApplyGravity();
@@ -110,6 +132,11 @@ namespace _2_Scripts
             ApplyTireFriction(_groundPlaneNormal);
             ApplyAirControl();
             ApplyLongitudinalMovement();
+        }
+
+        public void ApplyUpdate()
+        {
+            
         }
 
         #region Suspension
@@ -122,6 +149,7 @@ namespace _2_Scripts
                 if (tire.isGroundedExact)
                 {
                     RaycastHit hit = tire.exactGroundHit;
+                    float minRideHeight = 0.2f;
 
                     float offset = hit.distance - settings.GroundHeight;
                     Vector3 springDir = tire.tireTransform.up;
@@ -134,6 +162,16 @@ namespace _2_Scripts
                         (velAlongSpring * settings.SuspensionDamping);
                     tire.normalForceMag = suspensionForce;
 
+                    if (hit.distance < minRideHeight)
+                    {
+                        float lastVelAlongSpring = Vector3.Dot(tire.lastVelocity, springDir);
+                        
+                        float cancelForce = (lastVelAlongSpring - velAlongSpring) / Time.fixedDeltaTime;
+                        Debug.Log(cancelForce);
+                        suspensionForce = cancelForce;
+                        
+                    }
+                    
                     _playerRb.AddForceAtPosition(
                         springDir * (suspensionForce * _playerRb.mass),
                         tire.tireTransform.position,
@@ -560,6 +598,14 @@ namespace _2_Scripts
         
         public bool IsTireGrounded(int index) => _allTires[index].isGroundedExact;
 
+        private IEnumerator RunLateFixedUpdate()
+        {
+            while (true)
+            {
+                LateFixedUpdate();
+                yield return new WaitForFixedUpdate();
+            }
+        }
         #endregion
     }
 }

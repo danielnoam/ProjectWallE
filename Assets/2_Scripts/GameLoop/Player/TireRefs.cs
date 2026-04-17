@@ -16,6 +16,7 @@ namespace _2_Scripts
         [HideInInspector] public LayerMask hitLayer;
         [HideInInspector] public bool isMoving;
         [HideInInspector] public float normalForceMag = 0f;
+        [HideInInspector] public Vector3 lastVelocity;
 
         public void Initialize()
         {
