@@ -33,15 +33,20 @@ namespace ProjectWallE.UI
 
             if (ready)
             {
-                icon.transform.localScale = Vector3.one;
-                if (_punchTween.isAlive) _punchTween.Stop();
-                if (punchDuration > 0) _punchTween = Tween.PunchScale(icon.transform, Vector3.one * punchStrength, duration: punchDuration);
+                PunchIcon();
             }
             else
             {
                 float scale = Mathf.Lerp(minScale, 1f, normalized);
                 icon.transform.localScale = Vector3.one * scale;
             }
+        }
+
+        public void PunchIcon()
+        {
+            icon.transform.localScale = Vector3.one;
+            if (_punchTween.isAlive) _punchTween.Stop();
+            if (punchDuration > 0) _punchTween = Tween.PunchScale(icon.transform, Vector3.one * punchStrength, duration: punchDuration);
         }
     }
 }

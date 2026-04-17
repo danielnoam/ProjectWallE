@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DNExtensions.Utilities.AutoGet;
 using DNExtensions.Utilities.Button;
 using ProjectWallE.GameLoop;
+using ProjectWallE.UI;
 using UnityEditor;
 using UnityEngine;
 
@@ -239,21 +240,21 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
         {
             new StructureAction
             {
-                Label = $"{structureUIData.Label}\n{upgradeLabel}",
+                Label = $"{upgradeLabel}",
                 Icon = structureUIData.UpgradeIcon,
                 IsAvailable = canUpgrade && ResourceManager.Instance.CanAfford(UpgradeCost),
                 OnSelected = Upgrade
             },
             new StructureAction
             {
-                Label = $"{structureUIData.Label}\n{fixLabel}",
+                Label = $"{fixLabel}",
                 Icon = structureUIData.FixIcon,
                 IsAvailable = canFix && ResourceManager.Instance.CanAfford((int)FixCost),
                 OnSelected = Fix
             },
             new StructureAction
             {
-            Label = $"{structureUIData.Label}\n{demolishLabel}",
+            Label = $"{demolishLabel}",
             Icon = structureUIData.DemolishIcon,
             IsAvailable = canDemolish,
             OnSelected = Demolish
