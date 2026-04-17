@@ -244,7 +244,7 @@ namespace ProjectWallE.UI
             foreach (var objective in _activeObjectives)
             {
                 _objectiveBuilder.AppendLine(objective.IsCompleted
-                    ? $"{objectiveCompletedFontStyle.ApplyStyle($"√ {objective.Description}")}"
+                    ? $"○ {objectiveCompletedFontStyle.ApplyStyle($"{objective.Description}")}"
                     : $"○ {objective.Description} - {objectiveStatusFontStyle.ApplyStyle(objective.ProgressText)}");
             }
 
