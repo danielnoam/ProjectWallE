@@ -72,21 +72,6 @@ namespace ProjectWallE
             visuals?.ResetVisuals();
         }
 
-        private void Update()
-        {
-            JumpBufferTimer();
-        }
-        
-        private void LateUpdate()
-        {
-            if (visuals == null) return;
-
-            Vector3 moveDirWorld = GetCameraRelativeDirection(_input.Movement);
-            bool hasMovementInput = moveDirWorld.sqrMagnitude > 0.0001f;
-            visuals?.UpdateSwivelVisual(hasMovementInput ? moveDirWorld : Vector3.zero);
-            visuals?.UpdateWheelRollingVisual(_playerRb.linearVelocity);
-        }
-
         public void ApplyFixedUpdate()
         {
             bool isGrounded = IsGrounded(out RaycastHit hit);
@@ -99,6 +84,21 @@ namespace ProjectWallE
         }
 
         public void ApplyUpdate()
+        {
+            JumpBufferTimer();
+        }
+
+        public void ApplyLateUpdate()
+        {
+            if (visuals == null) return;
+
+            Vector3 moveDirWorld = GetCameraRelativeDirection(_input.Movement);
+            bool hasMovementInput = moveDirWorld.sqrMagnitude > 0.0001f;
+            visuals?.UpdateSwivelVisual(hasMovementInput ? moveDirWorld : Vector3.zero);
+            visuals?.UpdateWheelRollingVisual(_playerRb.linearVelocity);
+        }
+
+        public void ApplyLateFixedUpdate()
         {
             
         }

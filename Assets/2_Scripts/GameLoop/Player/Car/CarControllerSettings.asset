@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: CarControllerSettings
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.SOCarControllerSettings
   groundHeight: 0.65
-  suspensionStrength: 25
-  suspensionDamping: 2
+  suspensionStrength: 40
+  suspensionDamping: 4
   steeringAngle: 35
   steeringStrength: 3
   topSpeedSteeringFactor: 0.5
@@ -113,8 +113,8 @@ MonoBehaviour:
     minValue: 0.7
     maxValue: 1.2
   gripByNormalForceFactor:
-    minValue: 0.21074381
-    maxValue: 1
+    minValue: 0.2
+    maxValue: 1.1
   minGripWhenPartialGround: 0.1
   partialGroundGripPower: 2
   gravityStrength: 15
@@ -174,7 +174,7 @@ MonoBehaviour:
   speedyAccelMultiplier: 1.25
   brakeStrength: 15
   engineBrakeStrength: 2
-  airAlignmentStrength: 2
+  airAlignmentStrength: 4
   airAlignmentDamping: 2
-  airSteeringStrength: 2
+  airSteeringStrength: 3
   maxAirSteeringVelocity: 2

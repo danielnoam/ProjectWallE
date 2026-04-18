@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using _2_Scripts;
 using ProjectWallE.GameLoop.Player;
 using UnityEngine;
@@ -37,6 +38,8 @@ namespace ProjectWallE
         private PlayerControllerType _lastFramePlayerControllerTypeEnum;
         
         private IPlayerController _currentController;
+        
+        private Coroutine _lateFixedUpdateCoroutine;
         
         private float _currentHealth;
         private float _switchTimer;
@@ -93,6 +96,16 @@ namespace ProjectWallE
             EnableController(PlayerControllerType.Robot);
         }
 
+        private void OnEnable()
+        {
+            _lateFixedUpdateCoroutine = StartCoroutine(RunLateFixedUpdate());
+        }
+
+        private void OnDisable()
+        {
+            StopCoroutine(_lateFixedUpdateCoroutine);
+        }
+
         private void Update()
         {
             _currentController.ApplyUpdate();
@@ -106,6 +119,16 @@ namespace ProjectWallE
         private void FixedUpdate()
         {
             _currentController?.ApplyFixedUpdate();
+        }
+
+        private void LateUpdate()
+        {
+            _currentController?.ApplyLateUpdate();
+        }
+
+        private void LateFixedUpdate()
+        {
+            _currentController?.ApplyLateFixedUpdate();
         }
         
 
@@ -195,6 +218,15 @@ namespace ProjectWallE
             rot.y = _cameraTransform.rotation.eulerAngles.y;
             _rigidbody.rotation = Quaternion.Euler(rot);
             _rigidbody.angularVelocity = Vector3.zero;
+        }
+
+        private IEnumerator RunLateFixedUpdate()
+        {
+            while (true)
+            {
+                LateFixedUpdate();
+                yield return new WaitForFixedUpdate();
+            }
         }
 
         #endregion

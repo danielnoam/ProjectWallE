@@ -137,8 +137,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.64, y: 0.88, z: 2.37}
-  m_Center: {x: 0, y: 0.08, z: 0.3}
+  m_Size: {x: 1.1316833, y: 0.39834404, z: 1.5540466}
+  m_Center: {x: 0.002948761, y: 0.15181637, z: 0.24916077}
 --- !u!114 &6607225680324455528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -172,6 +172,8 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 0
     isMoving: 0
+    normalForceMag: 0
+    lastVelocity: {x: 0, y: 0, z: 0}
   - tireTransform: {fileID: 813313045939543381}
     isGroundedExact: 1
     isGroundedExtended: 1
@@ -179,6 +181,8 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 0
     isMoving: 0
+    normalForceMag: 0
+    lastVelocity: {x: 0, y: 0, z: 0}
   staticTires:
   - tireTransform: {fileID: 4997806077238404413}
     isGroundedExact: 1
@@ -187,6 +191,8 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 0
     isMoving: 0
+    normalForceMag: 0
+    lastVelocity: {x: 0, y: 0, z: 0}
   - tireTransform: {fileID: 5027628266276025665}
     isGroundedExact: 1
     isGroundedExtended: 1
@@ -194,6 +200,8 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 0
     isMoving: 0
+    normalForceMag: 0
+    lastVelocity: {x: 0, y: 0, z: 0}
   boostPoint: {fileID: 3352623459842719466}
   centerOfMassOffset: {x: 0, y: -0.25, z: 0.35}
   visuals:
@@ -415,6 +423,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4997806077238404413}
+  - component: {fileID: 6813097212352021623}
   m_Layer: 9
   m_Name: 'BackLeftTire '
   m_TagString: Untagged
@@ -437,6 +446,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3111835496907694697}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &6813097212352021623
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2160678104528011609}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2767083873058395676
 GameObject:
   m_ObjectHideFlags: 0
@@ -575,6 +605,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 813313045939543381}
+  - component: {fileID: 4242428797318229064}
   m_Layer: 9
   m_Name: FrontLeftTire
   m_TagString: Untagged
@@ -597,6 +628,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3111835496907694697}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &4242428797318229064
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2821246693688897465}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2823248555016632271
 GameObject:
   m_ObjectHideFlags: 0
@@ -831,6 +883,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3987191290676102387}
+  - component: {fileID: 2787217925141755593}
   m_Layer: 9
   m_Name: FrontRightTire
   m_TagString: Untagged
@@ -853,6 +906,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3111835496907694697}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &2787217925141755593
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3297115181469243394}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5105030358576147286
 GameObject:
   m_ObjectHideFlags: 0
@@ -1490,6 +1564,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5027628266276025665}
+  - component: {fileID: 125411949206817235}
   m_Layer: 9
   m_Name: BackRightTire
   m_TagString: Untagged
@@ -1512,6 +1587,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3111835496907694697}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &125411949206817235
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7170555774389211336}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7717407218151999399
 GameObject:
   m_ObjectHideFlags: 0

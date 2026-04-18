@@ -17,6 +17,8 @@ namespace ProjectWallE
         bool canShoot {get;}
         public void ApplyFixedUpdate();
         public void ApplyUpdate();
+        public void ApplyLateUpdate();
+        public void ApplyLateFixedUpdate();
         public void Initialize(PlayerReferences playerReferences);
 
         public GameObject gameObject { get; }

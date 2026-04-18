@@ -42,8 +42,6 @@ namespace _2_Scripts
         private Vector3 _groundPlaneNormal;
         
         private CarLongitudinalState _longitudinalState;
-        
-        private Coroutine _lateFixedUpdateCoroutine;
 
         private float _currentSteering;
         private float _groundedRatio;
@@ -98,31 +96,6 @@ namespace _2_Scripts
             visuals?.ResetVisuals();
         }
 
-        private void OnEnable()
-        {
-            _lateFixedUpdateCoroutine = StartCoroutine(RunLateFixedUpdate());
-        }
-
-        private void OnDisable()
-        {
-            StopCoroutine(_lateFixedUpdateCoroutine);
-        }
-
-        void Update()
-        {
-            UpdateTiresGroundState(out Vector3 planeNormal);
-            _groundPlaneNormal = planeNormal;
-        }
-        
-        private void LateFixedUpdate()
-        {
-            foreach (var tire in _allTires)
-            {
-                tire.lastVelocity = _playerRb.GetPointVelocity(tire.tireTransform.position);
-            }
-        }
-
-
         public void ApplyFixedUpdate()
         {
 
@@ -136,7 +109,18 @@ namespace _2_Scripts
 
         public void ApplyUpdate()
         {
+            UpdateTiresGroundState(out Vector3 planeNormal);
+            _groundPlaneNormal = planeNormal;
+        }
+        
+        public void ApplyLateUpdate()
+        {
             
+        }
+
+        public void ApplyLateFixedUpdate()
+        {
+            StopJittering();
         }
 
         #region Suspension
@@ -149,7 +133,6 @@ namespace _2_Scripts
                 if (tire.isGroundedExact)
                 {
                     RaycastHit hit = tire.exactGroundHit;
-                    float minRideHeight = 0.2f;
 
                     float offset = hit.distance - settings.GroundHeight;
                     Vector3 springDir = tire.tireTransform.up;
@@ -160,17 +143,8 @@ namespace _2_Scripts
                     float suspensionForce =
                         (-offset * settings.SuspensionStrength) -
                         (velAlongSpring * settings.SuspensionDamping);
-                    tire.normalForceMag = suspensionForce;
-
-                    if (hit.distance < minRideHeight)
-                    {
-                        float lastVelAlongSpring = Vector3.Dot(tire.lastVelocity, springDir);
-                        
-                        float cancelForce = (lastVelAlongSpring - velAlongSpring) / Time.fixedDeltaTime;
-                        Debug.Log(cancelForce);
-                        suspensionForce = cancelForce;
-                        
-                    }
+                    tire.normalForceMag = Mathf.Max(0f, suspensionForce);
+                    
                     
                     _playerRb.AddForceAtPosition(
                         springDir * (suspensionForce * _playerRb.mass),
@@ -258,7 +232,7 @@ namespace _2_Scripts
                 gripFactor *= _airborneFactor;
                 gripFactor *= _slippingFactor;
                 gripFactor = Mathf.Lerp(gripFactor, settings.HandBrakeGrip, _handbrake01);
-
+                
                 float desiredVelChange = -steeringVel * gripFactor;
                 float desiredAccel = desiredVelChange / Time.fixedDeltaTime;
 
@@ -282,22 +256,22 @@ namespace _2_Scripts
 
         private float CalcCurrentTireGripFactor(Tire tire, AnimationCurve frictionCurve, Vector3 tireVel)
         {
-            Vector3 tireVelAlongGround = Vector3.ProjectOnPlane(tireVel, tire.extendedGroundHit.normal);
-
-            if (tireVelAlongGround.magnitude < 0.1f)
+            Vector3 carVel = Vector3.ProjectOnPlane(_playerRb.linearVelocity, _groundPlaneNormal);
+            if (carVel.magnitude < 0.3f)
                 return frictionCurve.Evaluate(0f);
-
+            
+            Vector3 tireVelAlongGround = Vector3.ProjectOnPlane(tireVel, tire.extendedGroundHit.normal);
             float slippingAmount = Mathf.Clamp(
                 Vector3.Dot(tire.tireTransform.right, tireVelAlongGround.normalized),
                 -1f,
                 1f);
 
             float gripFactor = frictionCurve.Evaluate(Mathf.Abs(slippingAmount));
-            gripFactor = Mathf.Clamp(gripFactor * GetNormalForceGripFactor(tire), frictionCurve.Evaluate(1f), 1);
+            gripFactor = Mathf.Clamp(gripFactor * GetNormalForceGripFactor(tire, tireVel.magnitude), frictionCurve.Evaluate(1f), 1);
             return gripFactor;
         }
 
-        private float GetNormalForceGripFactor(Tire tire)
+        private float GetNormalForceGripFactor(Tire tire, float tireVelMag)
         {
             float normalizedNormalForce = tire.normalForceMag / settings.GravityStrength * _allTires.Count;
             float factor = 1f;
@@ -314,7 +288,6 @@ namespace _2_Scripts
                 float t = Mathf.InverseLerp(settings.UnaffectedNormalForceRange.maxValue, 2f, normalizedNormalForce);
                 factor = Mathf.Lerp(1f, settings.GripByNormalForceFactor.maxValue, t);
             }
-            Debug.Log(factor);
             return factor;
         }
 
@@ -379,8 +352,6 @@ namespace _2_Scripts
                 float availableAcceleration = carSpeed <= 0
                     ? settings.AccelerationCurve.Evaluate(normalizedSpeed) * accelForce
                     : brakeForce;
-                
-                
                 
                 Vector3 accelDir = Vector3.ProjectOnPlane(-tire.tireTransform.forward, tire.extendedGroundHit.normal);
 
@@ -539,24 +510,32 @@ namespace _2_Scripts
             float exactDistance = settings.GroundHeight;
             float extendedDistance = settings.GroundHeight + ExtendedGroundCheckExtraDistance;
 
-            planeNormal = transform.up;
+            Vector3 normalSum = Vector3.zero;
+            int groundedCount = 0;
 
             foreach (var tire in _allTires)
             {
                 Vector3 origin = tire.tireTransform.position;
                 Vector3 direction = -tire.tireTransform.up;
-                
-                tire.isGroundedExact = Physics.Raycast(origin, direction, out RaycastHit exactHit, exactDistance , _groundLayer);
+
+                tire.isGroundedExact = Physics.Raycast(origin, direction, out RaycastHit exactHit, exactDistance, _groundLayer);
                 tire.exactGroundHit = exactHit;
 
-                tire.isGroundedExtended = Physics.Raycast(origin, direction, out RaycastHit extendedHit, extendedDistance , _groundLayer);
+                tire.isGroundedExtended = Physics.Raycast(origin, direction, out RaycastHit extendedHit, extendedDistance, _groundLayer);
                 tire.extendedGroundHit = extendedHit;
 
+                if (!tire.isGroundedExtended)
+                    continue;
 
-                if (!tire.isGroundedExtended) continue;
-                planeNormal = extendedHit.normal;
+                normalSum += extendedHit.normal;
+                groundedCount++;
+
                 tire.hitLayer = 1 << extendedHit.collider.gameObject.layer;
             }
+
+            planeNormal = groundedCount > 0
+                ? (normalSum / groundedCount).normalized
+                : transform.up;
         }
 
         private bool IsCarGrounded()
@@ -595,17 +574,15 @@ namespace _2_Scripts
 
             return (float)groundedCount / _allTires.Count;
         }
+
+        private void StopJittering()
+        {
+            if (_playerRb.linearVelocity.magnitude > 0.1f) return;
+            _playerRb.linearVelocity = Vector3.zero;
+            _playerRb.angularVelocity = Vector3.zero;
+        }
         
         public bool IsTireGrounded(int index) => _allTires[index].isGroundedExact;
-
-        private IEnumerator RunLateFixedUpdate()
-        {
-            while (true)
-            {
-                LateFixedUpdate();
-                yield return new WaitForFixedUpdate();
-            }
-        }
         #endregion
     }
 }
