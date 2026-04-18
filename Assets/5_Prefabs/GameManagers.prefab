@@ -66,6 +66,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7835f264edc4b4b91fa3be8da632fea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.LevelCheats
+  restartSceneKey: 98
+  completeObjectivesKey: 97
+  addResourcesKey: 96
 --- !u!1 &1896268982781418045
 GameObject:
   m_ObjectHideFlags: 0
@@ -279,6 +282,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DebugOverlay
   enabledOnStart: 0
+  showTimestamp: 1
+  maxLines: 20
   toggleKey: 94
   labelStyle:
     m_Name: 
