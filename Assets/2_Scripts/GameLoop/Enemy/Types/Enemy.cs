@@ -27,12 +27,13 @@ namespace ProjectWallE.GameLoop
     public abstract class Enemy : MonoBehaviour, IDamageable, IPushable, IPoolable, IDeployable
     {
         public static event Action<Enemy> OnEnemyKilled;
+        public static event Action<IDamageable> OnEnemyDamaged;
         
         
         [Header("Settings")]
         [SerializeField] private float maxHealth = 100f;
         [SerializeField] private bool canBePushed = true;
-        [SerializeField, SOSelector("Assets/Data")] private SOLayerMask hitLayers;
+        [SerializeField, SOSelector("Assets/6_Data")] private SOLayerMask hitLayers;
 
         [Header("Targeting")]
         [SerializeField] private float targetFindRange = 75f;
@@ -63,7 +64,9 @@ namespace ProjectWallE.GameLoop
         protected bool RequiresDirectApproach => attackStrategy?.RequiresDirectApproach ?? false;
         protected virtual Vector3 Velocity => rigidBody.linearVelocity;
 
+
         public bool IsAlive => _currentHealth > 0;
+        public Team Team => Team.Enemy;
 
         public event Action<IDamageable> OnDeath;
         public event Action<float> OnDamaged;
@@ -95,6 +98,7 @@ namespace ProjectWallE.GameLoop
             {
                 DeltaTime = Time.deltaTime,
                 Position = transform.position,
+                Rotation = transform.rotation,
                 Velocity = Velocity,
                 TargetPosition = targetPos,
                 IsVisible = isVisible
@@ -201,6 +205,7 @@ namespace ProjectWallE.GameLoop
         {
             _currentHealth -= damage;
             OnDamaged?.Invoke(damage);
+            OnEnemyDamaged?.Invoke(attacker);
 
             if (attacker != null && attacker != CurrentTarget && ShouldRetaliate(attacker))
             {

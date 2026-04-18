@@ -123,5 +123,49 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ed12d104c8b9499459cba8257fbc00df, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -2389118804069690049}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ed12d104c8b9499459cba8257fbc00df, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -8577701123001900277}
   m_SourcePrefab: {fileID: 100100000, guid: ed12d104c8b9499459cba8257fbc00df, type: 3}
+--- !u!1 &2993072988507936679 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ed12d104c8b9499459cba8257fbc00df, type: 3}
+  m_PrefabInstance: {fileID: 2686645493657250550}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &-2389118804069690049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2993072988507936679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aed10b6dc779cd14ebf2c35ac914320f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::HologramGlitch
+  rend: {fileID: 8041045602403109816}
+--- !u!114 &-8577701123001900277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2993072988507936679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d18db5e15904b80ae734722ddd0e851, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.GhostStructure
+  canBuildColor: {fileID: 11400000, guid: 046258290a5e9d04f99f84b915c4387c, type: 2}
+  blockBuildColor: {fileID: 11400000, guid: 0d466add85d7d5346a070321146708c6, type: 2}
+  material: {fileID: 2100000, guid: 75bc54c4b0ad3614184c59931e286a0a, type: 2}
+--- !u!23 &8041045602403109816 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 5395146914925404494, guid: ed12d104c8b9499459cba8257fbc00df, type: 3}
+  m_PrefabInstance: {fileID: 2686645493657250550}
+  m_PrefabAsset: {fileID: 0}

@@ -9,9 +9,12 @@ namespace ProjectWallE.GameLoop
     [SerializableSelectorName("Kill", "Enemy")]
     public class KillEnemiesObjective : BaseLevelObjective
     {
-        [InfoBox("Leave the enemy field empty to allow any enemy to count towards the objective. (Works by type of class not prefab)")]
+        [Header("Settings")]
+        [Tooltip("Leave the enemy field empty to allow any enemy to count towards the objective. (Works by type of class not prefab)")]
         [PrefabSelector("Assets/5_Prefabs/Enemies")] public Enemy enemyPrefab;
         [SerializeField, Min(1)] private int killCount = 10;
+        [SerializeField] private bool spawnEnemies;
+        [SerializeField, ShowIf("spawnEnemies")] private EnemySpawnerConfig spawner;
 
         private int _currentKills;
 
@@ -23,11 +26,17 @@ namespace ProjectWallE.GameLoop
         {
             _currentKills = 0;
             Enemy.OnEnemyKilled += OnEnemyKilled;
+            if (spawnEnemies) spawner.Initialize(resolver);
         }
 
-        public override void Dispose()
+        protected override void OnDispose()
         {
             Enemy.OnEnemyKilled -= OnEnemyKilled;
+        }
+        
+        public override void Tick(float deltaTime)
+        {
+            if (spawnEnemies) spawner.Tick(deltaTime);
         }
 
         private void OnEnemyKilled(Enemy enemy)

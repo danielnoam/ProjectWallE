@@ -9,9 +9,9 @@ public class SpawnEnemyEvent : BaseLevelEventAsset
 {
     [Header("Interval")]
     public float spawnInterval = 1f;
+    public int enemiesPerWave = 3;
     
     [Header("Spawn")]
-    public int enemiesPerWave = 3;
     public SpawnType enemyType = SpawnType.Random;
     [InfoBox("Random - Will spawn randomly from the full enemy pool \n Specific - Will spawn from the enemies chance list")]
     [ShowIf("enemyType", SpawnType.Specific)] public ChanceList<Enemy> enemies;

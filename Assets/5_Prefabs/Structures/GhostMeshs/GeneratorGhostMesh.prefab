@@ -111,5 +111,49 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 113f02c3665fdd043ac10eb3c45f8654, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -7988210037588238735}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 113f02c3665fdd043ac10eb3c45f8654, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -768713031059423752}
   m_SourcePrefab: {fileID: 100100000, guid: 113f02c3665fdd043ac10eb3c45f8654, type: 3}
+--- !u!1 &4470561220568391773 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 113f02c3665fdd043ac10eb3c45f8654, type: 3}
+  m_PrefabInstance: {fileID: 3660290081430740236}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &-7988210037588238735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4470561220568391773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aed10b6dc779cd14ebf2c35ac914320f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::HologramGlitch
+  rend: {fileID: 7921959726006138919}
+--- !u!114 &-768713031059423752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4470561220568391773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d18db5e15904b80ae734722ddd0e851, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.GhostStructure
+  canBuildColor: {fileID: 11400000, guid: 046258290a5e9d04f99f84b915c4387c, type: 2}
+  blockBuildColor: {fileID: 11400000, guid: 0d466add85d7d5346a070321146708c6, type: 2}
+  material: {fileID: 2100000, guid: 75bc54c4b0ad3614184c59931e286a0a, type: 2}
+--- !u!23 &7921959726006138919 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6862221435064771883, guid: 113f02c3665fdd043ac10eb3c45f8654, type: 3}
+  m_PrefabInstance: {fileID: 3660290081430740236}
+  m_PrefabAsset: {fileID: 0}

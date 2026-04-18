@@ -13,15 +13,18 @@ MonoBehaviour:
   m_Name: ProjectileData_PlayerBasic
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileData
   maxLifetime: 10
-  pushStrength: 0
   damageType: 0
   damage: 25
+  pushStrength: 3
   aoeRadius: 5
   damageRange:
     minValue: 1
     maxValue: 100
+  pushRange:
+    minValue: 0
+    maxValue: 25
   movementType: 0
-  speed: 75
+  speed: 125
   prefab: {fileID: 8338543337846540916, guid: 3c09a670e7ef45449a66861350c5473d, type: 3}
   hitParticle: {fileID: 8195002406593029198, guid: 9d833e0335f9b0548b713e0ce34d2739, type: 3}
   collisionSFX: ProjectileCollision

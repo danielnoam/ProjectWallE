@@ -1,36 +1,43 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using DNExtensions.Systems.Shapes;
-using DNExtensions.Utilities;
+using DNExtensions.Systems.Scriptables;
 using DNExtensions.Utilities.AutoGet;
-using DNExtensions.Utilities.CustomFields;
 using ProjectWallE.GameLoop;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace ProjectWallE.UI
 {
     public class HUDManager : MonoBehaviour
-    {
-        [Header("Game Status")]
-        [SerializeField] private TextMeshProUGUI currentResourcesText;
-        [SerializeField] private TextMeshProUGUI structuresText;
-        [SerializeField] private TextMeshProUGUI objectivesText;
+    { 
+        [Header("Resources")]
+        [SerializeField] private CountIcon resourcesIcon;
+        [SerializeField] private CountIcon basesIcon;
+        [SerializeField] private CountIcon turretsIcon;
+        [SerializeField] private CountIcon generatorsIcon;
+        [SerializeField] private CountIcon rampsIcon;
         
-        [Header("Player Status")]
-        [SerializeField] private OptionalField<string> showFuelPrefix = new OptionalField<string>("Fuel: ", true);
-        [SerializeField] private SDFRectangle fuelBar;
-        [SerializeField] private TextMeshProUGUI fuelText;
-        [SerializeField] private OptionalField<string> showHealthPrefix = new OptionalField<string>("Health: ", true);
-        [SerializeField] private SDFRectangle healthBar;
-        [SerializeField] private TextMeshProUGUI healthText;
-        [SerializeField] private Image basicAttackIcon;
-        [SerializeField] private Image specialAttackIcon;
+        [Header("Objective")]
+        [SerializeField] private GameObject objectivesHolder;
+        [SerializeField] private TextMeshProUGUI objectivesText;
+        [SerializeField] protected SOFontStyle objectiveStatusFontStyle;
+        [SerializeField] protected SOFontStyle objectiveCompletedFontStyle;
+        
+        [Header("Bars")]
+        [SerializeField] private FillBar fuelBar;
+        [SerializeField] private FillBar healthBar;
+        
+        [Header("Actions")]
+        [SerializeField] private ActionIcon switchIcon;
+        [SerializeField] private ActionIcon buildIcon;
+        [SerializeField] private ActionIcon basicAttackIcon;
+        [SerializeField] private ActionIcon specialAttackIcon;
+        [SerializeField] private ActionIcon jumpIcon;
+        [SerializeField] private ActionIcon boostIcon;
+        [SerializeField] private ActionIcon brakeIcon;
         
         [Header("References")] 
-        [SerializeField] private GameObject crosshair;
         [SerializeField, AutoGetChildren] private RadarSystem radarSystem;
         [SerializeField, AutoGetScene] private PlayerManager player;
 
@@ -50,183 +57,223 @@ namespace ProjectWallE.UI
         private void OnEnable()
         {
             ResourceManager.OnResourcesChanged += UpdateResourcesDisplay;
-            StructureManager.OnStructureCreated += UpdateStructuresText;
-            StructureManager.OnStructureDestroyed += UpdateStructuresText;
+            StructureManager.OnStructureCountChanged += UpdateStructuresText;
             LevelManager.OnLevelInitializing += ResetTexts;
-            LevelManager.OnLevelStarted += OnLevelStarted;
-            LevelManager.OnTimeUpdated += OnTimeUpdated;
+            LevelManager.OnLeveTimeLineUpdated += OnLeveTimeLineUpdated;
             LevelManager.OnLevelCompleted += OnLevelCompleted;
             LevelManager.OnLevelFailed += OnLevelFailed;
-            LevelManager.OnObjectivesStarted += OnObjectivesStarted;
+            LevelManager.OnObjectivesAdded += OnObjectivesAdded;
             LevelManager.OnObjectivesCompleted += OnObjectivesCompleted;
 
             if (player)
             {
-                player.OnControllerChanged += OnControllerChanged;
                 player.OnHealthChanged += UpdateHealthBar;
+                player.OnControllerChanged += OnControllerChanged;
+                player.StructureBuilder.ActionsMenuRequested += OnActionsMenuRequested;
+                player.StructureBuilder.BuildMenuRequested += OnBuildMenuRequested;
+                player.StructureBuilder.MenuCloseRequested += OnMenuCloseRequested;
+                player.CarController.OnBrakeStarted += OnBrakeStarted;
                 player.CarController.CarBoost.OnFuelChange += UpdateFuelBar;
+                player.CarController.CarBoost.OnBoostStart += OnBoostStart;
+                player.RobotController.OnJumped += OnJumped;
                 player.Shooter.OnBasicCooldownUpdated += OnBasicCooldownUpdated;
                 player.Shooter.OnSpecialCooldownUpdated += OnSpecialCooldownUpdated;
                 
                 radarSystem.worldCenter.SetTransform(player.transform);
                 if (Camera.main) radarSystem.rotationTarget.Value = Camera.main.transform;
-                UpdateFuelBar(100,100);
-                UpdateHealthBar(100, 100);
+                fuelBar.SetImmediate(100, 100);
+                healthBar.SetImmediate(100, 100);
+                OnControllerChanged(player.PlayerControllerType);
             }
         }
+        
+
 
         private void OnDisable()
         {
             ResourceManager.OnResourcesChanged -= UpdateResourcesDisplay;
-            StructureManager.OnStructureCreated -= UpdateStructuresText;
-            StructureManager.OnStructureDestroyed -= UpdateStructuresText;
+            StructureManager.OnStructureCountChanged -= UpdateStructuresText;
             LevelManager.OnLevelInitializing -= ResetTexts;
-            LevelManager.OnLevelStarted -= OnLevelStarted;
-            LevelManager.OnTimeUpdated -= OnTimeUpdated;
+            LevelManager.OnLeveTimeLineUpdated -= OnLeveTimeLineUpdated;
             LevelManager.OnLevelCompleted -= OnLevelCompleted;
             LevelManager.OnLevelFailed -= OnLevelFailed;
-            LevelManager.OnObjectivesStarted -= OnObjectivesStarted;
+            LevelManager.OnObjectivesAdded -= OnObjectivesAdded;
             LevelManager.OnObjectivesCompleted -= OnObjectivesCompleted;
 
             if (player)
             {
-                player.OnControllerChanged -= OnControllerChanged;
                 player.OnHealthChanged -= UpdateHealthBar;
+                player.OnControllerChanged -= OnControllerChanged;
+                player.StructureBuilder.ActionsMenuRequested -= OnActionsMenuRequested;
+                player.StructureBuilder.BuildMenuRequested -= OnBuildMenuRequested;
+                player.StructureBuilder.MenuCloseRequested -= OnMenuCloseRequested;
+                player.CarController.OnBrakeStarted -= OnBrakeStarted;
                 player.CarController.CarBoost.OnFuelChange -= UpdateFuelBar;
+                player.CarController.CarBoost.OnBoostStart -= OnBoostStart;
+                player.RobotController.OnJumped -= OnJumped;
                 player.Shooter.OnBasicCooldownUpdated -= OnBasicCooldownUpdated;
                 player.Shooter.OnSpecialCooldownUpdated -= OnSpecialCooldownUpdated;
             }
         }
+
+        private void OnBrakeStarted()
+        {
+            if (brakeIcon && brakeIcon.isActiveAndEnabled) brakeIcon.PunchIcon();
+        }
         
+        private void OnBoostStart()
+        {
+            if (boostIcon && boostIcon.isActiveAndEnabled) boostIcon.PunchIcon();
+        }
+        
+        private void OnJumped()
+        {
+            if (jumpIcon && jumpIcon.isActiveAndEnabled) jumpIcon.PunchIcon();
+        }
+
+        private void OnControllerChanged(PlayerControllerType type)
+        {
+            switch (type)
+            {
+                case PlayerControllerType.Robot:
+                    
+                    jumpIcon.gameObject.SetActive(true);
+                    basicAttackIcon.gameObject.SetActive(true);
+                    specialAttackIcon.gameObject.SetActive(true);
+                    
+                    boostIcon.gameObject.SetActive(false);
+                    brakeIcon.gameObject.SetActive(false);
+                    break;
+                case PlayerControllerType.Car:
+                    jumpIcon.gameObject.SetActive(false);
+                    basicAttackIcon.gameObject.SetActive(false);
+                    specialAttackIcon.gameObject.SetActive(false);
+                    
+                    boostIcon.gameObject.SetActive(true);
+                    brakeIcon.gameObject.SetActive(true);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
+            }
+            
+            switchIcon.PunchIcon();
+        }
+
+        private void OnActionsMenuRequested(Structure structure)
+        {
+            basesIcon?.gameObject.SetActive(true);
+            turretsIcon?.gameObject.SetActive(true);
+            generatorsIcon?.gameObject.SetActive(true);
+            rampsIcon?.gameObject.SetActive(true);
+            if (buildIcon && buildIcon.isActiveAndEnabled) buildIcon.PunchIcon();
+        }
+        
+        private void OnBuildMenuRequested(Structure[] structures)
+        {
+            basesIcon?.gameObject.SetActive(true);
+            turretsIcon?.gameObject.SetActive(true);
+            generatorsIcon?.gameObject.SetActive(true);
+            rampsIcon?.gameObject.SetActive(true);
+            if (buildIcon && buildIcon.isActiveAndEnabled) buildIcon.PunchIcon();
+        }
+        
+        private void OnMenuCloseRequested()
+        {
+            basesIcon?.gameObject.SetActive(false);
+            turretsIcon?.gameObject.SetActive(false);
+            generatorsIcon?.gameObject.SetActive(false);
+            rampsIcon?.gameObject.SetActive(false);
+        }
+
         private void UpdateStructuresText(StructuresData data)
         {
-            structuresText.text = $"Bases - {data.BasesCount}" +
-                                  $"\nTurrets - {data.TurretsCount}" +
-                                  $"\nGenerators - {data.GeneratorsCount}";
+            basesIcon?.SetCount(data.BasesCount);
+            turretsIcon?.SetCount(data.TurretsCount);
+            generatorsIcon?.SetCount(data.GeneratorsCount);
+            rampsIcon?.SetCount(data.RampsCount);
         }
         
-        private void ResetTexts()
-        {
-            objectivesText.text = ""; 
-            currentResourcesText.text = ""; 
-            structuresText.text = "";
-        }
-        
-        private void OnLevelStarted()
-        {
-            currentResourcesText.color = currentResourcesText.color.SetAlpha(1f);
-        }
 
         private void OnLevelFailed()
         {
             _activeObjectives = null;
-            UpdateObjectiveDisplay("Fail");
+            objectivesHolder?.SetActive(false);
         }
 
         private void OnLevelCompleted()
         {
             _activeObjectives = null;
-            UpdateObjectiveDisplay("Success");  
+            objectivesText?.gameObject.SetActive(false);
         }
 
-        private void OnObjectivesStarted(List<BaseLevelObjective> objectives)
+        private void OnObjectivesAdded(List<BaseLevelObjective> objectives)
         {
             _activeObjectives = objectives;
+            objectivesHolder?.SetActive(true);
         }
 
         private void OnObjectivesCompleted()
         {
             _activeObjectives = null;
+            objectivesHolder?.SetActive(false);
         }
-
-        private void OnControllerChanged(PlayerControllerType controllerType)
+        
+        
+        private void OnBasicCooldownUpdated(float currentCooldown, float maxCooldown)
         {
-            switch (controllerType)
-            {
-                case PlayerControllerType.Robot:
-                    fuelBar.color = Color.black;
-                    fuelText.color = fuelText.color.SetAlpha(0.2f);
-                    crosshair.gameObject.SetActive(true);
-                    break;
-                case PlayerControllerType.Car:
-                    fuelBar.color = Color.white;
-                    fuelText.color = fuelText.color.SetAlpha(1f);
-                    crosshair.gameObject.SetActive(false);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(controllerType), controllerType, null);
-            }
+            if (basicAttackIcon && basicAttackIcon.isActiveAndEnabled) basicAttackIcon.UpdateCooldown(currentCooldown, maxCooldown);
         }
 
-        private void OnTimeUpdated(float timeRemaining)
+        private void OnSpecialCooldownUpdated(float currentCooldown, float maxCooldown)
+        {
+            if (specialAttackIcon&& basicAttackIcon.isActiveAndEnabled) specialAttackIcon.UpdateCooldown(currentCooldown, maxCooldown);
+        }
+
+        private void OnLeveTimeLineUpdated(float timeRemaining)
         {
             if (_activeObjectives != null)
             {
                 UpdateObjectivesDisplay();
-            }
-            else
-            {
-                UpdateObjectiveDisplay("No Objectives");
             }
         }
 
         private void UpdateObjectivesDisplay()
         {
             _objectiveBuilder.Clear();
-            _objectiveBuilder.AppendLine("Objectives:");
 
             foreach (var objective in _activeObjectives)
             {
-                _objectiveBuilder.AppendLine($"○ {objective.Description} - {objective.ProgressText}");
+                _objectiveBuilder.AppendLine(objective.IsCompleted
+                    ? $"○ {objectiveCompletedFontStyle.ApplyStyle($"{objective.Description}")}"
+                    : $"○ {objective.Description} - {objectiveStatusFontStyle.ApplyStyle(objective.ProgressText)}");
             }
 
-            UpdateObjectiveDisplay(_objectiveBuilder.ToString());
+            if (objectivesText) objectivesText.text = _objectiveBuilder.ToString();
         }
 
         private void UpdateResourcesDisplay(int currentResources)
         {
-            if (!currentResourcesText) return;
-            currentResourcesText.text = $"Resources: {currentResources}";
+            resourcesIcon?.SetCount(currentResources);
         }
-
-        private void UpdateObjectiveDisplay(string objectives)
-        {
-            if (!objectivesText) return;
-            objectivesText.text = objectives;
-        }
-
+        
         private void UpdateFuelBar(float currentFuel, float maxFuel)
         {
-            if (fuelBar) fuelBar.fillAmount = currentFuel / maxFuel;
-            if (fuelText)
-            {
-                fuelText.text = showFuelPrefix.isSet ? $"{showFuelPrefix.Value}{currentFuel:N0}/{maxFuel}" : $"{currentFuel:N0}/{maxFuel}";
-            }
+            if (fuelBar) fuelBar.SetValue(currentFuel, maxFuel);
         }
 
         private void UpdateHealthBar(float currentHealth, float maxHealth)
         {
-            if (healthBar) healthBar.fillAmount = currentHealth / maxHealth;
-            if (healthText)
-            {
-                healthText.text = showHealthPrefix.isSet ? $"{showHealthPrefix.Value}{currentHealth:N0}/{maxHealth}" : $"{currentHealth:N0}/{maxHealth}";
-            }
+            if (healthBar) healthBar.SetValue(currentHealth, maxHealth);
         }
         
-        private void OnSpecialCooldownUpdated(float currentCooldown, float maxCooldown)
+        private void ResetTexts()
         {
-            if (!specialAttackIcon) return;
-            
-            var normalizedCooldown = 1f - (currentCooldown / maxCooldown);
-            specialAttackIcon.color = specialAttackIcon.color.SetAlpha(normalizedCooldown);
-        }
-
-        private void OnBasicCooldownUpdated(float currentCooldown, float maxCooldown)
-        {
-            if (!basicAttackIcon) return;
-            
-            var normalizedCooldown = 1f - (currentCooldown / maxCooldown);
-            basicAttackIcon.color = basicAttackIcon.color.SetAlpha(normalizedCooldown);
+            resourcesIcon?.SetCountImmediate(0);
+            basesIcon?.SetCountImmediate(0);
+            turretsIcon?.SetCountImmediate(0);
+            generatorsIcon?.SetCountImmediate(0);
+            rampsIcon?.SetCountImmediate(0);
+            objectivesHolder?.SetActive(false);
         }
     }
 }

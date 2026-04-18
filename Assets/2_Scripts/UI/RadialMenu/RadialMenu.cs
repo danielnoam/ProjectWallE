@@ -9,20 +9,21 @@ namespace ProjectWallE.UI
 {
     public class RadialMenu<T> : MonoBehaviour where T : class
     {
-        [Header("Menu Settings")]
-        [SerializeField] private Color hoveredColor = Color.yellow;
-        [SerializeField] private Color normalColor = Color.white;
-
         [Header("Input Settings")]
-        [SerializeField] private float selectionDeadzone = 50f;
-        [SerializeField] private float maxRadius = 150f;
-        [SerializeField, ReadOnly, Preview] private Vector2 mousePositionFromCenter;
+        [SerializeField] protected float selectionDeadzone = 50f;
+        [SerializeField] protected float maxRadius = 150f;
+        [SerializeField, ReadOnly, Preview] protected Vector2 mousePositionFromCenter;
+        
+        [Header("Element Settings")]
+        [SerializeField] protected Color normalColor = Color.white;
+        [SerializeField] protected Color hoveredColor = Color.orange;
 
         [Header("References")]
-        [SerializeField] private CanvasGroup canvasGroup;
-        [SerializeField] private TextMeshProUGUI selectedItemText;
-        [SerializeField] private RadialMenuElement elementPrefab;
-        [SerializeField] private Transform elementsContainer;
+        [SerializeField] protected RadialMenuElement elementPrefab;
+        [SerializeField] protected Transform elementsContainer;
+        [SerializeField] protected CanvasGroup canvasGroup;
+        [SerializeField] protected TextMeshProUGUI menuTitleText;
+        [SerializeField] protected TextMeshProUGUI selectedItemText;
 
         private readonly Dictionary<RadialMenuElement, T> _elementToItem = new();
         private readonly List<RadialMenuElement> _menuElements = new();
@@ -175,6 +176,7 @@ namespace ProjectWallE.UI
             canvasGroup.alpha = 0f;
             canvasGroup.blocksRaycasts = false;
             canvasGroup.interactable = false;
+            selectedItemText.text = "";
             _isOpen = false;
         }
     }

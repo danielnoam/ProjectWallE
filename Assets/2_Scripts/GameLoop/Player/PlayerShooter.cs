@@ -1,19 +1,15 @@
 using System;
-using DNExtensions.Systems.Scriptables;
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.AutoGet;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
 
 namespace ProjectWallE.GameLoop.Player
 {
     public class PlayerShooter : MonoBehaviour
     {
         [Header("Settings")] 
-        [SerializeField] private Vector3 aimOffset = Vector3.zero;
         [SerializeField] private Transform firePoint;
-        [SerializeField] private SOLayerMask enemyLayerMask;
         [SerializeField, AutoGetSelf, HideInInspector] private PlayerManager playerManager;
         [SerializeField, AutoGetSelf, HideInInspector] private PlayerManagerInput input;
         
@@ -28,23 +24,15 @@ namespace ProjectWallE.GameLoop.Player
         private bool _inMenu;
         private float _basicCooldown;
         private float _specialCooldown;
-        private Camera _mainCamera;
-
 
         public event Action OnAttack1;
         public event Action OnAttack2;
-
         public event Action<float, float> OnBasicCooldownUpdated;
         public event Action<float, float> OnSpecialCooldownUpdated;
 
         private void OnValidate()
         {
             AutoGetSystem.Process(this);
-        }
-
-        private void Awake()
-        {
-            _mainCamera = Camera.main;
         }
 
         private void OnEnable()
@@ -117,13 +105,29 @@ namespace ProjectWallE.GameLoop.Player
             if (_basicCooldown > 0)
             {
                 _basicCooldown -= Time.deltaTime;
-                OnBasicCooldownUpdated?.Invoke(_basicCooldown, basicFireRate);
+                if (_basicCooldown <= 0)
+                {
+                    _basicCooldown = 0;
+                    OnBasicCooldownUpdated?.Invoke(0, basicFireRate);
+                }
+                else
+                {
+                    OnBasicCooldownUpdated?.Invoke(_basicCooldown, basicFireRate);
+                }
             }
 
             if (_specialCooldown > 0)
             {
                 _specialCooldown -= Time.deltaTime;
-                OnSpecialCooldownUpdated?.Invoke(_specialCooldown, aoeFireRate);
+                if (_specialCooldown <= 0)
+                {
+                    _specialCooldown = 0;
+                    OnSpecialCooldownUpdated?.Invoke(0, aoeFireRate);
+                }
+                else
+                {
+                    OnSpecialCooldownUpdated?.Invoke(_specialCooldown, aoeFireRate);
+                }
             }
         }
 
@@ -133,8 +137,8 @@ namespace ProjectWallE.GameLoop.Player
             
             _basicCooldown = basicFireRate;
             Vector3 position = firePoint ? firePoint.position : transform.position;
-            Vector3 direction = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)).direction;
-            basicProjectileData.Spawn(enemyLayerMask.Value, position, direction.Add(aimOffset), default, playerManager);
+            Vector3 direction = playerManager.Aimer.GetDirectionFrom(position);
+            basicProjectileData?.Spawn(position, direction, default, playerManager);
             OnAttack1?.Invoke();
             OnBasicCooldownUpdated?.Invoke(_basicCooldown, basicFireRate);
         }
@@ -145,8 +149,8 @@ namespace ProjectWallE.GameLoop.Player
             
             _specialCooldown = aoeFireRate;
             Vector3 position = firePoint ? firePoint.position : transform.position;
-            Vector3 direction = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)).direction;
-            specialProjectileData.Spawn(enemyLayerMask.Value, position, direction.Add(aimOffset), default, playerManager);
+            Vector3 direction = playerManager.Aimer.GetDirectionFrom(position);
+            specialProjectileData?.Spawn(position, direction, default, playerManager);
             OnAttack2?.Invoke();
             OnSpecialCooldownUpdated?.Invoke(_specialCooldown, aoeFireRate);
         }

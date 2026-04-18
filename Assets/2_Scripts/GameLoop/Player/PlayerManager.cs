@@ -28,6 +28,7 @@ namespace ProjectWallE
         [HideInInspector, SerializeField] private RobotController robotController;
         [HideInInspector, SerializeField] private PlayerStructureBuilder structureBuilder;
         [HideInInspector, SerializeField] private PlayerShooter shooter;
+        [HideInInspector, SerializeField] private PlayerAimer aimer;
         
 
         private PlayerManagerInput _input;
@@ -50,10 +51,12 @@ namespace ProjectWallE
         public RobotController RobotController => robotController;
         public PlayerStructureBuilder StructureBuilder => structureBuilder;
         public PlayerShooter Shooter => shooter;
+        public PlayerAimer Aimer => aimer;
         public bool CanBuild => _currentController.canBuild;
         public bool CanShoot => _currentController.canShoot;
         public Vector3 Velocity => _rigidbody.linearVelocity;
         public bool IsAlive => _currentHealth > 0;
+        public Team Team => Team.Player;
 
         public event Action<IDamageable> OnDeath;
         public event Action<float> OnDamaged;
@@ -67,6 +70,7 @@ namespace ProjectWallE
             if(robotController == null) robotController = GetComponentInChildren<RobotController>();
             if(structureBuilder == null) structureBuilder = GetComponentInChildren<PlayerStructureBuilder>();
             if (shooter == null) shooter = GetComponentInChildren<PlayerShooter>();
+            if (aimer == null) aimer = GetComponentInChildren<PlayerAimer>();
         }
 
         private void Awake()

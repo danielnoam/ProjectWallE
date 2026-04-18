@@ -1,3 +1,4 @@
+using System;
 using _2_Scripts;
 using DNExtensions.Utilities.Inline;
 using UnityEngine;
@@ -29,6 +30,8 @@ namespace ProjectWallE
         private bool _hadGroundHitLastFrame;
 
         private bool _isSlopeSliding = false;
+
+        public event Action OnJumped;
 
         /// <summary>
         /// controls how much dv affects the acceleration (bigger = less control)
@@ -270,6 +273,7 @@ namespace ProjectWallE
 
             Vector3 forcePoint = _playerRb.worldCenterOfMass - transform.up * settings.ForcePointBelowCom;
             _playerRb.AddForceAtPosition(Vector3.up * deltaV, forcePoint, ForceMode.VelocityChange);
+            OnJumped?.Invoke();
         }
 
         private void JumpBufferTimer()

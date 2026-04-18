@@ -2,12 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DNExtensions.Utilities.AutoGet;
+using PrimeTween;
 using ProjectWallE;
 using ProjectWallE.GameLoop;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Playables;
-using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(PlayableDirector))]
 public class LevelManager : MonoBehaviour, INotificationReceiver
@@ -18,8 +17,8 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
     public static event Action OnLevelStarted;
     public static event Action OnLevelCompleted;
     public static event Action OnLevelFailed;
-    public static event Action<float> OnTimeUpdated;
-    public static event Action<List<BaseLevelObjective>> OnObjectivesStarted;
+    public static event Action<float> OnLeveTimeLineUpdated;
+    public static event Action<List<BaseLevelObjective>> OnObjectivesAdded;
     public static event Action OnObjectivesCompleted;
 
     [Header("Settings")]
@@ -53,11 +52,12 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
             return;
         }
         Instance = this;
+        
+        PrimeTweenConfig.SetTweensCapacity(1000);
     }
 
     private void OnEnable()
     {
-        StructureManager.OnStructureDestroyed += OnStructureDestroyed;
         if (timeline)
         {
             timeline.stopped += OnTimelineStopped;
@@ -66,7 +66,6 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
 
     private void OnDestroy()
     {
-        StructureManager.OnStructureDestroyed -= OnStructureDestroyed;
         if (timeline)
         {
             timeline.stopped -= OnTimelineStopped;
@@ -83,15 +82,11 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
 
     private void Update()
     {
-        if (Keyboard.current.f1Key.wasPressedThisFrame)
+        if (_levelActive)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            OnLeveTimeLineUpdated?.Invoke(TimeRemaining);
+            TickObjectives();
         }
-
-        if (!_levelActive) return;
-
-        OnTimeUpdated?.Invoke(TimeRemaining);
-        TickObjectives();
     }
 
     private IEnumerator StartLevel()
@@ -112,17 +107,7 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
 
         CompleteLevel();
     }
-
-    private void OnStructureDestroyed(StructuresData data)
-    {
-        if (!_levelActive) return;
-
-        // if (data.BasesCount <= 0)
-        // {
-        //     FailLevel();
-        // }
-    }
-
+    
     private void CompleteLevel()
     {
         if (!_levelActive) return;
@@ -141,34 +126,6 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
         DisposeObjectives();
         timeline.Stop();
         OnLevelFailed?.Invoke();
-    }
-
-    public void StartObjectives(List<BaseLevelObjective> objectives, IExposedPropertyTable resolver)
-    {
-        if (objectives == null || objectives.Count == 0) return;
-
-        timeline.Pause();
-
-        _activeObjectives = objectives;
-        _completedCount = 0;
-
-        foreach (var objective in _activeObjectives)
-        {
-            objective.Initialize(OnObjectiveCompleted, resolver);
-        }
-
-        OnObjectivesStarted?.Invoke(_activeObjectives);
-    }
-
-    private void OnObjectiveCompleted()
-    {
-        _completedCount++;
-
-        if (_completedCount < _activeObjectives.Count) return;
-
-        DisposeObjectives();
-        OnObjectivesCompleted?.Invoke();
-        timeline.Resume();
     }
 
     private void TickObjectives()
@@ -191,6 +148,39 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
             objective.Dispose();
         }
         _activeObjectives = null;
+        _completedCount = 0;
+    }
+
+    private void OnObjectiveCompleted(BaseLevelObjective objective)
+    {
+        objective.Dispose();
+        _completedCount++;
+
+        if (_activeObjectives != null && _completedCount >= _activeObjectives.Count)
+        {
+            _activeObjectives = null;
+            _completedCount = 0;
+            OnObjectivesCompleted?.Invoke();
+            timeline.Resume();
+        }
+    }
+
+    public void StartObjectives(List<BaseLevelObjective> objectives, IExposedPropertyTable resolver)
+    {
+        if (objectives == null || objectives.Count == 0) return;
+
+        timeline.Pause();
+
+        _activeObjectives ??= new List<BaseLevelObjective>();
+
+        foreach (var objective in objectives)
+        {
+            var clone = objective.Clone();
+            clone.Initialize(() => OnObjectiveCompleted(clone), resolver);
+            _activeObjectives.Add(clone);
+        }
+
+        OnObjectivesAdded?.Invoke(_activeObjectives);
     }
 
     public void OnNotify(Playable origin, INotification notification, object context)

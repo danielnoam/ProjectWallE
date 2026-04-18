@@ -11,7 +11,9 @@ namespace ProjectWallE.GameLoop.Player
     public class PlayerStructureBuilder : MonoBehaviour
     {
         [Header("Build Settings")] 
-        [SerializeField] private float buildRange = 100f;
+        [SerializeField] private float buildRange = 50f;
+        [SerializeField] private float downBuildRange = 10f;
+        [SerializeField] private float maxBuildAngle = 45f;
         [SerializeField] private LayerMask buildableLayerMask;
         [SerializeField] private LayerMask blockBuildLayerMask;
         [SerializeField] private LayerMask structureLayerMask;
@@ -22,8 +24,9 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField, AutoGetScene, HideInInspector] private StructureActionsMenu actionsMenu;
 
         private StructureNode _targetedNode;
-        private Camera _mainCamera;
         private Ray _buildRay;
+        private Vector3 _buildPoint;
+        private Vector3 _buildNormal;
         private bool _canBuild;
         private bool _structureStatusVisible;
         private bool _menuOpen;
@@ -31,7 +34,6 @@ namespace ProjectWallE.GameLoop.Player
         private Structure _targetedStructure;
         private Structure _lastMenuStructure;
         private Sequence _timeSequence;
-        private GameObject _activeGhost;
 
         public event Action<Structure[]> BuildMenuRequested;
         public event Action<Structure> ActionsMenuRequested;
@@ -40,11 +42,6 @@ namespace ProjectWallE.GameLoop.Player
         private void OnValidate()
         {
             AutoGetSystem.Process(this);
-        }
-
-        private void Awake()
-        {
-            _mainCamera = Camera.main;
         }
 
         private void OnEnable()
@@ -82,7 +79,6 @@ namespace ProjectWallE.GameLoop.Player
             if (!playerManager || !playerManager.CanBuild) return;
 
             CastBuildRay();
-            UpdateGhostPosition();
 
             if (!_menuOpen && input.ActionMenuPressed)
             {
@@ -123,34 +119,11 @@ namespace ProjectWallE.GameLoop.Player
 
             if (structure)
             {
-                _activeGhost = StructureManager.Instance.ShowGhost(structure);
+                StructureManager.Instance.SetGhost(structure);
             }
             else
             {
                 StructureManager.Instance.HideGhost();
-                _activeGhost = null;
-            }
-        }
-
-        private void UpdateGhostPosition()
-        {
-            if (!_activeGhost) return;
-
-            if (_targetedNode)
-            {
-                _activeGhost.transform.position = _targetedNode.transform.position;
-                _activeGhost.transform.rotation = Quaternion.LookRotation(
-                    Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized, Vector3.up);
-            }
-            else if (Physics.Raycast(_buildRay, out RaycastHit hit, buildRange, buildableLayerMask))
-            {
-                Vector3 projectedForward = Vector3.ProjectOnPlane(transform.forward, hit.normal).normalized;
-                Quaternion rotation = projectedForward.sqrMagnitude > 0.001f
-                    ? Quaternion.LookRotation(projectedForward, hit.normal)
-                    : Quaternion.identity;
-
-                _activeGhost.transform.position = hit.point;
-                _activeGhost.transform.rotation = rotation;
             }
         }
 
@@ -165,27 +138,26 @@ namespace ProjectWallE.GameLoop.Player
         private void OpenContextMenu()
         {
             _menuOpen = true;
-            SetGameTimeScale(0f);
+            SetGameTimeScale(0.05f);
             RefreshOpenMenu();
         }
 
         private void CloseMenus()
         {
             SetGameTimeScale(1f);
-            MenuCloseRequested?.Invoke();
-            BuildPrompt.Instance?.Hide();
             UpdateStructureStatusVisibility(null);
             StructureManager.Instance?.HideGhost();
-            _activeGhost = null;
+            BuildPrompt.Instance?.Hide();
             _menuOpen = false;
             _lastMenuStructure = null;
             _lastMenuWasBuildMenu = false;
+            MenuCloseRequested?.Invoke();
         }
 
         private void CastBuildRay()
         {
-            _buildRay = _mainCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
- 
+            _buildRay = playerManager.Aimer.CameraRay;
+
             if (Physics.Raycast(_buildRay, out RaycastHit structureHit, buildRange, structureLayerMask) && structureHit.collider.TryGetComponent(out Structure structure))
             {
                 _targetedStructure = structure;
@@ -193,6 +165,7 @@ namespace ProjectWallE.GameLoop.Player
                 _canBuild = false;
                 UpdateBuildPrompt(_menuOpen ? structure.TopPoint : null);
                 UpdateStructureStatusVisibility(structure);
+                StructureManager.Instance?.HideGhost();
             }
             else if (Physics.Raycast(_buildRay, buildRange, blockBuildLayerMask))
             {
@@ -209,24 +182,52 @@ namespace ProjectWallE.GameLoop.Player
                 
                 if (groundHit.collider.TryGetComponent(out StructureNode node))
                 {
+                    _buildPoint = node.SnapPoint;
+                    _buildNormal = Vector3.up;
                     _targetedNode = node;
                     _canBuild = !node.IsOccupied;
                     UpdateBuildPrompt(_menuOpen ? node.SnapPoint : null);
+                    Quaternion rotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized, Vector3.up);
+                    StructureManager.Instance?.ShowGhost(node.transform.position, rotation, _canBuild);
                 }
                 else
                 {
+                    _buildPoint = groundHit.point;
+                    _buildNormal = groundHit.normal;
                     _targetedNode = null;
-                    _canBuild = true;
+                    _canBuild = Vector3.Angle(groundHit.normal, Vector3.up) <= maxBuildAngle;
                     UpdateBuildPrompt(_menuOpen ? groundHit.point : null);
+                    Vector3 projectedForward = Vector3.ProjectOnPlane(transform.forward, groundHit.normal).normalized;
+                    Quaternion rotation = projectedForward.sqrMagnitude > 0.001f ? Quaternion.LookRotation(projectedForward, groundHit.normal) : Quaternion.identity;
+                    StructureManager.Instance?.ShowGhost(groundHit.point, rotation, _canBuild);
                 }
             }
             else
             {
                 _targetedStructure = null;
                 _targetedNode = null;
-                _canBuild = false;
-                UpdateBuildPrompt(null);
-                UpdateStructureStatusVisibility(null);
+
+                Vector3 fallbackOrigin = _buildRay.GetPoint(buildRange);
+                if (Physics.Raycast(fallbackOrigin, Vector3.down, out RaycastHit downHit, downBuildRange, buildableLayerMask))
+                {
+                    _canBuild = Vector3.Angle(downHit.normal, Vector3.up) <= maxBuildAngle;
+                    UpdateBuildPrompt(_menuOpen ? downHit.point : null);
+                    _buildPoint = downHit.point;
+                    _buildNormal = downHit.normal;
+
+                    Vector3 projectedForward = Vector3.ProjectOnPlane(transform.forward, downHit.normal).normalized;
+                    Quaternion rotation = projectedForward.sqrMagnitude > 0.001f
+                        ? Quaternion.LookRotation(projectedForward, downHit.normal)
+                        : Quaternion.identity;
+                    StructureManager.Instance?.ShowGhost(downHit.point, rotation, _canBuild);
+                }
+                else
+                {
+                    UpdateBuildPrompt(null);
+                    UpdateStructureStatusVisibility(null);
+                    StructureManager.Instance?.HideGhost();
+                    _canBuild = false;
+                }
             }
  
             if (_menuOpen) RefreshOpenMenu();
@@ -290,28 +291,19 @@ namespace ProjectWallE.GameLoop.Player
 
             if (ResourceManager.Instance)
             {
-                if (ResourceManager.Instance.TrySpendResources(structure.BuildCost))
+                if (!ResourceManager.Instance.TrySpendResources(structure.BuildCost))
                 {
-                    if (_targetedNode)
-                    {
-                        StructureManager.Instance?.DeployStructureOnNode(structure, _targetedNode);
-                    }
-                    else if (Physics.Raycast(_buildRay, out RaycastHit hit, buildRange, buildableLayerMask))
-                    {
-                        StructureManager.Instance?.DeployStructureOnGround(structure, hit.point, transform.forward, hit.normal);
-                    }
+                    return;
                 }
+            }
+
+            if (_targetedNode)
+            {
+                StructureManager.Instance?.DeployStructureOnNode(structure, _targetedNode);
             }
             else
             {
-                if (_targetedNode)
-                {
-                    StructureManager.Instance?.DeployStructureOnNode(structure, _targetedNode);
-                }
-                else if (Physics.Raycast(_buildRay, out RaycastHit hit, buildRange, buildableLayerMask))
-                {
-                    StructureManager.Instance?.DeployStructureOnGround(structure, hit.point, transform.forward, hit.normal);
-                }
+                StructureManager.Instance?.DeployStructureOnGround(structure, _buildPoint, transform.forward, _buildNormal);
             }
         }
 
@@ -320,7 +312,7 @@ namespace ProjectWallE.GameLoop.Player
             if (Mathf.Approximately(Time.timeScale, timeScale)) return;
             if (_timeSequence.isAlive) _timeSequence.Stop();
 
-            var easeToUse = timeScale > 0f ? Ease.OutBack : Ease.Linear;
+            var easeToUse = timeScale > 0.05f ? Ease.OutBack : Ease.Linear;
             
             _timeSequence = Sequence.Create(useUnscaledTime: true)
                 .Group(Tween.GlobalTimeScale(timeScale, 0.5f, easeToUse));

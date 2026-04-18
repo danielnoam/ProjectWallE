@@ -48,10 +48,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06535a561c25490abaa0eb30b94e8fdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RadarTarget
+  autoRegisterOnEnable: 1
+  showOutOfRange: 0
   blipSprite: {fileID: 0}
   blipColor: {r: 1, g: 0.25490198, b: 0.25490198, a: 1}
   blipSizeMultiplier: 1
-  showOutOfRange: 0
   pingDuration: 1
   pingSizeMultiplier: 10
   pingStartAlpha: 1
@@ -98,7 +99,7 @@ NavMeshAgent:
   m_Acceleration: 20
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 3
+  m_StoppingDistance: 4
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -167,19 +168,24 @@ MonoBehaviour:
       type: {class: WheelEffect, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         wheels:
-        - transform: {fileID: 6789345302792274751}
+        - suspension: {fileID: 6789345302792274751}
+          wheel: {fileID: 277713790143893632}
+          canSteer: 1
         wheelRadius: 0.8
+        maxSteerAngle: 30
+        steerSpeed: 360
+        minSpeedForSteering: 0.5
         suspensionTravel: 1
         suspensionStiffness: 35
         suspensionDamping: 5
         raycastDistance: 1.5
         groundMask:
           serializedVersion: 2
-          m_Bits: 1032
+          m_Bits: 3080
     - rid: 6000861270941368436
       type: {class: SuicideAttack, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
-        attackRange: 5
+        attackRange: 6
         armedDuration: 2
         aoeRadius: 10
         damageRange:
@@ -382,6 +388,11 @@ PrefabInstance:
 --- !u!23 &206706519288862166 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 1588066396962892842, guid: 6930883bdc246d0468845291cef00251, type: 3}
+  m_PrefabInstance: {fileID: 1501861976589826556}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &277713790143893632 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1660997831421094268, guid: 6930883bdc246d0468845291cef00251, type: 3}
   m_PrefabInstance: {fileID: 1501861976589826556}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &833487158734437824 stripped

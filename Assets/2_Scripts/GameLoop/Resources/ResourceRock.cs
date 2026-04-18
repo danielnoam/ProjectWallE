@@ -19,6 +19,7 @@ public class ResourceRock : MonoBehaviour, IDamageable
     private Material _material;
 
     public bool IsAlive => _currentHealth > 0;
+    public Team Team => Team.Neutral;
     
     public event Action<IDamageable> OnDeath;
     public event Action<float> OnDamaged;

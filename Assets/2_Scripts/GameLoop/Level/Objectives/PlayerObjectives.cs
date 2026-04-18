@@ -1,6 +1,8 @@
 using System;
+using DNExtensions.Utilities;
 using DNExtensions.Utilities.SerializableSelector;
 using ProjectWallE.GameLoop.Player;
+using ProjectWallE.GameLoop.UI;
 using UnityEngine;
 
 namespace ProjectWallE.GameLoop
@@ -16,6 +18,7 @@ namespace ProjectWallE.GameLoop
     [SerializableSelectorName("Fire", "Player")]
     public class FireObjective : BaseLevelObjective
     {
+        [Header("Settings")]
         [SerializeField] private AttackRequirement attackType = AttackRequirement.Any;
         [SerializeField, Min(1)] private int attackCount = 1;
 
@@ -40,7 +43,7 @@ namespace ProjectWallE.GameLoop
             if (attackType is AttackRequirement.Any or AttackRequirement.Special) _shooter.OnAttack2 += OnAttack;
         }
 
-        public override void Dispose()
+        protected override void OnDispose()
         {
             if (!_shooter) return;
             _shooter.OnAttack1 -= OnAttack;
@@ -61,6 +64,7 @@ namespace ProjectWallE.GameLoop
     [SerializableSelectorName("Switch Controller", "Player")]
     public class SwitchControllerObjective : BaseLevelObjective
     {
+        [Header("Settings")]
         [SerializeField] private SwitchRequirement requirement = SwitchRequirement.Any;
 
         public enum SwitchRequirement { Any, SwitchToCar, SwitchToRobot }
@@ -92,7 +96,7 @@ namespace ProjectWallE.GameLoop
             }
         }
 
-        public override void Dispose()
+        protected override void OnDispose()
         {
             if (LevelManager.Instance && LevelManager.Instance.Player)
             {
@@ -117,6 +121,7 @@ namespace ProjectWallE.GameLoop
     [SerializableSelectorName("Boost", "Player")]
     public class BoostObjective : BaseLevelObjective
     {
+        [Header("Settings")]
         [SerializeField] private float requiredDuration = 2f;
 
         private CarBoost _carBoost;
@@ -135,7 +140,7 @@ namespace ProjectWallE.GameLoop
             _carBoost.OnBoostEnd += OnBoostEnd;
         }
 
-        public override void Dispose()
+        protected override void OnDispose()
         {
             if (_carBoost)
             {
@@ -172,7 +177,10 @@ namespace ProjectWallE.GameLoop
     [SerializableSelectorName("Survive", "Player")]
     public class SurviveObjective : BaseLevelObjective
     {
+        [Header("Settings")]
         [SerializeField, Min(1f)] private float duration = 30f;
+        [SerializeField] private bool spawnEnemies;
+        [SerializeField, ShowIf("spawnEnemies")] private EnemySpawnerConfig spawner;
 
         private float _elapsed;
 
@@ -182,9 +190,9 @@ namespace ProjectWallE.GameLoop
         protected override void OnInitialize(IExposedPropertyTable resolver = null)
         {
             _elapsed = 0f;
+            if (spawnEnemies) spawner.Initialize(resolver);
         }
-
-        public override void Dispose() { }
+        
 
         public override void Tick(float deltaTime)
         {
@@ -192,7 +200,9 @@ namespace ProjectWallE.GameLoop
             if (_elapsed >= duration)
             {
                 Complete();
+                return;
             }
+            if (spawnEnemies) spawner.Tick(deltaTime);
         }
     }
 
@@ -200,37 +210,26 @@ namespace ProjectWallE.GameLoop
     [SerializableSelectorName("Go To Position", "Player")]
     public class GoToPositionObjective : BaseLevelObjective
     {
-
-
-        [Header("Target")]
-        public ExposedReference<ObjectiveGameMarker> targetMarker;
+        [Header("Settings")]
         [SerializeField, Min(1f)] private float radius = 5f;
 
-        private ObjectiveGameMarker _marker;
         private Transform _player;
         private float _currentDistance;
-        
-        public override string Description => "Go to the target area";
-        public override string ProgressText => IsCompleted ? "Complete" : $"{_currentDistance:F1}m away";
+
+        public override string Description => "Go to target";
+        public override string ProgressText => IsCompleted ? "Complete" : $"{_currentDistance:F1}m";
 
         protected override void OnInitialize(IExposedPropertyTable resolver = null)
         {
             _currentDistance = float.MaxValue;
-            _marker = targetMarker.Resolve(resolver);
             _player = LevelManager.Instance.Player.transform;
-            _marker?.OnObjectiveStarted();
-        }
-
-        public override void Dispose()
-        {
-            _marker?.OnObjectiveCompleted();
         }
 
         public override void Tick(float deltaTime)
         {
-            if (!_marker || !_player) return;
+            if (!ResolvedMarker || !_player) return;
 
-            _currentDistance = Vector3.Distance(_player.position, _marker.transform.position);
+            _currentDistance = Vector3.Distance(_player.position, ResolvedMarker.transform.position);
             if (_currentDistance <= radius)
             {
                 Complete();

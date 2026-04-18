@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DNExtensions.Utilities.AutoGet;
 using DNExtensions.Utilities.Button;
 using ProjectWallE.GameLoop;
+using ProjectWallE.UI;
 using UnityEditor;
 using UnityEngine;
 
@@ -25,14 +26,14 @@ public struct StructureUIData
     [SerializeField] private Sprite upgradeIcon;
     [SerializeField] private Sprite fixIcon;
     [SerializeField] private Sprite demolishIcon;
-    [SerializeField] private GameObject ghostPrefab;
+    [SerializeField] private GhostStructure ghostPrefab;
     
     public string Label => label;
     public Sprite Icon => icon;
     public Sprite UpgradeIcon => upgradeIcon;
     public Sprite FixIcon => fixIcon;
     public Sprite DemolishIcon => demolishIcon;
-    public GameObject GhostPrefab => ghostPrefab;
+    public GhostStructure GhostPrefab => ghostPrefab;
 }
 
 [DisallowMultipleComponent]
@@ -42,6 +43,8 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     public static event Action<Structure> OnStructureBuilt;
     public static event Action<Structure> OnStructureUpgraded;
     public static event Action<Structure> OnStructureDemolished;
+    public static event Action<Structure> OnStructureBroken;
+    public static event Action<Structure> OnStructureRevived;
     
     [Header("Structure")]
     [SerializeField] private bool canDemolish;
@@ -71,6 +74,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     public float MaxHealth => CurrentLevelData.maxHealth;
     public int BuildCost => Levels[0].cost;
     public bool IsAlive => CurrentHealth > 0;
+    public Team Team => Team.Player;
     
     public event Action<IDamageable> OnDeath;
     public event Action<float> OnDamaged;
@@ -120,11 +124,11 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     
     private void Build()
     {
-        StructureManager.Instance?.RegisterStructure(this);
         CurrentUpgradeLevel = 1;
         CurrentHealth = CurrentLevelData.maxHealth;
         buildEffect?.Play(OnBuild);
         radarTarget?.PingBlip();
+        StructureManager.Instance?.RegisterStructure(this);
         OnStructureBuilt?.Invoke(this);
     }
     
@@ -134,8 +138,8 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     {
         CurrentHealth = 0f;
         brokenEffect?.SetBroken(transform.position);
-        StructureManager.Instance?.UnregisterStructure(this);
         OnDeath?.Invoke(this);
+        OnStructureBroken?.Invoke(this);
         radarTarget?.PingBlip(Color.red);
         OnBreak();
     }
@@ -152,10 +156,12 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     {
         if (ResourceManager.Instance && !ResourceManager.Instance.TrySpendResources((int)FixCost)) return;
 
-        if (CurrentHealth <= 0) brokenEffect?.SetNormal();
+        bool wasBroken = CurrentHealth <= 0;
+        if (wasBroken) brokenEffect?.SetNormal();
         CurrentHealth = MaxHealth;
         fixEffect?.Play();
         OnFix();
+        if (wasBroken) OnStructureRevived?.Invoke(this);
     }
 
     [Button(ButtonPlayMode.OnlyWhenPlaying)]
@@ -169,12 +175,14 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
 
         if (ResourceManager.Instance && !ResourceManager.Instance.TrySpendResources(UpgradeCost)) return;
 
-        if (CurrentHealth <= 0) brokenEffect?.SetNormal();
+        bool wasBroken = CurrentHealth <= 0;
+        if (wasBroken) brokenEffect?.SetNormal();
         CurrentUpgradeLevel++;
         CurrentHealth = CurrentLevelData.maxHealth;
         upgradeEffect?.Play();
         OnUpgrade();
         OnStructureUpgraded?.Invoke(this);
+        if (wasBroken) OnStructureRevived?.Invoke(this);
     }
     
     private bool CanUpgrade() 
@@ -232,21 +240,21 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
         {
             new StructureAction
             {
-                Label = $"{structureUIData.Label}\n{upgradeLabel}",
+                Label = $"{upgradeLabel}",
                 Icon = structureUIData.UpgradeIcon,
                 IsAvailable = canUpgrade && ResourceManager.Instance.CanAfford(UpgradeCost),
                 OnSelected = Upgrade
             },
             new StructureAction
             {
-                Label = $"{structureUIData.Label}\n{fixLabel}",
+                Label = $"{fixLabel}",
                 Icon = structureUIData.FixIcon,
                 IsAvailable = canFix && ResourceManager.Instance.CanAfford((int)FixCost),
                 OnSelected = Fix
             },
             new StructureAction
             {
-            Label = $"{structureUIData.Label}\n{demolishLabel}",
+            Label = $"{demolishLabel}",
             Icon = structureUIData.DemolishIcon,
             IsAvailable = canDemolish,
             OnSelected = Demolish

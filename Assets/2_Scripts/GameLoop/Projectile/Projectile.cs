@@ -9,24 +9,25 @@ using UnityEngine;
 public class Projectile : MonoBehaviour, IPoolable
 {
     [SerializeField] private SOLayerMask environmentLayerMask;
+    [SerializeField] private SOLayerMask damageableLayers;
     [SerializeField, AutoGetSelf] private Rigidbody rigidBody;
     [SerializeField, AutoGetSelf] private Collider col;
     
+    private Team _ownerTeam;
     private IDamageable _owner;
     private SOProjectileData _data;
     private float _maxLifetime;
-    private LayerMask _hitLayers;
     
     private bool _isInitialized;
     private bool _hitSomething;
     private float _lifetimeTimer;
-    private float _elapsed;
     private Vector3 _direction;
     private Vector3 _startPosition;
     private Vector3 _targetPosition;
     private Vector3 _arcVelocity;
     private readonly HashSet<IDamageable> _alreadyHit = new();
 
+    private int CombinedMask => damageableLayers.Value | environmentLayerMask.Value;
 
     private void Update()
     {
@@ -59,68 +60,14 @@ public class Projectile : MonoBehaviour, IPoolable
         if (_hitSomething || !_isInitialized) return;
 
         int layer = 1 << other.gameObject.layer;
-        if ((layer & (_hitLayers | environmentLayerMask.Value)) == 0) return;
+        if ((layer & CombinedMask) == 0) return;
 
         _hitSomething = true;
         bool hitDamageable = false;
 
-        if (layer != 0)
+        if ((layer & damageableLayers.Value) != 0)
         {
-            switch (_data.damageType)
-            {
-                case ProjectileDamageType.Single:
-
-                    var damageable = other.collider.GetComponentInParent<IDamageable>();
-                    if (damageable != null)
-                    {
-                        hitDamageable = true;
-                        damageable.TakeDamage(_data.damage, _owner);
-                    }
-
-                    var pushable = other.collider.GetComponentInParent<IPushable>();
-                    if (pushable != null)
-                    {
-                        Vector3 pushDirection = (other.transform.position - transform.position).normalized;
-                        pushable.Push(pushDirection, _data.pushStrength);
-                    }
-
-                    break;
-
-                case ProjectileDamageType.AreaOfEffect:
-
-                    Collider[] damagedObjects = Physics.OverlapSphere(transform.position, _data.aoeRadius, _hitLayers);
-                    _alreadyHit.Clear();
-
-                    foreach (var damagedObject in damagedObjects)
-                    {
-                        IDamageable target = damagedObject.GetComponentInParent<IDamageable>();
-                        if (target == null) continue;
-
-                        hitDamageable = true;
-
-                        if (target is EnemyDamageRelay relay) target = relay.Parent;
-                        if (target == null || !_alreadyHit.Add(target)) continue;
-
-                        float distance = Vector3.Distance(transform.position, damagedObject.transform.position);
-                        float normalizedDistance = distance / _data.aoeRadius;
-                        float damage = _data.damageRange.Lerp(1 - normalizedDistance);
-                        float push = _data.pushRange.Lerp(1 - normalizedDistance);
-
-                        target.TakeDamage(damage, _owner);
-
-                        var aoePush = damagedObject.GetComponentInParent<IPushable>();
-                        if (aoePush != null)
-                        {
-                            Vector3 pushDirection = (damagedObject.transform.position - transform.position).normalized;
-                            aoePush.Push(pushDirection, push);
-                        }
-                    }
-
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            hitDamageable = ProcessDamage(other);
         }
 
         if (_data.hitParticle)
@@ -139,6 +86,74 @@ public class Projectile : MonoBehaviour, IPoolable
         ObjectPooler.ReturnObjectToPool(this);
     }
 
+    private bool ProcessDamage(Collision other)
+    {
+        switch (_data.damageType)
+        {
+            case ProjectileDamageType.Single:
+                return ProcessSingleDamage(other);
+            case ProjectileDamageType.AreaOfEffect:
+                return ProcessAoeDamage();
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+
+    private bool ProcessSingleDamage(Collision other)
+    {
+        bool hitDamageable = false;
+        
+        var damageable = other.collider.GetComponentInParent<IDamageable>();
+        if (damageable != null && _ownerTeam.CanDamage(damageable.Team))
+        {
+            hitDamageable = true;
+            damageable.TakeDamage(_data.damage, _owner);
+        }
+
+        var pushable = other.collider.GetComponentInParent<IPushable>();
+        if (pushable != null)
+        {
+            Vector3 pushDirection = (other.transform.position - transform.position).normalized;
+            pushable.Push(pushDirection, _data.pushStrength);
+        }
+
+        return hitDamageable;
+    }
+
+    private bool ProcessAoeDamage()
+    {
+        bool hitDamageable = false;
+        Collider[] damagedObjects = Physics.OverlapSphere(transform.position, _data.aoeRadius, damageableLayers.Value);
+        _alreadyHit.Clear();
+
+        foreach (var damagedObject in damagedObjects)
+        {
+            IDamageable target = damagedObject.GetComponentInParent<IDamageable>();
+            if (target == null) continue;
+            if (target is EnemyDamageRelay relay) target = relay.Parent;
+            if (target == null || !_alreadyHit.Add(target)) continue;
+            if (!_ownerTeam.CanDamage(target.Team)) continue;
+
+            hitDamageable = true;
+
+            float distance = Vector3.Distance(transform.position, damagedObject.transform.position);
+            float normalizedDistance = distance / _data.aoeRadius;
+            float damage = _data.damageRange.Lerp(1 - normalizedDistance);
+            float push = _data.pushRange.Lerp(1 - normalizedDistance);
+
+            target.TakeDamage(damage, _owner);
+
+            var aoePush = damagedObject.GetComponentInParent<IPushable>();
+            if (aoePush != null)
+            {
+                Vector3 pushDirection = (damagedObject.transform.position - transform.position).normalized;
+                aoePush.Push(pushDirection, push);
+            }
+        }
+
+        return hitDamageable;
+    }
+
     private void MoveLinear()
     {
         Vector3 newPos = rigidBody.position + _direction * (_data.speed * Time.fixedDeltaTime);
@@ -153,11 +168,11 @@ public class Projectile : MonoBehaviour, IPoolable
         rigidBody.MovePosition(newPos);
         rigidBody.MoveRotation(Quaternion.LookRotation(_arcVelocity.normalized));
     }
+
     private void InitializeArc()
     {
         Vector3 toTarget = _targetPosition - _startPosition;
         float travelTime = toTarget.magnitude / _data.speed;
-        
         _arcVelocity = toTarget / travelTime - Physics.gravity * travelTime / 2f;
     }
     
@@ -169,19 +184,18 @@ public class Projectile : MonoBehaviour, IPoolable
         
         _data = null;
         _owner = null;
-        _hitLayers = -1;
+        _ownerTeam = default;
         _maxLifetime = 0;
         _startPosition = Vector3.zero;
         _targetPosition = Vector3.zero;
         _direction = Vector3.zero;
     }
 
-    
-    public void Initialize(SOProjectileData data, LayerMask hitLayers, Vector3 direction, Vector3 targetPosition, IDamageable owner)
+    public void Initialize(SOProjectileData data, Vector3 direction, Vector3 targetPosition, IDamageable owner)
     {
         _data = data;
         _owner = owner;
-        _hitLayers = hitLayers;
+        _ownerTeam = owner?.Team ?? Team.Neutral;
         _maxLifetime = data.maxLifetime;
         _startPosition = transform.position;
         _targetPosition = targetPosition;
@@ -197,13 +211,6 @@ public class Projectile : MonoBehaviour, IPoolable
         ResetData();
     }
 
-    public void OnPoolReturn()
-    {
-        
-    }
-
-    public void OnPoolRecycle()
-    {
-       
-    }
+    public void OnPoolReturn() { }
+    public void OnPoolRecycle() { }
 }

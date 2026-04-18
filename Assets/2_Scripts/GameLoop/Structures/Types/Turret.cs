@@ -14,7 +14,7 @@ public class TurretLevelData : StructureLevelData
     public float detectionRadius = 25f;
     public float attackRotationSpeed = 125f;
     public float attackCooldown = 0.3f;
-    [SOSelector("Assets/Data")] public SOProjectileData soProjectileData;
+    [SOSelector("Assets/6_Data")] public SOProjectileData soProjectileData;
 }
 
 public enum TurretState { Scanning, Attacking, Broken }
@@ -23,7 +23,7 @@ public abstract class Turret : Structure
 {
     [Header("Turret")]
     [SerializeReference, DrawSerializeReference] private TurretLevelData[] levels = Array.Empty<TurretLevelData>();
-    [SerializeField, SOSelector("Assets/Data")] protected SOLayerMask hitLayers;
+    [SerializeField, SOSelector("Assets/6_Data")] protected SOLayerMask hitLayers;
     [SerializeField] protected Transform firePoint;
     [SerializeField] protected float angleThreshold = 10f;
     [SerializeField] protected Transform horizontalSwivel;
@@ -106,7 +106,7 @@ public abstract class Turret : Structure
     private void Fire(Vector3 targetPosition)
     {
         var direction = (targetPosition - firePoint.position).normalized;
-        CurrentTurretLevelData.soProjectileData?.Spawn(hitLayers.Value, firePoint.position, direction, targetPosition, this);
+        CurrentTurretLevelData.soProjectileData?.Spawn(firePoint.position, direction, targetPosition, this);
         shootEffect?.Play(firePoint.position);
         _attackTimer = 0f;
     }

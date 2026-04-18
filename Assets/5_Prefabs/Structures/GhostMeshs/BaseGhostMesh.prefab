@@ -14,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 11d0b4ca14fdff8419fcf81ae14b4217, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.86
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 11d0b4ca14fdff8419fcf81ae14b4217, type: 3}
       propertyPath: m_LocalPosition.z
@@ -147,6 +147,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 11d0b4ca14fdff8419fcf81ae14b4217, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6622746216838147912}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 11d0b4ca14fdff8419fcf81ae14b4217, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -6251643880516215601}
   m_SourcePrefab: {fileID: 100100000, guid: 11d0b4ca14fdff8419fcf81ae14b4217, type: 3}
 --- !u!23 &2142746634540751487 stripped
 MeshRenderer:
@@ -171,3 +174,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::HologramGlitch
   rend: {fileID: 2142746634540751487}
+--- !u!114 &-6251643880516215601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4043771111272889121}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d18db5e15904b80ae734722ddd0e851, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.GhostStructure
+  canBuildColor: {fileID: 11400000, guid: 046258290a5e9d04f99f84b915c4387c, type: 2}
+  blockBuildColor: {fileID: 11400000, guid: 0d466add85d7d5346a070321146708c6, type: 2}
+  material: {fileID: 2100000, guid: 75bc54c4b0ad3614184c59931e286a0a, type: 2}

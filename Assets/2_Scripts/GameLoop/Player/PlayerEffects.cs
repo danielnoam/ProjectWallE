@@ -14,6 +14,8 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField] private VisualEffectAction wheelsAirReleaseEffect;
         [SerializeField] private DamageEffects damageEffects;
         [SerializeField, AudioLibraryID] private string changeStateSoundId;
+        [SerializeField, AudioLibraryID] private string robotMoveSoundId;
+        [SerializeField, AudioLibraryID] private string carMoveSoundId;
 
         [Header("Tire Dirt")]
         [SerializeField] private float tireEffectRobotSpeedThreshold = 5f;
@@ -25,6 +27,7 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField] private AudioSource airReleaseAudioSource;
         [SerializeField] private AudioSource changeStateAudioSource;
         [SerializeField] private AudioSource boostAudioSource;
+        [SerializeField] private AudioSource movementAudioSource;
         [SerializeField, AutoGetParent, HideInInspector] private PlayerManager player;
 
         private Material[] _materials;
@@ -86,6 +89,7 @@ namespace ProjectWallE.GameLoop.Player
         private void Update()
         {
             UpdateTireEffects();
+            UpdateMovementAudio();
         }
         
         private void OnDamaged(float damage)
@@ -119,6 +123,7 @@ namespace ProjectWallE.GameLoop.Player
         {
             carBoostEffect?.Stop(boostAudioSource);
             AudioLibrary.PlayOnSource(changeStateSoundId, changeStateAudioSource);
+            movementAudioSource.Stop();
             StopAllTireEffects();
             _activeTireEffects = type == PlayerControllerType.Robot ? robotTireEffects : carTireEffects;
             _tireEffectsPlaying = new bool[_activeTireEffects.Length];
@@ -150,6 +155,24 @@ namespace ProjectWallE.GameLoop.Player
                     _activeTireEffects[i].Stop();
                     _tireEffectsPlaying[i] = false;
                 }
+            }
+        }
+        
+        private void UpdateMovementAudio()
+        {
+            if (!movementAudioSource) return;
+
+            float speed = player.Velocity.magnitude;
+            bool isMoving = speed > 0.1f;
+
+            if (isMoving && !movementAudioSource.isPlaying)
+            {
+                string soundId = player.PlayerControllerType == PlayerControllerType.Robot ? robotMoveSoundId : carMoveSoundId;
+                AudioLibrary.PlayOnSource(soundId, movementAudioSource);
+            }
+            else if (!isMoving && movementAudioSource.isPlaying)
+            {
+                movementAudioSource.Stop();
             }
         }
 

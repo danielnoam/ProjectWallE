@@ -252,7 +252,7 @@ namespace ProjectWallE.GameLoop
                 Tween.MaterialProperty(mat, _propertyId, brokenColor, duration, ease);
             }
             
-            smokeEffect?.Play();
+            if (smokeEffect) smokeEffect.Play();
             
             AudioLibrary.PlayAtPosition(brokenSoundId, position);
         }
@@ -265,7 +265,7 @@ namespace ProjectWallE.GameLoop
                 Tween.MaterialProperty(_materials[i], _propertyId, _baseColors[i], duration, ease);
             }
             
-            smokeEffect?.Stop();
+            if (smokeEffect) smokeEffect.Stop();
         }
     }
     

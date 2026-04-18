@@ -37,8 +37,16 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _Cover_Tex:
+        m_Texture: {fileID: 2800000, guid: 6ae6e8796fb246b41b2a4979aebbe1bf, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: 6ae6e8796fb246b41b2a4979aebbe1bf, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Noise_Tex:
+        m_Texture: {fileID: 2800000, guid: 6d03b639ebb5b0547808293cb651caf3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -56,6 +64,9 @@ Material:
     m_Ints: []
     m_Floats:
     - _Ambient_Strength: 0.822
+    - _Cover_Edge_Width: 0.34
+    - _Cover_Normal_Bias: 0.849
+    - _Cover_Threshold: 0.13
     - _Dither: 0
     - _Dither_Fade_Distance: 0
     - _Dither_Size: 2
@@ -66,10 +77,17 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Smoothness: 1
+    - _USE_COVER: 0
     m_Colors:
+    - _Cover_Color: {r: 0.016050339, g: 0.8553459, b: 0, a: 1}
+    - _Cover_Direction: {r: 0, g: 1, b: 0, a: 0}
+    - _Cover_Tiling: {r: 0.01, g: 0.01, b: 0, a: 0}
     - _Diffuse_Color: {r: 0.57861626, g: 0.57861626, b: 0.57861626, a: 1}
     - _Emission_Color: {r: 5.340313, g: 5.340313, b: 5.340313, a: 1}
     - _Fresnel_Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Noise_Tiling: {r: 0.01, g: 0.01, b: 0, a: 0}
+    - _Offset: {r: 0, g: 0, b: 0, a: 0}
     - _Specular_Color: {r: 0.0754717, g: 0.0754717, b: 0.0754717, a: 1}
+    - _Tiling: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

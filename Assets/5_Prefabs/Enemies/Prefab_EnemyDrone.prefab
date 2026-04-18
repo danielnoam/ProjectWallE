@@ -48,10 +48,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06535a561c25490abaa0eb30b94e8fdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RadarTarget
+  autoRegisterOnEnable: 1
+  showOutOfRange: 0
   blipSprite: {fileID: 0}
   blipColor: {r: 1, g: 0.25471687, b: 0.25471687, a: 1}
   blipSizeMultiplier: 1
-  showOutOfRange: 0
   pingDuration: 1
   pingSizeMultiplier: 10
   pingStartAlpha: 1
