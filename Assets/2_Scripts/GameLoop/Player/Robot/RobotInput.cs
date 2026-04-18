@@ -5,46 +5,41 @@ namespace ProjectWallE
 {
     public class RobotInput : MonoBehaviour, InputSystem_Actions.IRobotControlsActions
     {
-        public InputSystem_Actions Input { get; private set; }   
-        
+        public InputSystem_Actions Input { get; private set; }
+
         public Vector2 Movement { get; private set; }
-        
+
         public bool JumpPressed { get; private set; }
         public bool JumpHeld { get; private set; }
         public bool JumpReleased { get; private set; }
 
-        void Awake()
+        private void Awake()
         {
             Input = new InputSystem_Actions();
+            Input.RobotControls.SetCallbacks(this);
         }
 
         private void OnEnable()
         {
-            EnableInput();
+            Input.RobotControls.Enable();
         }
 
         private void OnDisable()
         {
-            DisableInput();
-        }
-        
-        void EnableInput()
-        {
-            Input.Enable();
-
-            Input.RobotControls.Enable();
-            Input.RobotControls.SetCallbacks(this);
-        }
-    
-        void DisableInput()
-        {
-            Input?.RobotControls.Disable();
-            Input?.RobotControls.RemoveCallbacks(this);
-        
-            Input?.Disable();
+            if (Input == null) return;
+            Input.RobotControls.Disable();
         }
 
-        void LateUpdate()
+        private void OnDestroy()
+        {
+            if (Input == null) return;
+
+            Input.RobotControls.RemoveCallbacks(this);
+            Input.Dispose();
+            Input = null;
+        }
+
+        private void LateUpdate()
         {
             JumpPressed = false;
             JumpReleased = false;

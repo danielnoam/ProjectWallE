@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -19,32 +18,28 @@ namespace ProjectWallE
         public bool ActionMenuPressed { get; private set; }
         public bool ActionMenuReleased { get; private set; }
 
+        private void Awake()
+        {
+            Input = new InputSystem_Actions();
+            Input.PlayerManagerControls.SetCallbacks(this);
+        }
+
         private void OnEnable()
         {
-            EnableInput();
+            Input.PlayerManagerControls.Enable();
         }
 
         private void OnDisable()
         {
-            DisableInput();
+            if (Input == null) return;
+            Input.PlayerManagerControls.Disable();
         }
 
-        private void EnableInput()
-        {
-            Input = new InputSystem_Actions();
-            Input.Enable();
-
-            Input.PlayerManagerControls.Enable();
-            Input.PlayerManagerControls.SetCallbacks(this);
-        }
-
-        private void DisableInput()
+        private void OnDestroy()
         {
             if (Input == null) return;
 
-            Input.PlayerManagerControls.Disable();
             Input.PlayerManagerControls.RemoveCallbacks(this);
-
             Input.Dispose();
             Input = null;
         }
