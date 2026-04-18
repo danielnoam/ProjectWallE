@@ -4,9 +4,14 @@ using UnityEngine.SceneManagement;
 
 namespace ProjectWallE.GameLoop
 {
-    public class LevelCheats : MonoBehaviour
+    public class CheatsManager : MonoBehaviour
     {
-        private static LevelCheats _instance;
+        private static CheatsManager _instance;
+        
+        [Header("Settings")]
+        [SerializeField] private Key restartSceneKey = Key.F5;
+        [SerializeField] private Key completeObjectivesKey = Key.F4;
+        [SerializeField] private Key addResourcesKey = Key.F3;
 
         private void Awake()
         {
@@ -17,15 +22,17 @@ namespace ProjectWallE.GameLoop
             }
             _instance = this;
         }
+        
 
         private void Update()
         {
-            if (Keyboard.current.f5Key.wasPressedThisFrame)
+            if (Keyboard.current[restartSceneKey].wasPressedThisFrame)
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                Debug.Log("Scene reloaded");
             }
 
-            if (Keyboard.current.f4Key.wasPressedThisFrame)
+            if (Keyboard.current[completeObjectivesKey].wasPressedThisFrame)
             {
                 var objectives = LevelManager.Instance?.ActiveObjectives;
                 if (objectives == null) return;
@@ -34,11 +41,14 @@ namespace ProjectWallE.GameLoop
                 {
                     objective?.ForceComplete();
                 }
+                
+                Debug.Log("Objectives force complete");
             }
             
-            if (Keyboard.current.f3Key.wasPressedThisFrame)
+            if (Keyboard.current[addResourcesKey].wasPressedThisFrame)
             {
                 ResourceManager.Instance?.AddResources(500);
+                Debug.Log("Added 500 Resources");
             }
         }
     }

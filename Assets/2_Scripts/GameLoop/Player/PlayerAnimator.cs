@@ -26,6 +26,7 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField, Range(0f, 1f)] private float directionBias = 0.5f;
 
         [Header("References")]
+        [SerializeField] private RigBuilder rigBuilder;
         [SerializeField] private Rig rig;
         [SerializeField] private MultiAimConstraint headAim;
         [SerializeField] private TwoBoneIKConstraint armIK;
@@ -47,6 +48,8 @@ namespace ProjectWallE.GameLoop.Player
             
             _headIkTarget = new GameObject("PlayerHeadIK_Target").transform;
             headAim.data.sourceObjects = new WeightedTransformArray { new WeightedTransform(_headIkTarget, 1f) };
+            
+            rigBuilder.Build();
         }
 
         private void OnEnable()
