@@ -102,9 +102,6 @@ namespace ProjectWallE
         {
             if (_activePod)
             {
-                Vector3 direction = _activePod.transform.position - _playerManager.transform.position;
-                if (direction.sqrMagnitude > 0.001f)
-                    cameraTarget.rotation = Quaternion.LookRotation(direction);
                 podCamera.LookAt = null;
                 _activePod.OnLand -= OnLand;
             }

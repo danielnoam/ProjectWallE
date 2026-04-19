@@ -119,9 +119,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 581df25d31c3471eb2dfb2996c0c6195, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GroundEnemy
-  maxHealth: 300
+  maxHealth: 225
   canBePushed: 1
-  hitLayers: {fileID: 11400000, guid: b3e3f0ea33464b048aaf56518036cb00, type: 2}
   targetFindRange: 50
   targetRandomOffset: 20
   retargetDestinationThreshold: 1
@@ -186,6 +185,7 @@ MonoBehaviour:
       type: {class: SuicideAttack, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         attackRange: 6
+        hitLayers: {fileID: 11400000, guid: 858ceb8d9b448d24d94c04812c01cb15, type: 2}
         armedDuration: 2
         aoeRadius: 10
         damageRange:

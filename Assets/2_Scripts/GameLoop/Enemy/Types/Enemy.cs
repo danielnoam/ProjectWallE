@@ -33,7 +33,6 @@ namespace ProjectWallE.GameLoop
         [Header("Settings")]
         [SerializeField] private float maxHealth = 100f;
         [SerializeField] private bool canBePushed = true;
-        [SerializeField, SOSelector("Assets/6_Data")] private SOLayerMask hitLayers;
 
         [Header("Targeting")]
         [SerializeField] private float targetFindRange = 75f;
@@ -121,7 +120,6 @@ namespace ProjectWallE.GameLoop
                     Position = transform.position,
                     TargetPosition = targetPos.Value,
                     Owner = this,
-                    HitLayers = hitLayers.Value
                 }, Time.deltaTime);
 
                 if (attackStrategy is { ShouldDestroySelf: true }) Die();

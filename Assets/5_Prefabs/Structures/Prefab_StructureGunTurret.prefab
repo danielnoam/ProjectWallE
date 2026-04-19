@@ -81,7 +81,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RadarTarget
   autoRegisterOnEnable: 1
-  showOutOfRange: 1
+  showOutOfRange: 0
   blipSprite: {fileID: 0}
   blipColor: {r: 0.7294118, g: 1, b: 0.3882353, a: 1}
   blipSizeMultiplier: 1
@@ -193,6 +193,7 @@ MonoBehaviour:
   radarTarget: {fileID: 6290268805781187500}
   levels:
   - rid: 4437626158574207052
+  - rid: 126016576663060592
   hitLayers: {fileID: 11400000, guid: 2d607d7566d764844b32be4199186943, type: 2}
   firePoint: {fileID: 2441275468809066944}
   angleThreshold: 10
@@ -208,6 +209,16 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: 126016576663060592
+      type: {class: TurretLevelData, ns: , asm: Assembly-CSharp}
+      data:
+        maxHealth: 350
+        cost: 150
+        fixCostPerHealthPoint: 0.5
+        detectionRadius: 60
+        attackRotationSpeed: 100
+        attackCooldown: 0.2
+        soProjectileData: {fileID: 11400000, guid: c1a732ac9594bc340bfd849f394190f7, type: 2}
     - rid: 4437626158574207052
       type: {class: TurretLevelData, ns: , asm: Assembly-CSharp}
       data:

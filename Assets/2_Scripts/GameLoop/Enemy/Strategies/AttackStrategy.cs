@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using DNExtensions.Systems.AudioLibrary;
+using DNExtensions.Systems.Scriptables;
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.SerializableSelector;
 using UnityEngine;
@@ -12,15 +13,13 @@ namespace ProjectWallE.GameLoop
         public Vector3 Position;
         public Vector3 TargetPosition;
         public IDamageable Owner;
-        public LayerMask HitLayers;
     }
 
     [Serializable]
     public abstract class AttackStrategy
     {
-        [SerializeField] private float attackRange = 10f;
-
-        public float AttackRange => attackRange;
+        [SerializeField] protected float attackRange = 10f;
+        
         public virtual bool ShouldDestroySelf => false;
         public virtual bool RequiresDirectApproach => false;
         public virtual void SetUp() { }
@@ -42,7 +41,7 @@ namespace ProjectWallE.GameLoop
 
         public override void Tick(bool isAligned, float distanceToTarget, AttackContext context, float deltaTime)
         {
-            if (!isAligned || distanceToTarget > AttackRange)
+            if (!isAligned || distanceToTarget > attackRange)
             {
                 _attackTimer = 0f;
                 return;
@@ -65,6 +64,7 @@ namespace ProjectWallE.GameLoop
     [SerializableSelectorName("Suicide")]
     public class SuicideAttack : AttackStrategy
     {
+        [SerializeField, SOSelector("Assets/6_Data")] private SOLayerMask hitLayers;
         [SerializeField] private float armedDuration = 1.5f;
         [SerializeField] private float aoeRadius = 5f;
         [SerializeField, MinMaxRange(0f, 100f)] private RangedFloat damageRange = new RangedFloat(10f, 25f);
@@ -94,7 +94,7 @@ namespace ProjectWallE.GameLoop
 
         public override void Tick(bool isAligned, float distanceToTarget, AttackContext context, float deltaTime)
         {
-            if (!(distanceToTarget > AttackRange) && !_isArmed)
+            if (!(distanceToTarget > attackRange) && !_isArmed)
             {
                 _isArmed = true;
                 _armedTimer = armedDuration;
@@ -129,7 +129,7 @@ namespace ProjectWallE.GameLoop
 
         private void Detonate(AttackContext context)
         {
-            Collider[] hits = Physics.OverlapSphere(context.Position, aoeRadius, context.HitLayers);
+            Collider[] hits = Physics.OverlapSphere(context.Position, aoeRadius, hitLayers.Value);
             _alreadyHit.Clear();
 
             foreach (var hit in hits)

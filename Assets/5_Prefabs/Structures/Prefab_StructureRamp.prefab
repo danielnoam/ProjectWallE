@@ -91,7 +91,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RadarTarget
   autoRegisterOnEnable: 1
-  showOutOfRange: 1
+  showOutOfRange: 0
   blipSprite: {fileID: 0}
   blipColor: {r: 0.7294118, g: 1, b: 0.3882353, a: 1}
   blipSizeMultiplier: 1
@@ -201,9 +201,16 @@ MonoBehaviour:
   radarTarget: {fileID: 7098364094042899997}
   levels:
   - rid: 4437626158574207055
+  - rid: 126016576663060594
   references:
     version: 2
     RefIds:
+    - rid: 126016576663060594
+      type: {class: StructureLevelData, ns: , asm: Assembly-CSharp}
+      data:
+        maxHealth: 800
+        cost: 200
+        fixCostPerHealthPoint: 0.5
     - rid: 4437626158574207055
       type: {class: StructureLevelData, ns: , asm: Assembly-CSharp}
       data:

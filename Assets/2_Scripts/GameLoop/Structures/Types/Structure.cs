@@ -195,7 +195,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     {
         if (CurrentHealth <= 0 || damage <= 0) return;
 
-        radarTarget?.PunchBlip(Color.darkOrange);
+        radarTarget?.PunchBlip(Color.orangeRed);
         damageEffects?.Play(transform.position, _materials);
         CurrentHealth -= damage;
         OnDamaged?.Invoke(damage);
@@ -227,11 +227,11 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
         bool canFix = CurrentHealth < MaxHealth;
 
         string upgradeLabel = canUpgrade
-            ? $"Upgrade {CurrentUpgradeLevel} -> {CurrentUpgradeLevel + 1}\n{UpgradeCost}"
+            ? $"Upgrade {CurrentUpgradeLevel} -> {CurrentUpgradeLevel + 1}\nCost: {UpgradeCost}"
             : $"At Max Level\n{CurrentUpgradeLevel}/{CurrentUpgradeLevel}";
 
         string fixLabel = canFix
-            ? $"Fix {(int)FixCost}\n{(int)CurrentHealth}/{(int)MaxHealth}"
+            ? $"Fix {(int)CurrentHealth}/{(int)MaxHealth}\nCost: {(int)FixCost}"
             : $"At Full Health\n{(int)CurrentHealth}/{(int)MaxHealth}";
         
         string demolishLabel = $"Demolish";

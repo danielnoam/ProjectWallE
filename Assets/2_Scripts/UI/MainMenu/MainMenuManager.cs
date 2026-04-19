@@ -1,4 +1,5 @@
 using DNExtensions.Systems.MenuSystem;
+using DNExtensions.Systems.VFXManager;
 using DNExtensions.Utilities.AutoGet;
 using DNExtensions.Utilities.CustomFields;
 using UnityEngine;
@@ -21,6 +22,8 @@ namespace ProjectWallE.UI
         [SerializeField] private Button creditsButton;
         [SerializeField] private Button quitButton;
         [SerializeField] private SceneField gameScene;
+        [SerializeField] private EffectSequence fadeOutSequence;
+        [SerializeField] private EffectSequence fadeInSequence;
 
         [Header("Options")]
         [SerializeField] private Screen optionsScreen;
@@ -56,16 +59,12 @@ namespace ProjectWallE.UI
 
         private void Play()
         {
-            gameScene?.LoadScene();
+            TransitionManager.TransitionToScene(gameScene, fadeOutSequence, fadeInSequence);
         }
         
         private void Quit()
         {
-            #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-            return;
-            #endif
-            Application.Quit();
+            TransitionManager.TransitionQuit(fadeOutSequence);
         }
     }
 }

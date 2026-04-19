@@ -32,7 +32,7 @@ namespace ProjectWallE.GameLoop.Player
 
             CameraRay = _cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 
-            bool rawHit = Physics.Raycast(CameraRay, out RaycastHit hit, maxAimDistance, aimMask);
+            bool rawHit = Physics.Raycast(CameraRay, out RaycastHit hit, maxAimDistance, aimMask, QueryTriggerInteraction.Ignore);
 
             if (rawHit && hit.distance >= minAimDistance)
             {

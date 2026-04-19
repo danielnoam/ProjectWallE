@@ -1,5 +1,102 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &225805341642389850
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1932946382420250093}
+  - component: {fileID: 5548367462725112355}
+  - component: {fileID: 1180916150936233343}
+  - component: {fileID: 3767303729298828200}
+  m_Layer: 9
+  m_Name: FullscreenMaterials
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1932946382420250093
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 225805341642389850}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4410211601627553717}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5548367462725112355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 225805341642389850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 286c0a9b65940bc46a4af2e3e8df3264, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FullscreenVignetteController
+  material: {fileID: 2100000, guid: 11a4b36f82c657b429a3edb70f119268, type: 2}
+  propertyName: _Mask_Size
+  showValue: 1
+  hideValue: 0
+  duration: 0.5
+  ease: 4
+  punchCount: 1
+  punchDuration: 0.25
+  punchEase: 1
+--- !u!114 &1180916150936233343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 225805341642389850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 286c0a9b65940bc46a4af2e3e8df3264, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FullscreenVignetteController
+  material: {fileID: 2100000, guid: 11a4b36f82c657b429a3edb70f119268, type: 2}
+  propertyName: _Visibility
+  showValue: 1
+  hideValue: 0
+  duration: 0.5
+  ease: 4
+  punchCount: 1
+  punchDuration: 0.25
+  punchEase: 1
+--- !u!114 &3767303729298828200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 225805341642389850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 286c0a9b65940bc46a4af2e3e8df3264, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FullscreenVignetteController
+  material: {fileID: 2100000, guid: 6e808c978bf70bc488a47a310c10d16d, type: 2}
+  propertyName: _Visibility
+  showValue: 1
+  hideValue: 0
+  duration: 0.5
+  ease: 4
+  punchCount: 1
+  punchDuration: 0.25
+  punchEase: 1
 --- !u!1 &263893076665094181
 GameObject:
   m_ObjectHideFlags: 0
@@ -1376,6 +1473,7 @@ GameObject:
   - component: {fileID: 1023129824596148253}
   - component: {fileID: 6740650985369683722}
   - component: {fileID: 4948167179135989057}
+  - component: {fileID: 7626263423651712312}
   m_Layer: 9
   m_Name: Gfx
   m_TagString: Untagged
@@ -1399,6 +1497,7 @@ Transform:
   - {fileID: 4415569934503453722}
   - {fileID: 6193792910539710173}
   - {fileID: 5852170115000021510}
+  - {fileID: 1932946382420250093}
   m_Father: {fileID: 2207471271178187077}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &3887851470892790252
@@ -1624,6 +1723,27 @@ MonoBehaviour:
   changeStateAudioSource: {fileID: 3113016758275396871}
   boostAudioSource: {fileID: 8467015804595106265}
   movementAudioSource: {fileID: 885638804207550830}
+  player: {fileID: 2369243402749369746}
+--- !u!114 &7626263423651712312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6733501558051180430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e19baacf5624278ad73b936ffd475c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.PlayerFullScreenEffects
+  heighSpeedMagnitudeRange:
+    minValue: 15
+    maxValue: 30
+  speedLinesSizeRange: {x: 1, y: 0.9}
+  lowHealthThreshold: 0.3
+  lowHealthEffect: {fileID: 3767303729298828200}
+  speedLinesVisibility: {fileID: 1180916150936233343}
+  speedLinesSize: {fileID: 5548367462725112355}
   player: {fileID: 2369243402749369746}
 --- !u!1 &6916443636318400613
 GameObject:

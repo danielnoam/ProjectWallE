@@ -9,6 +9,7 @@ namespace ProjectWallE.GameLoop
         [Header("Settings")]
         [Tooltip("Whether the spawn should happen at the start of the level or be triggered by an event.")]
         [SerializeField] private bool spawnAtStart = true;
+        [SerializeField, EnableIf("spawnAtStart")] private bool enablePodCamera;
         [SerializeField, EnableIf("spawnAtStart"), PrefabSelector("Assets/Prefabs/Structures")] private Structure structurePrefab;
 
         private bool _hasSpawned;
@@ -27,7 +28,7 @@ namespace ProjectWallE.GameLoop
             }
         }
 
-        private void SpawnStartStructure() => SpawnStructure(structurePrefab);
+        private void SpawnStartStructure() => SpawnStructure(structurePrefab, enablePodCamera);
 
         protected override void OnLevelStarted()
         {
@@ -38,12 +39,12 @@ namespace ProjectWallE.GameLoop
         }
 
         
-        public void SpawnStructure(Structure structure)
+        public void SpawnStructure(Structure structure, bool enablePodCamera)
         {
             if (!structure || _hasSpawned) return;
 
             _hasSpawned = true;
-            StructureManager.Instance?.DeployStructureOnGround(structure, transform.position, transform.forward, transform.up);
+            StructureManager.Instance?.DeployStructureOnGround(structure, transform.position, transform.forward, transform.up, enablePodCamera);
         }
 
 #if UNITY_EDITOR

@@ -54,12 +54,12 @@ namespace ProjectWallE.GameLoop
             Structure.OnStructureRevived -= HandleStructureStateChanged;
         }
 
-        public void DeployStructureOnGround(Structure structure, Vector3 targetPosition, Vector3 forward, Vector3 surfaceNormal)
+        public void DeployStructureOnGround(Structure structure, Vector3 targetPosition, Vector3 forward, Vector3 surfaceNormal, bool enablePodCamera)
         {
             var request = new DeploymentRequest(targetPosition, forward, _structureHolder)
             {
                 TargetSurfaceNormal = surfaceNormal,
-                UseCamera = structure is Base
+                UseCamera = enablePodCamera,
             };
             DeploymentManager.Instance?.DeployFromShip(structure, request);
         }

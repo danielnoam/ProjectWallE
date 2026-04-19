@@ -51,14 +51,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RadarTarget
   autoRegisterOnEnable: 1
-  showOutOfRange: 1
+  showOutOfRange: 0
   blipSprite: {fileID: 0}
   blipColor: {r: 0.7294118, g: 1, b: 0.3882353, a: 1}
   blipSizeMultiplier: 1
   pingDuration: 1
   pingSizeMultiplier: 10
   pingStartAlpha: 1
-  punchDuration: 0.25
+  punchDuration: 0.15
   punchSizeMultiplier: 2
 --- !u!135 &4448602738787213311
 SphereCollider:
@@ -205,6 +205,7 @@ MonoBehaviour:
   levels:
   - rid: 4437626180964712524
   - rid: 4437626180964712525
+  - rid: 126016576663060591
   pumpingState:
     simpleAnimator: {fileID: 2218465062466442339}
     clipName: GeneratorPumping
@@ -218,22 +219,30 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: 126016576663060591
+      type: {class: ResourceGeneratorLevelData, ns: , asm: Assembly-CSharp}
+      data:
+        maxHealth: 250
+        cost: 300
+        fixCostPerHealthPoint: 0.5
+        generationInterval: 1
+        resourcesPerInterval: 2
     - rid: 4437626180964712524
       type: {class: ResourceGeneratorLevelData, ns: , asm: Assembly-CSharp}
       data:
         maxHealth: 100
         cost: 100
-        fixCostPerHealthPoint: 1
+        fixCostPerHealthPoint: 0.5
         generationInterval: 2
         resourcesPerInterval: 1
     - rid: 4437626180964712525
       type: {class: ResourceGeneratorLevelData, ns: , asm: Assembly-CSharp}
       data:
         maxHealth: 200
-        cost: 100
-        fixCostPerHealthPoint: 1
+        cost: 200
+        fixCostPerHealthPoint: 0.5
         generationInterval: 1
-        resourcesPerInterval: 2
+        resourcesPerInterval: 1
 --- !u!1 &8451801116168845029
 GameObject:
   m_ObjectHideFlags: 0
