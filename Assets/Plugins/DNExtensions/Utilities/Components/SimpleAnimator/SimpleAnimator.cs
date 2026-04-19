@@ -227,6 +227,25 @@ namespace DNExtensions.Utilities
         {
             return index >= 0 && index < clips.Length ? clips[index] : null;
         }
+        
+        /// <summary>
+        /// Plays a clip starting at the specified normalized time (0 = start, 1 = end).
+        /// </summary>
+        public void Play(int index, float normalizedTime, float crossfadeDuration = 0f, Action onFinished = null)
+        {
+            if (!TryGetClip(index, out var clip)) return;
+            PlayInternal(clip, index, crossfadeDuration, false, onFinished);
+            var clipPlayable = (AnimationClipPlayable)_mixer.GetInput(_activeSlot);
+            clipPlayable.SetTime(clip.length * normalizedTime);
+        }
+
+        /// <summary>
+        /// Plays a clip starting at the specified normalized time (0 = start, 1 = end).
+        /// </summary>
+        public void Play(string clipName, float normalizedTime, float crossfadeDuration = 0f, Action onFinished = null)
+        {
+            if (TryGetIndex(clipName, out int index)) Play(index, normalizedTime, crossfadeDuration, onFinished);
+        }
 
         /// <summary>
         /// Plays a clip and holds the last frame when finished.
