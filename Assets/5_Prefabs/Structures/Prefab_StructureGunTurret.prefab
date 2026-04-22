@@ -202,6 +202,14 @@ MonoBehaviour:
   brokenRotation: {x: 25, y: 0, z: 0}
   scanRotationSpeed: 35
   scanWaitDuration: 1.5
+  shootAnimation:
+    isSet: 1
+    hideValueIfSet: 0
+    value:
+      simpleAnimator: {fileID: 3131128396841918410}
+      clipName: TurretGunShoot
+      clipIndex: 1
+      assigned: 1
   shootEffect:
     visualEffects:
     - {fileID: 284114131515050947}
@@ -326,6 +334,7 @@ MonoBehaviour:
     value: 0
   clips:
   - {fileID: 7400000, guid: eea43ad899546a744975ccecee46278b, type: 2}
+  - {fileID: 7400000, guid: cad7afa5804ba7b478309892281ed6c7, type: 2}
 --- !u!1001 &1860159774656600581
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -468,6 +477,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6756884417540177175}
     m_Modifications:
+    - target: {fileID: -9199416420939667207, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.1105672
+      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -520,6 +533,14 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 97f6f496be545354e9997b5f67139ccc, type: 2}
+    - target: {fileID: -7399556042738189596, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.821253e-10
+      objectReference: {fileID: 0}
+    - target: {fileID: -7399556042738189596, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.1809038
+      objectReference: {fileID: 0}
     - target: {fileID: -6639813856202270970, guid: aff0234a4b934e9488ff3c72364066d7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 

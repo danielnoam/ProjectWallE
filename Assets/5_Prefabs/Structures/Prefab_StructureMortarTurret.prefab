@@ -170,6 +170,14 @@ MonoBehaviour:
   brokenRotation: {x: 30, y: 0, z: 0}
   scanRotationSpeed: 35
   scanWaitDuration: 1.5
+  shootAnimation:
+    isSet: 1
+    hideValueIfSet: 0
+    value:
+      simpleAnimator: {fileID: 2858022692532645654}
+      clipName: TurretMortarShoot
+      clipIndex: 1
+      assigned: 1
   shootEffect:
     visualEffects:
     - {fileID: 1686508872525300704}
@@ -326,6 +334,7 @@ MonoBehaviour:
     value: 0
   clips:
   - {fileID: 7400000, guid: 58453b03b28bf554e945af3d048bd64b, type: 2}
+  - {fileID: 7400000, guid: 764592ff9e608774faa924e1311d69af, type: 2}
 --- !u!1001 &4513682569854631036
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -486,6 +495,10 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: -1423875751824240234, guid: ed12d104c8b9499459cba8257fbc00df, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5daa2d568ea93a64ba0d31816b4a5b93, type: 2}
+    - target: {fileID: -966961684750153374, guid: ed12d104c8b9499459cba8257fbc00df, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 5daa2d568ea93a64ba0d31816b4a5b93, type: 2}

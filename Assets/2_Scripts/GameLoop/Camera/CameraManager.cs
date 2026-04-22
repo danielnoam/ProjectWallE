@@ -102,6 +102,11 @@ namespace ProjectWallE
         {
             if (_activePod)
             {
+                Vector3 dir = (_activePod.transform.position - _playerManager.transform.position).normalized;
+                _yaw = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
+                _pitch = -Mathf.Asin(dir.y) * Mathf.Rad2Deg;
+                _pitch = Mathf.Clamp(_pitch, -cameraVerticalClamp, cameraVerticalClamp);
+
                 podCamera.LookAt = null;
                 _activePod.OnLand -= OnLand;
             }
@@ -153,7 +158,7 @@ namespace ProjectWallE
         {
             cameraTarget.position = _playerManager.transform.position;
 
-            if (_cameraLocked) return;
+            if (_cameraLocked || _activePod) return;
 
             Vector2 lookDelta = GetScaledLookDelta();
 

@@ -3,6 +3,7 @@ using System.Collections;
 using DNExtensions.Systems.Scriptables;
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.Button;
+using DNExtensions.Utilities.CustomFields;
 using PrimeTween;
 using ProjectWallE.GameLoop;
 using UnityEngine;
@@ -31,6 +32,7 @@ public abstract class Turret : Structure
     [SerializeField] protected Vector3 brokenRotation;
     [SerializeField] private float scanRotationSpeed = 35f;
     [SerializeField] private float scanWaitDuration = 1.5f;
+    [SerializeField] private OptionalField<SimpleAnimatorClipField> shootAnimation;
     [SerializeField] private VisualEffectAction shootEffect;
 
     private float _attackTimer;
@@ -66,8 +68,7 @@ public abstract class Turret : Structure
 
                 if (!CanFire(targetPosition)) return;
 
-                if (_attackTimer >= CurrentTurretLevelData.attackCooldown)
-                    Fire(targetPosition);
+                if (_attackTimer >= CurrentTurretLevelData.attackCooldown) Shoot(targetPosition);
             }
             else
             {
@@ -103,11 +104,15 @@ public abstract class Turret : Structure
         );
     }
 
-    private void Fire(Vector3 targetPosition)
+    private void Shoot(Vector3 targetPosition)
     {
         var direction = (targetPosition - firePoint.position).normalized;
         CurrentTurretLevelData.soProjectileData?.Spawn(firePoint.position, direction, targetPosition, this);
         shootEffect?.Play(firePoint.position);
+        if (shootAnimation.IsSetAndHasValue())
+        {
+            shootAnimation.Value.PlayOnce();
+        }
         _attackTimer = 0f;
     }
 
