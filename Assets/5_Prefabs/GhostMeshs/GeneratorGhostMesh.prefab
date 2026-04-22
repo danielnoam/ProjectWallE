@@ -118,6 +118,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 113f02c3665fdd043ac10eb3c45f8654, type: 3}
       insertIndex: -1
       addedObject: {fileID: -768713031059423752}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 113f02c3665fdd043ac10eb3c45f8654, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 147395608233864686}
   m_SourcePrefab: {fileID: 100100000, guid: 113f02c3665fdd043ac10eb3c45f8654, type: 3}
 --- !u!1 &4470561220568391773 stripped
 GameObject:
@@ -152,6 +155,44 @@ MonoBehaviour:
   canBuildColor: {fileID: 11400000, guid: 046258290a5e9d04f99f84b915c4387c, type: 2}
   blockBuildColor: {fileID: 11400000, guid: 0d466add85d7d5346a070321146708c6, type: 2}
   material: {fileID: 2100000, guid: 75bc54c4b0ad3614184c59931e286a0a, type: 2}
+--- !u!114 &147395608233864686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4470561220568391773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f805c3c01c3dac042b8fe9cce5d48fd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.HologramGlitch
+  unscaledTime: 1
+  sequence:
+  - strength: 0
+    scanlineOffset: 0
+    duration: 0.35
+  - strength: 0.15
+    scanlineOffset: 0.5
+    duration: 0.35
+  - strength: 0
+    scanlineOffset: 0
+    duration: 0.7
+  - strength: 0.1
+    scanlineOffset: 0.5
+    duration: 0.2
+  - strength: 0
+    scanlineOffset: 0
+    duration: 0.25
+  - strength: 0.05
+    scanlineOffset: 0.5
+    duration: 0.2
+  - strength: 0
+    scanlineOffset: 0
+    duration: 0.4
+  - strength: 0.13
+    scanlineOffset: 0.5
+    duration: 0.3
 --- !u!23 &7921959726006138919 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 6862221435064771883, guid: 113f02c3665fdd043ac10eb3c45f8654, type: 3}

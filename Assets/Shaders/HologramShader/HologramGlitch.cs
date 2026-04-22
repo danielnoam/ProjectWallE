@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using DNExtensions.Utilities.Button;
 
 namespace ProjectWallE
 {
@@ -15,7 +14,8 @@ namespace ProjectWallE
         }
         
 
-        [Header("Glitch Sequence")]
+        [Header("Settings")]
+        [SerializeField] private bool unscaledTime;
         [SerializeField] private GlitchFrame[] sequence = new GlitchFrame[]
         {
             new GlitchFrame { strength = 0.00f, scanlineOffset = 0.0f, duration = 0.25f },
@@ -36,7 +36,16 @@ namespace ProjectWallE
         private void Awake()
         {
             CacheRenderers();
+        }
+
+        private void OnEnable()
+        {
             StartCoroutine(GlitchRoutine());
+        }
+
+        private void OnDisable()
+        {
+            StopAllCoroutines();
         }
         
         private void CacheRenderers()
@@ -64,7 +73,9 @@ namespace ProjectWallE
                 foreach (var frame in sequence)
                 {
                     SetGlitch(frame.strength, frame.scanlineOffset);
-                    yield return new WaitForSeconds(frame.duration);
+                    yield return unscaledTime
+                        ? new WaitForSecondsRealtime(frame.duration)
+                        : new WaitForSeconds(frame.duration);
                 }
             }
         }
