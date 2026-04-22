@@ -55,16 +55,17 @@ namespace ProjectWallE
         [Tooltip("At the max angle the accel force will be at 0%, at the min angle the accel force will be at 100%")]
         [SerializeField, MinMaxRange(0, 90)] private RangedFloat accelAngleRange;
         
+        [Header("Breaking Parameters")]
+        [SerializeField] private float brakeStrength;
+        [SerializeField] private float engineBrakeStrength;
+        
         [Header("Speedy Layer Settings")]
         [SerializeField] private LayerMask speedyLayer;
         [SerializeField] private float speedySpeedMultiplier;
         [SerializeField] private float speedyAccelMultiplier;
 
-        [Header("Breaking Parameters")]
-        [SerializeField] private float brakeStrength;
-        [SerializeField] private float engineBrakeStrength;
-
         [Header("Air Control Parameters")]
+        [SerializeField,Range(0f,1), Tooltip("Relative to velocity, use small numbers")] private float airDrag;
         [SerializeField] private float airAlignmentStrength;
         [SerializeField] private float airAlignmentDamping;
         [SerializeField] private float airSteeringStrength;
@@ -105,13 +106,14 @@ namespace ProjectWallE
         public float TopBackwardSpeed => topBackwardSpeed;
         public RangedFloat AccelAngleRange => accelAngleRange;
 
+        public float BrakeStrength => brakeStrength;
+        public float EngineBrakeStrength => engineBrakeStrength;
+        
         public LayerMask SpeedyLayer => speedyLayer;
         public float SpeedySpeedMultiplier => speedySpeedMultiplier;
         public float SpeedyAccelMultiplier => speedyAccelMultiplier;
-
-        public float BrakeStrength => brakeStrength;
-        public float EngineBrakeStrength => engineBrakeStrength;
-
+        
+        public float AirDrag => airDrag;
         public float AirAlignmentStrength => airAlignmentStrength;
         public float AirAlignmentDamping => airAlignmentDamping;
         public float AirSteeringStrength => airSteeringStrength;
