@@ -1,3 +1,4 @@
+using System;
 using DNExtensions.Utilities.CinemachineExtensions;
 using ProjectWallE.GameLoop;
 using Unity.Cinemachine;
@@ -8,6 +9,10 @@ namespace ProjectWallE
     [RequireComponent(typeof(PlayerManagerInput))]
     public class CameraManager : MonoBehaviour
     {
+        public static CameraManager Instance { get; private set; }
+
+        public static event Action<bool> OnCameraChanged;
+        
         [Header("Look Settings")]
         [SerializeField] private float mouseLookSensitivity = 0.08f;
         [SerializeField] private float gamepadLookSensitivity = 180f;
@@ -37,6 +42,13 @@ namespace ProjectWallE
 
         private void Awake()
         {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            } 
+            Instance = this;
+            
             _playerManager = FindFirstObjectByType<PlayerManager>();
             _input = GetComponent<PlayerManagerInput>();
 
@@ -44,8 +56,7 @@ namespace ProjectWallE
             _yaw = euler.y;
 
             _pitch = euler.x;
-            if (_pitch > 180f)
-                _pitch -= 360f;
+            if (_pitch > 180f) _pitch -= 360f;
         }
 
         private void OnEnable()
@@ -91,14 +102,14 @@ namespace ProjectWallE
             if (!request.UseCamera) return;
 
             _activePod = pod;
-            _activePod.OnLand += OnLand;
+            _activePod.OnLand += OnPodLand;
     
             podCamera.LookAt = pod.transform;
     
             SwitchActiveCamera(podCamera);
         }
 
-        private void OnLand()
+        private void OnPodLand()
         {
             if (_activePod)
             {
@@ -108,7 +119,7 @@ namespace ProjectWallE
                 _pitch = Mathf.Clamp(_pitch, -cameraVerticalClamp, cameraVerticalClamp);
 
                 podCamera.LookAt = null;
-                _activePod.OnLand -= OnLand;
+                _activePod.OnLand -= OnPodLand;
             }
             _activePod = null;
             SwitchActiveCamera(_playerManager.PlayerControllerType == PlayerControllerType.Robot ? robotCamera : carCamera);
@@ -186,6 +197,7 @@ namespace ProjectWallE
             robotCamera.Priority.Value = 0;
             
             cam.Priority.Value = 1;
+            OnCameraChanged?.Invoke(cam == podCamera);
         }
     }
 }

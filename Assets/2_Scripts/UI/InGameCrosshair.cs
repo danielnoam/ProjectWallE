@@ -48,6 +48,7 @@ namespace ProjectWallE.UI
         private Vector3 _baseScale;
         private bool _isActive;
         private bool _inMenu;
+        private bool _cinematicCameraActive;
         private float _currentDistance;
         private float _distanceVelocity;
 
@@ -75,17 +76,19 @@ namespace ProjectWallE.UI
 
         private void OnEnable()
         {
-            if (!player) return;
-            player.OnControllerChanged += OnControllerChanged;
-            player.Shooter.OnAttack1 += OnAttack;
-            player.Shooter.OnAttack2 += OnAttack;
-            player.StructureBuilder.BuildMenuRequested += OnMenuRequested;
-            player.StructureBuilder.ActionsMenuRequested += OnActionsMenuRequested;
-            player.StructureBuilder.MenuCloseRequested += OnMenuClosed;
+            if (player)
+            {
+                player.OnControllerChanged += OnControllerChanged;
+                player.Shooter.OnAttack1 += OnAttack;
+                player.Shooter.OnAttack2 += OnAttack;
+                player.StructureBuilder.BuildMenuRequested += OnMenuRequested;
+                player.StructureBuilder.ActionsMenuRequested += OnActionsMenuRequested;
+                player.StructureBuilder.MenuCloseRequested += OnMenuClosed;
 
-            RefreshActiveState();
-
+            }
             Enemy.OnEnemyDamaged += OnEnemyDamaged;
+            CameraManager.OnCameraChanged += OnCameraChanged;
+            RefreshActiveState();
         }
 
         private void OnDisable()
@@ -100,6 +103,7 @@ namespace ProjectWallE.UI
                 player.StructureBuilder.MenuCloseRequested -= OnMenuClosed;
             }
             Enemy.OnEnemyDamaged -= OnEnemyDamaged;
+            CameraManager.OnCameraChanged -= OnCameraChanged;
         }
 
         private void LateUpdate()
@@ -134,6 +138,12 @@ namespace ProjectWallE.UI
                 visual.transform.localScale = _baseScale * mult;
             }
         }
+        
+        private void OnCameraChanged(bool cinematicCamera)
+        {
+            _cinematicCameraActive = cinematicCamera;
+            RefreshActiveState();
+        }
 
         private void OnEnemyDamaged(IDamageable attacker)
         {
@@ -165,9 +175,7 @@ namespace ProjectWallE.UI
 
         private void RefreshActiveState()
         {
-            bool shouldBeActive = player
-                && player.PlayerControllerType == PlayerControllerType.Robot
-                && !_inMenu;
+            bool shouldBeActive = player && player.PlayerControllerType == PlayerControllerType.Robot && !_inMenu && !_cinematicCameraActive;
             SetActive(shouldBeActive);
         }
 
