@@ -17,6 +17,7 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField] private LayerMask buildableLayerMask;
         [SerializeField] private LayerMask blockBuildLayerMask;
         [SerializeField] private LayerMask structureLayerMask;
+        [SerializeField] private LayerMask nodeLayerMask;
         [SerializeField, PrefabSelector("Assets/Prefabs/Structures")] private Structure[] structuresArray;
         [SerializeField, AutoGetSelf, HideInInspector] private PlayerManager playerManager;
         [SerializeField, AutoGetSelf, HideInInspector] private PlayerManagerInput input;
@@ -27,6 +28,7 @@ namespace ProjectWallE.GameLoop.Player
         private Ray _buildRay;
         private Vector3 _buildPoint;
         private Vector3 _buildNormal;
+        private bool _lastCanBuild;
         private bool _canBuild;
         private bool _structureStatusVisible;
         private bool _menuOpen;
@@ -35,7 +37,7 @@ namespace ProjectWallE.GameLoop.Player
         private Structure _lastMenuStructure;
         private Sequence _timeSequence;
 
-        public event Action<Structure[]> BuildMenuRequested;
+        public event Action<Structure[], bool> BuildMenuRequested;
         public event Action<Structure> ActionsMenuRequested;
         public event Action MenuCloseRequested;
 
@@ -149,6 +151,7 @@ namespace ProjectWallE.GameLoop.Player
             StructureManager.Instance?.HideGhost();
             BuildPrompt.Instance?.Hide();
             _menuOpen = false;
+            _lastCanBuild = false;
             _lastMenuStructure = null;
             _lastMenuWasBuildMenu = false;
             MenuCloseRequested?.Invoke();
@@ -175,32 +178,30 @@ namespace ProjectWallE.GameLoop.Player
                 UpdateBuildPrompt(null);
                 UpdateStructureStatusVisibility(null);
             }
-            else if (Physics.Raycast(_buildRay, out RaycastHit groundHit, buildRange, buildableLayerMask))
+            else if (Physics.Raycast(_buildRay, out RaycastHit nodeHit, buildRange, nodeLayerMask, QueryTriggerInteraction.Collide) && nodeHit.collider.TryGetComponent(out StructureNode node))
             {
                 _targetedStructure = null;
                 UpdateStructureStatusVisibility(null);
-                
-                if (groundHit.collider.TryGetComponent(out StructureNode node))
-                {
-                    _buildPoint = node.SnapPoint;
-                    _buildNormal = Vector3.up;
-                    _targetedNode = node;
-                    _canBuild = !node.IsOccupied;
-                    UpdateBuildPrompt(_menuOpen ? node.SnapPoint : null);
-                    Quaternion rotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized, Vector3.up);
-                    StructureManager.Instance?.ShowGhost(node.transform.position, rotation, _canBuild);
-                }
-                else
-                {
-                    _buildPoint = groundHit.point;
-                    _buildNormal = groundHit.normal;
-                    _targetedNode = null;
-                    _canBuild = Vector3.Angle(groundHit.normal, Vector3.up) <= maxBuildAngle;
-                    UpdateBuildPrompt(_menuOpen ? groundHit.point : null);
-                    Vector3 projectedForward = Vector3.ProjectOnPlane(transform.forward, groundHit.normal).normalized;
-                    Quaternion rotation = projectedForward.sqrMagnitude > 0.001f ? Quaternion.LookRotation(projectedForward, groundHit.normal) : Quaternion.identity;
-                    StructureManager.Instance?.ShowGhost(groundHit.point, rotation, _canBuild);
-                }
+                _buildPoint = node.SnapPoint;
+                _buildNormal = Vector3.up;
+                _targetedNode = node;
+                _canBuild = !node.IsOccupied;
+                UpdateBuildPrompt(_menuOpen ? node.SnapPoint : null);
+                Quaternion rotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized, Vector3.up);
+                StructureManager.Instance?.ShowGhost(node.transform.position, rotation, _canBuild);
+            }
+            else if (Physics.Raycast(_buildRay, out RaycastHit groundHit, buildRange, buildableLayerMask, QueryTriggerInteraction.Ignore))
+            {
+                _targetedStructure = null;
+                UpdateStructureStatusVisibility(null);
+                _buildPoint = groundHit.point;
+                _buildNormal = groundHit.normal;
+                _targetedNode = null;
+                _canBuild = Vector3.Angle(groundHit.normal, Vector3.up) <= maxBuildAngle;
+                UpdateBuildPrompt(_menuOpen ? groundHit.point : null);
+                Vector3 projectedForward = Vector3.ProjectOnPlane(transform.forward, groundHit.normal).normalized;
+                Quaternion rotation = projectedForward.sqrMagnitude > 0.001f ? Quaternion.LookRotation(projectedForward, groundHit.normal) : Quaternion.identity;
+                StructureManager.Instance?.ShowGhost(groundHit.point, rotation, _canBuild);
             }
             else
             {
@@ -208,7 +209,7 @@ namespace ProjectWallE.GameLoop.Player
                 _targetedNode = null;
 
                 Vector3 fallbackOrigin = _buildRay.GetPoint(buildRange);
-                if (Physics.Raycast(fallbackOrigin, Vector3.down, out RaycastHit downHit, downBuildRange, buildableLayerMask))
+                if (Physics.Raycast(fallbackOrigin, Vector3.down, out RaycastHit downHit, downBuildRange, buildableLayerMask, QueryTriggerInteraction.Ignore))
                 {
                     _canBuild = Vector3.Angle(downHit.normal, Vector3.up) <= maxBuildAngle;
                     UpdateBuildPrompt(_menuOpen ? downHit.point : null);
@@ -261,12 +262,13 @@ namespace ProjectWallE.GameLoop.Player
             }
             else
             {
-                if (!_lastMenuWasBuildMenu)
+                if (!_lastMenuWasBuildMenu || _lastCanBuild != _canBuild)
                 {
-                    if (_lastMenuStructure) MenuCloseRequested?.Invoke();
-                    BuildMenuRequested?.Invoke(_targetedNode ? _targetedNode.AllowedStructures : structuresArray);
+                    if (!_lastMenuWasBuildMenu && _lastMenuStructure) MenuCloseRequested?.Invoke();
+                    BuildMenuRequested?.Invoke(_targetedNode ? _targetedNode.AllowedStructures : structuresArray, _canBuild);
                     _lastMenuStructure = null;
                     _lastMenuWasBuildMenu = true;
+                    _lastCanBuild = _canBuild;
                 }
             }
         }

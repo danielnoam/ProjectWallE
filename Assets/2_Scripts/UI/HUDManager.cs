@@ -168,7 +168,7 @@ namespace ProjectWallE.UI
             if (buildIcon && buildIcon.isActiveAndEnabled) buildIcon.PunchIcon();
         }
         
-        private void OnBuildMenuRequested(Structure[] structures)
+        private void OnBuildMenuRequested(Structure[] structures, bool canBuild)
         {
             basesIcon?.gameObject.SetActive(true);
             turretsIcon?.gameObject.SetActive(true);

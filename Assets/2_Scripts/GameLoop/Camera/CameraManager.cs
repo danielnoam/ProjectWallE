@@ -1,4 +1,5 @@
 using System;
+using DNExtensions.Utilities;
 using DNExtensions.Utilities.CinemachineExtensions;
 using ProjectWallE.GameLoop;
 using Unity.Cinemachine;
@@ -17,6 +18,10 @@ namespace ProjectWallE
         [SerializeField] private float mouseLookSensitivity = 0.08f;
         [SerializeField] private float gamepadLookSensitivity = 180f;
         [SerializeField, Range(1, 89)] private float cameraVerticalClamp = 80f;
+        
+        [Header("Car FOV Settings")]
+        [SerializeField, MinMaxRange(0f, 50f)] private RangedFloat speedMagnitudeRange = new RangedFloat(15f, 30f);
+        [SerializeField, MinMaxRange(0f, 150)] private RangedFloat fovRange = new RangedFloat(75f, 90f);
         
         [Header("Shake Settings")]
         [SerializeField] private ImpulseSettings damageImpulseSettings;
@@ -95,6 +100,7 @@ namespace ProjectWallE
         private void LateUpdate()
         {
             UpdateCameraMovement();
+            UpdateCarFOV();
         }
         
         private void OnPodDeployed(DeploymentRequest request, Pod pod)
@@ -155,7 +161,7 @@ namespace ProjectWallE
             _cameraLocked = true;
         }
 
-        private void OnBuildMenuRequested(Structure[] obj)
+        private void OnBuildMenuRequested(Structure[] obj, bool canBuild)
         {
             _cameraLocked = true;
         }
@@ -188,6 +194,13 @@ namespace ProjectWallE
                 return rawLook * (gamepadLookSensitivity * Time.deltaTime);
 
             return rawLook * mouseLookSensitivity;
+        }
+        
+        private void UpdateCarFOV()
+        {
+            var horizontalVelocity = _playerManager.Velocity.SetY(0f);
+            float t = Mathf.InverseLerp(speedMagnitudeRange.minValue, speedMagnitudeRange.maxValue, horizontalVelocity.magnitude);
+            carCamera.Lens.FieldOfView = Mathf.Lerp(fovRange.minValue, fovRange.maxValue, t);
         }
 
         private void SwitchActiveCamera(CinemachineCamera cam)

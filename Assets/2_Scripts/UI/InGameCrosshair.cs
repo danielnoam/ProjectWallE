@@ -158,7 +158,7 @@ namespace ProjectWallE.UI
             PlayReticlePunch();
         }
 
-        private void OnMenuRequested(Structure[] _) => SetMenuOpen(true);
+        private void OnMenuRequested(Structure[] _, bool canBuild) => SetMenuOpen(true);
         private void OnActionsMenuRequested(Structure _) => SetMenuOpen(true);
         private void OnMenuClosed() => SetMenuOpen(false);
 

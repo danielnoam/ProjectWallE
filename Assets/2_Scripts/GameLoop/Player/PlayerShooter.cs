@@ -60,7 +60,7 @@ namespace ProjectWallE.GameLoop.Player
             _inMenu = false;
         }
 
-        private void OnBuildMenuRequested(Structure[] obj)
+        private void OnBuildMenuRequested(Structure[] obj, bool canBuild)
         {
             _inMenu = true;
         }

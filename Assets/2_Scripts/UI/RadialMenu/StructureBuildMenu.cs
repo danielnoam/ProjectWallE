@@ -11,7 +11,7 @@ namespace ProjectWallE.UI
         {
             if (player)
             {
-                player.StructureBuilder.BuildMenuRequested += OnOpen;
+                player.StructureBuilder.BuildMenuRequested += OnBuildMenuRequested;
                 player.StructureBuilder.MenuCloseRequested += CloseMenu;
             }
         }
@@ -20,25 +20,26 @@ namespace ProjectWallE.UI
         {
             if (player)
             {
-                player.StructureBuilder.BuildMenuRequested -= OnOpen;
+                player.StructureBuilder.BuildMenuRequested -= OnBuildMenuRequested;
                 player.StructureBuilder.MenuCloseRequested -= CloseMenu;
             }
         }
 
-        private void OnOpen(Structure[] structures)
+        private void OnBuildMenuRequested(Structure[] structures, bool canBuild)
         {
-            SetupMenu(structures, ConfigureElement);
+            SetupMenu(structures, (element, structure) => ConfigureElement(element, structure, canBuild));
             OpenMenu();
         }
 
-        private static void ConfigureElement(RadialMenuElement element, Structure structure)
+        private void ConfigureElement(RadialMenuElement element, Structure structure, bool canBuild)
         {
+            if (!canBuild) selectedItemText.text = "Can't build here";
             bool canAfford = !ResourceManager.Instance || ResourceManager.Instance.CanAfford(structure.BuildCost);
             
             element.Configure(
-                $"{structure.StructureUIData.Label}\nCost: {structure.BuildCost}",
+                canBuild ? $"{structure.StructureUIData.Label}\nCost: {structure.BuildCost}" : "Can't build here",
                 structure.StructureUIData.Icon,
-                canAfford
+                canBuild && canAfford
             );
         }
     }

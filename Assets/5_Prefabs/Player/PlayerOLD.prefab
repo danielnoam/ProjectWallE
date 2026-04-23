@@ -256,6 +256,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStructureBuilder
   buildRange: 100
+  downBuildRange: 10
+  maxBuildAngle: 45
   buildableLayerMask:
     serializedVersion: 2
     m_Bits: 136
@@ -265,6 +267,9 @@ MonoBehaviour:
   structureLayerMask:
     serializedVersion: 2
     m_Bits: 64
+  nodeLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
   structuresArray:
   - {fileID: 9177759699372231121, guid: 290c791e53f525645b9870cd63da954e, type: 3}
   - {fileID: 7498951326900205619, guid: 22eee64180129c841a1ce897f19c4847, type: 3}
@@ -286,7 +291,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2da3f03942bd4251800628fa5b420e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerShooter
-  aimOffset: {x: 0, y: 0, z: 0}
   firePoint: {fileID: 0}
   playerManager: {fileID: 0}
   input: {fileID: 0}

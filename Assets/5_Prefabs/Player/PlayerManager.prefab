@@ -1432,6 +1432,9 @@ MonoBehaviour:
   structureLayerMask:
     serializedVersion: 2
     m_Bits: 64
+  nodeLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
   structuresArray:
   - {fileID: 9177759699372231121, guid: 290c791e53f525645b9870cd63da954e, type: 3}
   - {fileID: 7498951326900205619, guid: 22eee64180129c841a1ce897f19c4847, type: 3}
@@ -1738,8 +1741,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.PlayerFullScreenEffects
   heighSpeedMagnitudeRange:
     minValue: 15
-    maxValue: 30
-  speedLinesSizeRange: {x: 1, y: 0.9}
+    maxValue: 35
+  speedLinesSizeRange: {x: 1.1, y: 0.9}
   lowHealthThreshold: 0.3
   lowHealthEffect: {fileID: 3767303729298828200}
   speedLinesVisibility: {fileID: 1180916150936233343}

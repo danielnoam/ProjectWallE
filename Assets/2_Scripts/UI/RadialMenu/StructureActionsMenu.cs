@@ -25,7 +25,7 @@ namespace ProjectWallE.UI
         {
             if (player)
             {
-                player.StructureBuilder.ActionsMenuRequested += OnOpen;
+                player.StructureBuilder.ActionsMenuRequested += OnActionsMenuRequested;
                 player.StructureBuilder.MenuCloseRequested += CloseMenu;
             }
         }
@@ -34,12 +34,12 @@ namespace ProjectWallE.UI
         {
             if (player)
             {
-                player.StructureBuilder.ActionsMenuRequested -= OnOpen;
+                player.StructureBuilder.ActionsMenuRequested -= OnActionsMenuRequested;
                 player.StructureBuilder.MenuCloseRequested -= CloseMenu;
             }
         }
 
-        private void OnOpen(Structure structure)
+        private void OnActionsMenuRequested(Structure structure)
         {
             if (!structure) return;
             menuTitleText.text = structure.StructureUIData.Label;
@@ -47,7 +47,7 @@ namespace ProjectWallE.UI
             OpenMenu();
         }
 
-        private static void ConfigureElement(RadialMenuElement element, StructureAction action)
+        private void ConfigureElement(RadialMenuElement element, StructureAction action)
         {
             element.Configure(action.Label, action.Icon, action.IsAvailable);
         }

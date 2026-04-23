@@ -150,6 +150,12 @@ MonoBehaviour:
   mouseLookSensitivity: 0.08
   gamepadLookSensitivity: 180
   cameraVerticalClamp: 70
+  speedMagnitudeRange:
+    minValue: 20
+    maxValue: 35
+  fovRange:
+    minValue: 75
+    maxValue: 90
   damageImpulseSettings:
     impulseChannel: 1
     impulseType: 0
@@ -680,8 +686,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineThirdPersonFollow
   Damping: {x: 0.1, y: 0.5, z: 0.3}
-  ShoulderOffset: {x: 0.5, y: -0.4, z: 0}
-  VerticalArmLength: 0.4
+  ShoulderOffset: {x: 0, y: 1, z: -3}
+  VerticalArmLength: 1
   CameraSide: 1
   CameraDistance: 2
   AvoidObstacles:
