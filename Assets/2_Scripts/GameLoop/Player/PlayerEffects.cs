@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using DNExtensions.Systems.AudioLibrary;
+using DNExtensions.Utilities;
 using DNExtensions.Utilities.AutoGet;
 using UnityEngine;
 
@@ -13,9 +14,13 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField] private VisualEffectAction carBoostEffect;
         [SerializeField] private VisualEffectAction wheelsAirReleaseEffect;
         [SerializeField] private DamageEffects damageEffects;
+
+        [Header("Audio")]
         [SerializeField, AudioLibraryID] private string changeStateSoundId;
         [SerializeField, AudioLibraryID] private string robotMoveSoundId;
         [SerializeField, AudioLibraryID] private string carMoveSoundId;
+        [SerializeField, MinMaxRange(0f, 30f)] private RangedFloat robotMoveVolumeSpeedRange = new RangedFloat(0.5f, 10f);
+        [SerializeField, MinMaxRange(0f, 30f)] private RangedFloat carMoveVolumeSpeedRange = new RangedFloat(0.5f, 10f);
 
         [Header("Tire Dirt")]
         [SerializeField] private float tireEffectRobotSpeedThreshold = 5f;
@@ -27,12 +32,15 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField] private AudioSource airReleaseAudioSource;
         [SerializeField] private AudioSource changeStateAudioSource;
         [SerializeField] private AudioSource boostAudioSource;
-        [SerializeField] private AudioSource movementAudioSource;
+        [SerializeField] private AudioSource robotMoveAudioSource;
+        [SerializeField] private AudioSource carMoveAudioSource;
         [SerializeField, AutoGetParent, HideInInspector] private PlayerManager player;
 
         private Material[] _materials;
         private bool[] _tireEffectsPlaying;
         private ParticleSystem[] _activeTireEffects;
+        private AudioSource _activeMoveAudioSource;
+        private AudioSource _inactiveMoveAudioSource;
 
         private void OnValidate()
         {
@@ -52,6 +60,9 @@ namespace ProjectWallE.GameLoop.Player
                 }
             }
             _materials = mats.ToArray();
+
+            if (robotMoveAudioSource) AudioLibrary.PlayOnSource(robotMoveSoundId, robotMoveAudioSource);
+            if (carMoveAudioSource) AudioLibrary.PlayOnSource(carMoveSoundId, carMoveAudioSource);
         }
 
         private void OnEnable()
@@ -91,7 +102,7 @@ namespace ProjectWallE.GameLoop.Player
             UpdateTireEffects();
             UpdateMovementAudio();
         }
-        
+
         private void OnDamaged(float damage)
         {
             if (damage <= 0) return;
@@ -108,12 +119,12 @@ namespace ProjectWallE.GameLoop.Player
         {
             carBoostEffect?.Stop(boostAudioSource);
         }
-        
+
         private void OnAttack1()
         {
             shoot1Effect?.Play(transform.position);
         }
-        
+
         private void OnAttack2()
         {
             shoot2Effect?.Play(transform.position);
@@ -123,10 +134,29 @@ namespace ProjectWallE.GameLoop.Player
         {
             carBoostEffect?.Stop(boostAudioSource);
             AudioLibrary.PlayOnSource(changeStateSoundId, changeStateAudioSource);
-            movementAudioSource.Stop();
             StopAllTireEffects();
             _activeTireEffects = type == PlayerControllerType.Robot ? robotTireEffects : carTireEffects;
             _tireEffectsPlaying = new bool[_activeTireEffects.Length];
+
+            _activeMoveAudioSource = type == PlayerControllerType.Robot ? robotMoveAudioSource : carMoveAudioSource;
+            _inactiveMoveAudioSource = type == PlayerControllerType.Robot ? carMoveAudioSource : robotMoveAudioSource;
+            if (_inactiveMoveAudioSource) _inactiveMoveAudioSource.volume = 0f;
+        }
+
+        private void UpdateMovementAudio()
+        {
+            if (!_activeMoveAudioSource) return;
+            float speed = player.Velocity.magnitude;
+            bool isRobot = player.PlayerControllerType == PlayerControllerType.Robot;
+            var range = isRobot ? robotMoveVolumeSpeedRange : carMoveVolumeSpeedRange;
+            _activeMoveAudioSource.volume = Mathf.Lerp(0.1f, 0.4f, Mathf.InverseLerp(range.minValue, range.maxValue, speed));
+        }
+
+        private bool IsTireGrounded(int index)
+        {
+            return player.PlayerControllerType == PlayerControllerType.Robot
+                ? player.RobotController.IsGrounded()
+                : player.CarController.IsTireGrounded(index);
         }
 
         private void UpdateTireEffects()
@@ -156,31 +186,6 @@ namespace ProjectWallE.GameLoop.Player
                     _tireEffectsPlaying[i] = false;
                 }
             }
-        }
-        
-        private void UpdateMovementAudio()
-        {
-            if (!movementAudioSource) return;
-
-            float speed = player.Velocity.magnitude;
-            bool isMoving = speed > 0.1f;
-
-            if (isMoving && !movementAudioSource.isPlaying)
-            {
-                string soundId = player.PlayerControllerType == PlayerControllerType.Robot ? robotMoveSoundId : carMoveSoundId;
-                AudioLibrary.PlayOnSource(soundId, movementAudioSource);
-            }
-            else if (!isMoving && movementAudioSource.isPlaying)
-            {
-                movementAudioSource.Stop();
-            }
-        }
-
-        private bool IsTireGrounded(int index)
-        {
-            return player.PlayerControllerType == PlayerControllerType.Robot
-                ? player.RobotController.IsGrounded()
-                : player.CarController.IsTireGrounded(index);
         }
 
         private void StopAllTireEffects()

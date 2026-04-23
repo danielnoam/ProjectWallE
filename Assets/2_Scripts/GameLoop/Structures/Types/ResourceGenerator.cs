@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using DNExtensions.Systems.AudioLibrary;
 using UnityEngine;
 
 
@@ -15,6 +16,7 @@ public abstract class ResourceGenerator : Structure
 {
     [Header("Resource Generator")]
     [SerializeReference, DrawSerializeReference] private ResourceGeneratorLevelData[] levels = Array.Empty<ResourceGeneratorLevelData>();
+    [SerializeField] private AudioPlayer generationAudio;
     
     
     private ResourceBoostZone _boostZone;
@@ -44,6 +46,7 @@ public abstract class ResourceGenerator : Structure
     {
         if (_generating) return;
         
+        generationAudio?.PlayAudio();
         _generating = true;
         
         if (_generationCoroutine != null) StopCoroutine(_generationCoroutine);
@@ -54,6 +57,7 @@ public abstract class ResourceGenerator : Structure
     protected void StopGenerating()
     {
         _generating = false;
+        generationAudio?.StopAudio();
         
         if (_generationCoroutine != null)
         {
