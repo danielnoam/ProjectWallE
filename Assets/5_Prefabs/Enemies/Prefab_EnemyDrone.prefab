@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8574883881445243624}
-  - component: {fileID: 5663768101188873445}
   - component: {fileID: 2448601663206975914}
+  - component: {fileID: 5663768101188873445}
   - component: {fileID: 7364616695804156870}
   - component: {fileID: -4769723865369596212}
   m_Layer: 8
@@ -36,28 +36,6 @@ Transform:
   - {fileID: 1234027512125546189}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5663768101188873445
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6471506668328617800}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06535a561c25490abaa0eb30b94e8fdf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RadarTarget
-  autoRegisterOnEnable: 1
-  showOutOfRange: 0
-  blipSprite: {fileID: 0}
-  blipColor: {r: 1, g: 0.25471687, b: 0.25471687, a: 1}
-  blipSizeMultiplier: 1
-  pingDuration: 1
-  pingSizeMultiplier: 10
-  pingStartAlpha: 1
-  punchDuration: 0.15
-  punchSizeMultiplier: 1.25
 --- !u!54 &2448601663206975914
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -85,6 +63,28 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &5663768101188873445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6471506668328617800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06535a561c25490abaa0eb30b94e8fdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RadarTarget
+  autoRegisterOnEnable: 1
+  showOutOfRange: 0
+  blipSprite: {fileID: 0}
+  blipColor: {r: 1, g: 0.25471687, b: 0.25471687, a: 1}
+  blipSizeMultiplier: 1
+  pingDuration: 1
+  pingSizeMultiplier: 10
+  pingStartAlpha: 1
+  punchDuration: 0.15
+  punchSizeMultiplier: 1.25
 --- !u!114 &7364616695804156870
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -156,7 +156,7 @@ MonoBehaviour:
     hitSoundId: CriticalHit
   deathEffect:
     effectType: 1
-    particle: {fileID: 0}
+    particle: {fileID: 8195002406593029198, guid: 36e35b6fbcf75e14590c8e707c29401d, type: 3}
     triggerParticle: {fileID: 0}
     soundId: 
   effects:
@@ -194,7 +194,6 @@ MonoBehaviour:
       type: {class: ProjectileAttack, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         attackRange: 35
-        hitLayers: {fileID: 11400000, guid: 858ceb8d9b448d24d94c04812c01cb15, type: 2}
         attackCooldown: 1
         firePoint: {fileID: 7429042783596894845}
         soProjectileData: {fileID: 11400000, guid: 5aa17da338669a14eba6994821f7b4a8, type: 2}

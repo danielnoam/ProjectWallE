@@ -181,7 +181,7 @@ MonoBehaviour:
     hitSoundId: CriticalHit
   deathEffect:
     effectType: 1
-    particle: {fileID: 0}
+    particle: {fileID: 8195002406593029198, guid: bc3192087f66d1843972ffff977cece9, type: 3}
     triggerParticle: {fileID: 0}
     soundId: 
   effects:
@@ -217,7 +217,6 @@ MonoBehaviour:
       type: {class: ProjectileAttack, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         attackRange: 35
-        hitLayers: {fileID: 11400000, guid: 858ceb8d9b448d24d94c04812c01cb15, type: 2}
         attackCooldown: 0.5
         firePoint: {fileID: 1150219598074133490}
         soProjectileData: {fileID: 11400000, guid: 8ffdf2f42528d434f91c7d9b565e08fd, type: 2}
