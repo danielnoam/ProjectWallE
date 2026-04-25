@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: UIHologram
+  m_Name: UIHologramEnemy
   m_Shader: {fileID: -6465566751694194690, guid: 0f6dd5e77c1bdd0428a7a4b936aa232f, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -79,11 +79,12 @@ Material:
     - _USE_UNSCALED_TIME: 0
     - _UnscaledTime: 0
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 0.13725491}
+    - _Color: {r: 1, g: 1, b: 1, a: 0.11764706}
     - _Edge_Color: {r: 255.99997, g: 100.29113, b: 0, a: 1}
-    - _Fresnel_Color: {r: 68.13244, g: 203.33263, b: 0, a: 1}
+    - _Fresnel_Color: {r: 271.465, g: 2.6094713, b: 0, a: 1}
     - _Intersection_Color: {r: 5.9921565, g: 5.1137257, b: 0, a: 1}
     - _Main_Color: {r: 0.38007843, g: 1, b: 0, a: 0.32156864}
+    - _Scanlines_Color: {r: 2.6701567, g: 0.39809135, b: 0, a: 1}
     - _Scanlines_Scroll_Speed: {r: 0, g: 0.05, b: 0, a: 0}
     - _Scanlines_Tiling: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []

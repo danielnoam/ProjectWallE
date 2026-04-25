@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using _2_Scripts;
+using ProjectWallE.GameLoop;
 using ProjectWallE.GameLoop.Player;
 using UnityEngine;
 
@@ -162,6 +163,13 @@ namespace ProjectWallE
 
         #region Health
 
+        private void Die(IDamageable attacker = null)
+        {
+            _currentHealth = 0;
+            OnDeath?.Invoke(attacker);
+            if (LevelManager.Instance) Teleport(LevelManager.Instance.ActivePlayerSpawnPoint);
+        }
+
         private void RegenerateHealth()
         {
             if (_currentHealth >= maxHealth || Time.time < _lastDamageTime + timeBeforeHealthRegen) return;
@@ -183,8 +191,7 @@ namespace ProjectWallE
             
             if (_currentHealth <= 0)
             {
-                _currentHealth = 0;
-                OnDeath?.Invoke(attacker);
+                Die(attacker);
             }
             
             OnHealthChanged?.Invoke(_currentHealth, maxHealth);
@@ -234,7 +241,21 @@ namespace ProjectWallE
         }
 
         #endregion
-        
+
+
+        public void Teleport(Vector3 position, Quaternion rotation)
+        {
+            _rigidbody.position = position;
+            _rigidbody.rotation = rotation;
+        }
+
+        public void Teleport(PlayerSpawnPoint spawnPoint)
+        {
+            if (!spawnPoint) return;
+            
+            _rigidbody.position = spawnPoint.transform.position;
+            _rigidbody.rotation = spawnPoint.transform.rotation;
+        }
 
         public void Push(Vector3 direction, float force)
         {

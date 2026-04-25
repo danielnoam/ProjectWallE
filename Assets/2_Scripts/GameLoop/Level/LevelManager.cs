@@ -26,13 +26,16 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
     [SerializeField] private float initializeDelay = 4f;
     [SerializeField, AutoGetSelf] private PlayableDirector timeline;
     [SerializeField, AutoGetScene] private PlayerManager player;
-
+    
+    private PlayerSpawnPoint _activePlayerSpawnPoint;
     private bool _levelActive;
     private List<BaseLevelObjective> _activeObjectives;
     private int _completedCount;
-
+    
+    
     private float TimeRemaining => _levelActive ? (float)(timeline.duration - timeline.time) : 0f;
     public PlayerManager Player => player;
+    public PlayerSpawnPoint ActivePlayerSpawnPoint => _activePlayerSpawnPoint;
     public bool IsLevelActive => _levelActive;
     public bool HasActiveObjectives => _activeObjectives != null;
     public IReadOnlyList<BaseLevelObjective> ActiveObjectives => _activeObjectives;
@@ -88,6 +91,14 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
             TickObjectives();
         }
     }
+    
+    public void SetPlayerSpawnPoint(PlayerSpawnPoint playerSpawnPoint)
+    {
+        _activePlayerSpawnPoint = playerSpawnPoint;
+        Debug.Log($"Active spawn point updated");
+    }
+    
+    #region Level Control
 
     private IEnumerator StartLevel()
     {
@@ -99,13 +110,6 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
         timeline.Play();
 
         OnLevelStarted?.Invoke();
-    }
-
-    private void OnTimelineStopped(PlayableDirector director)
-    {
-        if (!_levelActive) return;
-
-        CompleteLevel();
     }
     
     private void CompleteLevel()
@@ -127,6 +131,11 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
         timeline.Stop();
         OnLevelFailed?.Invoke();
     }
+    
+
+    #endregion
+
+    #region Objectives
 
     private void TickObjectives()
     {
@@ -182,7 +191,18 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
 
         OnObjectivesAdded?.Invoke(_activeObjectives);
     }
+    
+    #endregion
 
+    #region Timeline
+
+    private void OnTimelineStopped(PlayableDirector director)
+    {
+        if (!_levelActive) return;
+
+        CompleteLevel();
+    }
+    
     public void OnNotify(Playable origin, INotification notification, object context)
     {
         if (!Application.isPlaying) return;
@@ -192,4 +212,6 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
             marker.Execute(origin.GetGraph().GetResolver());
         }
     }
+
+    #endregion
 }

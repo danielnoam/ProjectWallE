@@ -134,6 +134,22 @@ MonoBehaviour:
         showOnRadar: 1
         attackType: 0
         attackCount: 1
+--- !u!114 &-1331637992182345122
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e8753dfb9ae4440a6ff57fddb193624, type: 3}
+  m_Name: Teleport Player To Spawn Point Marker
+  m_EditorClassIdentifier: Assembly-CSharp::TeleportPlayerToSpawnPointMarker
+  m_Time: 47.15
+  playerSpawnPoint:
+    exposedName: 01d0b62c69505154cacb37ef448a98f2
+    defaultValue: {fileID: 0}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -260,6 +276,8 @@ MonoBehaviour:
     - {fileID: 5928714566332443244}
     - {fileID: 7075503200882715566}
     - {fileID: -2784054928127541824}
+    - {fileID: -1331637992182345122}
+    - {fileID: 6138156276450442711}
 --- !u!114 &5928714566332443244
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -277,6 +295,22 @@ MonoBehaviour:
   structureToSpawn: {fileID: 9177759699372231121, guid: 290c791e53f525645b9870cd63da954e, type: 3}
   structureSpawnPoint:
     exposedName: 0448e5d9742f1ea4da398fa95efc99c9
+    defaultValue: {fileID: 0}
+--- !u!114 &6138156276450442711
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0fbc1d0ac57400e9b78634571bedffa, type: 3}
+  m_Name: Set Active Player Spawn Point Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SetActivePlayerSpawnPointMarker
+  m_Time: 1.15
+  playerSpawnPoint:
+    exposedName: 40c59887def773b47b1bd622891c9cbd
     defaultValue: {fileID: 0}
 --- !u!114 &6159556742653435264
 MonoBehaviour:

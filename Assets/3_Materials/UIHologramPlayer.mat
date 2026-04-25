@@ -20,13 +20,11 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: StrucutreHologram
+  m_Name: UIHologramPlayer
   m_Shader: {fileID: -6465566751694194690, guid: 0f6dd5e77c1bdd0428a7a4b936aa232f, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _INTERSECTION
-  - _USE_UNSCALED_TIME
+  m_ValidKeywords: []
   m_InvalidKeywords:
   - _USEUNSCALEDTIME
   m_LightmapFlags: 2
@@ -45,7 +43,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Scanlines_Tex:
-        m_Texture: {fileID: 2800000, guid: 62c5f10814284cd4db0162563a208e09, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture:
@@ -68,26 +66,26 @@ Material:
     m_Floats:
     - _EDGE: 0
     - _Edge_Threshold: 0.112
-    - _Fresnel_Power: 6.73
+    - _Fresnel_Power: 10
     - _Glitch_Strength: 0
-    - _INTERSECTION: 1
-    - _Intersection_Power: 5.51
+    - _INTERSECTION: 0
+    - _Intersection_Power: 3
     - _Noise_Scale: 500
-    - _Noise_Strength: 0.5
+    - _Noise_Strength: 0
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Scanlines_Offset: 0
     - _USEUNSCALEDTIME: 1
-    - _USE_UNSCALED_TIME: 1
+    - _USE_UNSCALED_TIME: 0
     - _UnscaledTime: 0
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 0}
+    - _Color: {r: 1, g: 1, b: 1, a: 0.11764706}
     - _Edge_Color: {r: 255.99997, g: 100.29113, b: 0, a: 1}
-    - _Fresnel_Color: {r: 5.3403134, g: 3.224209, b: 0, a: 1}
+    - _Fresnel_Color: {r: 46.51624, g: 271.465, b: 0, a: 1}
     - _Intersection_Color: {r: 5.9921565, g: 5.1137257, b: 0, a: 1}
     - _Main_Color: {r: 0.38007843, g: 1, b: 0, a: 0.32156864}
-    - _Scanlines_Color: {r: 0.5769472, g: 4, b: 0, a: 1}
+    - _Scanlines_Color: {r: 0.28102446, g: 2.6701567, b: 0, a: 1}
     - _Scanlines_Scroll_Speed: {r: 0, g: 0.05, b: 0, a: 0}
-    - _Scanlines_Tiling: {r: 1, g: 3, b: 0, a: 0}
+    - _Scanlines_Tiling: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

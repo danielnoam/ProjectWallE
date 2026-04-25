@@ -1,4 +1,5 @@
 using System.Collections;
+using DNExtensions.Utilities.Button;
 using UnityEngine;
 
 namespace ProjectWallE
@@ -77,6 +78,22 @@ namespace ProjectWallE
                         ? new WaitForSecondsRealtime(frame.duration)
                         : new WaitForSeconds(frame.duration);
                 }
+            }
+        }
+        
+        [Button(ButtonPlayMode.OnlyWhenNotPlaying)]
+        private void RandomizeSequence(int frameCount = 8)
+        {
+            sequence = new GlitchFrame[frameCount];
+            for (int i = 0; i < frameCount; i++)
+            {
+                bool isGlitch = Random.value > 0.5f;
+                sequence[i] = new GlitchFrame
+                {
+                    strength      = isGlitch ? Random.Range(0.05f, 0.2f) : 0f,
+                    scanlineOffset = isGlitch ? Random.Range(0.2f, 0.8f) : 0f,
+                    duration      = isGlitch ? Random.Range(0.1f, 0.3f) : Random.Range(0.2f, 0.6f),
+                };
             }
         }
     }
