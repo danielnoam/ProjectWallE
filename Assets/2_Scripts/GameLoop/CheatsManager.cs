@@ -12,6 +12,8 @@ namespace ProjectWallE.GameLoop
         [SerializeField] private Key restartSceneKey = Key.F5;
         [SerializeField] private Key completeObjectivesKey = Key.F4;
         [SerializeField] private Key addResourcesKey = Key.F3;
+        [SerializeField] private Key healPlayerKey = Key.F2;
+        [SerializeField] private Key damagePlayerKey = Key.F1;
 
         private void Awake()
         {
@@ -49,6 +51,18 @@ namespace ProjectWallE.GameLoop
             {
                 ResourceManager.Instance?.AddResources(500);
                 Debug.Log("Added 500 Resources");
+            }
+            
+            if (Keyboard.current[healPlayerKey].wasPressedThisFrame)
+            {
+                LevelManager.Instance?.Player?.Heal(25f);
+                Debug.Log("Healed 25 Player");
+            }
+            
+            if (Keyboard.current[damagePlayerKey].wasPressedThisFrame)
+            {
+                LevelManager.Instance?.Player?.TakeDamage(25f, null);
+                Debug.Log("Damaged Player for 25");
             }
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using DNExtensions.Systems.Scriptables;
 using DNExtensions.Utilities.AutoGet;
+using PrimeTween;
 using ProjectWallE.GameLoop;
 using TMPro;
 using UnityEngine;
@@ -11,6 +12,10 @@ namespace ProjectWallE.UI
 {
     public class HUDManager : MonoBehaviour
     { 
+        [Header("Visibility")]
+        [SerializeField] private float fadeDuration = 0.5f;
+        [SerializeField] private CanvasGroup canvasGroup;
+
         [Header("Resources")]
         [SerializeField] private CountIcon resourcesIcon;
         [SerializeField] private CountIcon basesIcon;
@@ -43,6 +48,7 @@ namespace ProjectWallE.UI
 
         private IReadOnlyList<BaseLevelObjective> _activeObjectives;
         private readonly StringBuilder _objectiveBuilder = new();
+        private Tween _fadeTween;
 
         private void OnValidate()
         {
@@ -67,8 +73,11 @@ namespace ProjectWallE.UI
 
             if (player)
             {
+                player.OnDeath += OnPlayerDeath;
+                player.OnSpawn += OnPlayerSpawn;
                 player.OnHealthChanged += UpdateHealthBar;
                 player.OnControllerChanged += OnControllerChanged;
+                player.OnSwitchCooldownUpdated += OnSwitchCooldownUpdated;
                 player.StructureBuilder.ActionsMenuRequested += OnActionsMenuRequested;
                 player.StructureBuilder.BuildMenuRequested += OnBuildMenuRequested;
                 player.StructureBuilder.MenuCloseRequested += OnMenuCloseRequested;
@@ -87,8 +96,6 @@ namespace ProjectWallE.UI
             }
         }
         
-
-
         private void OnDisable()
         {
             ResourceManager.OnResourcesChanged -= UpdateResourcesDisplay;
@@ -102,8 +109,11 @@ namespace ProjectWallE.UI
 
             if (player)
             {
+                player.OnDeath -= OnPlayerDeath;
+                player.OnSpawn -= OnPlayerSpawn;
                 player.OnHealthChanged -= UpdateHealthBar;
                 player.OnControllerChanged -= OnControllerChanged;
+                player.OnSwitchCooldownUpdated -= OnSwitchCooldownUpdated;
                 player.StructureBuilder.ActionsMenuRequested -= OnActionsMenuRequested;
                 player.StructureBuilder.BuildMenuRequested -= OnBuildMenuRequested;
                 player.StructureBuilder.MenuCloseRequested -= OnMenuCloseRequested;
@@ -114,6 +124,20 @@ namespace ProjectWallE.UI
                 player.Shooter.OnBasicCooldownUpdated -= OnBasicCooldownUpdated;
                 player.Shooter.OnSpecialCooldownUpdated -= OnSpecialCooldownUpdated;
             }
+        }
+
+        private void OnPlayerSpawn()
+        {
+            if (!canvasGroup) return;
+            _fadeTween.Stop();
+            _fadeTween = Tween.Alpha(canvasGroup, 1f, fadeDuration);
+        }
+
+        private void OnPlayerDeath(IDamageable attacker)
+        {
+            if (!canvasGroup) return;
+            _fadeTween.Stop();
+            _fadeTween = Tween.Alpha(canvasGroup, 0f, fadeDuration);
         }
 
         private void OnBrakeStarted()
@@ -136,11 +160,9 @@ namespace ProjectWallE.UI
             switch (type)
             {
                 case PlayerControllerType.Robot:
-                    
                     jumpIcon.gameObject.SetActive(true);
                     basicAttackIcon.gameObject.SetActive(true);
                     specialAttackIcon.gameObject.SetActive(true);
-                    
                     boostIcon.gameObject.SetActive(false);
                     brakeIcon.gameObject.SetActive(false);
                     break;
@@ -148,15 +170,20 @@ namespace ProjectWallE.UI
                     jumpIcon.gameObject.SetActive(false);
                     basicAttackIcon.gameObject.SetActive(false);
                     specialAttackIcon.gameObject.SetActive(false);
-                    
                     boostIcon.gameObject.SetActive(true);
                     brakeIcon.gameObject.SetActive(true);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
-            
-            switchIcon.PunchIcon();
+        }
+        
+        private void OnSwitchCooldownUpdated(float currentCooldown, float maxCooldown)
+        {
+            if (switchIcon && switchIcon.isActiveAndEnabled)
+            {
+                switchIcon.UpdateCooldown(currentCooldown, maxCooldown);
+            }
         }
 
         private void OnActionsMenuRequested(Structure structure)
@@ -193,7 +220,6 @@ namespace ProjectWallE.UI
             rampsIcon?.SetCount(data.RampsCount);
         }
         
-
         private void OnLevelFailed()
         {
             _activeObjectives = null;
@@ -218,7 +244,6 @@ namespace ProjectWallE.UI
             objectivesHolder?.SetActive(false);
         }
         
-        
         private void OnBasicCooldownUpdated(float currentCooldown, float maxCooldown)
         {
             if (basicAttackIcon && basicAttackIcon.isActiveAndEnabled) basicAttackIcon.UpdateCooldown(currentCooldown, maxCooldown);
@@ -226,7 +251,7 @@ namespace ProjectWallE.UI
 
         private void OnSpecialCooldownUpdated(float currentCooldown, float maxCooldown)
         {
-            if (specialAttackIcon&& basicAttackIcon.isActiveAndEnabled) specialAttackIcon.UpdateCooldown(currentCooldown, maxCooldown);
+            if (specialAttackIcon && basicAttackIcon.isActiveAndEnabled) specialAttackIcon.UpdateCooldown(currentCooldown, maxCooldown);
         }
 
         private void OnLeveTimeLineUpdated(float timeRemaining)

@@ -84,7 +84,8 @@ namespace ProjectWallE.UI
                 player.StructureBuilder.BuildMenuRequested += OnMenuRequested;
                 player.StructureBuilder.ActionsMenuRequested += OnActionsMenuRequested;
                 player.StructureBuilder.MenuCloseRequested += OnMenuClosed;
-
+                player.OnDeath += OnPlayerDeath;
+                player.OnSpawn += OnPlayerSpawn;
             }
             Enemy.OnEnemyDamaged += OnEnemyDamaged;
             CameraManager.OnCameraChanged += OnCameraChanged;
@@ -101,6 +102,8 @@ namespace ProjectWallE.UI
                 player.StructureBuilder.BuildMenuRequested -= OnMenuRequested;
                 player.StructureBuilder.ActionsMenuRequested -= OnActionsMenuRequested;
                 player.StructureBuilder.MenuCloseRequested -= OnMenuClosed;
+                player.OnDeath -= OnPlayerDeath;
+                player.OnSpawn -= OnPlayerSpawn;
             }
             Enemy.OnEnemyDamaged -= OnEnemyDamaged;
             CameraManager.OnCameraChanged -= OnCameraChanged;
@@ -173,9 +176,19 @@ namespace ProjectWallE.UI
             RefreshActiveState();
         }
 
+        private void OnPlayerDeath(IDamageable attacker)
+        {
+            RefreshActiveState();
+        }
+
+        private void OnPlayerSpawn()
+        {
+            RefreshActiveState();
+        }
+
         private void RefreshActiveState()
         {
-            bool shouldBeActive = player && player.PlayerControllerType == PlayerControllerType.Robot && !_inMenu && !_cinematicCameraActive;
+            bool shouldBeActive = player && player.IsAlive && player.PlayerControllerType == PlayerControllerType.Robot && !_inMenu && !_cinematicCameraActive;
             SetActive(shouldBeActive);
         }
 

@@ -1379,6 +1379,8 @@ MonoBehaviour:
   maxHealth: 100
   timeBeforeHealthRegen: 1.5
   healthRegenRate: 5
+  respawnTime: 7
+  skipRespawnBaseCost: 250
   switchCooldown: 0.5
   robotHeightCheck: 2
   groundLayer:
@@ -1387,6 +1389,7 @@ MonoBehaviour:
   switchBlockLayer:
     serializedVersion: 2
     m_Bits: 3400
+  gfx: {fileID: 6733501558051180430}
   carController: {fileID: 2635220521126351491}
   robotController: {fileID: 1860573053989788979}
   structureBuilder: {fileID: 2737165017878004224}

@@ -55,9 +55,9 @@ namespace ProjectWallE.GameLoop
             Handles.color = isActive ? Color.red : Color.gray;
             Handles.DrawWireDisc(transform.position, Vector3.up, spawnPointRange);
 
-            if (SpawnHeight != 0)
+            if (spawnHeight != 0)
             {
-                Vector3 topPoint = transform.position + Vector3.up * SpawnHeight;
+                Vector3 topPoint = transform.position + Vector3.up * spawnHeight;
                 Handles.DrawLine(transform.position, topPoint);
                 Handles.DrawWireDisc(topPoint, Vector3.up, 0.5f);
             }
