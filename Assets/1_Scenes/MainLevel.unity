@@ -7342,6 +7342,26 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1048439152}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1097072294 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3936046523233198505, guid: d1b2e6bed7ee5c54c9f84065f72599fa, type: 3}
+  m_PrefabInstance: {fileID: 1115909451}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1097072300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1097072294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6709945b45d69bb44815583269844eb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.CameraAutoAlign
+  alignCooldown: 1
+  alignStrength: 2
+  xOffset: 15
 --- !u!1001 &1115909451
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7489,7 +7509,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3936046523233198505, guid: d1b2e6bed7ee5c54c9f84065f72599fa, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1097072300}
   m_SourcePrefab: {fileID: 100100000, guid: d1b2e6bed7ee5c54c9f84065f72599fa, type: 3}
 --- !u!1 &1123422784
 GameObject:
