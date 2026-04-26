@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.CameraManager
   mouseLookSensitivity: 0.08
-  gamepadLookSensitivity: 180
+  gamepadLookSensitivity: 270
   cameraVerticalClamp: 70
   speedMagnitudeRange:
     minValue: 20
@@ -574,6 +574,7 @@ GameObject:
   - component: {fileID: 913704876087868737}
   - component: {fileID: 5681632531551998153}
   - component: {fileID: 119158848503708915}
+  - component: {fileID: 6519189204434600965}
   m_Layer: 0
   m_Name: CarCam
   m_TagString: Untagged
@@ -703,7 +704,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineDeoccluder
   CollideAgainst:
     serializedVersion: 2
-    m_Bits: 1032
+    m_Bits: 3080
   IgnoreTag: 
   TransparentLayers:
     serializedVersion: 2
@@ -728,6 +729,21 @@ MonoBehaviour:
     NearLimit: 5
     FarLimit: 30
     MaxQualityBoost: 0.2
+--- !u!114 &6519189204434600965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3936046523233198505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6709945b45d69bb44815583269844eb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.CameraAutoAlign
+  alignCooldown: 1
+  alignStrength: 2
+  xOffset: 15
 --- !u!1 &6798405457871295215
 GameObject:
   m_ObjectHideFlags: 0
@@ -900,7 +916,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineDeoccluder
   CollideAgainst:
     serializedVersion: 2
-    m_Bits: 1032
+    m_Bits: 3080
   IgnoreTag: 
   TransparentLayers:
     serializedVersion: 2
@@ -1068,7 +1084,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineDeoccluder
   CollideAgainst:
     serializedVersion: 2
-    m_Bits: 1032
+    m_Bits: 3080
   IgnoreTag: 
   TransparentLayers:
     serializedVersion: 2

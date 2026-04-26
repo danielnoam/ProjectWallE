@@ -88,6 +88,22 @@ MonoBehaviour:
   m_Clips: []
   m_Markers:
     m_Objects: []
+--- !u!114 &-1206158933409946082
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0fbc1d0ac57400e9b78634571bedffa, type: 3}
+  m_Name: Set Active Player Spawn Point Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SetActivePlayerSpawnPointMarker
+  m_Time: 0.08333333333333333
+  playerSpawnPoint:
+    exposedName: 567401d39d8f0034b85f9d33f66e2bb4
+    defaultValue: {fileID: 0}
 --- !u!114 &-766553525110194642
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -101,6 +117,7 @@ MonoBehaviour:
   m_Name: Spawn Structure Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnStructureMarker
   m_Time: 1.5
+  podCameraMode: 0
   structureToSpawn: {fileID: 6487620541022002554, guid: 3b1b64788b055e0498a63ea738b3ba50, type: 3}
   structureSpawnPoint:
     exposedName: 8e4ae66d1eec401419747f2556109af2
@@ -126,9 +143,11 @@ MonoBehaviour:
     - rid: 1993976625937514496
       type: {class: GoToPositionObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
-        targetMarker:
+        objectiveMarker:
           exposedName: 
           defaultValue: {fileID: 0}
+        showInGame: 1
+        showOnRadar: 1
         radius: 30
 --- !u!114 &11400000
 MonoBehaviour:
@@ -173,9 +192,11 @@ MonoBehaviour:
     - rid: 1993976625937514505
       type: {class: GoToPositionObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
-        targetMarker:
-          exposedName: a878dd632e913ff47b207fa42bb40b34
+        objectiveMarker:
+          exposedName: 
           defaultValue: {fileID: 0}
+        showInGame: 1
+        showOnRadar: 1
         radius: 30
 --- !u!114 &2138337481656018860
 MonoBehaviour:
@@ -198,8 +219,24 @@ MonoBehaviour:
     - rid: 1993976625937514497
       type: {class: KillEnemiesObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
+        objectiveMarker:
+          exposedName: 
+          defaultValue: {fileID: 0}
+        showInGame: 1
+        showOnRadar: 1
         enemyPrefab: {fileID: 0}
         killCount: 6
+        spawnEnemies: 0
+        spawner:
+          spawnInterval: 3
+          enemiesPerWave: 3
+          enemyType: 0
+          enemies:
+            internalItems: []
+          spawnPosition: 0
+          spawnPoint:
+            exposedName: 
+            defaultValue: {fileID: 0}
 --- !u!114 &3501194080883682793
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -221,6 +258,11 @@ MonoBehaviour:
     - rid: 1993976599894032386
       type: {class: SwitchControllerObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
+        objectiveMarker:
+          exposedName: 
+          defaultValue: {fileID: 0}
+        showInGame: 1
+        showOnRadar: 1
         requirement: 1
 --- !u!114 &4621279658087295958
 MonoBehaviour:
@@ -282,6 +324,7 @@ MonoBehaviour:
     - {fileID: 4621279658087295958}
     - {fileID: 1572475322290309063}
     - {fileID: 8449979598081402622}
+    - {fileID: -1206158933409946082}
 --- !u!114 &5691303165561134707
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -303,9 +346,11 @@ MonoBehaviour:
     - rid: 1993976599894032391
       type: {class: GoToPositionObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
-        targetMarker:
-          exposedName: 3ae656b1860d0bd408acd069fcfd2f53
+        objectiveMarker:
+          exposedName: 
           defaultValue: {fileID: 0}
+        showInGame: 1
+        showOnRadar: 1
         radius: 10
 --- !u!114 &6827295725405647289
 MonoBehaviour:
@@ -328,9 +373,11 @@ MonoBehaviour:
     - rid: 1993976599894032384
       type: {class: GoToPositionObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
-        targetMarker:
-          exposedName: 35b93d5673ac9d24b96c40653afcc1cf
+        objectiveMarker:
+          exposedName: 
           defaultValue: {fileID: 0}
+        showInGame: 1
+        showOnRadar: 1
         radius: 20
 --- !u!114 &8449979598081402622
 MonoBehaviour:
@@ -354,10 +401,20 @@ MonoBehaviour:
     - rid: 1993976625937514506
       type: {class: BuildStructureObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
+        objectiveMarker:
+          exposedName: 
+          defaultValue: {fileID: 0}
+        showInGame: 1
+        showOnRadar: 1
         structurePrefab: {fileID: 9177759699372231121, guid: 290c791e53f525645b9870cd63da954e, type: 3}
     - rid: 1993976625937514507
       type: {class: BuildStructureObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
+        objectiveMarker:
+          exposedName: 
+          defaultValue: {fileID: 0}
+        showInGame: 1
+        showOnRadar: 1
         structurePrefab: {fileID: 9177759699372231121, guid: 290c791e53f525645b9870cd63da954e, type: 3}
 --- !u!114 &8979726575955328570
 MonoBehaviour:
@@ -380,4 +437,9 @@ MonoBehaviour:
     - rid: 1993976600566169689
       type: {class: BoostObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
+        objectiveMarker:
+          exposedName: 
+          defaultValue: {fileID: 0}
+        showInGame: 1
+        showOnRadar: 1
         requiredDuration: 0.5

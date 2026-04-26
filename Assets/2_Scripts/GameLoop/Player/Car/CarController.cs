@@ -45,10 +45,15 @@ namespace _2_Scripts
 
         private bool _wasBraking;
         private float _currentSteering;
+        private float _currentGripFactor;
         private float _groundedRatio;
         private float _airborneFactor;
         private float _handbrake01;
         private float _slippingFactor;
+        
+        private Vector3 _cachedLandingNormal;
+        private int _landingNormalCounter;
+        private const int LandingNormalUpdateInterval = 3; // update every N fixed frames
 
         /// <summary>
         /// controls how much dv affects the gravity (bigger = less control)
@@ -173,7 +178,7 @@ namespace _2_Scripts
         private void ApplyTireRotation()
         {
             float speed01 = Mathf.Clamp01(
-                Mathf.Abs(Vector3.Dot(transform.forward, _playerRb.linearVelocity)) / settings.TopForwardSpeed);
+                Mathf.Abs(Vector3.Dot(transform.forward, _playerRb.linearVelocity)) / (settings.TopForwardSpeed * 1.5f));
 
             float desiredSteeringAngle = Mathf.Lerp(
                 settings.SteeringAngle,
@@ -277,7 +282,9 @@ namespace _2_Scripts
 
             float gripFactor = frictionCurve.Evaluate(Mathf.Abs(slippingAmount));
             gripFactor = Mathf.Clamp(gripFactor * GetNormalForceGripFactor(tire, tireVel.magnitude), frictionCurve.Evaluate(1f), 1);
-            return gripFactor;
+            
+            _currentGripFactor = Mathf.MoveTowards(_currentGripFactor, gripFactor, Time.fixedDeltaTime);
+            return _currentGripFactor;
         }
 
         private float GetNormalForceGripFactor(Tire tire, float tireVelMag)
@@ -311,13 +318,13 @@ namespace _2_Scripts
             UpdateLongitudinalState();
             GetLongitudinalValues(out float topForwardSpeed, out float topBackwardSpeed,
                                   out float accelForce, out float brakeForce);
+            
+            ApplyEngineBreaking(carSpeed);
 
             if (_carInput.Acceleration > 0 || _carInput.BoostHeld)
                 ApplyForwardAcceleration(carSpeed, topForwardSpeed, accelForce, brakeForce);
             else if (_carInput.Acceleration < 0)
                 ApplyBackwardsAcceleration(carSpeed, topBackwardSpeed, accelForce, brakeForce);
-            else
-                ApplyEngineBreaking(carSpeed);
 
             if (CarBoost.CanBoost(out float boostAccel, out float boostSpeedFactor))
                 ApplyBoost(carSpeed, boostAccel, boostSpeedFactor);
@@ -407,17 +414,9 @@ namespace _2_Scripts
 
         private bool IsOnSpeedyLayer()
         {
-            bool isSpeedyLayer = false;
             foreach (Tire tire in _allTires)
-            {
-                if (tire.hitLayer != settings.SpeedyLayer)
-                {
-                    isSpeedyLayer = false;
-                    continue;
-                }
-                isSpeedyLayer = true;
-            }
-            return isSpeedyLayer;
+                if (tire.hitLayer == settings.SpeedyLayer) return true;
+            return false;
         }
 
         private float GetAccelAngleStrength()
@@ -469,9 +468,15 @@ namespace _2_Scripts
         private void ApplyAirControl()
         {
             if (IsCarGrounded()) return;
-
+            AirFriction();
             AirAlignTorque();
             AirSteeringTorque();
+        }
+
+        private void AirFriction()
+        {
+            Vector3 carForwardVel = Vector3.ProjectOnPlane(_playerRb.linearVelocity, Vector3.up);
+            _playerRb.AddForce(-carForwardVel * (carForwardVel.magnitude * settings.AirDrag/100f * _playerRb.mass));
         }
 
         private void AirSteeringTorque()
@@ -490,13 +495,17 @@ namespace _2_Scripts
 
         private void AirAlignTorque()
         {
-            Quaternion toUpright = Quaternion.FromToRotation(transform.up, Vector3.up);
+            Vector3 targetUp = GetPredictedLandingNormal();
 
-            toUpright.ToAngleAxis(out float angleDeg, out Vector3 axisWorld);
+            Quaternion toTarget = Quaternion.FromToRotation(transform.up, targetUp);
+
+            toTarget.ToAngleAxis(out float angleDeg, out Vector3 axisWorld);
             if (angleDeg > 180f) angleDeg -= 360f;
 
             Vector3 errorWorld = axisWorld * (angleDeg * Mathf.Deg2Rad);
             Vector3 errorLocal = transform.InverseTransformDirection(errorWorld);
+
+            // Keep yaw free for AirSteeringTorque
             errorLocal.y = 0f;
 
             Vector3 angVelLocal = transform.InverseTransformDirection(_playerRb.angularVelocity);
@@ -509,7 +518,42 @@ namespace _2_Scripts
             Vector3 torqueWorld = transform.TransformDirection(torqueLocal);
             _playerRb.AddTorque(torqueWorld, ForceMode.Acceleration);
         }
+        
+        private Vector3 GetPredictedLandingNormal()
+        {
+            if (_landingNormalCounter > 0)
+            {
+                _landingNormalCounter--;
+                return _cachedLandingNormal;
+            }
+            _landingNormalCounter = LandingNormalUpdateInterval;
 
+            Vector3 pos = transform.position;
+            Vector3 vel = _playerRb.linearVelocity;
+            float dt = 0.1f;
+            int maxSteps = 50;
+
+            for (int i = 0; i < maxSteps; i++)
+            {
+                float dv = (-settings.TerminalVelocity) - vel.y;
+                float gravityForce = Mathf.Clamp(dv * GravityControlFactor, -settings.GravityStrength, Mathf.Infinity);
+                vel.y += gravityForce * dt;
+
+                Vector3 nextPos = pos + vel * dt;
+                Vector3 step = nextPos - pos;
+
+                if (Physics.Raycast(pos, step.normalized, out RaycastHit hit, step.magnitude + 0.1f, _groundLayer))
+                {
+                    _cachedLandingNormal = hit.normal;
+                    return _cachedLandingNormal;
+                }
+
+                pos = nextPos;
+            }
+
+            _cachedLandingNormal = _groundPlaneNormal;
+            return _cachedLandingNormal;
+        }
         #endregion
 
         #region Helpers
@@ -560,14 +604,8 @@ namespace _2_Scripts
 
         private List<Tire> GetAllTires()
         {
-            var allTires = new List<Tire>();
-
-            foreach (var tire in steeringTires)
-                allTires.Add(tire);
-
-            foreach (var tire in staticTires)
-                allTires.Add(tire);
-
+            var allTires = new List<Tire>(steeringTires);
+            allTires.AddRange(staticTires);
             return allTires;
         }
 

@@ -296,7 +296,7 @@ MonoBehaviour:
     isMoving: 0
     normalForceMag: 0
   boostPoint: {fileID: 3352623459842719466}
-  centerOfMassOffset: {x: 0, y: -0.25, z: 0.3}
+  centerOfMassOffset: {x: 0, y: -0.3, z: 0.25}
   visuals:
     steeringTires:
     - visTransform: {fileID: 109133598325147726}
@@ -691,7 +691,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.2
+  m_Radius: 0.15
   m_Center: {x: 0.15, y: 0, z: 0.1}
 --- !u!1 &2767083873058395676
 GameObject:
@@ -873,7 +873,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.2
+  m_Radius: 0.15
   m_Center: {x: 0.15, y: 0, z: -0.1}
 --- !u!1 &2823248555016632271
 GameObject:
@@ -1151,7 +1151,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.2
+  m_Radius: 0.15
   m_Center: {x: -0.15, y: 0, z: -0.1}
 --- !u!1 &5105030358576147286
 GameObject:
@@ -1896,7 +1896,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.2
+  m_Radius: 0.15
   m_Center: {x: -0.15, y: 0, z: 0.1}
 --- !u!1 &7494357703884863085
 GameObject:

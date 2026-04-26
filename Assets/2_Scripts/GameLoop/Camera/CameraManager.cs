@@ -40,6 +40,7 @@ namespace ProjectWallE
         private Transform _podLookTarget;
         private PlayerManager _playerManager;
         private PlayerManagerInput _input;
+        private CameraAutoAlign _cameraAutoAlign;
         private Pod _activePod;
         
         private bool _cameraLocked;
@@ -193,9 +194,26 @@ namespace ProjectWallE
 
             Vector2 lookDelta = GetScaledLookDelta();
 
-            _yaw += lookDelta.x;
-            _pitch -= lookDelta.y;
-            _pitch = Mathf.Clamp(_pitch, -cameraVerticalClamp, cameraVerticalClamp);
+            if (lookDelta != Vector2.zero)
+            {
+                _cameraAutoAlign?.NotifyInput();
+
+                _yaw += lookDelta.x;
+                _pitch -= lookDelta.y;
+                _pitch = Mathf.Clamp(_pitch, -cameraVerticalClamp, cameraVerticalClamp);
+            }
+            else if (_cameraAutoAlign != null && _cameraAutoAlign.CanAlign(out float xOffset))
+            {
+                Quaternion target = Quaternion.Euler(_playerManager.transform.eulerAngles.x + xOffset, _playerManager.transform.eulerAngles.y, 0f);
+                cameraTarget.rotation = Quaternion.Slerp(cameraTarget.rotation, target, Time.deltaTime * _cameraAutoAlign.Strength);
+
+                // Sync yaw/pitch so there's no snap when the player looks again
+                _yaw = cameraTarget.eulerAngles.y;
+                _pitch = cameraTarget.eulerAngles.x;
+                if (_pitch > 180f) _pitch -= 360f;
+
+                return;
+            }
 
             cameraTarget.rotation = Quaternion.Euler(_pitch, _yaw, 0f);
         }
@@ -225,8 +243,9 @@ namespace ProjectWallE
             podCamera.Priority.Value = 0;
             carCamera.Priority.Value = 0;
             robotCamera.Priority.Value = 0;
-            
+
             cam.Priority.Value = 1;
+            cam.TryGetComponent(out _cameraAutoAlign);
             OnCameraChanged?.Invoke(nonePlayerCamera);
         }
     }

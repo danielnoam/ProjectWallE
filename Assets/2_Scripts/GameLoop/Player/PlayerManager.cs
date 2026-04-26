@@ -75,6 +75,8 @@ namespace ProjectWallE
         public event Action OnControllerSwitchFailed;
         public event Action<float, int> OnRespawnTick;
         public event Action<float, float> OnSwitchCooldownUpdated;
+        
+        
 
         private void OnValidate()
         {
