@@ -111,7 +111,7 @@ namespace ProjectWallE.GameLoop.Player
 
         private void OnBoostStart()
         {
-            if (player.PlayerControllerType == PlayerControllerType.Robot) return;
+            if (player.ControllerType == ControllerType.Robot) return;
             carBoostEffect?.Play(transform.position, boostAudioSource);
         }
 
@@ -130,16 +130,16 @@ namespace ProjectWallE.GameLoop.Player
             shoot2Effect?.Play(transform.position);
         }
 
-        private void OnControllerChanged(PlayerControllerType type)
+        private void OnControllerChanged(ControllerType type)
         {
             carBoostEffect?.Stop(boostAudioSource);
             AudioLibrary.PlayOnSource(changeStateSoundId, changeStateAudioSource);
             StopAllTireEffects();
-            _activeTireEffects = type == PlayerControllerType.Robot ? robotTireEffects : carTireEffects;
+            _activeTireEffects = type == ControllerType.Robot ? robotTireEffects : carTireEffects;
             _tireEffectsPlaying = new bool[_activeTireEffects.Length];
 
-            _activeMoveAudioSource = type == PlayerControllerType.Robot ? robotMoveAudioSource : carMoveAudioSource;
-            _inactiveMoveAudioSource = type == PlayerControllerType.Robot ? carMoveAudioSource : robotMoveAudioSource;
+            _activeMoveAudioSource = type == ControllerType.Robot ? robotMoveAudioSource : carMoveAudioSource;
+            _inactiveMoveAudioSource = type == ControllerType.Robot ? carMoveAudioSource : robotMoveAudioSource;
             if (_inactiveMoveAudioSource) _inactiveMoveAudioSource.volume = 0f;
         }
 
@@ -147,14 +147,14 @@ namespace ProjectWallE.GameLoop.Player
         {
             if (!_activeMoveAudioSource) return;
             float speed = player.Velocity.magnitude;
-            bool isRobot = player.PlayerControllerType == PlayerControllerType.Robot;
+            bool isRobot = player.ControllerType == ControllerType.Robot;
             var range = isRobot ? robotMoveVolumeSpeedRange : carMoveVolumeSpeedRange;
             _activeMoveAudioSource.volume = Mathf.Lerp(0.1f, 0.4f, Mathf.InverseLerp(range.minValue, range.maxValue, speed));
         }
 
         private bool IsTireGrounded(int index)
         {
-            return player.PlayerControllerType == PlayerControllerType.Robot
+            return player.ControllerType == ControllerType.Robot
                 ? player.RobotController.IsGrounded()
                 : player.CarController.IsTireGrounded(index);
         }
@@ -163,7 +163,7 @@ namespace ProjectWallE.GameLoop.Player
         {
             if (_activeTireEffects == null) return;
 
-            float threshold = player.PlayerControllerType == PlayerControllerType.Robot
+            float threshold = player.ControllerType == ControllerType.Robot
                 ? tireEffectRobotSpeedThreshold
                 : tireEffectCarSpeedThreshold;
 

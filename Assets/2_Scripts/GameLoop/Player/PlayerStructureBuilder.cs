@@ -104,7 +104,7 @@ namespace ProjectWallE.GameLoop.Player
             CloseMenus();
         }
 
-        private void OnControllerChanged(PlayerControllerType controllerType)
+        private void OnControllerChanged(ControllerType controllerType)
         {
             CloseMenus();
         }

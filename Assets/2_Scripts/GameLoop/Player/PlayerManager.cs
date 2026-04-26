@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace ProjectWallE
 {
-    public enum PlayerControllerType
+    public enum ControllerType
     {
         Robot, Car
     }
@@ -40,8 +40,8 @@ namespace ProjectWallE
         private Rigidbody _rigidbody;
         private Transform _cameraTransform;
         
-        private PlayerControllerType _playerControllerTypeEnum;
-        private PlayerControllerType _lastFramePlayerControllerTypeEnum;
+        private ControllerType _controllerTypeEnum;
+        private ControllerType _lastFrameControllerTypeEnum;
         
         private IPlayerController _currentController;
         
@@ -54,7 +54,7 @@ namespace ProjectWallE
         private int _currentSkipCost;
         private bool _podInFlight;
 
-        public PlayerControllerType PlayerControllerType => _playerControllerTypeEnum;
+        public ControllerType ControllerType => _controllerTypeEnum;
         public CarController CarController => carController;
         public RobotController RobotController => robotController;
         public PlayerStructureBuilder StructureBuilder => structureBuilder;
@@ -70,7 +70,7 @@ namespace ProjectWallE
         public event Action OnSpawn;
         public event Action OnRespawnPodCalled;
         public event Action<float> OnDamaged;
-        public event Action<PlayerControllerType> OnControllerChanged;
+        public event Action<ControllerType> OnControllerChanged;
         public event Action<float, float> OnHealthChanged;
         public event Action OnControllerSwitchFailed;
         public event Action<float, int> OnRespawnTick;
@@ -110,7 +110,7 @@ namespace ProjectWallE
 
         private void Start()
         {
-            EnableController(PlayerControllerType.Robot);
+            EnableController(ControllerType.Robot);
             OnSpawn?.Invoke();
         }
 
@@ -128,10 +128,10 @@ namespace ProjectWallE
 
         private void Update()
         {
+            if (!IsAlive) return;
+            
             _currentController.ApplyUpdate();
-            
             if (_input.SwitchPressed) SwitchControllerEnum();
-            
             UpdateSwitchCooldown();
             SwitchBehavior();
             RegenerateHealth();
@@ -139,16 +139,19 @@ namespace ProjectWallE
 
         private void FixedUpdate()
         {
+            if (!IsAlive) return;
             _currentController?.ApplyFixedUpdate();
         }
 
         private void LateUpdate()
         {
+            if (!IsAlive) return;
             _currentController?.ApplyLateUpdate();
         }
 
         private void LateFixedUpdate()
         {
+            if (!IsAlive) return;
             _currentController?.ApplyLateFixedUpdate();
         }
 
@@ -158,7 +161,7 @@ namespace ProjectWallE
         {
             if (!IsAlive) return;
             
-            if (_playerControllerTypeEnum == PlayerControllerType.Car && !CanSwitchToRobot())
+            if (_controllerTypeEnum == ControllerType.Car && !CanSwitchToRobot())
             {
                 OnControllerSwitchFailed?.Invoke();
                 return;
@@ -166,9 +169,9 @@ namespace ProjectWallE
             
             if (Time.time < _switchTimer + switchCooldown) return;
 
-            _playerControllerTypeEnum = _playerControllerTypeEnum == PlayerControllerType.Robot 
-                ? PlayerControllerType.Car 
-                : PlayerControllerType.Robot;
+            _controllerTypeEnum = _controllerTypeEnum == ControllerType.Robot 
+                ? ControllerType.Car 
+                : ControllerType.Robot;
         }
         
         private void UpdateSwitchCooldown()
@@ -180,10 +183,10 @@ namespace ProjectWallE
 
         private void SwitchBehavior()
         {
-            if (_playerControllerTypeEnum == _lastFramePlayerControllerTypeEnum) return;
-            EnableController(_playerControllerTypeEnum);
+            if (_controllerTypeEnum == _lastFrameControllerTypeEnum) return;
+            EnableController(_controllerTypeEnum);
             ResetRbRotation();
-            _lastFramePlayerControllerTypeEnum = _playerControllerTypeEnum;
+            _lastFrameControllerTypeEnum = _controllerTypeEnum;
             _switchTimer = Time.time;
         }
 
@@ -198,6 +201,7 @@ namespace ProjectWallE
             OnHealthChanged?.Invoke(_currentHealth, maxHealth);
             OnDeath?.Invoke(attacker);
             _respawnCoroutine = StartCoroutine(RespawnRoutine());
+            ResetRbVelocity();
         }
 
         private IEnumerator RespawnRoutine()
@@ -291,9 +295,9 @@ namespace ProjectWallE
         
         #region Helpers
 
-        private void EnableController(PlayerControllerType playerControllerType)
+        private void EnableController(ControllerType controllerType)
         {
-            bool isRobot = playerControllerType == PlayerControllerType.Robot;
+            bool isRobot = controllerType == ControllerType.Robot;
             
             _currentController?.OnExit();
             _currentController?.gameObject.SetActive(false);
@@ -303,7 +307,7 @@ namespace ProjectWallE
 
             _rigidbody.centerOfMass = _currentController.CenterOfMassOffset;
             
-            OnControllerChanged?.Invoke(playerControllerType);
+            OnControllerChanged?.Invoke(controllerType);
         }
 
         private bool CanSwitchToRobot()
@@ -316,6 +320,12 @@ namespace ProjectWallE
             Vector3 rot = _rigidbody.rotation.eulerAngles;
             rot.y = _cameraTransform.rotation.eulerAngles.y;
             _rigidbody.rotation = Quaternion.Euler(rot);
+            _rigidbody.angularVelocity = Vector3.zero;
+        }
+
+        private void ResetRbVelocity()
+        {
+            _rigidbody.linearVelocity = Vector3.zero;
             _rigidbody.angularVelocity = Vector3.zero;
         }
 

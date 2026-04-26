@@ -92,7 +92,7 @@ namespace ProjectWallE.UI
                 if (Camera.main) radarSystem.rotationTarget.Value = Camera.main.transform;
                 fuelBar.SetImmediate(100, 100);
                 healthBar.SetImmediate(100, 100);
-                OnControllerChanged(player.PlayerControllerType);
+                OnControllerChanged(player.ControllerType);
             }
         }
         
@@ -155,18 +155,18 @@ namespace ProjectWallE.UI
             if (jumpIcon && jumpIcon.isActiveAndEnabled) jumpIcon.PunchIcon();
         }
 
-        private void OnControllerChanged(PlayerControllerType type)
+        private void OnControllerChanged(ControllerType type)
         {
             switch (type)
             {
-                case PlayerControllerType.Robot:
+                case ControllerType.Robot:
                     jumpIcon.gameObject.SetActive(true);
                     basicAttackIcon.gameObject.SetActive(true);
                     specialAttackIcon.gameObject.SetActive(true);
                     boostIcon.gameObject.SetActive(false);
                     brakeIcon.gameObject.SetActive(false);
                     break;
-                case PlayerControllerType.Car:
+                case ControllerType.Car:
                     jumpIcon.gameObject.SetActive(false);
                     basicAttackIcon.gameObject.SetActive(false);
                     specialAttackIcon.gameObject.SetActive(false);

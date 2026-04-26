@@ -171,7 +171,7 @@ namespace ProjectWallE.UI
             RefreshActiveState();
         }
 
-        private void OnControllerChanged(PlayerControllerType type)
+        private void OnControllerChanged(ControllerType type)
         {
             RefreshActiveState();
         }
@@ -188,7 +188,7 @@ namespace ProjectWallE.UI
 
         private void RefreshActiveState()
         {
-            bool shouldBeActive = player && player.IsAlive && player.PlayerControllerType == PlayerControllerType.Robot && !_inMenu && !_cinematicCameraActive;
+            bool shouldBeActive = player && player.IsAlive && player.ControllerType == ControllerType.Robot && !_inMenu && !_cinematicCameraActive;
             SetActive(shouldBeActive);
         }
 

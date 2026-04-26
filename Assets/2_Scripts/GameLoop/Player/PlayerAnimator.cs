@@ -112,14 +112,14 @@ namespace ProjectWallE.GameLoop.Player
             _armIkTarget.position += _shakeOffset;
         }
 
-        private void OnControllerChanged(PlayerControllerType type)
+        private void OnControllerChanged(ControllerType type)
         {
             switch (type)
             {
-                case PlayerControllerType.Car:
+                case ControllerType.Car:
                     switchToCar.Play();
                     break;
-                case PlayerControllerType.Robot:
+                case ControllerType.Robot:
                     switchToRobot.Play();
                     break;
                 default:

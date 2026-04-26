@@ -11,6 +11,7 @@ namespace ProjectWallE
         public float Steering { get; private set; }
         public bool HandBreakHeld { get; private set; }
         public bool BoostHeld { get; private set; }
+        public bool MovementHeld => BoostHeld || Acceleration != 0;
 
         private void Awake()
         {

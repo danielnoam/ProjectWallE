@@ -624,7 +624,7 @@ namespace _2_Scripts
 
         private void StopJittering()
         {
-            if (_playerRb.linearVelocity.magnitude > 0.1f) return;
+            if (_playerRb.linearVelocity.magnitude > 0.1f || _carInput.MovementHeld) return;
             _playerRb.linearVelocity = Vector3.zero;
             _playerRb.angularVelocity = Vector3.zero;
         }

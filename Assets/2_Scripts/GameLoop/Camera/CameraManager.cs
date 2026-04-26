@@ -144,7 +144,7 @@ namespace ProjectWallE
             }
 
             _activePod = null;
-            SwitchActiveCamera(_playerManager.PlayerControllerType == PlayerControllerType.Robot ? robotCamera : carCamera);
+            SwitchActiveCamera(_playerManager.ControllerType == ControllerType.Robot ? robotCamera : carCamera);
         }
         
         private void OnDamaged(float damage)
@@ -163,11 +163,11 @@ namespace ProjectWallE
             rotationShake.Shake(attack2ShakeSettings);
         }
 
-        private void OnControllerSwitch(PlayerControllerType controllerType)
+        private void OnControllerSwitch(ControllerType controllerType)
         {
             if (_activePod) return;
             
-            bool isRobot = controllerType == PlayerControllerType.Robot;
+            bool isRobot = controllerType == ControllerType.Robot;
             SwitchActiveCamera(isRobot ? robotCamera : carCamera);
         }
 

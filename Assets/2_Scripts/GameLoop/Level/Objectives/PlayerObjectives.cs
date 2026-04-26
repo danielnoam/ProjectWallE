@@ -85,12 +85,12 @@ namespace ProjectWallE.GameLoop
             {
                 case SwitchRequirement.SwitchToCar:
                 {
-                    if (player.PlayerControllerType == PlayerControllerType.Car) Complete();
+                    if (player.ControllerType == ControllerType.Car) Complete();
                     break;
                 }
                 case SwitchRequirement.SwitchToRobot:
                 {
-                    if (player.PlayerControllerType == PlayerControllerType.Robot) Complete();
+                    if (player.ControllerType == ControllerType.Robot) Complete();
                     break;
                 }
             }
@@ -104,12 +104,12 @@ namespace ProjectWallE.GameLoop
             }
         }
 
-        private void OnControllerChanged(PlayerControllerType type)
+        private void OnControllerChanged(ControllerType type)
         {
             bool matches = requirement switch
             {
-                SwitchRequirement.SwitchToCar => type == PlayerControllerType.Car,
-                SwitchRequirement.SwitchToRobot => type == PlayerControllerType.Robot,
+                SwitchRequirement.SwitchToCar => type == ControllerType.Car,
+                SwitchRequirement.SwitchToRobot => type == ControllerType.Robot,
                 _ => true
             };
 
