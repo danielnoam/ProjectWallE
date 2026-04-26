@@ -305,7 +305,7 @@ namespace ProjectWallE.GameLoop.Player
             }
             else
             {
-                StructureManager.Instance?.DeployStructureOnGround(structure, _buildPoint, transform.forward, _buildNormal, false);
+                StructureManager.Instance?.DeployStructureOnGround(structure, _buildPoint, transform.forward, _buildNormal, PodCameraMode.None);
             }
         }
 

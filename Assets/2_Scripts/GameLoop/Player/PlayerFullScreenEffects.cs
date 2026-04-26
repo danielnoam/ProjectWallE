@@ -27,19 +27,36 @@ namespace ProjectWallE.GameLoop
             AutoGetSystem.Process(this);
         }
 
-        private void OnEnable()
+        private void Awake()
         {
-            if (player) player.OnHealthChanged += OnHealthChanged;
+            if (player)
+            {
+                player.OnHealthChanged += OnHealthChanged;
+                player.OnDeath += OnDeath;
+            }
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
-            if (player) player.OnHealthChanged -= OnHealthChanged;
+            if (player)
+            {
+                player.OnHealthChanged -= OnHealthChanged;
+                player.OnDeath -= OnDeath;
+            }
         }
 
         private void Update()
         {
             UpdateSpeedLines();
+        }
+        
+        private void OnDeath(IDamageable attacker)
+        {
+            lowHealthEffect?.Hide();
+            _lowHealthActive = false;
+            
+            speedLinesVisibility.Hide();
+            _speedLinesActive = false;
         }
 
         private void UpdateSpeedLines()
@@ -71,6 +88,8 @@ namespace ProjectWallE.GameLoop
 
         private void OnHealthChanged(float currentHealth, float maxHealth)
         {
+            if (currentHealth <= 0) return;
+            
             var percentage = currentHealth / maxHealth;
 
             if (!_lowHealthActive && percentage < lowHealthThreshold)

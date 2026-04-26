@@ -54,22 +54,20 @@ namespace ProjectWallE.UI
 
         private void OnEnable()
         {
-            if (player)
-            {
-                player.OnDeath += OnPlayerDeath;
-                player.OnRespawnTick += OnRespawnTick;
-                player.OnSpawn += OnPlayerSpawn;
-            }
+            if (!player) return;
+            player.OnDeath += OnPlayerDeath;
+            player.OnRespawnTick += OnRespawnTick;
+            player.OnSpawn += FadeOut;
+            player.OnRespawnPodCalled += FadeOut;
         }
 
         private void OnDisable()
         {
-            if (player)
-            {
-                player.OnDeath -= OnPlayerDeath;
-                player.OnRespawnTick -= OnRespawnTick;
-                player.OnSpawn -= OnPlayerSpawn;
-            }
+            if (!player) return;
+            player.OnDeath -= OnPlayerDeath;
+            player.OnRespawnTick -= OnRespawnTick;
+            player.OnSpawn -= FadeOut;
+            player.OnRespawnPodCalled -= FadeOut;
         }
 
         private void OnPlayerDeath(IDamageable attacker)
@@ -78,22 +76,16 @@ namespace ProjectWallE.UI
             canvasGroup.blocksRaycasts = true;
             canvasGroup.interactable = true;
             _fadeTween = Tween.Alpha(canvasGroup, 1f, fadeDuration);
-            _fadeTween.OnComplete(() =>
-            {
-                skipButton.SetSelected();
-            });
+            _fadeTween.OnComplete(() => skipButton.SetSelected());
         }
 
         private void OnRespawnTick(float timeRemaining, int currentCost)
         {
             countdownText.text = $"{respawnTextPrefix}{respawnTimeStyle.ApplyStyle(Mathf.CeilToInt(timeRemaining).ToString())}";
-            if (skipCostText)
-            {
-                skipCostText.text = $"{skipButtonTextPrefix}{currentCost}";
-            }
+            if (skipCostText) skipCostText.text = $"{skipButtonTextPrefix}{currentCost}";
         }
 
-        private void OnPlayerSpawn()
+        private void FadeOut()
         {
             _fadeTween.Stop();
             canvasGroup.blocksRaycasts = false;

@@ -29,6 +29,7 @@ namespace ProjectWallE
         [SerializeField] private RotationShakeSettings attack2ShakeSettings;
         
         [Header("References")]
+        [SerializeField] private CinemachineCamera lookAtPodCamera;
         [SerializeField] private CinemachineCamera podCamera;
         [SerializeField] private CinemachineCamera robotCamera;
         [SerializeField] private CinemachineCamera carCamera;
@@ -36,12 +37,12 @@ namespace ProjectWallE
         [SerializeField] private CinemachineRotationShake rotationShake;
         [SerializeField] private Transform cameraTarget;
 
+        private Transform _podLookTarget;
         private PlayerManager _playerManager;
         private PlayerManagerInput _input;
         private Pod _activePod;
         
         private bool _cameraLocked;
-
         private float _yaw;
         private float _pitch;
 
@@ -62,6 +63,8 @@ namespace ProjectWallE
 
             _pitch = euler.x;
             if (_pitch > 180f) _pitch -= 360f;
+            
+            _podLookTarget = new GameObject("PodLookTarget").transform;
         }
 
         private void OnEnable()
@@ -79,7 +82,6 @@ namespace ProjectWallE
                 _playerManager.Shooter.OnAttack2 += OnAttack2;
             }
         }
-        
 
         private void OnDisable()
         {
@@ -99,20 +101,30 @@ namespace ProjectWallE
 
         private void LateUpdate()
         {
+            if (_activePod) _podLookTarget.position = _activePod.transform.position;
             UpdateCameraMovement();
             UpdateCarFOV();
         }
-        
+
         private void OnPodDeployed(DeploymentRequest request, Pod pod)
         {
-            if (!request.UseCamera) return;
+            if (request.CameraMode == PodCameraMode.None) return;
 
             _activePod = pod;
             _activePod.OnLand += OnPodLand;
-    
-            podCamera.LookAt = pod.transform;
-    
-            SwitchActiveCamera(podCamera);
+
+            switch (request.CameraMode)
+            {
+                case PodCameraMode.LookAt:
+                    lookAtPodCamera.LookAt = _podLookTarget;
+                    SwitchActiveCamera(lookAtPodCamera);
+                    break;
+                case PodCameraMode.Follow:
+                    podCamera.Follow = _podLookTarget;
+                    podCamera.LookAt = _podLookTarget;
+                    SwitchActiveCamera(podCamera);
+                    break;
+            }
         }
 
         private void OnPodLand()
@@ -124,9 +136,12 @@ namespace ProjectWallE
                 _pitch = -Mathf.Asin(dir.y) * Mathf.Rad2Deg;
                 _pitch = Mathf.Clamp(_pitch, -cameraVerticalClamp, cameraVerticalClamp);
 
+                lookAtPodCamera.LookAt = null;
+                podCamera.Follow = null;
                 podCamera.LookAt = null;
                 _activePod.OnLand -= OnPodLand;
             }
+
             _activePod = null;
             SwitchActiveCamera(_playerManager.PlayerControllerType == PlayerControllerType.Robot ? robotCamera : carCamera);
         }
@@ -152,7 +167,6 @@ namespace ProjectWallE
             if (_activePod) return;
             
             bool isRobot = controllerType == PlayerControllerType.Robot;
-            
             SwitchActiveCamera(isRobot ? robotCamera : carCamera);
         }
 
@@ -205,12 +219,15 @@ namespace ProjectWallE
 
         private void SwitchActiveCamera(CinemachineCamera cam)
         {
+            bool nonePlayerCamera = cam == lookAtPodCamera || cam == podCamera;
+            
+            lookAtPodCamera.Priority.Value = 0;
             podCamera.Priority.Value = 0;
             carCamera.Priority.Value = 0;
             robotCamera.Priority.Value = 0;
             
             cam.Priority.Value = 1;
-            OnCameraChanged?.Invoke(cam == podCamera);
+            OnCameraChanged?.Invoke(nonePlayerCamera);
         }
     }
 }

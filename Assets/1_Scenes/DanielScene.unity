@@ -600,6 +600,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3362832883325170318, guid: 8f65af854e1005b4d90932e5e0946ba1, type: 3}
+      propertyPath: podCameraMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3362832883325170318, guid: 8f65af854e1005b4d90932e5e0946ba1, type: 3}
       propertyPath: enablePodCamera
       value: 0
       objectReference: {fileID: 0}
@@ -2886,18 +2890,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6391198412893836574, guid: d1b2e6bed7ee5c54c9f84065f72599fa, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -7.5400085
-      objectReference: {fileID: 0}
-    - target: {fileID: 6391198412893836574, guid: d1b2e6bed7ee5c54c9f84065f72599fa, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 33.54
-      objectReference: {fileID: 0}
-    - target: {fileID: 6391198412893836574, guid: d1b2e6bed7ee5c54c9f84065f72599fa, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -7.600006
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3670,6 +3662,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3362832883325170318, guid: 8f65af854e1005b4d90932e5e0946ba1, type: 3}
       propertyPath: spawnAtStart
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3362832883325170318, guid: 8f65af854e1005b4d90932e5e0946ba1, type: 3}
+      propertyPath: podCameraMode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3362832883325170318, guid: 8f65af854e1005b4d90932e5e0946ba1, type: 3}

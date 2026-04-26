@@ -100,11 +100,18 @@ namespace ProjectWallE.GameLoop
                 }
             }
 
-            MonoBehaviour instance = _request.Parent
-                ? Instantiate(_deployable as MonoBehaviour, _request.TargetPosition, Quaternion.LookRotation(_request.TargetForward), _request.Parent)
-                : Instantiate(_deployable as MonoBehaviour, _request.TargetPosition, Quaternion.LookRotation(_request.TargetForward));
+            if (_request.InstantiateOnLand)
+            {
+                MonoBehaviour instance = _request.Parent
+                    ? Instantiate(_deployable as MonoBehaviour, _request.TargetPosition, Quaternion.LookRotation(_request.TargetForward), _request.Parent)
+                    : Instantiate(_deployable as MonoBehaviour, _request.TargetPosition, Quaternion.LookRotation(_request.TargetForward));
 
-            ((IDeployable)instance).Deploy(_request);
+                ((IDeployable)instance).Deploy(_request);
+            }
+            else
+            {
+                _deployable.Deploy(_request);
+            }
             
             OnLand?.Invoke();
 

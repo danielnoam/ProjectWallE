@@ -5,6 +5,8 @@ using Random = UnityEngine.Random;
 
 namespace ProjectWallE.GameLoop
 {
+    public enum PodCameraMode { None, LookAt, Follow }
+    
     public struct DeploymentRequest
     {
         public Vector3 TargetPosition;
@@ -13,7 +15,8 @@ namespace ProjectWallE.GameLoop
         public Transform Parent;
         public StructureNode Node;
         public bool DamageOnImpact;
-        public bool UseCamera;
+        public bool InstantiateOnLand;
+        public PodCameraMode CameraMode;
 
         public DeploymentRequest(Vector3 targetPosition, Vector3 targetForward, Transform parent)
         {
@@ -23,7 +26,8 @@ namespace ProjectWallE.GameLoop
             Parent = parent;
             Node = null;
             DamageOnImpact = true;
-            UseCamera = false;
+            InstantiateOnLand = true;
+            CameraMode = PodCameraMode.None;
         }
     }
     
