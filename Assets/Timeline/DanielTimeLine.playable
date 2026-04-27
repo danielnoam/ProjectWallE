@@ -1,5 +1,59 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7882926120184746788
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 844512bbcc774b44b3c5e64aee9d8fbb, type: 3}
+  m_Name: Spawn Structure Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnStructureMarker
+  m_Time: 0.35
+  podCameraMode: 1
+  structureToSpawn: {fileID: 6487620541022002554, guid: 3b1b64788b055e0498a63ea738b3ba50, type: 3}
+  structureSpawnPoint:
+    exposedName: 6e1a360f9d2df3d44899b7c5b5e7af0a
+    defaultValue: {fileID: 0}
+--- !u!114 &-6722190662267044037
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 844512bbcc774b44b3c5e64aee9d8fbb, type: 3}
+  m_Name: Spawn Structure Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnStructureMarker
+  m_Time: 15.48333333333333
+  podCameraMode: 0
+  structureToSpawn: {fileID: 7498951326900205619, guid: 22eee64180129c841a1ce897f19c4847, type: 3}
+  structureSpawnPoint:
+    exposedName: c65cb73c9af24d842a4c251de3c84d21
+    defaultValue: {fileID: 0}
+--- !u!114 &-5845331006550468299
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 844512bbcc774b44b3c5e64aee9d8fbb, type: 3}
+  m_Name: Spawn Structure Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnStructureMarker
+  m_Time: 14.816666666666666
+  podCameraMode: 0
+  structureToSpawn: {fileID: 9177759699372231121, guid: 290c791e53f525645b9870cd63da954e, type: 3}
+  structureSpawnPoint:
+    exposedName: bcb0de94f9ff1dc45b0912ac5652af1a
+    defaultValue: {fileID: 0}
 --- !u!114 &-2831747386146784124
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -134,6 +188,24 @@ MonoBehaviour:
         showOnRadar: 1
         attackType: 0
         attackCount: 1
+--- !u!114 &-2661680937889478406
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 844512bbcc774b44b3c5e64aee9d8fbb, type: 3}
+  m_Name: Spawn Structure Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnStructureMarker
+  m_Time: 14.066666666666666
+  podCameraMode: 1
+  structureToSpawn: {fileID: 6487620541022002554, guid: 3b1b64788b055e0498a63ea738b3ba50, type: 3}
+  structureSpawnPoint:
+    exposedName: 92be92bee7135c442b34a71a3c6f3e96
+    defaultValue: {fileID: 0}
 --- !u!114 &-1331637992182345122
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -172,42 +244,6 @@ MonoBehaviour:
     m_ScenePreview: 1
   m_DurationMode: 1
   m_MarkerTrack: {fileID: 0}
---- !u!114 &977816328775002424
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 844512bbcc774b44b3c5e64aee9d8fbb, type: 3}
-  m_Name: Spawn Structure Marker
-  m_EditorClassIdentifier: Assembly-CSharp::SpawnStructureMarker
-  m_Time: 22.933333333333334
-  enablePodCamera: 0
-  structureToSpawn: {fileID: 9177759699372231121, guid: 290c791e53f525645b9870cd63da954e, type: 3}
-  structureSpawnPoint:
-    exposedName: 3494ca3688fb8784c9f2d18f1d5927ee
-    defaultValue: {fileID: 0}
---- !u!114 &1543535591712544232
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 844512bbcc774b44b3c5e64aee9d8fbb, type: 3}
-  m_Name: Spawn Structure Marker
-  m_EditorClassIdentifier: Assembly-CSharp::SpawnStructureMarker
-  m_Time: 22.466666666666665
-  enablePodCamera: 1
-  structureToSpawn: {fileID: 6487620541022002554, guid: 3b1b64788b055e0498a63ea738b3ba50, type: 3}
-  structureSpawnPoint:
-    exposedName: 6e1a360f9d2df3d44899b7c5b5e7af0a
-    defaultValue: {fileID: 0}
 --- !u!114 &2922814406924124433
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -229,6 +265,24 @@ MonoBehaviour:
   spawnPoint:
     exposedName: 
     defaultValue: {fileID: 0}
+--- !u!114 &3603449567746021823
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 844512bbcc774b44b3c5e64aee9d8fbb, type: 3}
+  m_Name: Spawn Structure Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnStructureMarker
+  m_Time: 0.5666666666666667
+  podCameraMode: 0
+  structureToSpawn: {fileID: 9177759699372231121, guid: 290c791e53f525645b9870cd63da954e, type: 3}
+  structureSpawnPoint:
+    exposedName: 3494ca3688fb8784c9f2d18f1d5927ee
+    defaultValue: {fileID: 0}
 --- !u!114 &4826244771618395407
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -246,6 +300,24 @@ MonoBehaviour:
     exposedName: 8408ad12f250b574c862ab17e5513917
     defaultValue: {fileID: 0}
   spawnPointState: 1
+--- !u!114 &4924236925050985226
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 844512bbcc774b44b3c5e64aee9d8fbb, type: 3}
+  m_Name: Spawn Structure Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnStructureMarker
+  m_Time: 1.1
+  podCameraMode: 0
+  structureToSpawn: {fileID: 7498951326900205619, guid: 22eee64180129c841a1ce897f19c4847, type: 3}
+  structureSpawnPoint:
+    exposedName: e32132410ce5c3e4bba6552b73d91d5d
+    defaultValue: {fileID: 0}
 --- !u!114 &5586992869872184875
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -269,33 +341,19 @@ MonoBehaviour:
   m_Clips: []
   m_Markers:
     m_Objects:
-    - {fileID: 1543535591712544232}
-    - {fileID: 977816328775002424}
     - {fileID: 4826244771618395407}
     - {fileID: 6159556742653435264}
-    - {fileID: 5928714566332443244}
     - {fileID: 7075503200882715566}
     - {fileID: -2784054928127541824}
     - {fileID: -1331637992182345122}
     - {fileID: 6138156276450442711}
---- !u!114 &5928714566332443244
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 844512bbcc774b44b3c5e64aee9d8fbb, type: 3}
-  m_Name: Spawn Structure Marker
-  m_EditorClassIdentifier: Assembly-CSharp::SpawnStructureMarker
-  m_Time: 23.4
-  enablePodCamera: 0
-  structureToSpawn: {fileID: 9177759699372231121, guid: 290c791e53f525645b9870cd63da954e, type: 3}
-  structureSpawnPoint:
-    exposedName: 0448e5d9742f1ea4da398fa95efc99c9
-    defaultValue: {fileID: 0}
+    - {fileID: -7882926120184746788}
+    - {fileID: 3603449567746021823}
+    - {fileID: 7862011037116891823}
+    - {fileID: -2661680937889478406}
+    - {fileID: -5845331006550468299}
+    - {fileID: -6722190662267044037}
+    - {fileID: 4924236925050985226}
 --- !u!114 &6138156276450442711
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -308,7 +366,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0fbc1d0ac57400e9b78634571bedffa, type: 3}
   m_Name: Set Active Player Spawn Point Marker
   m_EditorClassIdentifier: Assembly-CSharp::SetActivePlayerSpawnPointMarker
-  m_Time: 1.15
+  m_Time: 6.716666666666667
   playerSpawnPoint:
     exposedName: 40c59887def773b47b1bd622891c9cbd
     defaultValue: {fileID: 0}
@@ -353,4 +411,22 @@ MonoBehaviour:
   spawnType: 0
   spawnPoint:
     exposedName: 484274ddc675ccf4ca4a18b8a0fd0641
+    defaultValue: {fileID: 0}
+--- !u!114 &7862011037116891823
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 844512bbcc774b44b3c5e64aee9d8fbb, type: 3}
+  m_Name: Spawn Structure Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnStructureMarker
+  m_Time: 0.8333333333333334
+  podCameraMode: 0
+  structureToSpawn: {fileID: 9177759699372231121, guid: 290c791e53f525645b9870cd63da954e, type: 3}
+  structureSpawnPoint:
+    exposedName: 0448e5d9742f1ea4da398fa95efc99c9
     defaultValue: {fileID: 0}

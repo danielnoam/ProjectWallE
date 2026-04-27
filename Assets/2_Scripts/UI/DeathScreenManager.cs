@@ -72,11 +72,15 @@ namespace ProjectWallE.UI
 
         private void OnPlayerDeath(IDamageable attacker)
         {
-            _fadeTween.Stop();
             canvasGroup.blocksRaycasts = true;
             canvasGroup.interactable = true;
-            _fadeTween = Tween.Alpha(canvasGroup, 1f, fadeDuration);
-            _fadeTween.OnComplete(() => skipButton.SetSelected());
+
+            if (!Mathf.Approximately(canvasGroup.alpha, 1f))
+            {
+                _fadeTween.Stop();
+                _fadeTween = Tween.Alpha(canvasGroup, 1f, fadeDuration);
+                _fadeTween.OnComplete(() => skipButton.SetSelected());
+            }
         }
 
         private void OnRespawnTick(float timeRemaining, int currentCost)
@@ -87,10 +91,14 @@ namespace ProjectWallE.UI
 
         private void FadeOut()
         {
-            _fadeTween.Stop();
             canvasGroup.blocksRaycasts = false;
             canvasGroup.interactable = false;
-            _fadeTween = Tween.Alpha(canvasGroup, 0f, fadeDuration);
+
+            if (!Mathf.Approximately(canvasGroup.alpha, 0f))
+            {
+                _fadeTween.Stop();
+                _fadeTween = Tween.Alpha(canvasGroup, 0f, fadeDuration);
+            }
         }
 
         private void OnSkipButtonClicked()

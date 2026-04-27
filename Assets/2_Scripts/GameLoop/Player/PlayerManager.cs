@@ -197,11 +197,11 @@ namespace ProjectWallE
         private void Die(IDamageable attacker = null)
         {
             _currentHealth = 0;
-            gfx.SetActive(false);
             OnHealthChanged?.Invoke(_currentHealth, maxHealth);
             OnDeath?.Invoke(attacker);
-            _respawnCoroutine = StartCoroutine(RespawnRoutine());
+            gfx.SetActive(false);
             ResetRbVelocity();
+            _respawnCoroutine = StartCoroutine(RespawnRoutine());
         }
 
         private IEnumerator RespawnRoutine()
@@ -273,10 +273,10 @@ namespace ProjectWallE
         {
             _podInFlight = true;
 
-            Vector3 spawnPosition = LevelManager.Instance 
+            Vector3 spawnPosition = LevelManager.Instance && LevelManager.Instance.ActivePlayerSpawnPoint
                 ? LevelManager.Instance.ActivePlayerSpawnPoint.SpawnPosition 
                 : transform.position;
-            Quaternion spawnRotation = LevelManager.Instance 
+            Quaternion spawnRotation = LevelManager.Instance && LevelManager.Instance.ActivePlayerSpawnPoint
                 ? LevelManager.Instance.ActivePlayerSpawnPoint.SpawnRotation 
                 : transform.rotation;
 

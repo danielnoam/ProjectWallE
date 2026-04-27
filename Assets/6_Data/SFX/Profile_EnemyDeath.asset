@@ -10,26 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ee7d95efa184de2b18dfff76533a189, type: 3}
-  m_Name: Profile_EngineLoop2
+  m_Name: Profile_EnemyDeath
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.Systems.AudioLibrary.SOAudioProfile
   clips:
-  - {fileID: 8300000, guid: 98035819ca0760541a31c12ba067eaca, type: 3}
+  - {fileID: 8300000, guid: c45211ccbc0a46f4eb849850b02598b9, type: 3}
+  - {fileID: 8300000, guid: e6152504508b3f3459473052219f69de, type: 3}
+  - {fileID: 8300000, guid: 7aab1f1259090ac4b90093789e1976d7, type: 3}
   volume:
     minValue: 1
     maxValue: 1
   pitch:
-    minValue: 1.3
-    maxValue: 1.3
+    minValue: 0.9
+    maxValue: 1.2
   stereoPan: 0
   spatialBlend: 1
   reverbZoneMix: 1
   bypassEffects: 0
   bypassListenerEffects: 0
   bypassReverbZones: 0
-  loop: 1
+  loop: 0
   set3DSettings: 1
-  dopplerLevel: 1
+  dopplerLevel: 0
   spread: 0
-  minDistance: 50
+  minDistance: 1
   maxDistance: 500
   rolloffMode: 0

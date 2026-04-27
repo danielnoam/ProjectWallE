@@ -25,6 +25,7 @@ namespace ProjectWallE
         
         [Header("Shake Settings")]
         [SerializeField] private ImpulseSettings damageImpulseSettings;
+        [SerializeField] private ImpulseSettings deathImpulseSettings;
         [SerializeField] private RotationShakeSettings attack1ShakeSettings;
         [SerializeField] private RotationShakeSettings attack2ShakeSettings;
         
@@ -76,6 +77,7 @@ namespace ProjectWallE
             {
                 _playerManager.OnControllerChanged += OnControllerSwitch;
                 _playerManager.OnDamaged += OnDamaged;
+                _playerManager.OnDeath += OnDeath;
                 _playerManager.StructureBuilder.ActionsMenuRequested += OnMenuActionRequested;
                 _playerManager.StructureBuilder.BuildMenuRequested += OnBuildMenuRequested;
                 _playerManager.StructureBuilder.MenuCloseRequested += OnMenuCloseRequested;
@@ -83,6 +85,7 @@ namespace ProjectWallE
                 _playerManager.Shooter.OnAttack2 += OnAttack2;
             }
         }
+        
 
         private void OnDisable()
         {
@@ -92,6 +95,7 @@ namespace ProjectWallE
             {
                 _playerManager.OnControllerChanged -= OnControllerSwitch;
                 _playerManager.OnDamaged -= OnDamaged;
+                _playerManager.OnDeath -= OnDeath;
                 _playerManager.StructureBuilder.ActionsMenuRequested -= OnMenuActionRequested;
                 _playerManager.StructureBuilder.BuildMenuRequested -= OnBuildMenuRequested;
                 _playerManager.StructureBuilder.MenuCloseRequested -= OnMenuCloseRequested;
@@ -106,10 +110,21 @@ namespace ProjectWallE
             UpdateCameraMovement();
             UpdateCarFOV();
         }
+        
+        private void OnDeath(IDamageable attacker)
+        {
+            impulseSource?.GenerateImpulse(deathImpulseSettings);
+            cameraTarget.eulerAngles = Vector3.zero;
+        }
 
         private void OnPodDeployed(DeploymentRequest request, Pod pod)
         {
             if (request.CameraMode == PodCameraMode.None) return;
+
+            if (_activePod)
+            {
+                _activePod.OnLand -= OnPodLand;
+            }
 
             _activePod = pod;
             _activePod.OnLand += OnPodLand;

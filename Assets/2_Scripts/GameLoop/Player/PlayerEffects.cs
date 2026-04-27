@@ -14,6 +14,7 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField] private VisualEffectAction carBoostEffect;
         [SerializeField] private VisualEffectAction wheelsAirReleaseEffect;
         [SerializeField] private DamageEffects damageEffects;
+        [SerializeField] private ParticleEffectAction deathEffects;
 
         [Header("Audio")]
         [SerializeField, AudioLibraryID] private string changeStateSoundId;
@@ -71,6 +72,7 @@ namespace ProjectWallE.GameLoop.Player
             {
                 player.OnControllerChanged += OnControllerChanged;
                 player.OnDamaged += OnDamaged;
+                player.OnDeath += OnDeath;
                 if (player.CarController.CarBoost)
                 {
                     player.CarController.CarBoost.OnBoostStart += OnBoostStart;
@@ -101,6 +103,14 @@ namespace ProjectWallE.GameLoop.Player
         {
             UpdateTireEffects();
             UpdateMovementAudio();
+        }
+        
+        
+        private void OnDeath(IDamageable attacker)
+        {
+            deathEffects?.Play(transform.position);
+            carBoostEffect?.Stop(boostAudioSource);
+            StopAllTireEffects();
         }
 
         private void OnDamaged(float damage)
@@ -149,7 +159,7 @@ namespace ProjectWallE.GameLoop.Player
             float speed = player.Velocity.magnitude;
             bool isRobot = player.ControllerType == ControllerType.Robot;
             var range = isRobot ? robotMoveVolumeSpeedRange : carMoveVolumeSpeedRange;
-            _activeMoveAudioSource.volume = Mathf.Lerp(0.1f, 0.4f, Mathf.InverseLerp(range.minValue, range.maxValue, speed));
+            _activeMoveAudioSource.volume = Mathf.Lerp(0.05f, 0.15f, Mathf.InverseLerp(range.minValue, range.maxValue, speed));
         }
 
         private bool IsTireGrounded(int index)

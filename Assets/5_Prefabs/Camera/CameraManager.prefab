@@ -167,6 +167,16 @@ MonoBehaviour:
     dissipationDistance: 0
     dissipationRate: 0
     propagationSpeed: 0
+  deathImpulseSettings:
+    impulseChannel: 0
+    impulseType: 0
+    impulseShape: 0
+    duration: 0
+    intensity: 0
+    velocity: {x: 0, y: 0, z: 0}
+    dissipationDistance: 0
+    dissipationRate: 0
+    propagationSpeed: 0
   attack1ShakeSettings:
     intensity: 0.5
     duration: 0.3
@@ -271,6 +281,8 @@ GameObject:
   - component: {fileID: 7235236298278023215}
   - component: {fileID: 5566050871350756375}
   - component: {fileID: 6709275518575816653}
+  - component: {fileID: 4442092809061578531}
+  - component: {fileID: 7083151467108173251}
   m_Layer: 0
   m_Name: 'FollowPodCam '
   m_TagString: Untagged
@@ -388,9 +400,50 @@ MonoBehaviour:
   Damping: {x: 1, y: 1}
   Lookahead:
     Enabled: 1
-    Time: 0.035
-    Smoothing: 3.7
-    IgnoreY: 1
+    Time: 0.2
+    Smoothing: 6
+    IgnoreY: 0
+--- !u!114 &4442092809061578531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 805633230659257904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineBasicMultiChannelPerlin
+  NoiseProfile: {fileID: 11400000, guid: e9ce97b7a206dc64d90931ea044e0c72, type: 2}
+  PivotOffset: {x: 0, y: 0, z: 0}
+  AmplitudeGain: 1
+  FrequencyGain: 2
+  m_NoiseOffsets: {x: 0, y: 0, z: 0}
+--- !u!114 &7083151467108173251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 805633230659257904}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00b2d199b96b516448144ab30fb26aed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseListener
+  ApplyAfter: 2
+  ChannelMask: 1
+  Gain: 1
+  Use2DDistance: 0
+  UseCameraSpace: 1
+  SignalCombinationMode: 0
+  ReactionSettings:
+    m_SecondaryNoise: {fileID: 0}
+    AmplitudeGain: 1
+    FrequencyGain: 1
+    Duration: 1
+    m_NoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!1 &2971591483419805130
 GameObject:
   m_ObjectHideFlags: 0

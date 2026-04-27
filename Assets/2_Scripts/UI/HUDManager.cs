@@ -129,6 +129,8 @@ namespace ProjectWallE.UI
         private void OnPlayerSpawn()
         {
             if (!canvasGroup) return;
+            if (Mathf.Approximately(canvasGroup.alpha, 1f)) return;
+            
             _fadeTween.Stop();
             _fadeTween = Tween.Alpha(canvasGroup, 1f, fadeDuration);
         }
@@ -136,6 +138,7 @@ namespace ProjectWallE.UI
         private void OnPlayerDeath(IDamageable attacker)
         {
             if (!canvasGroup) return;
+            if (Mathf.Approximately(canvasGroup.alpha, 0f)) return;
             _fadeTween.Stop();
             _fadeTween = Tween.Alpha(canvasGroup, 0f, fadeDuration);
         }
