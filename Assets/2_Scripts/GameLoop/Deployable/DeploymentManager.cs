@@ -42,7 +42,7 @@ namespace ProjectWallE.GameLoop
         [SerializeField] private float skyDropHeight = 300f;
         [SerializeField] private Pod podPrefab;
         
-        private readonly List<Transform> _shipSpawnPositions = new List<Transform>();
+        private readonly List<ShipPosition> _shipSpawnPositions = new List<ShipPosition>();
 
         private Transform _podHolder;
 
@@ -75,8 +75,9 @@ namespace ProjectWallE.GameLoop
             
             var shipPositionIndex = Random.Range(0, _shipSpawnPositions.Count);
             var shipPosition = _shipSpawnPositions[shipPositionIndex];
-            
-            SpawnPod(deployable, request, shipPosition.position);
+
+            shipPosition.PlayEffects();
+            SpawnPod(deployable, request, shipPosition.transform.position);
         }
 
         public void DeployFromSky<T>(T deployable, DeploymentRequest request) where T : MonoBehaviour, IDeployable
@@ -85,18 +86,18 @@ namespace ProjectWallE.GameLoop
             SpawnPod(deployable, request, origin);
         }
         
-        public void RegisterShipPosition(Transform ship)
+        public void RegisterShipPosition(ShipPosition position)
         {
-            if (_shipSpawnPositions.Contains(ship)) return;
+            if (_shipSpawnPositions.Contains(position)) return;
             
-            _shipSpawnPositions.Add(ship);
+            _shipSpawnPositions.Add(position);
         }
 
-        public void UnregisterShipPosition(Transform ship)
+        public void UnregisterShipPosition(ShipPosition position)
         {
-            if (!_shipSpawnPositions.Contains(ship)) return;
+            if (!_shipSpawnPositions.Contains(position)) return;
             
-            _shipSpawnPositions.Remove(ship);
+            _shipSpawnPositions.Remove(position);
         }
     }
 }

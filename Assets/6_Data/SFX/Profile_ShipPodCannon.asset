@@ -10,26 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ee7d95efa184de2b18dfff76533a189, type: 3}
-  m_Name: Profile_EngineLoop2
+  m_Name: Profile_ShipPodCannon
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.Systems.AudioLibrary.SOAudioProfile
   clips:
-  - {fileID: 8300000, guid: 98035819ca0760541a31c12ba067eaca, type: 3}
+  - {fileID: 8300000, guid: 27ed4dbf8c3c8534894158cd33491e1c, type: 3}
+  - {fileID: 8300000, guid: f06f1268787dc9e4c9adaec2c0f59de8, type: 3}
   volume:
     minValue: 1
     maxValue: 1
   pitch:
-    minValue: 1.3
-    maxValue: 1.3
+    minValue: 0.8
+    maxValue: 1
   stereoPan: 0
-  spatialBlend: 1
+  spatialBlend: 0.7
   reverbZoneMix: 1
   bypassEffects: 0
   bypassListenerEffects: 0
   bypassReverbZones: 0
-  loop: 1
+  loop: 0
   set3DSettings: 1
   dopplerLevel: 1
   spread: 0
-  minDistance: 50
-  maxDistance: 500
+  minDistance: 500
+  maxDistance: 2000
   rolloffMode: 0
