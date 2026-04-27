@@ -25,7 +25,7 @@ namespace UnityEngine.Splines
 
         [Header("Spline to Terrain")]
         [SerializeField, Tooltip("Snap spline knot positions to terrain height.")]
-        private bool snapSplineToTerrain = true;
+        private bool snapSplineToTerrain = false;
 
         [SerializeField, Tooltip("Additional vertical offset applied to snapped spline points.")]
         private float splineHeightOffset = 0f;

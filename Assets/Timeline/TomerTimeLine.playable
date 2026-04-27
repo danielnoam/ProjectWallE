@@ -116,8 +116,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 844512bbcc774b44b3c5e64aee9d8fbb, type: 3}
   m_Name: Spawn Structure Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnStructureMarker
-  m_Time: 1.5
-  podCameraMode: 0
+  m_Time: 4
+  podCameraMode: 1
   structureToSpawn: {fileID: 6487620541022002554, guid: 3b1b64788b055e0498a63ea738b3ba50, type: 3}
   structureSpawnPoint:
     exposedName: 8e4ae66d1eec401419747f2556109af2
@@ -193,11 +193,11 @@ MonoBehaviour:
       type: {class: GoToPositionObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         objectiveMarker:
-          exposedName: 
+          exposedName: a0139ca27f056684fa9572ace13431e0
           defaultValue: {fileID: 0}
         showInGame: 1
         showOnRadar: 1
-        radius: 30
+        radius: 7
 --- !u!114 &2138337481656018860
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -347,11 +347,11 @@ MonoBehaviour:
       type: {class: GoToPositionObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         objectiveMarker:
-          exposedName: 
+          exposedName: 3a568f04fbb836242b846cbfd87efcb1
           defaultValue: {fileID: 0}
         showInGame: 1
         showOnRadar: 1
-        radius: 10
+        radius: 20
 --- !u!114 &6827295725405647289
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -374,7 +374,7 @@ MonoBehaviour:
       type: {class: GoToPositionObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         objectiveMarker:
-          exposedName: 
+          exposedName: c9e57532bf1260048b4a794fee25e930
           defaultValue: {fileID: 0}
         showInGame: 1
         showOnRadar: 1
