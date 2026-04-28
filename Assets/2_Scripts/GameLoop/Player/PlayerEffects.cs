@@ -15,6 +15,7 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField] private VisualEffectAction wheelsAirReleaseEffect;
         [SerializeField] private DamageEffects damageEffects;
         [SerializeField] private ParticleEffectAction deathEffects;
+        [SerializeField] private VisualEffectAction explodeEffect;
 
         [Header("Audio")]
         [SerializeField, AudioLibraryID] private string changeStateSoundId;
@@ -108,6 +109,7 @@ namespace ProjectWallE.GameLoop.Player
         
         private void OnDeath(IDamageable attacker)
         {
+            explodeEffect?.Play(transform.position);
             deathEffects?.Play(transform.position);
             carBoostEffect?.Stop(boostAudioSource);
             StopAllTireEffects();

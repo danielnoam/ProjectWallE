@@ -1689,21 +1689,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.PlayerAnimator
   shoot1Effect:
+    effectType: 0
+    visualEffect: {fileID: 0}
     visualEffects:
     - {fileID: 5782453471879991033}
     - {fileID: 3686714904999105487}
     soundId: Shoot1
   shoot2Effect:
+    effectType: 0
+    visualEffect: {fileID: 0}
     visualEffects:
     - {fileID: 6508442177166462385}
     - {fileID: 3686714904999105487}
     soundId: Shoot2
   carBoostEffect:
+    effectType: 0
+    visualEffect: {fileID: 0}
     visualEffects:
     - {fileID: 5454407353768600682}
     - {fileID: 3246170288374732677}
     soundId: Boost
   wheelsAirReleaseEffect:
+    effectType: 0
+    visualEffect: {fileID: 0}
     visualEffects:
     - {fileID: 3149229671974226224}
     - {fileID: 2909571650443864060}
@@ -1721,6 +1729,11 @@ MonoBehaviour:
     particle: {fileID: 8151950975278357215, guid: a24290b60cf384a48bebb6c500854a1d, type: 3}
     triggerParticle: {fileID: 0}
     soundId: PlayerDeath
+  explodeEffect:
+    effectType: 1
+    visualEffect: {fileID: -646395566823460614, guid: c8931742fb422eb4d862e8bfe7ea43d5, type: 3}
+    visualEffects: []
+    soundId: 
   changeStateSoundId: ChangeState
   robotMoveSoundId: EngineLoop2
   carMoveSoundId: EngineLoop1

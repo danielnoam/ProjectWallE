@@ -168,12 +168,12 @@ MonoBehaviour:
     dissipationRate: 0
     propagationSpeed: 0
   deathImpulseSettings:
-    impulseChannel: 0
+    impulseChannel: 1
     impulseType: 0
-    impulseShape: 0
-    duration: 0
-    intensity: 0
-    velocity: {x: 0, y: 0, z: 0}
+    impulseShape: 4
+    duration: 0.3
+    intensity: 0.7
+    velocity: {x: 1, y: 1, z: 1}
     dissipationDistance: 0
     dissipationRate: 0
     propagationSpeed: 0
@@ -347,7 +347,7 @@ MonoBehaviour:
       Curvature: {x: 2, y: 11}
       BarrelClipping: 0.25
       Anamorphism: 0
-  BlendHint: 4
+  BlendHint: 0
 --- !u!114 &5566050871350756375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -692,7 +692,7 @@ MonoBehaviour:
       Curvature: {x: 2, y: 11}
       BarrelClipping: 0.25
       Anamorphism: 0
-  BlendHint: 4
+  BlendHint: 0
 --- !u!114 &913704876087868737
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -875,7 +875,7 @@ MonoBehaviour:
       Curvature: {x: 2, y: 11}
       BarrelClipping: 0.25
       Anamorphism: 0
-  BlendHint: 4
+  BlendHint: 0
 --- !u!114 &297259147612917025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1072,7 +1072,7 @@ MonoBehaviour:
       Curvature: {x: 2, y: 11}
       BarrelClipping: 0.25
       Anamorphism: 0
-  BlendHint: 4
+  BlendHint: 0
 --- !u!114 &286418199684431279
 MonoBehaviour:
   m_ObjectHideFlags: 0

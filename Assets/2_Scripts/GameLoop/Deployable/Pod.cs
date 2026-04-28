@@ -23,6 +23,7 @@ namespace ProjectWallE.GameLoop
 
         [Header("Effects")]
         [SerializeField] private ParticleEffectAction collisionEffect;
+        [SerializeField] private VisualEffectAction explodeEffect;
         [SerializeField] private ImpulseSettings collisionImpulseSettings;
         [SerializeField, AutoGetSelf, HideInInspector] private CinemachineImpulseSource impulseSource;
 
@@ -79,6 +80,7 @@ namespace ProjectWallE.GameLoop
         {
             impulseSource?.GenerateImpulse(collisionImpulseSettings);
             collisionEffect?.Play(_request.TargetPosition, Quaternion.LookRotation(_request.TargetSurfaceNormal));
+            explodeEffect?.Play(_request.TargetPosition.AddY(1));
 
             if (_request.DamageOnImpact)
             {

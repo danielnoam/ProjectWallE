@@ -5,7 +5,7 @@ namespace ProjectWallE.GameLoop
     public class ShipPosition : MonoBehaviour
     {
         [Header("Settings")]
-        [SerializeField] private ParticleEffectAction cannonEffect;
+        [SerializeField] private VisualEffectAction cannonEffect;
         
         
         private void Start()

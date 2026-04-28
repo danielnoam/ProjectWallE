@@ -25,7 +25,6 @@ public class ResourceRock : MonoBehaviour, IDamageable
     public event Action<float> OnDamaged;
     
     
-
     private void Awake()
     {
         _currentHealth = maxHealth;
