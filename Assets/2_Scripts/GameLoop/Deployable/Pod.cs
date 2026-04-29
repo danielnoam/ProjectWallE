@@ -3,6 +3,7 @@ using System.Collections;
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.AutoGet;
 using DNExtensions.Utilities.CinemachineExtensions;
+using DNExtensions.Utilities.SerializableSelector;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -16,15 +17,9 @@ namespace ProjectWallE.GameLoop
         [SerializeField, MinMaxRange(-5, 5)] private RangedFloat rotationSpeedRange = new RangedFloat(1, 1);
         [SerializeField, MinMaxRange(0, 10)] private RangedFloat travelDurationRange = new RangedFloat(3, 5);
 
-        [Header("Impact")]
-        [SerializeField] private float pushRange = 10f;
-        [SerializeField] private float impactDamage = 100f;
-        [SerializeField, MinMaxRange(0, 100)] private RangedFloat pushStrength = new RangedFloat(3, 15);
-
         [Header("Effects")]
-        [SerializeField] private ParticleEffectAction collisionEffect;
-        [SerializeField] private VisualEffectAction explodeEffect;
         [SerializeField] private ImpulseSettings collisionImpulseSettings;
+        [SerializeReference, SerializableSelector(Foldout = false)] private DeployBehavior[] onImpact;
         [SerializeField, AutoGetSelf, HideInInspector] private CinemachineImpulseSource impulseSource;
 
         
@@ -40,16 +35,16 @@ namespace ProjectWallE.GameLoop
         {
             float elapsed = 0f;
             Vector3 previousPosition = _startPosition;
-            float duration = travelDurationRange.RandomValue;
-            float rotationSpeed = rotationSpeedRange.RandomValue;
+            float randomT = UnityEngine.Random.value;
+            float duration = travelDurationRange.Lerp(randomT);
+            float rotationSpeed = rotationSpeedRange.Lerp(1f - randomT);
 
             while (elapsed < duration)
             {
                 elapsed += Time.deltaTime;
-                float t = elapsed / duration;
-                Vector3 position = Vector3.Lerp(_startPosition, _request.TargetPosition, t);
-
-                position.y += arcHeight * Mathf.Sin(t * Mathf.PI);
+                float progress = elapsed / duration;
+                Vector3 position = Vector3.Lerp(_startPosition, _request.TargetPosition, progress);
+                position.y += arcHeight * Mathf.Sin(progress * Mathf.PI);
 
                 Vector3 movementDirection = position - previousPosition;
                 if (movementDirection.sqrMagnitude > 0.001f)
@@ -73,15 +68,16 @@ namespace ProjectWallE.GameLoop
         {
             float elapsed = 0f;
             Vector3 previousPosition = _startPosition;
-            float duration = travelDurationRange.RandomValue;
-            float rotationSpeed = rotationSpeedRange.RandomValue;
+            float randomT = UnityEngine.Random.value;
+            float duration = travelDurationRange.Lerp(randomT);
+            float rotationSpeed = rotationSpeedRange.Lerp(1f - randomT);
 
             while (elapsed < duration)
             {
-
                 elapsed += Time.deltaTime;
-                float t = elapsed / duration;
-                Vector3 position = Vector3.Lerp(_startPosition, _request.TargetPosition, t);
+                float progress = elapsed / duration;
+                Vector3 position = Vector3.Lerp(_startPosition, _request.TargetPosition, progress);
+
                 Vector3 movementDirection = position - previousPosition;
                 if (movementDirection.sqrMagnitude > 0.001f)
                 {
@@ -91,7 +87,7 @@ namespace ProjectWallE.GameLoop
                     Quaternion spinRotation = Quaternion.Euler(0, yRotation, 0);
                     transform.rotation = directionRotation * offset * spinRotation;
                 }
-                
+
                 previousPosition = position;
                 transform.position = position;
                 yield return null;
@@ -103,44 +99,25 @@ namespace ProjectWallE.GameLoop
         private void Land()
         {
             impulseSource?.GenerateImpulse(collisionImpulseSettings);
-            collisionEffect?.Play(_request.TargetPosition, Quaternion.LookRotation(_request.TargetSurfaceNormal));
-            explodeEffect?.Play(_request.TargetPosition.AddY(1));
 
-            if (_request.DamageOnImpact)
+            foreach (var effect in onImpact)
             {
-                var colliders = Physics.OverlapSphere(_request.TargetPosition, pushRange);
-                foreach (Collider col in colliders)
-                {
-                    Enemy enemy = col.GetComponentInParent<IDamageable>() as Enemy;
-                    enemy?.TakeDamage(impactDamage);
-
-                    IPushable pushable = col.GetComponentInParent<IPushable>();
-                    if (pushable != null)
-                    {
-                        float distance = Vector3.Distance(_request.TargetPosition, col.transform.position);
-                        float push = pushStrength.Lerp(1 - distance / pushRange);
-
-                        Vector3 direction = (col.transform.position - _request.TargetPosition).normalized;
-                        pushable.Push(direction, push);
-                    }
-                }
+                effect?.Execute(_request);
             }
 
-            if (_request.InstantiateOnLand)
+            if (_request.InstantiateOnLand && _deployable != null)
             {
                 MonoBehaviour instance = _request.Parent
                     ? Instantiate(_deployable as MonoBehaviour, _request.TargetPosition, Quaternion.LookRotation(_request.TargetForward), _request.Parent)
                     : Instantiate(_deployable as MonoBehaviour, _request.TargetPosition, Quaternion.LookRotation(_request.TargetForward));
-
                 ((IDeployable)instance).Deploy(_request);
             }
             else
             {
-                _deployable.Deploy(_request);
+                _deployable?.Deploy(_request);
             }
-            
-            OnLand?.Invoke();
 
+            OnLand?.Invoke();
             Destroy(gameObject);
         }
         
@@ -150,6 +127,14 @@ namespace ProjectWallE.GameLoop
             _request = request;
             _startPosition = transform.position;
 
+            _moveCoroutine = StartCoroutine(moveInArc ? MoveInArc() : MoveLinearly());
+        }
+        
+        public void Initialize(ScriptableObject deployable, DeploymentRequest request, bool moveInArc)
+        {
+            _deployable = deployable as IDeployable;
+            _request = request;
+            _startPosition = transform.position;
             _moveCoroutine = StartCoroutine(moveInArc ? MoveInArc() : MoveLinearly());
         }
     }

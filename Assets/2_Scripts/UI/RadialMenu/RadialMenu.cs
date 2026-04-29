@@ -34,6 +34,9 @@ namespace ProjectWallE.UI
 
         public event Action<T> OnItemSelected;
         public event Action<T> OnItemHoverChanged;
+        public event Action OnMenuOpened;
+        public event Action OnMenuClosed;
+        
 
         private void Awake()
         {
@@ -163,6 +166,7 @@ namespace ProjectWallE.UI
 
         public void OpenMenu()
         {
+            OnMenuOpened?.Invoke();
             canvasGroup.alpha = 1f;
             canvasGroup.blocksRaycasts = true;
             canvasGroup.interactable = true;
@@ -171,7 +175,9 @@ namespace ProjectWallE.UI
 
         public void CloseMenu()
         {
+            if (_isOpen) OnMenuClosed?.Invoke();
             UnhoverElement();
+            ClearMenu();
             _accumulatedMouseDelta = Vector2.zero;
             canvasGroup.alpha = 0f;
             canvasGroup.blocksRaycasts = false;

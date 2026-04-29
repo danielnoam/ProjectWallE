@@ -35,7 +35,6 @@ namespace ProjectWallE.GameLoop.Player
         private bool _lastMenuWasBuildMenu;
         private Structure _targetedStructure;
         private Structure _lastMenuStructure;
-        private Sequence _timeSequence;
 
         public event Action<Structure[], bool> BuildMenuRequested;
         public event Action<Structure> ActionsMenuRequested;
@@ -140,13 +139,11 @@ namespace ProjectWallE.GameLoop.Player
         private void OpenContextMenu()
         {
             _menuOpen = true;
-            SetGameTimeScale(0.05f);
             RefreshOpenMenu();
         }
 
         private void CloseMenus()
         {
-            SetGameTimeScale(1f);
             UpdateStructureStatusVisibility(null);
             StructureManager.Instance?.HideGhost();
             BuildPrompt.Instance?.Hide();
@@ -307,17 +304,6 @@ namespace ProjectWallE.GameLoop.Player
             {
                 StructureManager.Instance?.DeployStructureOnGround(structure, _buildPoint, transform.forward, _buildNormal, PodCameraMode.None);
             }
-        }
-
-        private void SetGameTimeScale(float timeScale)
-        {
-            if (Mathf.Approximately(Time.timeScale, timeScale)) return;
-            if (_timeSequence.isAlive) _timeSequence.Stop();
-
-            var easeToUse = timeScale > 0.05f ? Ease.OutBack : Ease.Linear;
-            
-            _timeSequence = Sequence.Create(useUnscaledTime: true)
-                .Group(Tween.GlobalTimeScale(timeScale, 0.5f, easeToUse));
         }
     }
 }

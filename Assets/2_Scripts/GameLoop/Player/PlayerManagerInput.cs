@@ -17,6 +17,8 @@ namespace ProjectWallE
         public bool Attack2Released { get; private set; }
         public bool ActionMenuPressed { get; private set; }
         public bool ActionMenuReleased { get; private set; }
+        public bool SupportMenuPressed { get; private set; }
+        public bool SupportMenuReleased { get; private set; }
 
         private void Awake()
         {
@@ -51,6 +53,8 @@ namespace ProjectWallE
             ActionMenuReleased = false;
             Attack1Released = false;
             Attack2Released = false;
+            SupportMenuPressed = false;
+            SupportMenuReleased = false;
         }
 
         public void OnSwitchController(InputAction.CallbackContext context)
@@ -84,6 +88,12 @@ namespace ProjectWallE
         {
             if (context.started) ActionMenuPressed = true;
             if (context.canceled) ActionMenuReleased = true;
+        }
+        
+        public void OnSupportMenu(InputAction.CallbackContext context)
+        {
+            if (context.started) SupportMenuPressed = true;
+            if (context.canceled) SupportMenuReleased = true;
         }
     }
 }

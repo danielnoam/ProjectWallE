@@ -663,6 +663,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SupportMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""7be003e2-3fb6-4b5f-817d-7bf640fa079c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -784,6 +793,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
                     ""action"": ""ActionMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2baa149b-faa0-4faf-a950-99a88a311ad5"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""SupportMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1206,6 +1226,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_PlayerManagerControls_Attack2 = m_PlayerManagerControls.FindAction("Attack2", throwIfNotFound: true);
         m_PlayerManagerControls_Look = m_PlayerManagerControls.FindAction("Look", throwIfNotFound: true);
         m_PlayerManagerControls_ActionMenu = m_PlayerManagerControls.FindAction("ActionMenu", throwIfNotFound: true);
+        m_PlayerManagerControls_SupportMenu = m_PlayerManagerControls.FindAction("SupportMenu", throwIfNotFound: true);
         // CarControls
         m_CarControls = asset.FindActionMap("CarControls", throwIfNotFound: true);
         m_CarControls_AccelDecel = m_CarControls.FindAction("Accel/Decel", throwIfNotFound: true);
@@ -1499,6 +1520,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerManagerControls_Attack2;
     private readonly InputAction m_PlayerManagerControls_Look;
     private readonly InputAction m_PlayerManagerControls_ActionMenu;
+    private readonly InputAction m_PlayerManagerControls_SupportMenu;
     /// <summary>
     /// Provides access to input actions defined in input action map "PlayerManagerControls".
     /// </summary>
@@ -1530,6 +1552,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "PlayerManagerControls/ActionMenu".
         /// </summary>
         public InputAction @ActionMenu => m_Wrapper.m_PlayerManagerControls_ActionMenu;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerManagerControls/SupportMenu".
+        /// </summary>
+        public InputAction @SupportMenu => m_Wrapper.m_PlayerManagerControls_SupportMenu;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1571,6 +1597,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @ActionMenu.started += instance.OnActionMenu;
             @ActionMenu.performed += instance.OnActionMenu;
             @ActionMenu.canceled += instance.OnActionMenu;
+            @SupportMenu.started += instance.OnSupportMenu;
+            @SupportMenu.performed += instance.OnSupportMenu;
+            @SupportMenu.canceled += instance.OnSupportMenu;
         }
 
         /// <summary>
@@ -1597,6 +1626,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @ActionMenu.started -= instance.OnActionMenu;
             @ActionMenu.performed -= instance.OnActionMenu;
             @ActionMenu.canceled -= instance.OnActionMenu;
+            @SupportMenu.started -= instance.OnSupportMenu;
+            @SupportMenu.performed -= instance.OnSupportMenu;
+            @SupportMenu.canceled -= instance.OnSupportMenu;
         }
 
         /// <summary>
@@ -2051,6 +2083,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnActionMenu(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SupportMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSupportMenu(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "CarControls" which allows adding and removing callbacks.

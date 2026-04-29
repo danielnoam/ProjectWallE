@@ -237,21 +237,6 @@ MonoBehaviour:
   travelDurationRange:
     minValue: 3
     maxValue: 5
-  pushRange: 10
-  impactDamage: 100
-  pushStrength:
-    minValue: 3
-    maxValue: 10
-  collisionEffect:
-    effectType: 1
-    particle: {fileID: 3589259924837436033, guid: e6dd420ba061f104abb1af9566d0eb3d, type: 3}
-    triggerParticle: {fileID: 0}
-    soundId: PodCollision
-  explodeEffect:
-    effectType: 1
-    visualEffect: {fileID: -646395566823460614, guid: c8931742fb422eb4d862e8bfe7ea43d5, type: 3}
-    visualEffects: []
-    soundId: 
   collisionImpulseSettings:
     impulseChannel: 1
     impulseType: 1
@@ -262,7 +247,46 @@ MonoBehaviour:
     dissipationDistance: 100
     dissipationRate: 0.25
     propagationSpeed: 343
+  onImpact:
+  - rid: 126016798228742228
+  - rid: 126016798228742229
+  - rid: 126016798228742230
+  - rid: 126016798228742231
   impulseSource: {fileID: -6820564451760052507}
+  references:
+    version: 2
+    RefIds:
+    - rid: 126016798228742228
+      type: {class: DamageBehavior, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        radius: 7
+        damageRange:
+          minValue: 25
+          maxValue: 150
+        hitLayers: {fileID: 11400000, guid: 858ceb8d9b448d24d94c04812c01cb15, type: 2}
+    - rid: 126016798228742229
+      type: {class: PushBehavior, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        radius: 7
+        pushStrength:
+          minValue: 3
+          maxValue: 15
+    - rid: 126016798228742230
+      type: {class: ParticleImpactEffect, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        effect:
+          effectType: 1
+          particle: {fileID: 3589259924837436033, guid: e6dd420ba061f104abb1af9566d0eb3d, type: 3}
+          triggerParticle: {fileID: 0}
+          soundId: PodCollision
+    - rid: 126016798228742231
+      type: {class: VisualImpactEffect, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        effect:
+          effectType: 1
+          visualEffect: {fileID: -646395566823460614, guid: c8931742fb422eb4d862e8bfe7ea43d5, type: 3}
+          visualEffects: []
+          soundId: 
 --- !u!1001 &2377388537530615530
 PrefabInstance:
   m_ObjectHideFlags: 0

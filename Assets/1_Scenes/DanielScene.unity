@@ -4899,6 +4899,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2737165017878004224, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: actionsMenu
+      value: 
+      objectReference: {fileID: 9042847428745733046}
     - target: {fileID: 5821086676760150823, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
       propertyPath: m_Name
       value: PlayerManager
@@ -6067,6 +6071,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
+--- !u!114 &9042847428745733046 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1362821622492407948, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
+  m_PrefabInstance: {fileID: 9042847428745733045}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf667956165c4d90b3fd437f60b617e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StructureActionsMenu
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

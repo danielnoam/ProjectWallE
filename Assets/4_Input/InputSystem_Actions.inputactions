@@ -577,6 +577,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "SupportMenu",
+                    "type": "Button",
+                    "id": "7be003e2-3fb6-4b5f-817d-7bf640fa079c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -698,6 +707,17 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "ActionMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2baa149b-faa0-4faf-a950-99a88a311ad5",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "SupportMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

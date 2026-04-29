@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using _2_Scripts;
+using DNExtensions.Utilities.AutoGet;
 using ProjectWallE.GameLoop;
 using ProjectWallE.GameLoop.Player;
 using ProjectWallE.UI;
@@ -30,11 +31,12 @@ namespace ProjectWallE
         
         [Header("References")]
         [SerializeField] private GameObject gfx;
-        [HideInInspector, SerializeField] private CarController carController;
-        [HideInInspector, SerializeField] private RobotController robotController;
-        [HideInInspector, SerializeField] private PlayerStructureBuilder structureBuilder;
-        [HideInInspector, SerializeField] private PlayerShooter shooter;
-        [HideInInspector, SerializeField] private PlayerAimer aimer;
+        [HideInInspector, SerializeField, AutoGetChildren] private CarController carController;
+        [HideInInspector, SerializeField, AutoGetChildren] private RobotController robotController;
+        [HideInInspector, SerializeField, AutoGetChildren] private PlayerStructureBuilder structureBuilder;
+        [HideInInspector, SerializeField, AutoGetChildren] private PlayerSupportCaller supportCaller;
+        [HideInInspector, SerializeField, AutoGetChildren] private PlayerShooter shooter;
+        [HideInInspector, SerializeField, AutoGetChildren] private PlayerAimer aimer;
 
         private PlayerManagerInput _input;
         private Rigidbody _rigidbody;
@@ -60,11 +62,13 @@ namespace ProjectWallE
         public PlayerStructureBuilder StructureBuilder => structureBuilder;
         public PlayerShooter Shooter => shooter;
         public PlayerAimer Aimer => aimer;
+        public PlayerSupportCaller SupportCaller => supportCaller;
         public bool CanBuild => _currentController.canBuild && IsAlive;
         public bool CanShoot => _currentController.canShoot && IsAlive;
         public Vector3 Velocity => _rigidbody.linearVelocity;
         public bool IsAlive => _currentHealth > 0;
         public Team Team => Team.Player;
+
 
         public event Action<IDamageable> OnDeath;
         public event Action OnSpawn;
@@ -80,11 +84,7 @@ namespace ProjectWallE
 
         private void OnValidate()
         {
-            if (!carController) carController = GetComponentInChildren<CarController>();
-            if (!robotController) robotController = GetComponentInChildren<RobotController>();
-            if (!structureBuilder) structureBuilder = GetComponentInChildren<PlayerStructureBuilder>();
-            if (!shooter) shooter = GetComponentInChildren<PlayerShooter>();
-            if (!aimer) aimer = GetComponentInChildren<PlayerAimer>();
+            AutoGetSystem.Process(this);
         }
 
         private void Awake()
@@ -283,7 +283,7 @@ namespace ProjectWallE
             var request = new DeploymentRequest(spawnPosition, spawnRotation * Vector3.forward, null)
             {
                 InstantiateOnLand = false,
-                DamageOnImpact = false,
+                ImpactTeam = Team.Player,
                 CameraMode = PodCameraMode.Follow
             };
 

@@ -14,7 +14,7 @@ namespace ProjectWallE.GameLoop
         public Vector3 TargetSurfaceNormal;
         public Transform Parent;
         public StructureNode Node;
-        public bool DamageOnImpact;
+        public Team ImpactTeam;
         public bool InstantiateOnLand;
         public PodCameraMode CameraMode;
 
@@ -25,7 +25,7 @@ namespace ProjectWallE.GameLoop
             TargetSurfaceNormal = Vector3.up;
             Parent = parent;
             Node = null;
-            DamageOnImpact = true;
+            ImpactTeam = Team.Neutral;
             InstantiateOnLand = true;
             CameraMode = PodCameraMode.None;
         }
@@ -58,11 +58,36 @@ namespace ProjectWallE.GameLoop
             _podHolder = new GameObject("PodHolder").transform;
         }
         
+        
         private void SpawnPod<T>(T deployable, DeploymentRequest request, Vector3 spawnPosition, bool moveInArc) where T : MonoBehaviour, IDeployable
         {
-            Pod pod = Instantiate(podPrefab, spawnPosition, Quaternion.identity, _podHolder);
+            Pod prefab = deployable is IDeployableWithPod withPod && withPod.PodPrefab ? withPod.PodPrefab : podPrefab;
+            Pod pod = Instantiate(prefab, spawnPosition, Quaternion.identity, _podHolder);
             pod.Initialize(deployable, request, moveInArc);
             OnPodDeployed?.Invoke(request, pod);
+        }
+
+        private void SpawnPod(ScriptableObject deployable, DeploymentRequest request, Vector3 spawnPosition, bool moveInArc)
+        {
+            Pod prefab = deployable is IDeployableWithPod withPod && withPod.PodPrefab ? withPod.PodPrefab : podPrefab;
+            Pod pod = Instantiate(prefab, spawnPosition, Quaternion.identity, _podHolder);
+            pod.Initialize(deployable, request, moveInArc);
+            OnPodDeployed?.Invoke(request, pod);
+        }
+        
+                
+        public void RegisterShipCannon(ShipCannon cannon)
+        {
+            if (_shipSpawnCannons.Contains(cannon)) return;
+            
+            _shipSpawnCannons.Add(cannon);
+        }
+
+        public void UnregisterShipCannon(ShipCannon cannon)
+        {
+            if (!_shipSpawnCannons.Contains(cannon)) return;
+            
+            _shipSpawnCannons.Remove(cannon);
         }
         
         public void DeployFromShip<T>(T deployable, DeploymentRequest request) where T : MonoBehaviour, IDeployable
@@ -85,19 +110,25 @@ namespace ProjectWallE.GameLoop
             Vector3 origin = request.TargetPosition + Vector3.up * skyDropHeight;
             SpawnPod(deployable, request, origin, false);
         }
-        
-        public void RegisterShipCannon(ShipCannon cannon)
+
+        public void DeployFromSky(ScriptableObject deployable, DeploymentRequest request)
         {
-            if (_shipSpawnCannons.Contains(cannon)) return;
-            
-            _shipSpawnCannons.Add(cannon);
+            Vector3 origin = request.TargetPosition + Vector3.up * skyDropHeight;
+            SpawnPod(deployable, request, origin, false);
         }
 
-        public void UnregisterShipCannon(ShipCannon cannon)
+        public void DeployFromShip(ScriptableObject deployable, DeploymentRequest request)
         {
-            if (!_shipSpawnCannons.Contains(cannon)) return;
+            if (_shipSpawnCannons.Count == 0)
+            {
+                DeployFromSky(deployable, request);
+                return;
+            }
             
-            _shipSpawnCannons.Remove(cannon);
+            var shipPositionIndex = Random.Range(0, _shipSpawnCannons.Count);
+            var shipPosition = _shipSpawnCannons[shipPositionIndex];
+            shipPosition.PlayEffects();
+            SpawnPod(deployable, request, shipPosition.transform.position, true);
         }
     }
 }

@@ -81,11 +81,19 @@ namespace ProjectWallE
                 _playerManager.StructureBuilder.ActionsMenuRequested += OnMenuActionRequested;
                 _playerManager.StructureBuilder.BuildMenuRequested += OnBuildMenuRequested;
                 _playerManager.StructureBuilder.MenuCloseRequested += OnMenuCloseRequested;
+                _playerManager.SupportCaller.SupportMenuRequested += SupportCallerOnSupportMenuRequested;
+                _playerManager.SupportCaller.MenuCloseRequested += OnMenuCloseRequested;
+
                 _playerManager.Shooter.OnAttack1 += OnAttack1;
                 _playerManager.Shooter.OnAttack2 += OnAttack2;
             }
         }
-        
+
+        private void SupportCallerOnSupportMenuRequested(SOSupportActionData[] obj)
+        {
+            _cameraLocked = true;
+        }
+
 
         private void OnDisable()
         {
@@ -99,6 +107,8 @@ namespace ProjectWallE
                 _playerManager.StructureBuilder.ActionsMenuRequested -= OnMenuActionRequested;
                 _playerManager.StructureBuilder.BuildMenuRequested -= OnBuildMenuRequested;
                 _playerManager.StructureBuilder.MenuCloseRequested -= OnMenuCloseRequested;
+                _playerManager.SupportCaller.SupportMenuRequested -= SupportCallerOnSupportMenuRequested;
+                _playerManager.SupportCaller.MenuCloseRequested -= OnMenuCloseRequested;
                 _playerManager.Shooter.OnAttack1 -= OnAttack1;
                 _playerManager.Shooter.OnAttack2 -= OnAttack2;
             }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DNExtensions.Utilities.AutoGet;
 using DNExtensions.Utilities.Button;
+using DNExtensions.Utilities.CustomFields;
 using ProjectWallE.GameLoop;
 using ProjectWallE.UI;
 using UnityEditor;
@@ -27,6 +28,7 @@ public struct StructureUIData
     [SerializeField] private Sprite fixIcon;
     [SerializeField] private Sprite demolishIcon;
     [SerializeField] private GhostStructure ghostPrefab;
+    [SerializeField] private Pod podPrefab;
     
     public string Label => label;
     public Sprite Icon => icon;
@@ -34,11 +36,12 @@ public struct StructureUIData
     public Sprite FixIcon => fixIcon;
     public Sprite DemolishIcon => demolishIcon;
     public GhostStructure GhostPrefab => ghostPrefab;
+    public Pod PodPrefab => podPrefab;
 }
 
 [DisallowMultipleComponent]
 [SelectionBase]
-public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
+public abstract class Structure : MonoBehaviour, IDamageable, IDeployableWithPod
 {
     public static event Action<Structure> OnStructureBuilt;
     public static event Action<Structure> OnStructureUpgraded;
@@ -70,6 +73,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployable
     public int CurrentUpgradeLevel { get; private set; }
     public float CurrentHealth { get; private set; }
     public StructureUIData StructureUIData => structureUIData;
+    public Pod PodPrefab => structureUIData.PodPrefab;
     public Vector3 TopPoint => transform.position + transform.TransformVector(topPoint);
     public float MaxHealth => CurrentLevelData.maxHealth;
     public int BuildCost => Levels[0].cost;

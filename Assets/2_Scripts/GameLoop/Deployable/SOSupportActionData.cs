@@ -1,0 +1,37 @@
+using DNExtensions.Utilities.SerializableSelector;
+using UnityEngine;
+
+namespace ProjectWallE.GameLoop
+{
+    [CreateAssetMenu(fileName = "New SOSupport Action Data", menuName = "Support Action Data")]
+    public class SOSupportActionData : ScriptableObject, IDeployableWithPod
+    {
+        [Header("Identity")]
+        [SerializeField] private string label;
+        [SerializeField] private Sprite icon;
+        [SerializeField] private Pod podPrefab;
+        
+        [Header("Behavior")]
+        [SerializeField, Min(1)] private int podCount = 1;
+        [SerializeField, Min(0)] private float scatterRadius;
+        [SerializeReference, SerializableSelector(Foldout = false)] private DeployBehavior[] onImpact;
+        
+        public int PodCount => podCount;
+        public float ScatterRadius => scatterRadius;
+        public string Label => label;
+        public Sprite Icon => icon;
+        public Pod PodPrefab => podPrefab;
+
+
+
+        public void Deploy(DeploymentRequest request)
+        {
+            foreach (var effect in onImpact)
+            {
+                effect?.Execute(request);
+            }
+        }
+
+
+    }
+}
