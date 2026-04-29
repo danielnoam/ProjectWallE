@@ -13,7 +13,7 @@ namespace ProjectWallE.GameLoop
     {
         [Header("Settings")]
         [SerializeField] private float arcHeight = 125f;
-        [SerializeField, MinMaxRange(0, 360)] private RangedFloat rotationSpeedRange = new RangedFloat(200, 300);
+        [SerializeField, MinMaxRange(-5, 5)] private RangedFloat rotationSpeedRange = new RangedFloat(1, 1);
         [SerializeField, MinMaxRange(0, 10)] private RangedFloat travelDurationRange = new RangedFloat(3, 5);
 
         [Header("Impact")]
@@ -27,21 +27,15 @@ namespace ProjectWallE.GameLoop
         [SerializeField] private ImpulseSettings collisionImpulseSettings;
         [SerializeField, AutoGetSelf, HideInInspector] private CinemachineImpulseSource impulseSource;
 
+        
+        private Coroutine _moveCoroutine;
         private IDeployable _deployable;
         private DeploymentRequest _request;
         private Vector3 _startPosition;
 
         public event Action OnLand;
 
-        public void Initialize<T>(T deployable, DeploymentRequest request) where T : MonoBehaviour, IDeployable
-        {
-            _deployable = deployable;
-            _request = request;
-            _startPosition = transform.position;
-
-            StartCoroutine(MoveInArc());
-        }
-
+        
         private IEnumerator MoveInArc()
         {
             float elapsed = 0f;
@@ -64,12 +58,42 @@ namespace ProjectWallE.GameLoop
                     Quaternion offset = Quaternion.Euler(new Vector3(90, 0, 0));
                     float yRotation = elapsed * rotationSpeed * 360f;
                     Quaternion spinRotation = Quaternion.Euler(0, yRotation, 0);
-
                     transform.rotation = directionRotation * offset * spinRotation;
                 }
 
                 transform.position = position;
                 previousPosition = position;
+                yield return null;
+            }
+
+            Land();
+        }
+
+        private IEnumerator MoveLinearly()
+        {
+            float elapsed = 0f;
+            Vector3 previousPosition = _startPosition;
+            float duration = travelDurationRange.RandomValue;
+            float rotationSpeed = rotationSpeedRange.RandomValue;
+
+            while (elapsed < duration)
+            {
+
+                elapsed += Time.deltaTime;
+                float t = elapsed / duration;
+                Vector3 position = Vector3.Lerp(_startPosition, _request.TargetPosition, t);
+                Vector3 movementDirection = position - previousPosition;
+                if (movementDirection.sqrMagnitude > 0.001f)
+                {
+                    Quaternion directionRotation = Quaternion.LookRotation(movementDirection);
+                    Quaternion offset = Quaternion.Euler(new Vector3(90, 0, 0));
+                    float yRotation = elapsed * rotationSpeed * 360f;
+                    Quaternion spinRotation = Quaternion.Euler(0, yRotation, 0);
+                    transform.rotation = directionRotation * offset * spinRotation;
+                }
+                
+                previousPosition = position;
+                transform.position = position;
                 yield return null;
             }
 
@@ -118,6 +142,15 @@ namespace ProjectWallE.GameLoop
             OnLand?.Invoke();
 
             Destroy(gameObject);
+        }
+        
+        public void Initialize<T>(T deployable, DeploymentRequest request, bool moveInArc) where T : MonoBehaviour, IDeployable
+        {
+            _deployable = deployable;
+            _request = request;
+            _startPosition = transform.position;
+
+            _moveCoroutine = StartCoroutine(moveInArc ? MoveInArc() : MoveLinearly());
         }
     }
 }

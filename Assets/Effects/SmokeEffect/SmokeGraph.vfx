@@ -85,22 +85,6 @@ MonoBehaviour:
   m_UIInfos: {fileID: 114340500867371532}
   m_CustomAttributes: []
   m_ParameterInfo:
-  - name: Loop
-    path: Loop
-    tooltip: 
-    space: -1
-    spaceable: 0
-    sheetType: m_Bool
-    realType: Boolean
-    defaultValue:
-      m_Type:
-        m_SerializableType: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
-          PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: True
-    min: -Infinity
-    max: Infinity
-    enumValues: []
-    descendantCount: 0
   - name: Spawn Rate
     path: Spawn Rate
     tooltip: Used when Loop
@@ -113,6 +97,22 @@ MonoBehaviour:
         m_SerializableType: System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
       m_SerializableObject: 10
+    min: -Infinity
+    max: Infinity
+    enumValues: []
+    descendantCount: 0
+  - name: Loop
+    path: Loop
+    tooltip: 
+    space: -1
+    spaceable: 0
+    sheetType: m_Bool
+    realType: Boolean
+    defaultValue:
+      m_Type:
+        m_SerializableType: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral,
+          PublicKeyToken=b77a5c561934e089
+      m_SerializableObject: True
     min: -Infinity
     max: Infinity
     enumValues: []
@@ -4844,7 +4844,7 @@ MonoBehaviour:
   - {fileID: 8926484042661615004}
   m_ExposedName: Size Over Life
   m_Exposed: 1
-  m_Order: 4
+  m_Order: 7
   m_Category: Particles
   m_Min:
     m_Type:
@@ -4863,7 +4863,7 @@ MonoBehaviour:
     linkedSlots:
     - outputSlot: {fileID: 8926484042661615004}
       inputSlot: {fileID: 8926484042661614998}
-    position: {x: 577.3334, y: -49.333332}
+    position: {x: 662.6667, y: 44.666668}
     expandedSlots: []
     expanded: 1
     supecollapsed: 0
@@ -4925,7 +4925,7 @@ MonoBehaviour:
   - {fileID: 8926484042661615006}
   m_ExposedName: Spawn Rate
   m_Exposed: 1
-  m_Order: 1
+  m_Order: 8
   m_Category: 
   m_Min:
     m_Type:
@@ -5328,7 +5328,7 @@ MonoBehaviour:
   - {fileID: 8926484042661615132}
   m_ExposedName: Loop
   m_Exposed: 1
-  m_Order: 0
+  m_Order: 10
   m_Category: 
   m_Min:
     m_Type:
@@ -5706,7 +5706,7 @@ MonoBehaviour:
   - {fileID: 8926484042661615154}
   m_ExposedName: Spawn Amount Range
   m_Exposed: 1
-  m_Order: 2
+  m_Order: 11
   m_Category: 
   m_Min:
     m_Type:

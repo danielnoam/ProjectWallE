@@ -58,10 +58,10 @@ namespace ProjectWallE.GameLoop
             _podHolder = new GameObject("PodHolder").transform;
         }
         
-        private void SpawnPod<T>(T deployable, DeploymentRequest request, Vector3 spawnPosition) where T : MonoBehaviour, IDeployable
+        private void SpawnPod<T>(T deployable, DeploymentRequest request, Vector3 spawnPosition, bool moveInArc) where T : MonoBehaviour, IDeployable
         {
             Pod pod = Instantiate(podPrefab, spawnPosition, Quaternion.identity, _podHolder);
-            pod.Initialize(deployable, request);
+            pod.Initialize(deployable, request, moveInArc);
             OnPodDeployed?.Invoke(request, pod);
         }
         
@@ -77,13 +77,13 @@ namespace ProjectWallE.GameLoop
             var shipPosition = _shipSpawnPositions[shipPositionIndex];
 
             shipPosition.PlayEffects();
-            SpawnPod(deployable, request, shipPosition.transform.position);
+            SpawnPod(deployable, request, shipPosition.transform.position, true);
         }
 
         public void DeployFromSky<T>(T deployable, DeploymentRequest request) where T : MonoBehaviour, IDeployable
         {
             Vector3 origin = request.TargetPosition + Vector3.up * skyDropHeight;
-            SpawnPod(deployable, request, origin);
+            SpawnPod(deployable, request, origin, false);
         }
         
         public void RegisterShipPosition(ShipPosition position)

@@ -24,8 +24,12 @@ Material:
   m_Shader: {fileID: -6465566751694194690, guid: b941d44e36cb2054abde13a5b7528ada, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_ValidKeywords:
+  - _CLOUDS
+  - _STARS
+  - _SUN
+  m_InvalidKeywords:
+  - _CELESTIAL
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -37,6 +41,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _Celestial_Texutre:
+        m_Texture: {fileID: 2800000, guid: 85ac55597b97403c82fc6601a93cf241, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Clouds_Texture:
         m_Texture: {fileID: 2800000, guid: 6d03b639ebb5b0547808293cb651caf3, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -65,10 +73,21 @@ Material:
     m_Floats:
     - _BadirBlendPower: 0.77
     - _Badir_Blend_Power: 0.01
+    - _Breath_Frquency: 1
+    - _Breath_Max: 1
+    - _Breath_Min: 0
+    - _CELESTIAL: 1
+    - _CLOUDS: 1
+    - _Celestial_Size: 0.12
     - _Clouds_Distance_Fade_Power: 1.11
     - _Distance_Fade_Power: 2
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _STARS: 1
+    - _SUN: 1
+    - _Stars_Breath_Frquency: 2
+    - _Stars_Breath_Max: 1
+    - _Stars_Breath_Min: 0.2
     - _Starts_Density: 53.4
     - _Starts_Horizon_Fade: 0.35
     - _Starts_Size: 15
@@ -80,6 +99,8 @@ Material:
     - _ZenithBlendPower: 0.5
     - _Zenith_Blend_Power: 0.81
     m_Colors:
+    - _Celestial_Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Celestial_Direction: {r: 7.57, g: -4.88, b: 0, a: 0}
     - _Clouds_Color: {r: 1, g: 1, b: 1, a: 1}
     - _Clouds_Scale: {r: 0.1, g: 0.1, b: 0, a: 0}
     - _Clouds_Speed: {r: 0.002, g: 0.004, b: 0, a: 0}
@@ -90,7 +111,7 @@ Material:
     - _Nadir_Color: {r: 0.18039216, g: 1, b: 0, a: 1}
     - _Scale: {r: 1, g: 1, b: 0, a: 0}
     - _Speed: {r: 0.01, g: 0.01, b: 0, a: 0}
-    - _Stars_Color: {r: 0, g: 20.439787, b: 31.999998, a: 1}
+    - _Stars_Color: {r: 0, g: 40.879574, b: 63.999996, a: 1}
     - _Sun_Color: {r: 0, g: 1, b: 0.75958014, a: 1}
     - _ZennithColor: {r: 0, g: 0.7322017, b: 0.76862746, a: 1}
     - _Zennith_Color: {r: 0, g: 0.62745094, b: 1, a: 1}
