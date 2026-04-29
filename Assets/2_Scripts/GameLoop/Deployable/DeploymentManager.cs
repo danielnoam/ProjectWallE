@@ -42,7 +42,7 @@ namespace ProjectWallE.GameLoop
         [SerializeField] private float skyDropHeight = 300f;
         [SerializeField] private Pod podPrefab;
         
-        private readonly List<ShipPosition> _shipSpawnPositions = new List<ShipPosition>();
+        private readonly List<ShipCannon> _shipSpawnCannons = new List<ShipCannon>();
 
         private Transform _podHolder;
 
@@ -67,14 +67,14 @@ namespace ProjectWallE.GameLoop
         
         public void DeployFromShip<T>(T deployable, DeploymentRequest request) where T : MonoBehaviour, IDeployable
         {
-            if (_shipSpawnPositions.Count == 0)
+            if (_shipSpawnCannons.Count == 0)
             {
                 DeployFromSky(deployable, request);
                 return;
             }
             
-            var shipPositionIndex = Random.Range(0, _shipSpawnPositions.Count);
-            var shipPosition = _shipSpawnPositions[shipPositionIndex];
+            var shipPositionIndex = Random.Range(0, _shipSpawnCannons.Count);
+            var shipPosition = _shipSpawnCannons[shipPositionIndex];
 
             shipPosition.PlayEffects();
             SpawnPod(deployable, request, shipPosition.transform.position, true);
@@ -86,18 +86,18 @@ namespace ProjectWallE.GameLoop
             SpawnPod(deployable, request, origin, false);
         }
         
-        public void RegisterShipPosition(ShipPosition position)
+        public void RegisterShipCannon(ShipCannon cannon)
         {
-            if (_shipSpawnPositions.Contains(position)) return;
+            if (_shipSpawnCannons.Contains(cannon)) return;
             
-            _shipSpawnPositions.Add(position);
+            _shipSpawnCannons.Add(cannon);
         }
 
-        public void UnregisterShipPosition(ShipPosition position)
+        public void UnregisterShipCannon(ShipCannon cannon)
         {
-            if (!_shipSpawnPositions.Contains(position)) return;
+            if (!_shipSpawnCannons.Contains(cannon)) return;
             
-            _shipSpawnPositions.Remove(position);
+            _shipSpawnCannons.Remove(cannon);
         }
     }
 }

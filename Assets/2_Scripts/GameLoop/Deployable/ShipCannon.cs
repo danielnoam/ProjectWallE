@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ProjectWallE.GameLoop
 {
-    public class ShipPosition : MonoBehaviour
+    public class ShipCannon : MonoBehaviour
     {
         [Header("Settings")]
         [SerializeField] private VisualEffectAction cannonEffect;
@@ -10,12 +10,12 @@ namespace ProjectWallE.GameLoop
         
         private void Start()
         {
-            DeploymentManager.Instance?.RegisterShipPosition(this);
+            DeploymentManager.Instance?.RegisterShipCannon(this);
         }
 
         private void OnDestroy()
         {
-            DeploymentManager.Instance?.UnregisterShipPosition(this);
+            DeploymentManager.Instance?.UnregisterShipCannon(this);
         }
 
         public void PlayEffects()
