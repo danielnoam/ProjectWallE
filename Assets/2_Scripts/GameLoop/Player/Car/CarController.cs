@@ -43,6 +43,7 @@ namespace _2_Scripts
         
         private CarLongitudinalState _longitudinalState;
 
+        private float _carSpeed;
         private bool _wasBraking;
         private float _currentSteering;
         private float _currentGripFactor;
@@ -60,6 +61,7 @@ namespace _2_Scripts
         /// </summary>
         private float GravityControlFactor => settings.GravityStrength * 0.25f;
 
+        public float CarSpeed => _carSpeed;
         public CarBoost CarBoost => carBoost;
         public Vector3 CenterOfMassOffset => centerOfMassOffset;
         public bool canBuild { get; private set; } = true;
