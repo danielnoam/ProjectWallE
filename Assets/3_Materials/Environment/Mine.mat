@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-3105920869366138087
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Editor::UnityEditor.Rendering.Universal.AssetVersion
+  version: 10
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -7,12 +20,11 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SpaceShipHull
+  m_Name: Mine
   m_Shader: {fileID: -6465566751694194690, guid: 1862a6367050f2b4a84d84a7b9be1a5d, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _USE_COVER
+  m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -26,11 +38,11 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Cover_Tex:
-        m_Texture: {fileID: 2800000, guid: 5fd216e117a7dca4ba6238547fa6354c, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 6ae6e8796fb246b41b2a4979aebbe1bf, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Noise_Tex:
@@ -51,45 +63,31 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Ambient_Strength: 1
-    - _Cover_Edge_Width: 0.63
-    - _Cover_Normal_Bias: 0.807
-    - _Cover_Threshold: 1
-    - _Dither: 0
-    - _Dither_Fade_Distance: 2
-    - _Dither_Size: 5
+    - _Ambient_Strength: 0.434
+    - _Cover_Edge_Width: 1
+    - _Cover_Normal_Bias: 1
+    - _Cover_Threshold: 0.5
+    - _Dither: 1
+    - _Dither_Fade_Distance: 0
+    - _Dither_Size: 2
     - _Emission_Strength: 0
-    - _Falloff_Amount: 3
+    - _Falloff_Amount: 0.56
     - _Fresnel_Size: 0.1
-    - _Lighting_Cutoff: -0
+    - _Lighting_Cutoff: 0
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Smoothness: 1
-    - _USE_COVER: 1
+    - _USE_COVER: 0
     m_Colors:
     - _Cover_Color: {r: 1, g: 1, b: 1, a: 1}
     - _Cover_Direction: {r: 0, g: 1, b: 0, a: 0}
     - _Cover_Tiling: {r: 1, g: 1, b: 0, a: 0}
-    - _Diffuse_Color: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 1}
-    - _Emission: {r: 4, g: 0, b: 0, a: 1}
-    - _Emission_Color: {r: 0, g: 0, b: 0, a: 1}
-    - _Fresnel_Color: {r: 0.8490566, g: 0.8490566, b: 0.8490566, a: 1}
+    - _Diffuse_Color: {r: 0.5031446, g: 0.5031446, b: 0.5031446, a: 1}
+    - _Emission_Color: {r: 10.536487, g: 0, b: 4.0270376, a: 1}
+    - _Fresnel_Color: {r: 0.9496855, g: 0.13960981, b: 0, a: 1}
     - _Noise_Tiling: {r: 1, g: 1, b: 0, a: 0}
     - _Offset: {r: 0, g: 0, b: 0, a: 0}
-    - _Specular_Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Specular_Color: {r: 0.654088, g: 0.654088, b: 0.654088, a: 1}
     - _Tiling: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &8789261756548390696
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Editor::UnityEditor.Rendering.Universal.AssetVersion
-  version: 10

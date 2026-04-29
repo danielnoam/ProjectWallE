@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.SOSupportData
   label: Airstrike
   icon: {fileID: 21300000, guid: 3b0ddddeff23d00409a6e6f20bc8ebdc, type: 3}
-  podPrefab: {fileID: 826211790791627871, guid: ff5e2e37e09c7aa4db09d8f7ae28eeb6, type: 3}
+  podPrefab: {fileID: 826211790791627871, guid: d3cd268ca72788b4e88f4fd0255a36b5, type: 3}
+  cost: 500
   podCount: 1
   scatterRadius: 0
   onImpact:
@@ -29,8 +30,8 @@ MonoBehaviour:
       data:
         radius: 15
         damageRange:
-          minValue: 50
-          maxValue: 100
+          minValue: 100
+          maxValue: 250
         hitLayers: {fileID: 11400000, guid: 858ceb8d9b448d24d94c04812c01cb15, type: 2}
     - rid: 126016798228742239
       type: {class: PushBehavior, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}

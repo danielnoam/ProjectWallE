@@ -63,15 +63,17 @@ namespace ProjectWallE.GameLoop
     }
 
     [Serializable]
-    [SerializableSelectorName("Spawn Prefab")]
-    public class SpawnPrefabBehavior : DeployBehavior
+    [SerializableSelectorName("Spawn Mine")]
+    public class SpawnMineBehavior : DeployBehavior
     {
-        [SerializeField] private GameObject prefab;
+        [SerializeField] private Mine minePrefab;
+        [SerializeField] private Team team;
 
         public override void Execute(DeploymentRequest request)
         {
-            if (!prefab) return;
-            UnityEngine.Object.Instantiate(prefab, request.TargetPosition, Quaternion.LookRotation(request.TargetForward));
+            if (!minePrefab) return;
+            Mine mine = UnityEngine.Object.Instantiate(minePrefab, request.TargetPosition, Quaternion.LookRotation(request.TargetForward));
+            mine.Initialize(team);
         }
     }
     

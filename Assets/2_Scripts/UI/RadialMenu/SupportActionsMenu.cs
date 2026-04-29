@@ -35,7 +35,8 @@ namespace ProjectWallE.UI
 
         private void ConfigureElement(RadialMenuElement element, SOSupportActionData actionData)
         {
-            element.Configure(actionData.Label, actionData.Icon, true);
+            bool canAfford = !ResourceManager.Instance || ResourceManager.Instance.CanAfford(actionData.Cost);
+            element.Configure($"{actionData.Label}\nCost: {actionData.Cost}", actionData.Icon, canAfford);
         }
     }
 }

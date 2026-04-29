@@ -196,11 +196,12 @@ namespace ProjectWallE
                 
         private void Die(IDamageable attacker = null)
         {
+            ResetRbVelocity();
+            _rigidbody.isKinematic = true;
             _currentHealth = 0;
             OnHealthChanged?.Invoke(_currentHealth, maxHealth);
             OnDeath?.Invoke(attacker);
             gfx.SetActive(false);
-            ResetRbVelocity();
             _respawnCoroutine = StartCoroutine(RespawnRoutine());
         }
 
@@ -261,6 +262,7 @@ namespace ProjectWallE
 
         private void FinishRespawn()
         {
+            _rigidbody.isKinematic = false;
             _podInFlight = false;
             gfx?.SetActive(true);
             _currentHealth = maxHealth;
@@ -368,8 +370,7 @@ namespace ProjectWallE
         
         public void Teleport(Vector3 position, Quaternion rotation)
         {
-            _rigidbody.angularVelocity = Vector3.zero;
-            _rigidbody.linearVelocity = Vector3.zero;
+            ResetRbVelocity();
             _rigidbody.position = position;
             _rigidbody.rotation = rotation;
         }
@@ -382,6 +383,7 @@ namespace ProjectWallE
 
         public void Push(Vector3 direction, float force)
         {
+            if (!IsAlive) return;
             _rigidbody.AddForce(direction * force, ForceMode.Impulse);
         }
         

@@ -111,6 +111,7 @@ namespace ProjectWallE.GameLoop.Player
         private void OnSupportSelected(SOSupportActionData data)
         {
             if (!_hasTarget) return;
+            if (ResourceManager.Instance && !ResourceManager.Instance.TrySpendResources(data.Cost)) return;
             FireSupport(data, _targetPoint, _targetNormal);
         }
 

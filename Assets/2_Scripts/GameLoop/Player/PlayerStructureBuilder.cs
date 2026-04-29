@@ -18,7 +18,7 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField] private LayerMask blockBuildLayerMask;
         [SerializeField] private LayerMask structureLayerMask;
         [SerializeField] private LayerMask nodeLayerMask;
-        [SerializeField, PrefabSelector("Assets/Prefabs/Structures")] private Structure[] structuresArray;
+        [SerializeField, PrefabSelector("Assets/5_Prefabs/Structures")] private Structure[] structuresArray;
         [SerializeField, AutoGetSelf, HideInInspector] private PlayerManager playerManager;
         [SerializeField, AutoGetSelf, HideInInspector] private PlayerManagerInput input;
         [SerializeField, AutoGetScene, HideInInspector] private StructureBuildMenu buildMenu;
