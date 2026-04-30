@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
-  m_Time: 9
+  m_Time: 5.5
   enemyCount: 6
   enemyType: 1
   enemies:
@@ -20,9 +20,9 @@ MonoBehaviour:
     - item: {fileID: 622395889724703068, guid: 311465a237bc47a4a80317173bf23667, type: 3}
       chance: 100
       isLocked: 0
-  spawnType: 0
+  spawnType: 1
   spawnPoint:
-    exposedName: 
+    exposedName: 7f00a9a72cb8fb443813400daa158641
     defaultValue: {fileID: 0}
 --- !u!114 &-8106321468260954739
 MonoBehaviour:
@@ -36,7 +36,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
-  m_Time: 13.483333333333341
+  m_Time: 9.98333333333336
   enemyCount: 8
   enemyType: 1
   enemies:
@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d09b01d4b9a242f59f452dd030b5551c, type: 3}
   m_Name: Toggle Enemy Spawn Point Marker
   m_EditorClassIdentifier: Assembly-CSharp::ToggleEnemySpawnPointMarker
-  m_Time: 11.466666666666676
+  m_Time: 7.966666666666692
   enemySpawnPoint:
     exposedName: fcadd405a0ff92246bb5a968c3399b68
     defaultValue: {fileID: 0}
@@ -116,7 +116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 844512bbcc774b44b3c5e64aee9d8fbb, type: 3}
   m_Name: Spawn Structure Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnStructureMarker
-  m_Time: 5.966666666666667
+  m_Time: 3.5166666666666666
   podCameraMode: 1
   structureToSpawn: {fileID: 6487620541022002554, guid: 3b1b64788b055e0498a63ea738b3ba50, type: 3}
   structureSpawnPoint:
@@ -134,7 +134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Objective Marker
   m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
-  m_Time: 7.033333333333333
+  m_Time: 4.483333333333333
   objectives:
   - rid: 1993976625937514496
   references:
@@ -183,7 +183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Objective Marker
   m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
-  m_Time: 4.766666666666666
+  m_Time: 3
   objectives:
   - rid: 1993976625937514505
   references:
@@ -210,7 +210,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Objective Marker
   m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
-  m_Time: 9.983333333333341
+  m_Time: 6.483333333333346
   objectives:
   - rid: 1993976625937514497
   references:
@@ -249,7 +249,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Objective Marker
   m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
-  m_Time: 2
+  m_Time: 1.5
   objectives:
   - rid: 1993976599894032386
   references:
@@ -276,7 +276,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
-  m_Time: 13.650000000000006
+  m_Time: 10.150000000000023
   enemyCount: 2
   enemyType: 1
   enemies:
@@ -337,7 +337,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Objective Marker
   m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
-  m_Time: 3.0166666666666666
+  m_Time: 1.9833333333333334
   objectives:
   - rid: 1993976599894032391
   references:
@@ -391,7 +391,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Objective Marker
   m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
-  m_Time: 10.983333333333341
+  m_Time: 7.483333333333349
   objectives:
   - rid: 1993976625937514506
   - rid: 1993976625937514507
@@ -428,7 +428,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Objective Marker
   m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
-  m_Time: 4
+  m_Time: 2.5166666666666666
   objectives:
   - rid: 1993976600566169689
   references:
