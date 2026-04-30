@@ -63,6 +63,7 @@ namespace _2_Scripts
 
         public float CarSpeed => _carSpeed;
         public CarBoost CarBoost => carBoost;
+        public CarInput CarInput => _carInput;
         public Vector3 CenterOfMassOffset => centerOfMassOffset;
         public bool canBuild { get; private set; } = true;
         public bool canShoot { get; private set; } = false;
@@ -315,24 +316,24 @@ namespace _2_Scripts
 
         private void ApplyLongitudinalMovement()
         {
-            float carSpeed = Vector3.Dot(transform.forward, _playerRb.linearVelocity);
+            _carSpeed = Vector3.Dot(transform.forward, _playerRb.linearVelocity);
             
             UpdateLongitudinalState();
             GetLongitudinalValues(out float topForwardSpeed, out float topBackwardSpeed,
                                   out float accelForce, out float brakeForce);
             
-            ApplyEngineBreaking(carSpeed);
+            ApplyEngineBreaking(_carSpeed);
 
             if (_carInput.Acceleration > 0 || _carInput.BoostHeld)
-                ApplyForwardAcceleration(carSpeed, topForwardSpeed, accelForce, brakeForce);
+                ApplyForwardAcceleration(_carSpeed, topForwardSpeed, accelForce, brakeForce);
             else if (_carInput.Acceleration < 0)
-                ApplyBackwardsAcceleration(carSpeed, topBackwardSpeed, accelForce, brakeForce);
+                ApplyBackwardsAcceleration(_carSpeed, topBackwardSpeed, accelForce, brakeForce);
 
             if (CarBoost.CanBoost(out float boostAccel, out float boostSpeedFactor))
-                ApplyBoost(carSpeed, boostAccel, boostSpeedFactor);
+                ApplyBoost(_carSpeed, boostAccel, boostSpeedFactor);
 
             for (int i = 0; i < _allTires.Count; i++)
-                visuals.RotateWheels(carSpeed, i);
+                visuals.RotateWheels(_carSpeed, i);
         }
         
         private void ApplyForwardAcceleration(float carSpeed, float topSpeed, float accelForce, float brakeForce)
@@ -592,18 +593,7 @@ namespace _2_Scripts
                 ? (normalSum / groundedCount).normalized
                 : transform.up;
         }
-
-        private bool IsCarGrounded()
-        {
-            foreach (Tire tire in _allTires)
-            {
-                if (tire.isGroundedExtended)
-                    return true;
-            }
-
-            return false;
-        }
-
+        
         private List<Tire> GetAllTires()
         {
             var allTires = new List<Tire>(steeringTires);
@@ -631,6 +621,17 @@ namespace _2_Scripts
             _playerRb.angularVelocity = Vector3.zero;
         }
         
+        public bool IsCarGrounded()
+        {
+            foreach (Tire tire in _allTires)
+            {
+                if (tire.isGroundedExtended)
+                    return true;
+            }
+
+            return false;
+        }
+
         public bool IsTireGrounded(int index) => _allTires[index].isGroundedExact;
         #endregion
     }
