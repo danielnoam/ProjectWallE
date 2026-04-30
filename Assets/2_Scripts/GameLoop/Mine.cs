@@ -13,6 +13,9 @@ namespace ProjectWallE.GameLoop
     {
         [Header("Settings")]
         [SerializeField] private float maxHealth = 50f;
+        [SerializeField] private float delayBeforeArmed = 0.5f;
+        
+        [Header("Detonation")]
         [SerializeField] private float detonateRadius = 5f;
         [SerializeField] private float detonateDelay = 0.5f;
         [SerializeField, SOSelector("Assets/6_Data")] private SOLayerMask detectionLayers;
@@ -23,9 +26,9 @@ namespace ProjectWallE.GameLoop
         [SerializeField] private VisualEffectAction detonateEffect;
         [SerializeField] private DamageEffects damageEffects;
         [SerializeField] private DamageEffects triggeredEffect;
-        [SerializeField, AutoGetChildren, HideInInspector] private Renderer rend;
+        [SerializeField, AutoGetChildren] private Renderer rend;
         
-
+        private bool _armed;
         private Coroutine _detonateCoroutine;
         private float _currentHealth;
         private Material _material;
@@ -42,15 +45,19 @@ namespace ProjectWallE.GameLoop
         {
             _currentHealth = maxHealth;
             _material = rend ? rend.material : null;
+            StartCoroutine(ArmDelayed());
         }
-
-        public void Initialize(Team impactTeam)
+        
+        private IEnumerator ArmDelayed()
         {
-            _impactTeam = impactTeam;
+            yield return new WaitForSeconds(delayBeforeArmed);
+            _armed = true;
         }
 
         private void OnTriggerEnter(Collider other)
         {
+            if (!_armed) return;
+            
             IDamageable damageable = other.GetComponentInParent<IDamageable>();
             if (damageable == null || !_impactTeam.CanDamage(damageable.Team)) return;
             _detonateCoroutine ??= StartCoroutine(DetonateDelayed());
@@ -105,6 +112,11 @@ namespace ProjectWallE.GameLoop
                 if (_detonateCoroutine != null) StopCoroutine(_detonateCoroutine);
                 Detonate();
             }
+        }
+        
+        public void Initialize(Team impactTeam)
+        {
+            _impactTeam = impactTeam;
         }
 
 #if UNITY_EDITOR

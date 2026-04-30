@@ -2477,6 +2477,7 @@ MonoBehaviour:
   healthBar: {fileID: 604054242566132265}
   switchIcon: {fileID: 4876008509774851714}
   buildIcon: {fileID: 6281768265807176345}
+  supportIcon: {fileID: 2422758255442577192}
   basicAttackIcon: {fileID: 2141308938926434303}
   specialAttackIcon: {fileID: 5541646901790608830}
   jumpIcon: {fileID: 3424540411953728746}
@@ -3323,6 +3324,7 @@ RectTransform:
   m_Children:
   - {fileID: 6790140560136598311}
   - {fileID: 5385515491509059388}
+  - {fileID: 4327746996955536013}
   - {fileID: 11001817837386330}
   - {fileID: 5870302776359063579}
   - {fileID: 3609083586775896399}
@@ -4219,6 +4221,132 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b4fdc1742a6449d9fda6d5e169178c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.UI.CooldownIcon
+--- !u!1001 &4000609762324724047
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 5674856455222702687}
+    m_Modifications:
+    - target: {fileID: 831542601585746882, guid: cd76964ddc812c04c9527cc506a6dc07, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 831542601585746882, guid: cd76964ddc812c04c9527cc506a6dc07, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 831542601585746882, guid: cd76964ddc812c04c9527cc506a6dc07, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 831542601585746882, guid: cd76964ddc812c04c9527cc506a6dc07, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 831542601585746882, guid: cd76964ddc812c04c9527cc506a6dc07, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 831542601585746882, guid: cd76964ddc812c04c9527cc506a6dc07, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 831542601585746882, guid: cd76964ddc812c04c9527cc506a6dc07, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 55
+      objectReference: {fileID: 0}
+    - target: {fileID: 831542601585746882, guid: cd76964ddc812c04c9527cc506a6dc07, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 55
+      objectReference: {fileID: 0}
+    - target: {fileID: 831542601585746882, guid: cd76964ddc812c04c9527cc506a6dc07, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 831542601585746882, guid: cd76964ddc812c04c9527cc506a6dc07, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 831542601585746882, guid: cd76964ddc812c04c9527cc506a6dc07, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 831542601585746882, guid: cd76964ddc812c04c9527cc506a6dc07, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 831542601585746882, guid: cd76964ddc812c04c9527cc506a6dc07, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 831542601585746882, guid: cd76964ddc812c04c9527cc506a6dc07, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 831542601585746882, guid: cd76964ddc812c04c9527cc506a6dc07, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 831542601585746882, guid: cd76964ddc812c04c9527cc506a6dc07, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 831542601585746882, guid: cd76964ddc812c04c9527cc506a6dc07, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 831542601585746882, guid: cd76964ddc812c04c9527cc506a6dc07, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 831542601585746882, guid: cd76964ddc812c04c9527cc506a6dc07, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 831542601585746882, guid: cd76964ddc812c04c9527cc506a6dc07, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3023251664393101388, guid: cd76964ddc812c04c9527cc506a6dc07, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 10c9bc5c97bc3f442ba5d5f1467f520d, type: 3}
+    - target: {fileID: 4586966667182512609, guid: cd76964ddc812c04c9527cc506a6dc07, type: 3}
+      propertyPath: m_text
+      value: E
+      objectReference: {fileID: 0}
+    - target: {fileID: 4586966667182512609, guid: cd76964ddc812c04c9527cc506a6dc07, type: 3}
+      propertyPath: m_fontSize
+      value: 22
+      objectReference: {fileID: 0}
+    - target: {fileID: 5418792330581440271, guid: cd76964ddc812c04c9527cc506a6dc07, type: 3}
+      propertyPath: m_Name
+      value: Prefab_IconSupport
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 115717304492278524, guid: cd76964ddc812c04c9527cc506a6dc07, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: cd76964ddc812c04c9527cc506a6dc07, type: 3}
+--- !u!114 &2422758255442577192 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1592682922310106727, guid: cd76964ddc812c04c9527cc506a6dc07, type: 3}
+  m_PrefabInstance: {fileID: 4000609762324724047}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b4fdc1742a6449d9fda6d5e169178c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.UI.CooldownIcon
+--- !u!224 &4327746996955536013 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 831542601585746882, guid: cd76964ddc812c04c9527cc506a6dc07, type: 3}
+  m_PrefabInstance: {fileID: 4000609762324724047}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4151247870460637837
 PrefabInstance:
   m_ObjectHideFlags: 0

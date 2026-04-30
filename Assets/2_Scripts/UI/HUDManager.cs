@@ -36,6 +36,7 @@ namespace ProjectWallE.UI
         [Header("Actions")]
         [SerializeField] private ActionIcon switchIcon;
         [SerializeField] private ActionIcon buildIcon;
+        [SerializeField] private ActionIcon supportIcon;
         [SerializeField] private ActionIcon basicAttackIcon;
         [SerializeField] private ActionIcon specialAttackIcon;
         [SerializeField] private ActionIcon jumpIcon;
@@ -78,6 +79,8 @@ namespace ProjectWallE.UI
                 player.OnHealthChanged += UpdateHealthBar;
                 player.OnControllerChanged += OnControllerChanged;
                 player.OnSwitchCooldownUpdated += OnSwitchCooldownUpdated;
+                player.SupportCaller.SupportMenuRequested += OnSupportMenuRequested;
+                player.SupportCaller.MenuCloseRequested += OnSupportMenuCloseRequested;
                 player.StructureBuilder.ActionsMenuRequested += OnActionsMenuRequested;
                 player.StructureBuilder.BuildMenuRequested += OnBuildMenuRequested;
                 player.StructureBuilder.MenuCloseRequested += OnMenuCloseRequested;
@@ -114,6 +117,8 @@ namespace ProjectWallE.UI
                 player.OnHealthChanged -= UpdateHealthBar;
                 player.OnControllerChanged -= OnControllerChanged;
                 player.OnSwitchCooldownUpdated -= OnSwitchCooldownUpdated;
+                player.SupportCaller.SupportMenuRequested -= OnSupportMenuRequested;
+                player.SupportCaller.MenuCloseRequested -= OnSupportMenuCloseRequested;
                 player.StructureBuilder.ActionsMenuRequested -= OnActionsMenuRequested;
                 player.StructureBuilder.BuildMenuRequested -= OnBuildMenuRequested;
                 player.StructureBuilder.MenuCloseRequested -= OnMenuCloseRequested;
@@ -205,6 +210,24 @@ namespace ProjectWallE.UI
             generatorsIcon?.gameObject.SetActive(true);
             rampsIcon?.gameObject.SetActive(true);
             if (buildIcon && buildIcon.isActiveAndEnabled) buildIcon.PunchIcon();
+        }
+        
+
+        private void OnSupportMenuRequested(SOSupportActionData[] obj)
+        {
+            basesIcon?.gameObject.SetActive(true);
+            turretsIcon?.gameObject.SetActive(true);
+            generatorsIcon?.gameObject.SetActive(true);
+            rampsIcon?.gameObject.SetActive(true);
+            if (supportIcon && supportIcon.isActiveAndEnabled) supportIcon.PunchIcon();
+        }
+        
+        private void OnSupportMenuCloseRequested()
+        {
+            basesIcon?.gameObject.SetActive(false);
+            turretsIcon?.gameObject.SetActive(false);
+            generatorsIcon?.gameObject.SetActive(false);
+            rampsIcon?.gameObject.SetActive(false);
         }
         
         private void OnMenuCloseRequested()
