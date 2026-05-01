@@ -13,6 +13,7 @@ namespace ProjectWallE.GameLoop.Player
     {
         [Header("Settings")]
         [SerializeField] private float targetRange = 100f;
+        [SerializeField] private float scatterRaycastHeight = 200f;
         [SerializeField] private LayerMask targetLayerMask;
         [SerializeField] private SOSupportActionData[] supportArray;
         [SerializeField, AutoGetSelf, HideInInspector] private PlayerManager playerManager;
@@ -127,10 +128,18 @@ namespace ProjectWallE.GameLoop.Player
             {
                 Vector2 scatter = Random.insideUnitCircle * data.ScatterRadius;
                 Vector3 scatteredPosition = targetPosition + new Vector3(scatter.x, 0f, scatter.y);
+                Vector3 resolvedNormal = surfaceNormal;
+
+                Vector3 rayOrigin = scatteredPosition + Vector3.up * scatterRaycastHeight;
+                if (Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, scatterRaycastHeight * 2f, targetLayerMask))
+                {
+                    scatteredPosition.y = hit.point.y;
+                    resolvedNormal = hit.normal;
+                }
 
                 var request = new DeploymentRequest(scatteredPosition, transform.forward, null)
                 {
-                    TargetSurfaceNormal = surfaceNormal,
+                    TargetSurfaceNormal = resolvedNormal,
                     ImpactTeam = Team.Player,
                     InstantiateOnLand = false
                 };

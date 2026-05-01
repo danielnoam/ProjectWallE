@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DNExtensions.Systems.ObjectPooling;
 using DNExtensions.Systems.Scriptables;
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.SerializableSelector;
@@ -98,6 +99,20 @@ namespace ProjectWallE.GameLoop
         public override void Execute(DeploymentRequest request)
         {
             effect?.Play(request.TargetPosition);
+        }
+    }
+    
+    [Serializable]
+    [SerializableSelectorName("Spawn Decal Effect")]
+    public class DecalImpactEffect : DeployBehavior
+    {
+        [SerializeField] private PoolableDecal decal;
+
+        public override void Execute(DeploymentRequest request)
+        {
+            if (!decal) return;
+            var instance = ObjectPooler.GetObjectFromPool(decal, request.TargetPosition, Quaternion.LookRotation(request.TargetSurfaceNormal));
+            instance?.Show();
         }
     }
 }

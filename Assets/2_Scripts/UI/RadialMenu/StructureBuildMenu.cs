@@ -27,6 +27,7 @@ namespace ProjectWallE.UI
 
         private void OnBuildMenuRequested(Structure[] structures, bool canBuild)
         {
+            menuTitleText.text = "Structures";
             SetupMenu(structures, (element, structure) => ConfigureElement(element, structure, canBuild));
             OpenMenu();
         }

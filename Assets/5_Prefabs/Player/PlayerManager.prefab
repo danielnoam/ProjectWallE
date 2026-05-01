@@ -1760,14 +1760,6 @@ MonoBehaviour:
     visualEffects: []
     soundId: 
   changeStateSoundId: ChangeState
-  robotMoveSoundId: EngineLoop2
-  carMoveSoundId: EngineLoop1
-  robotMoveVolumeSpeedRange:
-    minValue: 0
-    maxValue: 10
-  carMoveVolumeSpeedRange:
-    minValue: 0
-    maxValue: 25
   tireEffectRobotSpeedThreshold: 5
   robotTireEffects:
   - {fileID: 6436861685030297602}
@@ -1778,8 +1770,6 @@ MonoBehaviour:
   airReleaseAudioSource: {fileID: 1757885287560848928}
   changeStateAudioSource: {fileID: 3113016758275396871}
   boostAudioSource: {fileID: 8467015804595106265}
-  robotMoveAudioSource: {fileID: 885638804207550830}
-  carMoveAudioSource: {fileID: 7818205048832801901}
   player: {fileID: 2369243402749369746}
 --- !u!114 &7626263423651712312
 MonoBehaviour:
