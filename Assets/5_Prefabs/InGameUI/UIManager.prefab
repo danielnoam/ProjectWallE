@@ -466,6 +466,7 @@ GameObject:
   - component: {fileID: 5817056803022296217}
   - component: {fileID: 8261069695603664545}
   - component: {fileID: 9023401652402803164}
+  - component: {fileID: 7337016221351746771}
   m_Layer: 5
   m_Name: Tutorials
   m_TagString: Untagged
@@ -571,6 +572,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
   m_HorizontalFit: 0
   m_VerticalFit: 2
+--- !u!114 &7337016221351746771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1108550737374486494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Mask
+  m_ShowMaskGraphic: 1
 --- !u!1 &1960752943013590231
 GameObject:
   m_ObjectHideFlags: 0
@@ -1106,6 +1120,7 @@ GameObject:
   - component: {fileID: 8653273230179002560}
   - component: {fileID: 2819427840889958715}
   - component: {fileID: 2458061033134347415}
+  - component: {fileID: 3753923518913181621}
   m_Layer: 5
   m_Name: Objectives
   m_TagString: Untagged
@@ -1212,6 +1227,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
   m_HorizontalFit: 0
   m_VerticalFit: 2
+--- !u!114 &3753923518913181621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2199814467615039767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Mask
+  m_ShowMaskGraphic: 1
 --- !u!1 &2403902601368898946
 GameObject:
   m_ObjectHideFlags: 0
@@ -1853,6 +1881,9 @@ MonoBehaviour:
   tutorialHolder: {fileID: 1108550737374486494}
   tutorialText: {fileID: 1298905661794540019}
   tutorialActionFontStyle: {fileID: 11400000, guid: f382380db2e96544798a399921633bdb, type: 2}
+  showDuration: 0.7
+  hideDuration: 0.3
+  animationEase: 1
 --- !u!1 &3790620818070257813
 GameObject:
   m_ObjectHideFlags: 0

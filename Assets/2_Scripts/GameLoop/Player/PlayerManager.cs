@@ -327,6 +327,7 @@ namespace ProjectWallE
 
         private void ResetRbVelocity()
         {
+            if (_rigidbody.isKinematic) return;
             _rigidbody.linearVelocity = Vector3.zero;
             _rigidbody.angularVelocity = Vector3.zero;
         }

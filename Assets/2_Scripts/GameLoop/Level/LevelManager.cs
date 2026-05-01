@@ -184,10 +184,13 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
 
         foreach (var objective in objectives)
         {
+            if (objective == null) continue;
             var clone = objective.Clone();
-            clone.Initialize(() => OnObjectiveCompleted(clone), resolver);
             _activeObjectives.Add(clone);
+            clone.Initialize(() => OnObjectiveCompleted(clone), resolver);
         }
+
+        if (_activeObjectives == null || _activeObjectives.Count == 0) return;
 
         OnObjectivesAdded?.Invoke(_activeObjectives);
     }

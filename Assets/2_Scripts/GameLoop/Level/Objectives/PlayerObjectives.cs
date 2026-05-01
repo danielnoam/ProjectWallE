@@ -227,7 +227,8 @@ namespace ProjectWallE.GameLoop
         private float _currentDistance;
 
         public override string Description => "Go to target";
-        public override string ProgressText => IsCompleted ? "Complete" : $"{_currentDistance:F1}m";
+        public override string ProgressText => IsCompleted ? "Complete" : 
+            _currentDistance >= 10f ? $"{_currentDistance:F0}m" : $"{_currentDistance:F1}m";
 
         protected override string DefaultTutorialText => "";
 
