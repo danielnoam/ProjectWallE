@@ -46,6 +46,14 @@ namespace ProjectWallE.GameLoop.Player
 
         private void Awake()
         {
+            if (player)
+            {
+                player.Shooter.OnAttack1 += OnAttack1;
+                player.Shooter.OnAttack2 += OnAttack1;
+                player.OnControllerChanged += OnControllerChanged;
+                player.OnSpawn += HandleSpawn;
+            }
+            
             _robotStateHash = Animator.StringToHash(switchToRobot.StateName);
             _carStateHash = Animator.StringToHash(switchToCar.StateName);
             
@@ -57,19 +65,8 @@ namespace ProjectWallE.GameLoop.Player
             
             rigBuilder.Build();
         }
-
-        private void OnEnable()
-        {
-            if (player)
-            {
-                player.Shooter.OnAttack1 += OnAttack1;
-                player.Shooter.OnAttack2 += OnAttack1;
-                player.OnControllerChanged += OnControllerChanged;
-                player.OnSpawn += HandleSpawn;
-            }
-        }
-
-        private void OnDisable()
+        
+        private void OnDestroy()
         {
             if (player)
             {

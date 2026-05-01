@@ -27,11 +27,11 @@ namespace ProjectWallE.GameLoop
 
 
 
-        public void Deploy(DeploymentRequest request)
+        public void Deploy(DeploymentRequest deploymentRequest, BehaviorRequest behaviorRequest)
         {
             foreach (var effect in onImpact)
             {
-                effect?.Execute(request);
+                effect?.Execute(behaviorRequest);
             }
         }
 

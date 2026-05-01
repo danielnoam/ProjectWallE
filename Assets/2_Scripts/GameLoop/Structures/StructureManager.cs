@@ -59,7 +59,7 @@ namespace ProjectWallE.GameLoop
             var request = new DeploymentRequest(targetPosition, forward, _structureHolder)
             {
                 TargetSurfaceNormal = surfaceNormal,
-                ImpactTeam = Team.Player,
+                Team = Team.Player,
                 CameraMode = podCameraMode,
             };
             DeploymentManager.Instance?.LaunchFromShip(structure, request);
@@ -70,7 +70,7 @@ namespace ProjectWallE.GameLoop
             var request = new DeploymentRequest(node.SnapPoint, node.transform.forward, _structureHolder)
             {
                 TargetSurfaceNormal = node.transform.up,
-                ImpactTeam = Team.Player,
+                Team = Team.Player,
                 Node = node
             };
             DeploymentManager.Instance?.LaunchFromShip(structure, request);

@@ -2,11 +2,9 @@ using System;
 using System.Collections;
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.AutoGet;
-using DNExtensions.Utilities.CinemachineExtensions;
 using DNExtensions.Utilities.SerializableSelector;
 using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.VFX;
 
 namespace ProjectWallE.GameLoop
 {
@@ -20,26 +18,29 @@ namespace ProjectWallE.GameLoop
 
 
         [Header("Effects")]
-        [SerializeField] private ImpulseSettings collisionImpulseSettings;
-        [SerializeField] private VisualEffect fireVisualEffect;
+        [SerializeField] private VisualEffectAction thrusterEffect;
         [SerializeReference, SerializableSelector(Foldout = false)] private DeployBehavior[] onLand;
         [SerializeReference, SerializableSelector(Foldout = false)] private DeployBehavior[] onDeploy;
         [SerializeField, AutoGetSelf, HideInInspector] private CinemachineImpulseSource impulseSource;
+        [SerializeField, AutoGetSelf, HideInInspector] private AudioSource audioSource;
 
         
         private const float ArcHeight = 125f;
         
         private Coroutine _moveCoroutine;
         private IDeployable _deployable;
-        private DeploymentRequest _request;
+        private DeploymentRequest _deploymentRequest;
+        private BehaviorRequest _behaviourRequest;
         private Vector3 _startPosition;
 
         public event Action OnLand;
         public event Action OnDeploy;
 
         
+        
         private IEnumerator MoveInArc()
         {
+            thrusterEffect?.Play(transform.position, audioSource);
             float elapsed = 0f;
             Vector3 previousPosition = _startPosition;
             float randomT = UnityEngine.Random.value;
@@ -51,7 +52,7 @@ namespace ProjectWallE.GameLoop
             {
                 elapsed += Time.deltaTime;
                 float progress = elapsed / duration;
-                Vector3 position = Vector3.Lerp(_startPosition, _request.TargetPosition, progress);
+                Vector3 position = Vector3.Lerp(_startPosition, _deploymentRequest.TargetPosition, progress);
                 position.y += ArcHeight * Mathf.Sin(progress * Mathf.PI);
 
                 Vector3 movementDirection = position - previousPosition;
@@ -76,6 +77,7 @@ namespace ProjectWallE.GameLoop
 
         private IEnumerator MoveLinearly()
         {
+            thrusterEffect?.Play(transform.position, audioSource);
             float elapsed = 0f;
             Vector3 previousPosition = _startPosition;
             float randomT = UnityEngine.Random.value;
@@ -87,7 +89,7 @@ namespace ProjectWallE.GameLoop
             {
                 elapsed += Time.deltaTime;
                 float progress = elapsed / duration;
-                Vector3 position = Vector3.Lerp(_startPosition, _request.TargetPosition, progress);
+                Vector3 position = Vector3.Lerp(_startPosition, _deploymentRequest.TargetPosition, progress);
 
                 Vector3 movementDirection = position - previousPosition;
                 if (movementDirection.sqrMagnitude > 0.001f)
@@ -111,12 +113,11 @@ namespace ProjectWallE.GameLoop
 
         private void Land()
         {
-            fireVisualEffect?.Stop();
+            thrusterEffect?.Stop(audioSource);
             foreach (var effect in onLand)
             {
-                effect?.Execute(_request);
+                effect?.Execute(_behaviourRequest);
             }
-            impulseSource?.GenerateImpulse(collisionImpulseSettings);
             OnLand?.Invoke();
         }
 
@@ -124,18 +125,18 @@ namespace ProjectWallE.GameLoop
         {
             foreach (var effect in onDeploy)
             {
-                effect?.Execute(_request);
+                effect?.Execute(_behaviourRequest);
             }
-            if (_request.InstantiateOnLand && _deployable != null)
+            if (_deploymentRequest.InstantiateOnLand && _deployable != null)
             {
-                MonoBehaviour instance = _request.Parent
-                    ? Instantiate(_deployable as MonoBehaviour, _request.TargetPosition, Quaternion.LookRotation(_request.TargetForward), _request.Parent)
-                    : Instantiate(_deployable as MonoBehaviour, _request.TargetPosition, Quaternion.LookRotation(_request.TargetForward));
-                ((IDeployable)instance).Deploy(_request);
+                MonoBehaviour instance = _deploymentRequest.DeployableParent
+                    ? Instantiate(_deployable as MonoBehaviour, _deploymentRequest.TargetPosition, Quaternion.LookRotation(_deploymentRequest.TargetForward), _deploymentRequest.DeployableParent)
+                    : Instantiate(_deployable as MonoBehaviour, _deploymentRequest.TargetPosition, Quaternion.LookRotation(_deploymentRequest.TargetForward));
+                ((IDeployable)instance).Deploy(_deploymentRequest, _behaviourRequest);
             }
             else
             {
-                _deployable?.Deploy(_request);
+                _deployable?.Deploy(_deploymentRequest, _behaviourRequest);
             }
             
             OnDeploy?.Invoke();
@@ -145,17 +146,38 @@ namespace ProjectWallE.GameLoop
         public void Initialize<T>(T deployable, DeploymentRequest request, bool moveInArc) where T : MonoBehaviour, IDeployable
         {
             _deployable = deployable;
-            _request = request;
+            _deploymentRequest = request;
             _startPosition = transform.position;
 
+            _behaviourRequest = new BehaviorRequest()
+            {
+                Position = _deploymentRequest.TargetPosition,
+                Forward = _deploymentRequest.TargetForward,
+                SurfaceNormal = _deploymentRequest.TargetSurfaceNormal,
+                Team = _deploymentRequest.Team,
+                AudioSource = null,
+                ImpulseSource = impulseSource,
+            };
+            
             _moveCoroutine = StartCoroutine(moveInArc ? MoveInArc() : MoveLinearly());
         }
         
         public void Initialize(ScriptableObject deployable, DeploymentRequest request, bool moveInArc)
         {
             _deployable = deployable as IDeployable;
-            _request = request;
+            _deploymentRequest = request;
             _startPosition = transform.position;
+            
+            _behaviourRequest = new BehaviorRequest()
+            {
+                Position = _deploymentRequest.TargetPosition,
+                Forward = _deploymentRequest.TargetForward,
+                SurfaceNormal = _deploymentRequest.TargetSurfaceNormal,
+                Team = _deploymentRequest.Team,
+                AudioSource = null,
+                ImpulseSource = impulseSource,
+            };
+            
             _moveCoroutine = StartCoroutine(moveInArc ? MoveInArc() : MoveLinearly());
         }
     }

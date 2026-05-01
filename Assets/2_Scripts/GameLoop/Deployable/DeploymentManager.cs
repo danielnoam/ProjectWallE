@@ -12,20 +12,20 @@ namespace ProjectWallE.GameLoop
         public Vector3 TargetPosition;
         public Vector3 TargetForward;
         public Vector3 TargetSurfaceNormal;
-        public Transform Parent;
+        public Transform DeployableParent;
         public StructureNode Node;
-        public Team ImpactTeam;
+        public Team Team;
         public bool InstantiateOnLand;
         public PodCameraMode CameraMode;
 
-        public DeploymentRequest(Vector3 targetPosition, Vector3 targetForward, Transform parent)
+        public DeploymentRequest(Vector3 targetPosition, Vector3 targetForward, Transform deployableParent)
         {
             TargetPosition = targetPosition;
             TargetForward = targetForward;
             TargetSurfaceNormal = Vector3.up;
-            Parent = parent;
+            DeployableParent = deployableParent;
             Node = null;
-            ImpactTeam = Team.Neutral;
+            Team = Team.Neutral;
             InstantiateOnLand = true;
             CameraMode = PodCameraMode.None;
         }

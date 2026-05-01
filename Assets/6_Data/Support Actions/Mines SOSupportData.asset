@@ -22,6 +22,7 @@ MonoBehaviour:
   - rid: 126016801572388944
   - rid: 126016798228742236
   - rid: 126016801572388943
+  - rid: 4199866171927298153
   references:
     version: 2
     RefIds:
@@ -44,4 +45,18 @@ MonoBehaviour:
       type: {class: SpawnMineBehavior, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         minePrefab: {fileID: 1922941866027212315, guid: ace7a17740535d24e9e5f0ad6e358231, type: 3}
+        positionOffset: {x: 0, y: 0.5, z: 0}
         team: 1
+    - rid: 4199866171927298153
+      type: {class: GenerateImpulseBehavior, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        impulseSettings:
+          impulseChannel: 1
+          impulseType: 1
+          impulseShape: 4
+          duration: 0.2
+          intensity: 0.5
+          velocity: {x: 1, y: 1, z: 1}
+          dissipationDistance: 100
+          dissipationRate: 0.25
+          propagationSpeed: 343

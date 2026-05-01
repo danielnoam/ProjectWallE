@@ -48,7 +48,7 @@ public class EnemyManager : MonoBehaviour
 
         var request = new DeploymentRequest(spawnPosition, Vector3.forward, _enemyHolder)
         {
-            ImpactTeam = Team.Enemy,
+            Team = Team.Enemy,
         };
 
         DeploymentManager.Instance?.LaunchFromSky(enemy, request);

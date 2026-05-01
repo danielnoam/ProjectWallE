@@ -23,6 +23,7 @@ MonoBehaviour:
   - rid: 126016798228742239
   - rid: 126016798228742240
   - rid: 4199866168745656399
+  - rid: 4199866171927298150
   references:
     version: 2
     RefIds:
@@ -53,3 +54,16 @@ MonoBehaviour:
       type: {class: DecalImpactEffect, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         decal: {fileID: 3143388929836681745, guid: e4762635f7768174ea6f494a962e3214, type: 3}
+    - rid: 4199866171927298150
+      type: {class: GenerateImpulseBehavior, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        impulseSettings:
+          impulseChannel: 1
+          impulseType: 1
+          impulseShape: 4
+          duration: 0.2
+          intensity: 1
+          velocity: {x: 1, y: 1, z: 1}
+          dissipationDistance: 100
+          dissipationRate: 0.25
+          propagationSpeed: 343

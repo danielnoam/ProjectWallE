@@ -261,7 +261,7 @@ namespace ProjectWallE.GameLoop
             attackStrategy?.Reset();
         }
         
-        public void Deploy(DeploymentRequest request)
+        public void Deploy(DeploymentRequest deploymentRequest, BehaviorRequest behaviorRequest)
         {
 
         }

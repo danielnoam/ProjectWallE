@@ -10,16 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ee7d95efa184de2b18dfff76533a189, type: 3}
-  m_Name: Profile_EngineLoop2
+  m_Name: Profile_PodThruster
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.Systems.AudioLibrary.SOAudioProfile
-  clips:
-  - {fileID: 8300000, guid: 98035819ca0760541a31c12ba067eaca, type: 3}
+  clips: []
   volume:
-    minValue: 1
-    maxValue: 1
+    minValue: 0.5
+    maxValue: 0.5
   pitch:
-    minValue: 1.3
-    maxValue: 1.3
+    minValue: 0.9
+    maxValue: 1.1
   stereoPan: 0
   spatialBlend: 1
   reverbZoneMix: 1
@@ -28,8 +27,8 @@ MonoBehaviour:
   bypassReverbZones: 0
   loop: 1
   set3DSettings: 1
-  dopplerLevel: 1
+  dopplerLevel: 0
   spread: 0
-  minDistance: 50
+  minDistance: 15
   maxDistance: 500
   rolloffMode: 0

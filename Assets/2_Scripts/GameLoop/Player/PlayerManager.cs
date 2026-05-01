@@ -285,7 +285,7 @@ namespace ProjectWallE
             var request = new DeploymentRequest(spawnPosition, spawnRotation * Vector3.forward, null)
             {
                 InstantiateOnLand = false,
-                ImpactTeam = Team.Player,
+                Team = Team.Player,
                 CameraMode = PodCameraMode.Follow
             };
 
@@ -387,9 +387,9 @@ namespace ProjectWallE
             _rigidbody.AddForce(direction * force, ForceMode.Impulse);
         }
         
-        public void Deploy(DeploymentRequest request)
+        public void Deploy(DeploymentRequest deploymentRequest, BehaviorRequest behaviorRequest)
         {
-            Respawn(request.TargetPosition, Quaternion.LookRotation(request.TargetForward));
+            Respawn(deploymentRequest.TargetPosition, Quaternion.LookRotation(deploymentRequest.TargetForward));
         }
         
         public void CallPodTo(PlayerSpawnPoint spawnPoint)
@@ -415,7 +415,7 @@ namespace ProjectWallE
             var request = new DeploymentRequest(spawnPoint.SpawnPosition, spawnPoint.SpawnRotation * Vector3.forward, null)
             {
                 InstantiateOnLand = false,
-                ImpactTeam = Team.Player,
+                Team = Team.Player,
                 CameraMode = PodCameraMode.Follow
             };
 

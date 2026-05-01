@@ -4,7 +4,7 @@ namespace ProjectWallE.GameLoop
 {
     public interface IDeployable
     {
-        void Deploy(DeploymentRequest request);
+        void Deploy(DeploymentRequest deploymentRequest, BehaviorRequest behaviorRequest);
     }
 
     public interface IDeployableWithPod : IDeployable

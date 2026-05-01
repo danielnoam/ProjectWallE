@@ -210,17 +210,17 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployableWithPod
         }
     }
 
-    public void Deploy(DeploymentRequest request)
+    public void Deploy(DeploymentRequest deploymentRequest, BehaviorRequest behaviorRequest)
     {
-        Vector3 projectedForward = Vector3.ProjectOnPlane(request.TargetForward, request.TargetSurfaceNormal).normalized;
+        Vector3 projectedForward = Vector3.ProjectOnPlane(deploymentRequest.TargetForward, deploymentRequest.TargetSurfaceNormal).normalized;
         Quaternion yawRotation = projectedForward.sqrMagnitude > 0.001f
-            ? Quaternion.LookRotation(projectedForward, request.TargetSurfaceNormal)
+            ? Quaternion.LookRotation(projectedForward, deploymentRequest.TargetSurfaceNormal)
             : Quaternion.identity;
 
-        transform.position = request.TargetPosition - yawRotation * bottomPoint;
+        transform.position = deploymentRequest.TargetPosition - yawRotation * bottomPoint;
         transform.rotation = yawRotation;
         
-        if (request.Node) request.Node.Occupy(this);
+        if (deploymentRequest.Node) deploymentRequest.Node.Occupy(this);
         
         Build();
     }

@@ -140,7 +140,7 @@ namespace ProjectWallE.GameLoop.Player
                 var request = new DeploymentRequest(scatteredPosition, transform.forward, null)
                 {
                     TargetSurfaceNormal = resolvedNormal,
-                    ImpactTeam = Team.Player,
+                    Team = Team.Player,
                     InstantiateOnLand = false
                 };
 
