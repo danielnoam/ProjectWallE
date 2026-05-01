@@ -36,7 +36,7 @@ namespace ProjectWallE.GameLoop
     public class DeploymentManager : MonoBehaviour
     {
         public static DeploymentManager Instance { get; private set; }
-        public static event Action<DeploymentRequest, Pod> OnPodDeployed;
+        public static event Action<DeploymentRequest, Pod> OnPodLaunched;
 
         [Header("Settings")]
         [SerializeField] private float skyDropHeight = 300f;
@@ -64,7 +64,7 @@ namespace ProjectWallE.GameLoop
             Pod prefab = deployable is IDeployableWithPod withPod && withPod.PodPrefab ? withPod.PodPrefab : podPrefab;
             Pod pod = Instantiate(prefab, spawnPosition, Quaternion.identity, _podHolder);
             pod.Initialize(deployable, request, moveInArc);
-            OnPodDeployed?.Invoke(request, pod);
+            OnPodLaunched?.Invoke(request, pod);
         }
 
         private void SpawnPod(ScriptableObject deployable, DeploymentRequest request, Vector3 spawnPosition, bool moveInArc)
@@ -72,7 +72,7 @@ namespace ProjectWallE.GameLoop
             Pod prefab = deployable is IDeployableWithPod withPod && withPod.PodPrefab ? withPod.PodPrefab : podPrefab;
             Pod pod = Instantiate(prefab, spawnPosition, Quaternion.identity, _podHolder);
             pod.Initialize(deployable, request, moveInArc);
-            OnPodDeployed?.Invoke(request, pod);
+            OnPodLaunched?.Invoke(request, pod);
         }
         
                 
@@ -90,11 +90,11 @@ namespace ProjectWallE.GameLoop
             _shipSpawnCannons.Remove(cannon);
         }
         
-        public void DeployFromShip<T>(T deployable, DeploymentRequest request) where T : MonoBehaviour, IDeployable
+        public void LaunchFromShip<T>(T deployable, DeploymentRequest request) where T : MonoBehaviour, IDeployable
         {
             if (_shipSpawnCannons.Count == 0)
             {
-                DeployFromSky(deployable, request);
+                LaunchFromSky(deployable, request);
                 return;
             }
             
@@ -105,23 +105,23 @@ namespace ProjectWallE.GameLoop
             SpawnPod(deployable, request, shipPosition.transform.position, true);
         }
 
-        public void DeployFromSky<T>(T deployable, DeploymentRequest request) where T : MonoBehaviour, IDeployable
+        public void LaunchFromSky<T>(T deployable, DeploymentRequest request) where T : MonoBehaviour, IDeployable
         {
             Vector3 origin = request.TargetPosition + Vector3.up * skyDropHeight;
             SpawnPod(deployable, request, origin, false);
         }
 
-        public void DeployFromSky(ScriptableObject deployable, DeploymentRequest request)
+        public void LaunchFromSky(ScriptableObject deployable, DeploymentRequest request)
         {
             Vector3 origin = request.TargetPosition + Vector3.up * skyDropHeight;
             SpawnPod(deployable, request, origin, false);
         }
 
-        public void DeployFromShip(ScriptableObject deployable, DeploymentRequest request)
+        public void LaunchFromShip(ScriptableObject deployable, DeploymentRequest request)
         {
             if (_shipSpawnCannons.Count == 0)
             {
-                DeployFromSky(deployable, request);
+                LaunchFromSky(deployable, request);
                 return;
             }
             

@@ -19,8 +19,9 @@ namespace ProjectWallE.GameLoop
         private int _currentKills;
 
         public override string Description => enemyPrefab ? $"Kill {killCount} {enemyPrefab.name}" : $"Kill {killCount} enemies";
-
         public override string ProgressText => IsCompleted ? "Complete" : $"{_currentKills}/{killCount}";
+
+        protected override string DefaultTutorialText => "";
 
         protected override void OnInitialize(IExposedPropertyTable resolver = null)
         {
@@ -33,7 +34,7 @@ namespace ProjectWallE.GameLoop
         {
             Enemy.OnEnemyKilled -= OnEnemyKilled;
         }
-        
+
         public override void Tick(float deltaTime)
         {
             if (spawnEnemies) spawner.Tick(deltaTime);

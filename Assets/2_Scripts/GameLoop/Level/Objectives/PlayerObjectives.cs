@@ -2,7 +2,6 @@ using System;
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.SerializableSelector;
 using ProjectWallE.GameLoop.Player;
-using ProjectWallE.GameLoop.UI;
 using UnityEngine;
 
 namespace ProjectWallE.GameLoop
@@ -33,6 +32,13 @@ namespace ProjectWallE.GameLoop
         };
 
         public override string ProgressText => IsCompleted ? "Complete" : $"{_currentAttacks}/{attackCount}";
+
+        protected override string DefaultTutorialText => attackType switch
+        {
+            AttackRequirement.Basic => "Press *[LMB]* to shoot",
+            AttackRequirement.Special => "Press *[RMB]* to use special attack",
+            _ => "Press *[LMB]* or *[RMB]* to attack"
+        };
 
         protected override void OnInitialize(IExposedPropertyTable resolver = null)
         {
@@ -76,11 +82,13 @@ namespace ProjectWallE.GameLoop
             _ => "Switch controller"
         };
 
+        protected override string DefaultTutorialText => "Press *[Tab]* to switch";
+
         protected override void OnInitialize(IExposedPropertyTable resolver = null)
         {
             var player = LevelManager.Instance.Player;
             LevelManager.Instance.Player.OnControllerChanged += OnControllerChanged;
-            
+
             switch (requirement)
             {
                 case SwitchRequirement.SwitchToCar:
@@ -130,6 +138,8 @@ namespace ProjectWallE.GameLoop
 
         public override string Description => "Use car boost";
         public override string ProgressText => IsCompleted ? "Complete" : $"{_boostDuration:F1}s / {requiredDuration:F1}s";
+
+        protected override string DefaultTutorialText => "Hold *[Shift]* to boost";
 
         protected override void OnInitialize(IExposedPropertyTable resolver = null)
         {
@@ -186,13 +196,13 @@ namespace ProjectWallE.GameLoop
 
         public override string Description => $"Survive for {duration} seconds";
         public override string ProgressText => IsCompleted ? "Complete" : $"{_elapsed:F1}s / {duration:F1}s";
+        
 
         protected override void OnInitialize(IExposedPropertyTable resolver = null)
         {
             _elapsed = 0f;
             if (spawnEnemies) spawner.Initialize(resolver);
         }
-        
 
         public override void Tick(float deltaTime)
         {
@@ -218,6 +228,8 @@ namespace ProjectWallE.GameLoop
 
         public override string Description => "Go to target";
         public override string ProgressText => IsCompleted ? "Complete" : $"{_currentDistance:F1}m";
+
+        protected override string DefaultTutorialText => "";
 
         protected override void OnInitialize(IExposedPropertyTable resolver = null)
         {

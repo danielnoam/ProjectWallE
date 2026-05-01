@@ -62,7 +62,7 @@ namespace ProjectWallE.GameLoop
                 ImpactTeam = Team.Player,
                 CameraMode = podCameraMode,
             };
-            DeploymentManager.Instance?.DeployFromShip(structure, request);
+            DeploymentManager.Instance?.LaunchFromShip(structure, request);
         }
 
         public void DeployStructureOnNode(Structure structure, StructureNode node)
@@ -73,7 +73,7 @@ namespace ProjectWallE.GameLoop
                 ImpactTeam = Team.Player,
                 Node = node
             };
-            DeploymentManager.Instance?.DeployFromShip(structure, request);
+            DeploymentManager.Instance?.LaunchFromShip(structure, request);
         }
 
         #region Ghost

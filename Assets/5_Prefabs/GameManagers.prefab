@@ -198,7 +198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2be2a7524b76488da57da260bee48d05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelManager
-  initializeDelay: 1
+  initializeDelay: 0.1
   timeline: {fileID: 4965267845722546262}
   player: {fileID: 0}
 --- !u!1 &3503836410232390380
@@ -541,6 +541,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyManager
   maxEnemies: 100
+  spawnRaycastMask:
+    serializedVersion: 2
+    m_Bits: 0
+  spawnRaycastHeight: 200
   enemyTypes:
     internalItems:
     - item: {fileID: 622395889724703068, guid: 311465a237bc47a4a80317173bf23667, type: 3}

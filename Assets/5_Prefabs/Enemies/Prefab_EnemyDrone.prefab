@@ -162,6 +162,7 @@ MonoBehaviour:
   effects:
   - rid: 6000861270941368430
   visibilityRenderer: {fileID: 5462120949173186914}
+  podPrefab: {fileID: 2007875823429963842, guid: 7b162c145a4df174a80c46a045ab6be6, type: 3}
   rigidBody: {fileID: 2448601663206975914}
   stopDistance: 30
   flyingAgent: {fileID: 7364616695804156870}
@@ -198,6 +199,8 @@ MonoBehaviour:
         firePoint: {fileID: 7429042783596894845}
         soProjectileData: {fileID: 11400000, guid: 5aa17da338669a14eba6994821f7b4a8, type: 2}
         shootEffect:
+          effectType: 0
+          visualEffect: {fileID: 0}
           visualEffects:
           - {fileID: 8918560584602633050}
           soundId: Shoot

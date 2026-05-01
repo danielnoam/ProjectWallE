@@ -155,6 +155,7 @@ MonoBehaviour:
   effects:
   - rid: 6000861270941368433
   visibilityRenderer: {fileID: 7676367922731443217}
+  podPrefab: {fileID: 2007875823429963842, guid: 7b162c145a4df174a80c46a045ab6be6, type: 3}
   rigidBody: {fileID: 2448601663206975914}
   navMeshAgent: {fileID: 8909220601765990049}
   references:
@@ -188,6 +189,8 @@ MonoBehaviour:
         firePoint: {fileID: 8925620038691902775}
         soProjectileData: {fileID: 11400000, guid: c32a03d395cada347bd4ebe76d2ed779, type: 2}
         shootEffect:
+          effectType: 0
+          visualEffect: {fileID: 0}
           visualEffects:
           - {fileID: 7214270018605058130}
           soundId: Shoot

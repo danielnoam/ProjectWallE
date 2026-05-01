@@ -33,7 +33,10 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField] private Transform torso;
         [SerializeField] private Transform shoulder;
         [SerializeField, AutoGetParent, HideInInspector] private PlayerManager player;
+        [SerializeField, AutoGetSelf, HideInInspector] private Animator animator;
 
+        private int _robotStateHash;
+        private int _carStateHash;
         private Transform _armIkTarget;
         private Transform _headIkTarget;
         private float _targetWeight = 1f;
@@ -43,6 +46,9 @@ namespace ProjectWallE.GameLoop.Player
 
         private void Awake()
         {
+            _robotStateHash = Animator.StringToHash(switchToRobot.StateName);
+            _carStateHash = Animator.StringToHash(switchToCar.StateName);
+            
             _armIkTarget = new GameObject("PlayerArmIK_Target").transform;
             armIK.data.target = _armIkTarget;
             
@@ -59,6 +65,7 @@ namespace ProjectWallE.GameLoop.Player
                 player.Shooter.OnAttack1 += OnAttack1;
                 player.Shooter.OnAttack2 += OnAttack1;
                 player.OnControllerChanged += OnControllerChanged;
+                player.OnSpawn += HandleSpawn;
             }
         }
 
@@ -69,6 +76,7 @@ namespace ProjectWallE.GameLoop.Player
                 player.Shooter.OnAttack1 -= OnAttack1;
                 player.Shooter.OnAttack2 -= OnAttack1;
                 player.OnControllerChanged -= OnControllerChanged;
+                player.OnSpawn -= HandleSpawn;
             }
         }
 
@@ -78,6 +86,12 @@ namespace ProjectWallE.GameLoop.Player
             UpdateArmIK();
             UpdateHeadIK();
             ApplyShake();
+        }
+        
+        private void HandleSpawn()
+        {
+            animator.Play(player.ControllerType == ControllerType.Robot ? _robotStateHash : _carStateHash, 0, 1f);
+            animator.Update(0f);
         }
 
         private void UpdateRigWeight()

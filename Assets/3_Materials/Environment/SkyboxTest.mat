@@ -24,7 +24,10 @@ Material:
   m_Shader: {fileID: -6465566751694194690, guid: b941d44e36cb2054abde13a5b7528ada, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _CLOUDS
+  - _STARS
+  - _SUN
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -39,6 +42,10 @@ Material:
     m_TexEnvs:
     - _Clouds_Texture:
         m_Texture: {fileID: 2800000, guid: 6d03b639ebb5b0547808293cb651caf3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Stars_Mask:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture:
@@ -61,10 +68,19 @@ Material:
     m_Floats:
     - _BadirBlendPower: 0.77
     - _Badir_Blend_Power: 0.01
+    - _CLOUDS: 1
     - _Clouds_Distance_Fade_Power: 10
     - _Distance_Fade_Power: 2
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _STARS: 1
+    - _SUN: 1
+    - _Stars_Breath_Frquency: 1
+    - _Stars_Breath_Max: 1
+    - _Stars_Breath_Min: 0
+    - _Starts_Horizon_Fade: 1
+    - _Starts_Size: 50
+    - _Starts_Softness: 0.2
     - _Sun_Exponent: 22
     - _Sun_Intensity: 1000
     - _Sun_Radius_A: 0.0369
@@ -82,6 +98,7 @@ Material:
     - _Nadir_Color: {r: 1, g: 1, b: 1, a: 1}
     - _Scale: {r: 1, g: 1, b: 0, a: 0}
     - _Speed: {r: 0.01, g: 0.01, b: 0, a: 0}
+    - _Stars_Color: {r: 0, g: 0.6360378, b: 1, a: 1}
     - _Sun_Color: {r: 0, g: 1, b: 0.75958014, a: 1}
     - _ZennithColor: {r: 0, g: 0.7322017, b: 0.76862746, a: 1}
     - _Zennith_Color: {r: 1, g: 1, b: 1, a: 1}

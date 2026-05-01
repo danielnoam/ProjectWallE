@@ -71,7 +71,7 @@ namespace ProjectWallE
 
         private void OnEnable()
         {
-            DeploymentManager.OnPodDeployed += OnPodDeployed;
+            DeploymentManager.OnPodLaunched += OnPodLaunched;
             
             if (_playerManager != null)
             {
@@ -97,7 +97,7 @@ namespace ProjectWallE
 
         private void OnDisable()
         {
-            DeploymentManager.OnPodDeployed -= OnPodDeployed;
+            DeploymentManager.OnPodLaunched -= OnPodLaunched;
             
             if (_playerManager != null)
             {
@@ -127,7 +127,7 @@ namespace ProjectWallE
             cameraTarget.eulerAngles = Vector3.zero;
         }
 
-        private void OnPodDeployed(DeploymentRequest request, Pod pod)
+        private void OnPodLaunched(DeploymentRequest request, Pod pod)
         {
             if (request.CameraMode == PodCameraMode.None) return;
 

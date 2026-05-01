@@ -6,6 +6,7 @@ using DNExtensions.Utilities.CinemachineExtensions;
 using DNExtensions.Utilities.SerializableSelector;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.VFX;
 
 namespace ProjectWallE.GameLoop
 {
@@ -13,15 +14,20 @@ namespace ProjectWallE.GameLoop
     public class Pod : MonoBehaviour
     {
         [Header("Settings")]
-        [SerializeField] private float arcHeight = 125f;
         [SerializeField, MinMaxRange(-5, 5)] private RangedFloat rotationSpeedRange = new RangedFloat(1, 1);
         [SerializeField, MinMaxRange(0, 10)] private RangedFloat travelDurationRange = new RangedFloat(3, 5);
+        [SerializeField, MinMaxRange(0, 10)] private RangedFloat delayBeforeDeployRange = new RangedFloat(0, 1.5f);
+
 
         [Header("Effects")]
         [SerializeField] private ImpulseSettings collisionImpulseSettings;
-        [SerializeReference, SerializableSelector(Foldout = false)] private DeployBehavior[] onImpact;
+        [SerializeField] private VisualEffect fireVisualEffect;
+        [SerializeReference, SerializableSelector(Foldout = false)] private DeployBehavior[] onLand;
+        [SerializeReference, SerializableSelector(Foldout = false)] private DeployBehavior[] onDeploy;
         [SerializeField, AutoGetSelf, HideInInspector] private CinemachineImpulseSource impulseSource;
 
+        
+        private const float ArcHeight = 125f;
         
         private Coroutine _moveCoroutine;
         private IDeployable _deployable;
@@ -29,6 +35,7 @@ namespace ProjectWallE.GameLoop
         private Vector3 _startPosition;
 
         public event Action OnLand;
+        public event Action OnDeploy;
 
         
         private IEnumerator MoveInArc()
@@ -38,13 +45,14 @@ namespace ProjectWallE.GameLoop
             float randomT = UnityEngine.Random.value;
             float duration = travelDurationRange.Lerp(randomT);
             float rotationSpeed = rotationSpeedRange.Lerp(1f - randomT);
+            float delayBeforeDeploy = delayBeforeDeployRange.RandomValue;
 
             while (elapsed < duration)
             {
                 elapsed += Time.deltaTime;
                 float progress = elapsed / duration;
                 Vector3 position = Vector3.Lerp(_startPosition, _request.TargetPosition, progress);
-                position.y += arcHeight * Mathf.Sin(progress * Mathf.PI);
+                position.y += ArcHeight * Mathf.Sin(progress * Mathf.PI);
 
                 Vector3 movementDirection = position - previousPosition;
                 if (movementDirection.sqrMagnitude > 0.001f)
@@ -62,6 +70,8 @@ namespace ProjectWallE.GameLoop
             }
 
             Land();
+            if (delayBeforeDeploy > 0f) yield return new  WaitForSeconds(delayBeforeDeploy);
+            Deploy();
         }
 
         private IEnumerator MoveLinearly()
@@ -71,6 +81,7 @@ namespace ProjectWallE.GameLoop
             float randomT = UnityEngine.Random.value;
             float duration = travelDurationRange.Lerp(randomT);
             float rotationSpeed = rotationSpeedRange.Lerp(1f - randomT);
+            float delayBeforeDeploy = delayBeforeDeployRange.RandomValue;
 
             while (elapsed < duration)
             {
@@ -94,17 +105,27 @@ namespace ProjectWallE.GameLoop
             }
 
             Land();
+            if (delayBeforeDeploy > 0f) yield return new  WaitForSeconds(delayBeforeDeploy);
+            Deploy();
         }
 
         private void Land()
         {
-            impulseSource?.GenerateImpulse(collisionImpulseSettings);
-
-            foreach (var effect in onImpact)
+            fireVisualEffect?.Stop();
+            foreach (var effect in onLand)
             {
                 effect?.Execute(_request);
             }
+            impulseSource?.GenerateImpulse(collisionImpulseSettings);
+            OnLand?.Invoke();
+        }
 
+        private void Deploy()
+        {
+            foreach (var effect in onDeploy)
+            {
+                effect?.Execute(_request);
+            }
             if (_request.InstantiateOnLand && _deployable != null)
             {
                 MonoBehaviour instance = _request.Parent
@@ -116,8 +137,8 @@ namespace ProjectWallE.GameLoop
             {
                 _deployable?.Deploy(_request);
             }
-
-            OnLand?.Invoke();
+            
+            OnDeploy?.Invoke();
             Destroy(gameObject);
         }
         

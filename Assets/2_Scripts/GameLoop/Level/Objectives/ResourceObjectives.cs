@@ -16,6 +16,8 @@ namespace ProjectWallE.GameLoop
         public override string Description => $"Destroy {destroyCount} resource nodes";
         public override string ProgressText => IsCompleted ? "Complete" : $"{_currentCount}/{destroyCount}";
 
+        protected override string DefaultTutorialText => "";
+
         protected override void OnInitialize(IExposedPropertyTable resolver = null)
         {
             _currentCount = 0;
@@ -36,17 +38,19 @@ namespace ProjectWallE.GameLoop
             }
         }
     }
-    
+
     [Serializable]
     [SerializableSelectorName("Reach Resource Amount", "Resource")]
     public class ReachResourceAmountObjective : BaseLevelObjective
     {
         [Header("Settings")]
         [SerializeField, Min(1)] private int targetAmount = 500;
- 
+
         public override string Description => $"Collect {targetAmount} resources";
         public override string ProgressText => IsCompleted ? "Complete" : $"{ResourceManager.Instance?.CurrentResources ?? 0}/{targetAmount}";
- 
+
+        protected override string DefaultTutorialText => "";
+
         protected override void OnInitialize(IExposedPropertyTable resolver = null)
         {
             if (ResourceManager.Instance && ResourceManager.Instance.CurrentResources >= targetAmount)
@@ -54,15 +58,15 @@ namespace ProjectWallE.GameLoop
                 Complete();
                 return;
             }
- 
+
             ResourceManager.OnResourcesChanged += OnResourcesChanged;
         }
- 
+
         protected override void OnDispose()
         {
             ResourceManager.OnResourcesChanged -= OnResourcesChanged;
         }
- 
+
         private void OnResourcesChanged(int currentAmount)
         {
             if (currentAmount >= targetAmount)
@@ -71,32 +75,34 @@ namespace ProjectWallE.GameLoop
             }
         }
     }
-    
+
     [Serializable]
     [SerializableSelectorName("Spend Resources", "Resource")]
     public class SpendResourcesObjective : BaseLevelObjective
     {
         [Header("Settings")]
         [SerializeField, Min(1)] private int targetSpend = 500;
- 
+
         private int _totalSpent;
         private int _previousAmount;
- 
+
         public override string Description => $"Spend {targetSpend} resources";
         public override string ProgressText => IsCompleted ? "Complete" : $"{_totalSpent}/{targetSpend}";
- 
+
+        protected override string DefaultTutorialText => "Build or upgrade structures to spend resources";
+
         protected override void OnInitialize(IExposedPropertyTable resolver = null)
         {
             _totalSpent = 0;
             _previousAmount = ResourceManager.Instance.CurrentResources;
             ResourceManager.OnResourcesChanged += OnResourcesChanged;
         }
- 
+
         protected override void OnDispose()
         {
             ResourceManager.OnResourcesChanged -= OnResourcesChanged;
         }
- 
+
         private void OnResourcesChanged(int currentAmount)
         {
             if (currentAmount < _previousAmount)

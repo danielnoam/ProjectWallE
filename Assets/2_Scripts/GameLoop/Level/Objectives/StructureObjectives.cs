@@ -12,8 +12,10 @@ namespace ProjectWallE.GameLoop
         [Header("Settings")]
         [Tooltip("Leave the structure field empty to allow any structure to count towards the objective. (Works by type of class not prefab)")]
         [PrefabSelector("Assets/5_Prefabs/Structures")] public Structure structurePrefab;
-        
+
         public override string Description => structurePrefab ? $"Build {structurePrefab.StructureUIData.Label}" : "Build a structure";
+
+        protected override string DefaultTutorialText => "Press *[Q]* to open the build menu";
 
         protected override void OnInitialize(IExposedPropertyTable resolver = null)
         {
@@ -42,6 +44,8 @@ namespace ProjectWallE.GameLoop
 
         public override string Description => structurePrefab ? $"Upgrade {structurePrefab.StructureUIData.Label}" : "Upgrade a structure";
 
+        protected override string DefaultTutorialText => "Press *[Q]* near a structure to upgrade it";
+
         protected override void OnInitialize(IExposedPropertyTable resolver = null)
         {
             Structure.OnStructureUpgraded += OnStructureUpgraded;
@@ -58,7 +62,7 @@ namespace ProjectWallE.GameLoop
             Complete();
         }
     }
-    
+
     [Serializable]
     [SerializableSelectorName("Demolish", "Structure")]
     public class DemolishStructureObjective : BaseLevelObjective
@@ -68,6 +72,8 @@ namespace ProjectWallE.GameLoop
         [PrefabSelector("Assets/5_Prefabs/Structures")] public Structure structurePrefab;
 
         public override string Description => structurePrefab ? $"Demolish {structurePrefab.StructureUIData.Label}" : "Demolish a structure";
+
+        protected override string DefaultTutorialText => "Press *[Q]* near a structure to demolish it";
 
         protected override void OnInitialize(IExposedPropertyTable resolver = null)
         {

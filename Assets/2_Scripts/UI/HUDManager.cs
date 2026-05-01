@@ -1,17 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using DNExtensions.Systems.Scriptables;
 using DNExtensions.Utilities.AutoGet;
 using PrimeTween;
 using ProjectWallE.GameLoop;
-using TMPro;
 using UnityEngine;
 
 namespace ProjectWallE.UI
 {
     public class HUDManager : MonoBehaviour
-    { 
+    {
         [Header("Visibility")]
         [SerializeField] private float fadeDuration = 0.5f;
         [SerializeField] private CanvasGroup canvasGroup;
@@ -22,17 +18,11 @@ namespace ProjectWallE.UI
         [SerializeField] private CountIcon turretsIcon;
         [SerializeField] private CountIcon generatorsIcon;
         [SerializeField] private CountIcon rampsIcon;
-        
-        [Header("Objective")]
-        [SerializeField] private GameObject objectivesHolder;
-        [SerializeField] private TextMeshProUGUI objectivesText;
-        [SerializeField] protected SOFontStyle objectiveStatusFontStyle;
-        [SerializeField] protected SOFontStyle objectiveCompletedFontStyle;
-        
+
         [Header("Bars")]
         [SerializeField] private FillBar fuelBar;
         [SerializeField] private FillBar healthBar;
-        
+
         [Header("Actions")]
         [SerializeField] private ActionIcon switchIcon;
         [SerializeField] private ActionIcon buildIcon;
@@ -42,13 +32,11 @@ namespace ProjectWallE.UI
         [SerializeField] private ActionIcon jumpIcon;
         [SerializeField] private ActionIcon boostIcon;
         [SerializeField] private ActionIcon brakeIcon;
-        
-        [Header("References")] 
+
+        [Header("References")]
         [SerializeField, AutoGetChildren] private RadarSystem radarSystem;
         [SerializeField, AutoGetScene] private PlayerManager player;
 
-        private IReadOnlyList<BaseLevelObjective> _activeObjectives;
-        private readonly StringBuilder _objectiveBuilder = new();
         private Tween _fadeTween;
 
         private void OnValidate()
@@ -58,19 +46,14 @@ namespace ProjectWallE.UI
 
         private void Awake()
         {
-            ResetTexts();
+            ResetIcons();
         }
 
         private void OnEnable()
         {
             ResourceManager.OnResourcesChanged += UpdateResourcesDisplay;
             StructureManager.OnStructureCountChanged += UpdateStructuresText;
-            LevelManager.OnLevelInitializing += ResetTexts;
-            LevelManager.OnLeveTimeLineUpdated += OnLeveTimeLineUpdated;
-            LevelManager.OnLevelCompleted += OnLevelCompleted;
-            LevelManager.OnLevelFailed += OnLevelFailed;
-            LevelManager.OnObjectivesAdded += OnObjectivesAdded;
-            LevelManager.OnObjectivesCompleted += OnObjectivesCompleted;
+            LevelManager.OnLevelInitializing += ResetIcons;
 
             if (player)
             {
@@ -90,7 +73,7 @@ namespace ProjectWallE.UI
                 player.RobotController.OnJumped += OnJumped;
                 player.Shooter.OnBasicCooldownUpdated += OnBasicCooldownUpdated;
                 player.Shooter.OnSpecialCooldownUpdated += OnSpecialCooldownUpdated;
-                
+
                 radarSystem.worldCenter.SetTransform(player.transform);
                 if (Camera.main) radarSystem.rotationTarget.Value = Camera.main.transform;
                 fuelBar.SetImmediate(100, 100);
@@ -98,17 +81,12 @@ namespace ProjectWallE.UI
                 OnControllerChanged(player.ControllerType);
             }
         }
-        
+
         private void OnDisable()
         {
             ResourceManager.OnResourcesChanged -= UpdateResourcesDisplay;
             StructureManager.OnStructureCountChanged -= UpdateStructuresText;
-            LevelManager.OnLevelInitializing -= ResetTexts;
-            LevelManager.OnLeveTimeLineUpdated -= OnLeveTimeLineUpdated;
-            LevelManager.OnLevelCompleted -= OnLevelCompleted;
-            LevelManager.OnLevelFailed -= OnLevelFailed;
-            LevelManager.OnObjectivesAdded -= OnObjectivesAdded;
-            LevelManager.OnObjectivesCompleted -= OnObjectivesCompleted;
+            LevelManager.OnLevelInitializing -= ResetIcons;
 
             if (player)
             {
@@ -135,7 +113,7 @@ namespace ProjectWallE.UI
         {
             if (!canvasGroup) return;
             if (Mathf.Approximately(canvasGroup.alpha, 1f)) return;
-            
+
             _fadeTween.Stop();
             _fadeTween = Tween.Alpha(canvasGroup, 1f, fadeDuration);
         }
@@ -152,12 +130,12 @@ namespace ProjectWallE.UI
         {
             if (brakeIcon && brakeIcon.isActiveAndEnabled) brakeIcon.PunchIcon();
         }
-        
+
         private void OnBoostStart()
         {
             if (boostIcon && boostIcon.isActiveAndEnabled) boostIcon.PunchIcon();
         }
-        
+
         private void OnJumped()
         {
             if (jumpIcon && jumpIcon.isActiveAndEnabled) jumpIcon.PunchIcon();
@@ -185,7 +163,7 @@ namespace ProjectWallE.UI
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
         }
-        
+
         private void OnSwitchCooldownUpdated(float currentCooldown, float maxCooldown)
         {
             if (switchIcon && switchIcon.isActiveAndEnabled)
@@ -202,7 +180,7 @@ namespace ProjectWallE.UI
             rampsIcon?.gameObject.SetActive(true);
             if (buildIcon && buildIcon.isActiveAndEnabled) buildIcon.PunchIcon();
         }
-        
+
         private void OnBuildMenuRequested(Structure[] structures, bool canBuild)
         {
             basesIcon?.gameObject.SetActive(true);
@@ -211,7 +189,6 @@ namespace ProjectWallE.UI
             rampsIcon?.gameObject.SetActive(true);
             if (buildIcon && buildIcon.isActiveAndEnabled) buildIcon.PunchIcon();
         }
-        
 
         private void OnSupportMenuRequested(SOSupportActionData[] obj)
         {
@@ -221,7 +198,7 @@ namespace ProjectWallE.UI
             rampsIcon?.gameObject.SetActive(true);
             if (supportIcon && supportIcon.isActiveAndEnabled) supportIcon.PunchIcon();
         }
-        
+
         private void OnSupportMenuCloseRequested()
         {
             basesIcon?.gameObject.SetActive(false);
@@ -229,7 +206,7 @@ namespace ProjectWallE.UI
             generatorsIcon?.gameObject.SetActive(false);
             rampsIcon?.gameObject.SetActive(false);
         }
-        
+
         private void OnMenuCloseRequested()
         {
             basesIcon?.gameObject.SetActive(false);
@@ -245,31 +222,7 @@ namespace ProjectWallE.UI
             generatorsIcon?.SetCount(data.GeneratorsCount);
             rampsIcon?.SetCount(data.RampsCount);
         }
-        
-        private void OnLevelFailed()
-        {
-            _activeObjectives = null;
-            objectivesHolder?.SetActive(false);
-        }
 
-        private void OnLevelCompleted()
-        {
-            _activeObjectives = null;
-            objectivesText?.gameObject.SetActive(false);
-        }
-
-        private void OnObjectivesAdded(List<BaseLevelObjective> objectives)
-        {
-            _activeObjectives = objectives;
-            objectivesHolder?.SetActive(true);
-        }
-
-        private void OnObjectivesCompleted()
-        {
-            _activeObjectives = null;
-            objectivesHolder?.SetActive(false);
-        }
-        
         private void OnBasicCooldownUpdated(float currentCooldown, float maxCooldown)
         {
             if (basicAttackIcon && basicAttackIcon.isActiveAndEnabled) basicAttackIcon.UpdateCooldown(currentCooldown, maxCooldown);
@@ -280,33 +233,11 @@ namespace ProjectWallE.UI
             if (specialAttackIcon && basicAttackIcon.isActiveAndEnabled) specialAttackIcon.UpdateCooldown(currentCooldown, maxCooldown);
         }
 
-        private void OnLeveTimeLineUpdated(float timeRemaining)
-        {
-            if (_activeObjectives != null)
-            {
-                UpdateObjectivesDisplay();
-            }
-        }
-
-        private void UpdateObjectivesDisplay()
-        {
-            _objectiveBuilder.Clear();
-
-            foreach (var objective in _activeObjectives)
-            {
-                _objectiveBuilder.AppendLine(objective.IsCompleted
-                    ? $"○ {objectiveCompletedFontStyle.ApplyStyle($"{objective.Description}")}"
-                    : $"○ {objective.Description} - {objectiveStatusFontStyle.ApplyStyle(objective.ProgressText)}");
-            }
-
-            if (objectivesText) objectivesText.text = _objectiveBuilder.ToString();
-        }
-
         private void UpdateResourcesDisplay(int currentResources)
         {
             resourcesIcon?.SetCount(currentResources);
         }
-        
+
         private void UpdateFuelBar(float currentFuel, float maxFuel)
         {
             if (fuelBar) fuelBar.SetValue(currentFuel, maxFuel);
@@ -316,15 +247,14 @@ namespace ProjectWallE.UI
         {
             if (healthBar) healthBar.SetValue(currentHealth, maxHealth);
         }
-        
-        private void ResetTexts()
+
+        private void ResetIcons()
         {
             resourcesIcon?.SetCountImmediate(0);
             basesIcon?.SetCountImmediate(0);
             turretsIcon?.SetCountImmediate(0);
             generatorsIcon?.SetCountImmediate(0);
             rampsIcon?.SetCountImmediate(0);
-            objectivesHolder?.SetActive(false);
         }
     }
 }

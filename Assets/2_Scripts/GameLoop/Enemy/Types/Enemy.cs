@@ -24,7 +24,7 @@ namespace ProjectWallE.GameLoop
 
     [SelectionBase]
     [RequireComponent(typeof(Rigidbody))]
-    public abstract class Enemy : MonoBehaviour, IDamageable, IPushable, IPoolable, IDeployable
+    public abstract class Enemy : MonoBehaviour, IDamageable, IPushable, IPoolable, IDeployableWithPod
     {
         public static event Action<Enemy> OnEnemyKilled;
         public static event Action<IDamageable> OnEnemyDamaged;
@@ -51,6 +51,7 @@ namespace ProjectWallE.GameLoop
         [SerializeField] private ParticleEffectAction deathEffect;
         [SerializeReference, SerializableSelector(Foldout = false)] private EnemyEffect[] effects;
         [SerializeField] private Renderer visibilityRenderer;
+        [SerializeField, PrefabSelector("Assets/5_Prefabs")] private Pod podPrefab;
         
         
         [SerializeField, AutoGetSelf, HideInInspector] protected Rigidbody rigidBody;
@@ -59,6 +60,7 @@ namespace ProjectWallE.GameLoop
 
         protected EnemyState State;
         protected IDamageable CurrentTarget;
+        private IDeployableWithPod _iDeployableWithPodImplementation;
         protected bool AimingControlsBodyRotation => aimingStrategy?.ControlsBodyRotation ?? false;
         protected bool RequiresDirectApproach => attackStrategy?.RequiresDirectApproach ?? false;
         protected virtual Vector3 Velocity => rigidBody.linearVelocity;
@@ -66,6 +68,7 @@ namespace ProjectWallE.GameLoop
 
         public bool IsAlive => _currentHealth > 0;
         public Team Team => Team.Enemy;
+        public Pod PodPrefab => podPrefab;
 
         public event Action<IDamageable> OnDeath;
         public event Action<float> OnDamaged;
@@ -291,6 +294,5 @@ namespace ProjectWallE.GameLoop
                 effect?.OnDrawGizmos(transform);
         }
 #endif
-        
     }
 }

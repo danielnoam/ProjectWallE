@@ -15,6 +15,8 @@ public class EnemyManager : MonoBehaviour
     
     [Header("Settings")]
     [SerializeField] private int maxEnemies = 100;
+    [SerializeField] private LayerMask spawnRaycastMask;
+    [SerializeField] private float spawnRaycastHeight = 200f;
     [SerializeField] private ChanceList<Enemy> enemyTypes = new ChanceList<Enemy>();
     
     private Transform _enemyHolder;
@@ -38,15 +40,18 @@ public class EnemyManager : MonoBehaviour
     private void SpawnEnemy(Enemy enemy, EnemySpawnPoint spawnPoint)
     {
         Vector3 spawnOffset = Random.insideUnitSphere * spawnPoint.SpawnPointRange;
-        spawnOffset.y = spawnPoint.SpawnHeight;
+        spawnOffset.y = 0f;
         Vector3 spawnPosition = spawnPoint.transform.position.Add(spawnOffset);
-        
+
+        Vector3 rayOrigin = spawnPosition + Vector3.up * spawnRaycastHeight;
+        if (Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, spawnRaycastHeight * 2f, spawnRaycastMask)) spawnPosition.y = hit.point.y;
+
         var request = new DeploymentRequest(spawnPosition, Vector3.forward, _enemyHolder)
         {
-            ImpactTeam = Team.Enemy
+            ImpactTeam = Team.Enemy,
         };
-        
-        DeploymentManager.Instance?.DeployFromSky(enemy, request);
+
+        DeploymentManager.Instance?.LaunchFromSky(enemy, request);
     }
     
     public void SpawnEnemyWave(int enemiesToSpawn, ChanceList<Enemy> enemySource = null, EnemySpawnPoint spawnPoint = null)

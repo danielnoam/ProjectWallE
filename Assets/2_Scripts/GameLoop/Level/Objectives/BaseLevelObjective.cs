@@ -1,5 +1,5 @@
 using System;
-using DNExtensions.Utilities;
+using DNExtensions.Utilities.CustomFields;
 using ProjectWallE.GameLoop.UI;
 using UnityEngine;
 
@@ -12,7 +12,10 @@ namespace ProjectWallE.GameLoop
         [SerializeField] protected ExposedReference<ObjectiveGameMarker> objectiveMarker;
         [SerializeField] protected bool showInGame = true;
         [SerializeField] protected bool showOnRadar = true;
-        
+
+        [Header("Tutorial")]
+        [Tooltip("Use * to wrap text for styled formatting, e.g. 'Press *Space* to jump'")]
+        [SerializeField] private OptionalField<string> tutorialTextOverride;
 
         private bool _isDisposed;
         private bool _isCompleted;
@@ -21,17 +24,14 @@ namespace ProjectWallE.GameLoop
         protected ObjectiveGameMarker ResolvedMarker { get; private set; }
 
         public bool IsCompleted => _isCompleted;
+        public string TutorialText => tutorialTextOverride.isSet ? tutorialTextOverride.Value : DefaultTutorialText;
         public abstract string Description { get; }
         public virtual string ProgressText => _isCompleted ? "Complete" : "In Progress";
-        
+        protected virtual string DefaultTutorialText => string.Empty;
 
         protected abstract void OnInitialize(IExposedPropertyTable resolver = null);
 
-
-        protected virtual void OnDispose()
-        {
-            
-        }
+        protected virtual void OnDispose() { }
 
         protected void Complete()
         {
@@ -40,16 +40,13 @@ namespace ProjectWallE.GameLoop
             _onComplete?.Invoke();
         }
 
-        public virtual void Tick(float deltaTime)
-        {
-            
-        }
+        public virtual void Tick(float deltaTime) { }
 
         public BaseLevelObjective Clone()
         {
             return (BaseLevelObjective)MemberwiseClone();
         }
-        
+
         public void Initialize(Action onComplete, IExposedPropertyTable resolver = null)
         {
             _isCompleted = false;
@@ -64,7 +61,7 @@ namespace ProjectWallE.GameLoop
         {
             Complete();
         }
-        
+
         public void Dispose()
         {
             if (_isDisposed) return;

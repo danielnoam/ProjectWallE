@@ -131,7 +131,7 @@ namespace ProjectWallE.GameLoop.Player
                 Vector3 resolvedNormal = surfaceNormal;
 
                 Vector3 rayOrigin = scatteredPosition + Vector3.up * scatterRaycastHeight;
-                if (Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, scatterRaycastHeight * 2f, targetLayerMask))
+                if (Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, scatterRaycastHeight * 2f, targetLayerMask, QueryTriggerInteraction.Ignore))
                 {
                     scatteredPosition.y = hit.point.y;
                     resolvedNormal = hit.normal;
@@ -144,7 +144,7 @@ namespace ProjectWallE.GameLoop.Player
                     InstantiateOnLand = false
                 };
 
-                DeploymentManager.Instance.DeployFromShip(data, request);
+                DeploymentManager.Instance.LaunchFromShip(data, request);
             }
         }
     }

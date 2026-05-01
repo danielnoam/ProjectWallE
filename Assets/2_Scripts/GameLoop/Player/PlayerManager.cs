@@ -290,7 +290,7 @@ namespace ProjectWallE
             };
 
             OnRespawnPodCalled?.Invoke();
-            DeploymentManager.Instance.DeployFromShip(this, request);
+            DeploymentManager.Instance.LaunchFromShip(this, request);
         }
 
         #endregion
@@ -390,6 +390,36 @@ namespace ProjectWallE
         public void Deploy(DeploymentRequest request)
         {
             Respawn(request.TargetPosition, Quaternion.LookRotation(request.TargetForward));
+        }
+        
+        public void CallPodTo(PlayerSpawnPoint spawnPoint)
+        {
+            if (!DeploymentManager.Instance || !spawnPoint) return;
+
+            if (_respawnCoroutine != null)
+            {
+                StopCoroutine(_respawnCoroutine);
+                _respawnCoroutine = null;
+            }
+            
+            if (IsAlive)
+            {
+                ResetRbVelocity();
+                _currentHealth = 0;
+                _rigidbody.isKinematic = true;
+                gfx.SetActive(false);
+            }
+
+            _podInFlight = true;
+
+            var request = new DeploymentRequest(spawnPoint.SpawnPosition, spawnPoint.SpawnRotation * Vector3.forward, null)
+            {
+                InstantiateOnLand = false,
+                ImpactTeam = Team.Player,
+                CameraMode = PodCameraMode.Follow
+            };
+
+            DeploymentManager.Instance.LaunchFromShip(this, request);
         }
 
         #endregion

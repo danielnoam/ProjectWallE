@@ -12,19 +12,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de20f28ea40c22c43978f33a09f060b4, type: 3}
   m_Name: Sequence Fade In
   m_EditorClassIdentifier: 
-  duration: 2
+  duration: 5
   isAdditive: 0
   resetEffectsOnComplete: 0
   effects:
+  - rid: 4199866171927298146
   - rid: 6000860902211453005
   references:
     version: 2
     RefIds:
-    - rid: 6000860902211453005
+    - rid: 4199866171927298146
       type: {class: SetFullscreenColor, ns: DNExtensions.Systems.VFXManager, asm: Assembly-CSharp-firstpass}
       data:
         duration:
           minValue: 0
+          maxValue: 0.15
+        overrideStartColor:
+          isSet: 1
+          hideValueIfSet: 0
+          value: {r: 0, g: 0, b: 0, a: 1}
+        endColor: {r: 0, g: 0, b: 0, a: 1}
+        ease: 1
+    - rid: 6000860902211453005
+      type: {class: SetFullscreenColor, ns: DNExtensions.Systems.VFXManager, asm: Assembly-CSharp-firstpass}
+      data:
+        duration:
+          minValue: 0.15
           maxValue: 1
         overrideStartColor:
           isSet: 1
