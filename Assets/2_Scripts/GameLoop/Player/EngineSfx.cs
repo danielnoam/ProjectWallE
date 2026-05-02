@@ -100,30 +100,24 @@ namespace ProjectWallE
             }
 
             float maxUsableRPM = Mathf.Min(maxRPM, GetClipRPM(audioSources.Count - 1));
-
             float maxSpeed = carControllerSettings.TopForwardSpeed * maxSpeedMultiplier;
             maxSpeed = Mathf.Max(0.01f, maxSpeed);
-
             float targetRPM;
 
             if (player.CarController.IsCarGrounded())
             {
                 float speed = Mathf.Abs(player.CarController.CarSpeed);
                 float speedT = Mathf.InverseLerp(0f, maxSpeed, speed);
-
                 targetRPM = Mathf.Lerp(minRPM, maxUsableRPM, speedT);
             }
             else
             {
                 float accelInput = Mathf.Clamp01(player.CarController.CarInput.Acceleration);
-
                 targetRPM = Mathf.Lerp(minRPM, maxUsableRPM, accelInput);
             }
 
             _currentRPM = SmoothValue(_currentRPM, targetRPM, rpmSmoothSpeed);
-
             float rpm = Mathf.Clamp(_currentRPM, minRPM, maxUsableRPM);
-
             ApplyWeightedEngineBlend(rpm);
         }
 
@@ -199,11 +193,7 @@ namespace ProjectWallE
 
         private float SmoothValue(float current, float target, float speed)
         {
-            return Mathf.Lerp(
-                current,
-                target,
-                1f - Mathf.Exp(-speed * Time.deltaTime)
-            );
+            return Mathf.Lerp(current, target, 1f - Mathf.Exp(-speed * Time.deltaTime));
         }
 
         private void OnControllerSwitch(ControllerType type)
