@@ -3,6 +3,7 @@ using DNExtensions.Utilities.AutoGet;
 using PrimeTween;
 using ProjectWallE.GameLoop;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ProjectWallE.UI
 {
@@ -14,6 +15,12 @@ namespace ProjectWallE.UI
 
         [Header("Resources")]
         [SerializeField] private CountIcon resourcesIcon;
+
+        [Header("Structures")]
+        [SerializeField] private RectTransform structuresHolder;
+        [SerializeField, Min(0f)] private float structuresShowDuration = 0.25f;
+        [SerializeField, Min(0f)] private float structuresHideDuration = 0.15f;
+        [SerializeField] private Ease structuresAnimationEase = Ease.InOutSine;
         [SerializeField] private CountIcon basesIcon;
         [SerializeField] private CountIcon turretsIcon;
         [SerializeField] private CountIcon generatorsIcon;
@@ -38,6 +45,8 @@ namespace ProjectWallE.UI
         [SerializeField, AutoGetScene] private PlayerManager player;
 
         private Tween _fadeTween;
+        private Tween _structuresTween;
+        private float _structuresContentHeight;
 
         private void OnValidate()
         {
@@ -47,6 +56,17 @@ namespace ProjectWallE.UI
         private void Awake()
         {
             ResetIcons();
+
+            if (structuresHolder)
+            {
+                var csf = structuresHolder.GetComponent<ContentSizeFitter>();
+                if (csf) csf.enabled = false;
+                structuresHolder.sizeDelta = new Vector2(structuresHolder.sizeDelta.x, 0f);
+
+                LayoutRebuilder.ForceRebuildLayoutImmediate(structuresHolder);
+                _structuresContentHeight = LayoutUtility.GetPreferredHeight(structuresHolder);
+                structuresHolder.sizeDelta = new Vector2(structuresHolder.sizeDelta.x, 0f);
+            }
         }
 
         private void OnEnable()
@@ -109,6 +129,39 @@ namespace ProjectWallE.UI
             }
         }
 
+        private void OnDestroy()
+        {
+            if (_structuresTween.isAlive) _structuresTween.Stop();
+        }
+
+        private void ShowStructuresHolder()
+        {
+            if (!structuresHolder) return;
+            if (_structuresTween.isAlive) _structuresTween.Stop();
+            _structuresTween = AnimateStructuresHeight(_structuresContentHeight, structuresShowDuration);
+        }
+
+        private void HideStructuresHolder()
+        {
+            if (!structuresHolder) return;
+            if (_structuresTween.isAlive) _structuresTween.Stop();
+            _structuresTween = AnimateStructuresHeight(0f, structuresHideDuration);
+        }
+
+        private Tween AnimateStructuresHeight(float target, float duration)
+        {
+            float start = structuresHolder.sizeDelta.y;
+            if (Mathf.Approximately(start, target)) return default;
+
+            if (duration > 0)
+                return Tween.Custom(start, target, duration,
+                    v => structuresHolder.sizeDelta = new Vector2(structuresHolder.sizeDelta.x, v),
+                    ease: structuresAnimationEase, useUnscaledTime: true);
+
+            structuresHolder.sizeDelta = new Vector2(structuresHolder.sizeDelta.x, target);
+            return default;
+        }
+
         private void OnPlayerSpawn()
         {
             if (!canvasGroup) return;
@@ -167,52 +220,35 @@ namespace ProjectWallE.UI
         private void OnSwitchCooldownUpdated(float currentCooldown, float maxCooldown)
         {
             if (switchIcon && switchIcon.isActiveAndEnabled)
-            {
                 switchIcon.UpdateCooldown(currentCooldown, maxCooldown);
-            }
         }
 
         private void OnActionsMenuRequested(Structure structure)
         {
-            basesIcon?.gameObject.SetActive(true);
-            turretsIcon?.gameObject.SetActive(true);
-            generatorsIcon?.gameObject.SetActive(true);
-            rampsIcon?.gameObject.SetActive(true);
+            ShowStructuresHolder();
             if (buildIcon && buildIcon.isActiveAndEnabled) buildIcon.PunchIcon();
         }
 
         private void OnBuildMenuRequested(Structure[] structures, bool canBuild)
         {
-            basesIcon?.gameObject.SetActive(true);
-            turretsIcon?.gameObject.SetActive(true);
-            generatorsIcon?.gameObject.SetActive(true);
-            rampsIcon?.gameObject.SetActive(true);
+            ShowStructuresHolder();
             if (buildIcon && buildIcon.isActiveAndEnabled) buildIcon.PunchIcon();
         }
 
         private void OnSupportMenuRequested(SOSupportActionData[] obj)
         {
-            basesIcon?.gameObject.SetActive(true);
-            turretsIcon?.gameObject.SetActive(true);
-            generatorsIcon?.gameObject.SetActive(true);
-            rampsIcon?.gameObject.SetActive(true);
+            ShowStructuresHolder();
             if (supportIcon && supportIcon.isActiveAndEnabled) supportIcon.PunchIcon();
         }
 
         private void OnSupportMenuCloseRequested()
         {
-            basesIcon?.gameObject.SetActive(false);
-            turretsIcon?.gameObject.SetActive(false);
-            generatorsIcon?.gameObject.SetActive(false);
-            rampsIcon?.gameObject.SetActive(false);
+            HideStructuresHolder();
         }
 
         private void OnMenuCloseRequested()
         {
-            basesIcon?.gameObject.SetActive(false);
-            turretsIcon?.gameObject.SetActive(false);
-            generatorsIcon?.gameObject.SetActive(false);
-            rampsIcon?.gameObject.SetActive(false);
+            HideStructuresHolder();
         }
 
         private void UpdateStructuresText(StructuresData data)
@@ -225,12 +261,14 @@ namespace ProjectWallE.UI
 
         private void OnBasicCooldownUpdated(float currentCooldown, float maxCooldown)
         {
-            if (basicAttackIcon && basicAttackIcon.isActiveAndEnabled) basicAttackIcon.UpdateCooldown(currentCooldown, maxCooldown);
+            if (basicAttackIcon && basicAttackIcon.isActiveAndEnabled)
+                basicAttackIcon.UpdateCooldown(currentCooldown, maxCooldown);
         }
 
         private void OnSpecialCooldownUpdated(float currentCooldown, float maxCooldown)
         {
-            if (specialAttackIcon && basicAttackIcon.isActiveAndEnabled) specialAttackIcon.UpdateCooldown(currentCooldown, maxCooldown);
+            if (specialAttackIcon && basicAttackIcon.isActiveAndEnabled)
+                specialAttackIcon.UpdateCooldown(currentCooldown, maxCooldown);
         }
 
         private void UpdateResourcesDisplay(int currentResources)

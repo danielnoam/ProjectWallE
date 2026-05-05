@@ -6,10 +6,12 @@ using UnityEngine;
 public class ToggleEnemySpawnPointMarker : BaseLevelEventMarker
 {
     [Header("Spawn Point")]
-    public ExposedReference<EnemySpawnPoint> enemySpawnPoint;
-    public bool spawnPointState = true;
+    [SerializeField] private ExposedReference<EnemySpawnPoint> enemySpawnPoint;
+    [SerializeField] private bool spawnPointState = true;
     
-    public override void Execute(IExposedPropertyTable resolver = null)
+    public bool SpawnPointState => spawnPointState;
+    
+    protected override void OnExecute(IExposedPropertyTable resolver = null)
     {
         var point = enemySpawnPoint.Resolve(resolver);
         point?.SetActiveState(spawnPointState);

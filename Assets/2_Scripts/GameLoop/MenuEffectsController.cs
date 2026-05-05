@@ -1,3 +1,4 @@
+using DNExtensions.Systems.VFXManager;
 using DNExtensions.Utilities.AutoGet;
 using PrimeTween;
 using ProjectWallE.UI;
@@ -5,12 +6,14 @@ using UnityEngine;
 
 namespace ProjectWallE.GameLoop
 {
-    public class TimeScaleManager : MonoBehaviour
+    public class MenuEffectsController : MonoBehaviour
     {
         [Header("Settings")]
         [SerializeField] private float slowScale = 0.05f;
         [SerializeField] private float slowDuration = 0.5f;
         [SerializeField] private float resumeDuration = 0.5f;
+        [SerializeField] private EffectSequence fadeInSequence;
+        [SerializeField] private EffectSequence fadeOutSequence;
         [SerializeField, AutoGetScene, HideInInspector] private StructureBuildMenu buildMenu;
         [SerializeField, AutoGetScene, HideInInspector] private StructureActionsMenu actionsMenu;
         [SerializeField, AutoGetScene, HideInInspector] private SupportActionsMenu supportMenu;
@@ -61,13 +64,21 @@ namespace ProjectWallE.GameLoop
         private void OnMenuOpened()
         {
             _openMenuCount++;
-            if (_openMenuCount == 1) SetTimeScale(slowScale, slowDuration, Ease.Linear);
+            if (_openMenuCount == 1)
+            {
+                VFXManager.Instance?.PlaySequence(fadeInSequence);
+                SetTimeScale(slowScale, slowDuration, Ease.Linear);
+            }
         }
 
         private void OnMenuClosed()
         {
             _openMenuCount = Mathf.Max(0, _openMenuCount - 1);
-            if (_openMenuCount == 0) SetTimeScale(1f, resumeDuration, Ease.OutBack);
+            if (_openMenuCount == 0)
+            {
+                VFXManager.Instance?.PlaySequence(fadeOutSequence);
+                SetTimeScale(1f, resumeDuration, Ease.OutBack);
+            }
         }
 
         private void SetTimeScale(float target, float duration, Ease ease)

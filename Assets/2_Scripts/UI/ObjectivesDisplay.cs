@@ -3,6 +3,7 @@ using System.Text;
 using DNExtensions.Systems.Scriptables;
 using ProjectWallE.GameLoop;
 using PrimeTween;
+using TMPEffects.Components;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,12 +15,14 @@ namespace ProjectWallE.UI
         [Header("Objectives")]
         [SerializeField] private GameObject objectivesHolder;
         [SerializeField] private TextMeshProUGUI objectivesText;
+        [SerializeField] private TMPWriter objectivesWriter;
         [SerializeField] private SOFontStyle objectiveStatusFontStyle;
         [SerializeField] private SOFontStyle objectiveCompletedFontStyle;
 
         [Header("Tutorial")]
         [SerializeField] private GameObject tutorialHolder;
         [SerializeField] private TextMeshProUGUI tutorialText;
+        [SerializeField] private TMPWriter tutorialWriter;
         [SerializeField] private SOFontStyle tutorialActionFontStyle;
 
         [Header("Animation")]
@@ -53,6 +56,9 @@ namespace ProjectWallE.UI
                 if (csf) csf.enabled = false;
                 if (_tutorialRect) _tutorialRect.sizeDelta = new Vector2(_tutorialRect.sizeDelta.x, 0f);
             }
+            
+            if (objectivesWriter) objectivesWriter.OnFinishWriter.AddListener(_ => objectivesWriter.enabled = false);
+            if (tutorialWriter) tutorialWriter.OnFinishWriter.AddListener(_ => tutorialWriter.enabled = false);
         }
 
         private void OnEnable()
@@ -103,6 +109,7 @@ namespace ProjectWallE.UI
         {
             _activeObjectives = objectives;
             UpdateObjectivesDisplay();
+            if (objectivesWriter) objectivesWriter.enabled = true;
 
             BuildTutorialText();
             bool hasTutorial = _tutorialBuilder.Length > 0;
@@ -124,6 +131,8 @@ namespace ProjectWallE.UI
                     if (_tutorialTween.isAlive) _tutorialTween.Stop();
                     _tutorialTween = AnimateHeight(_tutorialRect, GetContentHeight(_tutorialRect), showDuration);
                 }
+                
+                if (tutorialWriter) tutorialWriter.enabled = true;
             }
         }
 
@@ -217,8 +226,7 @@ namespace ProjectWallE.UI
             float start = rect.sizeDelta.y;
             if (Mathf.Approximately(start, target)) return default;
 
-            if (duration > 0)
-                return Tween.Custom(start, target, duration, v => rect.sizeDelta = new Vector2(rect.sizeDelta.x, v), ease: animationEase);
+            if (duration > 0) return Tween.Custom(start, target, duration, v => rect.sizeDelta = new Vector2(rect.sizeDelta.x, v), ease: animationEase, useUnscaledTime: true);
 
             rect.sizeDelta = new Vector2(rect.sizeDelta.x, target);
             return default;

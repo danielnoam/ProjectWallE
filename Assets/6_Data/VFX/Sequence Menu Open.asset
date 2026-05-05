@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de20f28ea40c22c43978f33a09f060b4, type: 3}
+  m_Name: Sequence Menu Open
+  m_EditorClassIdentifier: 
+  duration: 0.3
+  isAdditive: 0
+  resetEffectsOnComplete: 0
+  effects:
+  - rid: 6000861080652611849
+  - rid: 4199866267989442786
+  references:
+    version: 2
+    RefIds:
+    - rid: 4199866267989442786
+      type: {class: SetChromaticAberration, ns: DNExtensions.Systems.VFXManager, asm: Assembly-CSharp-firstpass}
+      data:
+        duration:
+          minValue: 0
+          maxValue: 1
+        intensity:
+          animate: 1
+          startValue:
+            isSet: 0
+            hideValueIfSet: 0
+            value: 0
+          endValue: 0.6
+          ease: 1
+    - rid: 6000861080652611849
+      type: {class: SetVignette, ns: DNExtensions.Systems.VFXManager, asm: Assembly-CSharp-firstpass}
+      data:
+        duration:
+          minValue: 0
+          maxValue: 1
+        intensity:
+          animate: 1
+          startValue:
+            isSet: 0
+            hideValueIfSet: 0
+            value: 0
+          endValue: 0.25
+          ease: 3
+        smoothness:
+          animate: 1
+          startValue:
+            isSet: 0
+            hideValueIfSet: 0
+            value: 0
+          endValue: 0.626
+          ease: 3
+        center:
+          animate: 0
+          startValue:
+            isSet: 0
+            hideValueIfSet: 0
+            value: {x: 0, y: 0}
+          endValue: {x: 0.5, y: 0.5}
+          ease: 1
+        rounded: 1

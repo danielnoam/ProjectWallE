@@ -7,9 +7,12 @@ using UnityEngine;
 [Serializable]
 public class StartObjectivesMarker : BaseLevelEventMarker
 {
-    [SerializeReference, SerializableSelector(Foldout = false)] public List<BaseLevelObjective> objectives = new();
+    [Space(10)]
+    [SerializeReference, SerializableSelector(Foldout = false)] private List<BaseLevelObjective> objectives = new();
+    
+    public List<BaseLevelObjective> Objectives => objectives;
 
-    public override void Execute(IExposedPropertyTable resolver = null)
+    protected override void OnExecute(IExposedPropertyTable resolver = null)
     {
         LevelManager.Instance?.StartObjectives(objectives, resolver);
     }

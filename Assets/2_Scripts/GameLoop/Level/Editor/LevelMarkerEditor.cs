@@ -22,7 +22,7 @@ public class SpawnEnemyWaveMarkerEditor : MarkerEditor
     {
         return new MarkerDrawOptions
         {
-            tooltip = $"Spawn {((SpawnEnemyWaveMarker)marker).enemyCount} enemies",
+            tooltip = $"Spawn {((SpawnEnemyWaveMarker)marker).EnemyCount} enemies",
         };
     }
 }
@@ -41,7 +41,7 @@ public class SpawnStructureMarkerEditor : MarkerEditor
     
     public override MarkerDrawOptions GetMarkerOptions(IMarker marker)
     {
-        var structure = ((SpawnStructureMarker)marker).structureToSpawn;
+        var structure = ((SpawnStructureMarker)marker).StructureToSpawn;
         return new MarkerDrawOptions
         {
             tooltip = $"Spawn {(!structure ? "Structure" : structure.StructureUIData.Label)}",
@@ -55,7 +55,7 @@ public class ToggleEnemySpawnPointMarkerEditor : MarkerEditor
     public override void DrawOverlay(IMarker marker, MarkerUIStates uiState, MarkerOverlayRegion region)
     {
         var toggle = marker as ToggleEnemySpawnPointMarker;
-        Color color = toggle && toggle.spawnPointState ? new Color(1f, 0.3f, 0.3f, 0.9f) : new Color(1f, 0.3f, 0.3f, 0.2f);
+        Color color = toggle && toggle.SpawnPointState ? new Color(1f, 0.3f, 0.3f, 0.9f) : new Color(1f, 0.3f, 0.3f, 0.2f);
         
         Rect markerRect = region.markerRegion;
         
@@ -73,7 +73,7 @@ public class ToggleEnemySpawnPointMarkerEditor : MarkerEditor
         var toggle = marker as ToggleEnemySpawnPointMarker;
         return new MarkerDrawOptions
         {
-            tooltip = toggle && toggle.spawnPointState ? "Enable Spawn Point" : "Disable Spawn Point"
+            tooltip = toggle && toggle.SpawnPointState ? "Enable Spawn Point" : "Disable Spawn Point"
         };
     }
 }
@@ -97,7 +97,7 @@ internal class StartObjectivesMarkerEditor : MarkerEditor
     public override MarkerDrawOptions GetMarkerOptions(IMarker marker)
     {
         var objective = marker as StartObjectivesMarker;
-        int count = objective?.objectives?.Count ?? 0;
+        int count = objective?.Objectives?.Count ?? 0;
 
         return new MarkerDrawOptions
         {

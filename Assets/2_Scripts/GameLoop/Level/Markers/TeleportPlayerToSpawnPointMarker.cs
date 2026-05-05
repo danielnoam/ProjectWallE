@@ -5,11 +5,12 @@ using UnityEngine;
 [Serializable]
 public class TeleportPlayerToSpawnPointMarker : BaseLevelEventMarker
 {
-    public bool usePod;
-    public ExposedReference<PlayerSpawnPoint> playerSpawnPoint;
+    [Header("Spawn Point")]
+    [SerializeField] private bool usePod;
+    [SerializeField] private ExposedReference<PlayerSpawnPoint> playerSpawnPoint;
 
 
-    public override void Execute(IExposedPropertyTable resolver = null)
+    protected override void OnExecute(IExposedPropertyTable resolver = null)
     {
         var spawnPoint = playerSpawnPoint.Resolve(resolver);
         if (!spawnPoint) return;
