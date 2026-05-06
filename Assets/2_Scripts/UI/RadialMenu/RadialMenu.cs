@@ -12,7 +12,7 @@ namespace ProjectWallE.UI
         [Header("Input Settings")]
         [SerializeField] protected float selectionDeadzone = 50f;
         [SerializeField] protected float maxRadius = 150f;
-        [SerializeField, ReadOnly, Preview] protected Vector2 mousePositionFromCenter;
+        [SerializeField, ReadOnly] protected Vector2 mousePositionFromCenter;
         
         [Header("Element Settings")]
         [SerializeField] protected Color normalColor = Color.white;
@@ -32,8 +32,8 @@ namespace ProjectWallE.UI
         private int _currentSegmentIndex = -1;
         private bool _isOpen;
 
-        public event Action<T> OnItemSelected;
-        public event Action<T> OnItemHoverChanged;
+        public event Action<RadialMenuElement, T> OnElementSelected;
+        public event Action<RadialMenuElement, T> OnElementHoverChanged;
         public event Action OnMenuOpened;
         public event Action OnMenuClosed;
         
@@ -68,7 +68,7 @@ namespace ProjectWallE.UI
 
             if (_elementToItem.TryGetValue(element, out T item))
             {
-                OnItemHoverChanged?.Invoke(item);
+                OnElementHoverChanged?.Invoke(element, item);
             }
         }
 
@@ -78,7 +78,7 @@ namespace ProjectWallE.UI
             if (selectedItemText) selectedItemText.text = "";
             _hoveredElement.SetNormal();
             _hoveredElement = null;
-            OnItemHoverChanged?.Invoke(null);
+            OnElementHoverChanged?.Invoke(null, null);
         }
 
         private void UpdateHoverSelection()
@@ -160,7 +160,7 @@ namespace ProjectWallE.UI
         {
             if (!_hoveredElement) return false;
             if (!_elementToItem.TryGetValue(_hoveredElement, out T item)) return false;
-            OnItemSelected?.Invoke(item);
+            OnElementSelected?.Invoke(_hoveredElement, item);
             return true;
         }
 

@@ -81,9 +81,11 @@ namespace ProjectWallE.UI
                 player.OnControllerChanged += OnControllerChanged;
                 player.Shooter.OnAttack1 += OnAttack;
                 player.Shooter.OnAttack2 += OnAttack;
-                player.StructureBuilder.BuildMenuRequested += OnMenuRequested;
+                player.StructureBuilder.BuildMenuRequested += OnBuildMenuRequested;
                 player.StructureBuilder.ActionsMenuRequested += OnActionsMenuRequested;
                 player.StructureBuilder.MenuCloseRequested += OnMenuClosed;
+                player.SupportCaller.SupportMenuRequested += OnSupportMenuRequested;
+                player.SupportCaller.MenuCloseRequested += OnMenuClosed;
                 player.OnDeath += OnPlayerDeath;
                 player.OnSpawn += OnPlayerSpawn;
             }
@@ -91,6 +93,7 @@ namespace ProjectWallE.UI
             CameraManager.OnCameraChanged += OnCameraChanged;
             RefreshActiveState();
         }
+        
 
         private void OnDisable()
         {
@@ -99,9 +102,11 @@ namespace ProjectWallE.UI
                 player.OnControllerChanged -= OnControllerChanged;
                 player.Shooter.OnAttack1 -= OnAttack;
                 player.Shooter.OnAttack2 -= OnAttack;
-                player.StructureBuilder.BuildMenuRequested -= OnMenuRequested;
+                player.StructureBuilder.BuildMenuRequested -= OnBuildMenuRequested;
                 player.StructureBuilder.ActionsMenuRequested -= OnActionsMenuRequested;
                 player.StructureBuilder.MenuCloseRequested -= OnMenuClosed;
+                player.SupportCaller.SupportMenuRequested -= OnSupportMenuRequested;
+                player.SupportCaller.MenuCloseRequested -= OnMenuClosed;
                 player.OnDeath -= OnPlayerDeath;
                 player.OnSpawn -= OnPlayerSpawn;
             }
@@ -142,6 +147,12 @@ namespace ProjectWallE.UI
             }
         }
         
+        private void OnSupportMenuRequested(SOSupportActionData[] _) => SetMenuOpen(true);
+        private void OnBuildMenuRequested(Structure[] _, bool canBuild) => SetMenuOpen(true);
+        private void OnActionsMenuRequested(Structure _) => SetMenuOpen(true);
+        private void OnMenuClosed() => SetMenuOpen(false);
+
+        
         private void OnCameraChanged(bool cinematicCamera)
         {
             _cinematicCameraActive = cinematicCamera;
@@ -160,11 +171,7 @@ namespace ProjectWallE.UI
         {
             PlayReticlePunch();
         }
-
-        private void OnMenuRequested(Structure[] _, bool canBuild) => SetMenuOpen(true);
-        private void OnActionsMenuRequested(Structure _) => SetMenuOpen(true);
-        private void OnMenuClosed() => SetMenuOpen(false);
-
+        
         private void SetMenuOpen(bool value)
         {
             _inMenu = value;

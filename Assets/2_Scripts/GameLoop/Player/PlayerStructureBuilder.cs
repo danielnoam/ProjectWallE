@@ -49,10 +49,10 @@ namespace ProjectWallE.GameLoop.Player
         {
             if (buildMenu)
             {
-                buildMenu.OnItemSelected += TryBuildStructure;
-                buildMenu.OnItemHoverChanged += OnBuildItemHoverChanged;
+                buildMenu.OnElementSelected += TryBuildStructure;
+                buildMenu.OnElementHoverChanged += OnBuildElementHoverChanged;
             }
-            if (actionsMenu) actionsMenu.OnItemSelected += OnStructureActionSelected;
+            if (actionsMenu) actionsMenu.OnElementSelected += OnStructureActionSelected;
             if (playerManager)
             {
                 playerManager.OnDeath += OnDeath;
@@ -64,10 +64,10 @@ namespace ProjectWallE.GameLoop.Player
         {
             if (buildMenu)
             {
-                buildMenu.OnItemSelected -= TryBuildStructure;
-                buildMenu.OnItemHoverChanged -= OnBuildItemHoverChanged;
+                buildMenu.OnElementSelected -= TryBuildStructure;
+                buildMenu.OnElementHoverChanged -= OnBuildElementHoverChanged;
             }
-            if (actionsMenu) actionsMenu.OnItemSelected -= OnStructureActionSelected;
+            if (actionsMenu) actionsMenu.OnElementSelected -= OnStructureActionSelected;
             if (playerManager)
             {
                 playerManager.OnDeath -= OnDeath;
@@ -108,13 +108,13 @@ namespace ProjectWallE.GameLoop.Player
             CloseMenus();
         }
 
-        private void OnStructureActionSelected(StructureAction action)
+        private void OnStructureActionSelected(RadialMenuElement _, StructureAction action)
         {
             if (!action.IsAvailable) return;
             action.OnSelected?.Invoke();
         }
 
-        private void OnBuildItemHoverChanged(Structure structure)
+        private void OnBuildElementHoverChanged(RadialMenuElement _, Structure structure)
         {
             if (!StructureManager.Instance) return;
 
@@ -284,7 +284,7 @@ namespace ProjectWallE.GameLoop.Player
             }
         }
 
-        private void TryBuildStructure(Structure structure)
+        private void TryBuildStructure(RadialMenuElement _, Structure structure)
         {
             if (!_canBuild) return;
 

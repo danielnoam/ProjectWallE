@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 #if UNITY_EDITOR
-using UnityEditor;
+using UnityEditor; 
 #endif
 
 
@@ -12,20 +12,20 @@ namespace DNExtensions.Utilities
     public class RadialLayoutGroup : LayoutGroup
     {
         [Header("Radial Settings")]
-        [SerializeField] private float radius = 100f;
-        [SerializeField] private Vector2 offset = Vector2.zero;
-        [SerializeField, Range(0f, 360f)] private float startAngle;
-        [SerializeField, Range(0f, 360f)] private float endAngle = 360f;
+        public float radius = 100f;
+        public Vector2 offset = Vector2.zero;
+        [Range(0f, 360f)] public float startAngle;
+        [Range(0f, 360f)] public float endAngle = 360f;
         [Tooltip("If true, only visible children are arranged, otherwise all children are arranged")]
-        [SerializeField] private bool onlyLayoutVisible = true;
+        public bool onlyLayoutVisible = true;
         
         [Header("Child Settings")]
         [Tooltip("If true, child size is taken from the child's layout element component, otherwise child size is controlled by childSize")]
-        [SerializeField] private bool controlChildSize;
-        [SerializeField, EnableIf("controlChildSize")] private Vector2 childSize = new Vector2(50f, 50f);
+        public bool controlChildSize;
+        [EnableIf("controlChildSize")] public Vector2 childSize = new Vector2(50f, 50f);
         [Tooltip("If true, children are rotated to face away from the center of the radial group")]
-        [SerializeField] private bool rotateChildren;
-        [SerializeField, EnableIf("rotateChildren")] private float childRotationOffset = -90f;
+        public bool rotateChildren;
+        [EnableIf("rotateChildren")] public float childRotationOffset = -90f;
         
         
         public float Radius

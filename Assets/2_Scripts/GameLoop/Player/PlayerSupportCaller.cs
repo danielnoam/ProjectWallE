@@ -35,7 +35,7 @@ namespace ProjectWallE.GameLoop.Player
 
         private void OnEnable()
         {
-            if (supportMenu) supportMenu.OnItemSelected += OnSupportSelected;
+            if (supportMenu) supportMenu.OnElementSelected += OnSupportSelected;
             if (playerManager)
             {
                 playerManager.OnDeath += OnDeath;
@@ -45,7 +45,7 @@ namespace ProjectWallE.GameLoop.Player
 
         private void OnDisable()
         {
-            if (supportMenu) supportMenu.OnItemSelected -= OnSupportSelected;
+            if (supportMenu) supportMenu.OnElementSelected -= OnSupportSelected;
             if (playerManager)
             {
                 playerManager.OnDeath -= OnDeath;
@@ -109,7 +109,7 @@ namespace ProjectWallE.GameLoop.Player
             CloseMenu();
         }
 
-        private void OnSupportSelected(SOSupportActionData data)
+        private void OnSupportSelected(RadialMenuElement _, SOSupportActionData data)
         {
             if (!_hasTarget) return;
             if (ResourceManager.Instance && !ResourceManager.Instance.TrySpendResources(data.Cost)) return;
