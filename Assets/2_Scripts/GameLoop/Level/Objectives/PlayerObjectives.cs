@@ -43,7 +43,7 @@ namespace ProjectWallE.GameLoop
         protected override void OnInitialize(IExposedPropertyTable resolver = null)
         {
             _currentAttacks = 0;
-            _shooter = LevelManager.Instance.Player.Shooter;
+            _shooter = PlayerManager.Instance.Shooter;
 
             if (attackType is AttackRequirement.Any or AttackRequirement.Basic) _shooter.OnAttack1 += OnAttack;
             if (attackType is AttackRequirement.Any or AttackRequirement.Special) _shooter.OnAttack2 += OnAttack;
@@ -86,8 +86,8 @@ namespace ProjectWallE.GameLoop
 
         protected override void OnInitialize(IExposedPropertyTable resolver = null)
         {
-            var player = LevelManager.Instance.Player;
-            LevelManager.Instance.Player.OnControllerChanged += OnControllerChanged;
+            var player = PlayerManager.Instance;
+            PlayerManager.Instance.OnControllerChanged += OnControllerChanged;
 
             switch (requirement)
             {
@@ -106,9 +106,9 @@ namespace ProjectWallE.GameLoop
 
         protected override void OnDispose()
         {
-            if (LevelManager.Instance && LevelManager.Instance.Player)
+            if (PlayerManager.Instance )
             {
-                LevelManager.Instance.Player.OnControllerChanged -= OnControllerChanged;
+                PlayerManager.Instance.OnControllerChanged -= OnControllerChanged;
             }
         }
 
@@ -145,7 +145,7 @@ namespace ProjectWallE.GameLoop
         {
             _boostDuration = 0f;
             _isBoosting = false;
-            _carBoost = LevelManager.Instance.Player.CarController.CarBoost;
+            _carBoost = PlayerManager.Instance.CarController.CarBoost;
             _carBoost.OnBoostStart += OnBoostStart;
             _carBoost.OnBoostEnd += OnBoostEnd;
         }
@@ -235,7 +235,7 @@ namespace ProjectWallE.GameLoop
         protected override void OnInitialize(IExposedPropertyTable resolver = null)
         {
             _currentDistance = float.MaxValue;
-            _player = LevelManager.Instance.Player.transform;
+            _player = PlayerManager.Instance.transform;
         }
 
         public override void Tick(float deltaTime)

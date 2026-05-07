@@ -29,7 +29,7 @@ namespace ProjectWallE.GameLoop
     {
         protected override IDamageable FindTarget(Vector3 position, float range)
         {
-            var player = LevelManager.Instance?.Player;
+            var player = PlayerManager.Instance;
             if (!player || !player.IsAlive) return null;
             
             if (inRange)
@@ -37,7 +37,7 @@ namespace ProjectWallE.GameLoop
                 return Vector3.Distance(position, player.transform.position) <= range ? player : null;
             }
             
-            return LevelManager.Instance.Player;
+            return player;
         }
     }
     

@@ -16,6 +16,8 @@ namespace ProjectWallE
     
     public class PlayerManager : MonoBehaviour, IDamageable, IPushable, IDeployable
     {
+        public static PlayerManager Instance  { get; private set; }
+        
         [Header("Settings")]
         [SerializeField, Min(10f)] private float maxHealth = 100f;
         [SerializeField] private float timeBeforeHealthRegen = 1.5f;
@@ -89,6 +91,13 @@ namespace ProjectWallE
 
         private void Awake()
         {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            Instance = this;
+            
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 

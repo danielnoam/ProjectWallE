@@ -55,13 +55,13 @@ namespace ProjectWallE.GameLoop
             
             if (Keyboard.current[healPlayerKey].wasPressedThisFrame)
             {
-                LevelManager.Instance?.Player?.Heal(25f);
+                PlayerManager.Instance?.Heal(25f);
                 Debug.Log("Healed 25 Player");
             }
             
             if (Keyboard.current[damagePlayerKey].wasPressedThisFrame)
             {
-                LevelManager.Instance?.Player?.TakeDamage(25f, null);
+                PlayerManager.Instance?.TakeDamage(25f, null);
                 Debug.Log("Damaged Player for 25");
             }
         }

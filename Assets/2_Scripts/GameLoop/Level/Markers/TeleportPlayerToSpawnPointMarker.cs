@@ -1,4 +1,5 @@
 using System;
+using ProjectWallE;
 using ProjectWallE.GameLoop;
 using UnityEngine;
 
@@ -15,7 +16,7 @@ public class TeleportPlayerToSpawnPointMarker : BaseLevelEventMarker
         var spawnPoint = playerSpawnPoint.Resolve(resolver);
         if (!spawnPoint) return;
 
-        var player = LevelManager.Instance?.Player;
+        var player = PlayerManager.Instance;
         if (!player) return;
 
         if (usePod) player.CallPodTo(spawnPoint);

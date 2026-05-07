@@ -84,10 +84,15 @@ namespace ProjectWallE.GameLoop.Player
                 _targetPoint = hit.point;
                 _targetNormal = hit.normal;
                 _hasTarget = true;
+                if (_menuOpen)
+                {
+                    BuildPrompt.Instance?.Show(_targetPoint);
+                }
             }
             else
             {
                 _hasTarget = false;
+                if (_menuOpen) BuildPrompt.Instance?.Hide();
             }
         }
 
@@ -99,6 +104,7 @@ namespace ProjectWallE.GameLoop.Player
 
         private void CloseMenu()
         {
+            BuildPrompt.Instance?.Hide();
             _menuOpen = false;
             MenuCloseRequested?.Invoke();
         }

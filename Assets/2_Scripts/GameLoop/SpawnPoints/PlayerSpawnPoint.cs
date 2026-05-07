@@ -28,7 +28,7 @@ namespace ProjectWallE.GameLoop
         [Button]
         public void TeleportPlayer()
         {
-            LevelManager.Instance?.Player?.Teleport(SpawnPosition, SpawnRotation);
+            PlayerManager.Instance?.Teleport(SpawnPosition, SpawnRotation);
         }
 
 #if UNITY_EDITOR

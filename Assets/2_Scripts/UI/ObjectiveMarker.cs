@@ -47,7 +47,7 @@ namespace ProjectWallE.GameLoop.UI
 
             if (!_player)
             {
-                _player = LevelManager.Instance ? LevelManager.Instance.Player?.transform : null;
+                _player = PlayerManager.Instance ? PlayerManager.Instance.transform : null;
             }
         }
 

@@ -1,7 +1,6 @@
 using System;
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.AutoGet;
-using PrimeTween;
 using ProjectWallE.UI;
 using UnityEngine;
 
@@ -146,7 +145,6 @@ namespace ProjectWallE.GameLoop.Player
         {
             UpdateStructureStatusVisibility(null);
             StructureManager.Instance?.HideGhost();
-            BuildPrompt.Instance?.Hide();
             _menuOpen = false;
             _lastCanBuild = false;
             _lastMenuStructure = null;
@@ -163,7 +161,6 @@ namespace ProjectWallE.GameLoop.Player
                 _targetedStructure = structure;
                 _targetedNode = null;
                 _canBuild = false;
-                UpdateBuildPrompt(_menuOpen ? structure.TopPoint : null);
                 UpdateStructureStatusVisibility(structure);
                 StructureManager.Instance?.HideGhost();
             }
@@ -172,7 +169,6 @@ namespace ProjectWallE.GameLoop.Player
                 _targetedStructure = null;
                 _targetedNode = null;
                 _canBuild = false;
-                UpdateBuildPrompt(null);
                 UpdateStructureStatusVisibility(null);
             }
             else if (Physics.Raycast(_buildRay, out RaycastHit nodeHit, buildRange, nodeLayerMask, QueryTriggerInteraction.Collide) && nodeHit.collider.TryGetComponent(out StructureNode node))
@@ -183,7 +179,6 @@ namespace ProjectWallE.GameLoop.Player
                 _buildNormal = Vector3.up;
                 _targetedNode = node;
                 _canBuild = !node.IsOccupied;
-                UpdateBuildPrompt(_menuOpen ? node.SnapPoint : null);
                 Quaternion rotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized, Vector3.up);
                 StructureManager.Instance?.ShowGhost(node.transform.position, rotation, _canBuild);
             }
@@ -195,7 +190,6 @@ namespace ProjectWallE.GameLoop.Player
                 _buildNormal = groundHit.normal;
                 _targetedNode = null;
                 _canBuild = Vector3.Angle(groundHit.normal, Vector3.up) <= maxBuildAngle;
-                UpdateBuildPrompt(_menuOpen ? groundHit.point : null);
                 Vector3 projectedForward = Vector3.ProjectOnPlane(transform.forward, groundHit.normal).normalized;
                 Quaternion rotation = projectedForward.sqrMagnitude > 0.001f ? Quaternion.LookRotation(projectedForward, groundHit.normal) : Quaternion.identity;
                 StructureManager.Instance?.ShowGhost(groundHit.point, rotation, _canBuild);
@@ -209,7 +203,7 @@ namespace ProjectWallE.GameLoop.Player
                 if (Physics.Raycast(fallbackOrigin, Vector3.down, out RaycastHit downHit, downBuildRange, buildableLayerMask, QueryTriggerInteraction.Ignore))
                 {
                     _canBuild = Vector3.Angle(downHit.normal, Vector3.up) <= maxBuildAngle;
-                    UpdateBuildPrompt(_menuOpen ? downHit.point : null);
+
                     _buildPoint = downHit.point;
                     _buildNormal = downHit.normal;
 
@@ -221,7 +215,6 @@ namespace ProjectWallE.GameLoop.Player
                 }
                 else
                 {
-                    UpdateBuildPrompt(null);
                     UpdateStructureStatusVisibility(null);
                     StructureManager.Instance?.HideGhost();
                     _canBuild = false;
@@ -269,20 +262,7 @@ namespace ProjectWallE.GameLoop.Player
                 }
             }
         }
-
-        private void UpdateBuildPrompt(Vector3? position)
-        {
-            if (!BuildPrompt.Instance) return;
-            
-            if (position.HasValue)
-            {
-                BuildPrompt.Instance.Show(position.Value);
-            }
-            else
-            {
-                BuildPrompt.Instance.Hide();
-            }
-        }
+        
 
         private void TryBuildStructure(RadialMenuElement _, Structure structure)
         {

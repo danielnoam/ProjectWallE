@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using DNExtensions.Utilities.AutoGet;
 using PrimeTween;
-using ProjectWallE;
 using ProjectWallE.GameLoop;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -25,7 +24,6 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
     [Tooltip("Time before the time line starts")]
     [SerializeField] private float initializeDelay = 4f;
     [SerializeField, AutoGetSelf] private PlayableDirector timeline;
-    [SerializeField, AutoGetScene] private PlayerManager player;
     
     private PlayerSpawnPoint _activePlayerSpawnPoint;
     private bool _levelActive;
@@ -34,7 +32,6 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
     
     
     private float TimeRemaining => _levelActive ? (float)(timeline.duration - timeline.time) : 0f;
-    public PlayerManager Player => player;
     public PlayerSpawnPoint ActivePlayerSpawnPoint => _activePlayerSpawnPoint;
     public bool IsLevelActive => _levelActive;
     public bool HasActiveObjectives => _activeObjectives != null;
