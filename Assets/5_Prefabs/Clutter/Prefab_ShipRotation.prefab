@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6240379487131827091}
   - component: {fileID: 9142418247421182858}
+  - component: {fileID: 2159019051874486062}
   m_Layer: 0
   m_Name: Prefab_ShipRotation
   m_TagString: Untagged
@@ -32,7 +33,7 @@ Transform:
   m_Children:
   - {fileID: 5620436739122494731}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: -144.214, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &9142418247421182858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40,7 +41,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8207176133198309658}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d323b82d633143bb86158863cf217c76, type: 3}
   m_Name: 
@@ -62,6 +63,126 @@ MonoBehaviour:
       type: {class: AxisRotationEffect, ns: DNExtensions.Utilities, asm: Assembly-CSharp-firstpass}
       data:
         rotationSpeed: {x: 0, y: -1, z: 0}
+--- !u!114 &2159019051874486062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8207176133198309658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dab5c7d4c32e743048dfca98e2d5914f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Splines::UnityEngine.Splines.SplineContainer
+  m_Spline:
+    m_EditModeType: 1
+    m_Knots: []
+    m_MetaData: []
+    m_Closed: 0
+    m_IntData:
+      m_Data: []
+    m_FloatData:
+      m_Data: []
+    m_Float4Data:
+      m_Data: []
+    m_ObjectData:
+      m_Data: []
+  m_Splines:
+  - m_EditModeType: 1
+    m_Knots:
+    - Position:
+        x: -281
+        y: 0
+        z: -393
+      TangentIn:
+        x: -0
+        y: -0
+        z: -132.82663
+      TangentOut:
+        x: 0
+        y: 0
+        z: 162.21072
+      Rotation:
+        value:
+          x: 0
+          y: -0.37330815
+          z: -0
+          w: 0.92770743
+    - Position:
+        x: -223
+        y: 0
+        z: 412
+      TangentIn:
+        x: -0
+        y: -0
+        z: -157.84969
+      TangentOut:
+        x: 0
+        y: 0
+        z: 143.88484
+      Rotation:
+        value:
+          x: 0
+          y: 0.4706554
+          z: 0
+          w: 0.882317
+    - Position:
+        x: 414.09998
+        y: 0
+        z: 202.70001
+      TangentIn:
+        x: -0
+        y: -0
+        z: -157.90878
+      TangentOut:
+        x: 0
+        y: 0
+        z: 149.22755
+      Rotation:
+        value:
+          x: 0
+          y: 0.96934545
+          z: 0
+          w: 0.24570204
+    - Position:
+        x: 259.9
+        y: 0
+        z: -376
+      TangentIn:
+        x: -0
+        y: -0
+        z: -156.12637
+      TangentOut:
+        x: 0
+        y: 0
+        z: 148.41159
+      Rotation:
+        value:
+          x: 0
+          y: 0.9004704
+          z: 0
+          w: -0.43491745
+    m_MetaData:
+    - Mode: 0
+      Tension: 0.5
+    - Mode: 0
+      Tension: 0.5
+    - Mode: 0
+      Tension: 0.5
+    - Mode: 0
+      Tension: 0.5
+    m_Closed: 1
+    m_IntData:
+      m_Data: []
+    m_FloatData:
+      m_Data: []
+    m_Float4Data:
+      m_Data: []
+    m_ObjectData:
+      m_Data: []
+  m_Knots:
+    m_KnotsLink: []
 --- !u!1001 &3766924242209720414
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -80,31 +201,31 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 9700369a301194c47a2dc4c8df8dc477, type: 2}
     - target: {fileID: 8771042627555734869, guid: 7bb1c4e83c8827e4da3c038692a736dd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -352.33667
+      value: -281
       objectReference: {fileID: 0}
     - target: {fileID: 8771042627555734869, guid: 7bb1c4e83c8827e4da3c038692a736dd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 306
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8771042627555734869, guid: 7bb1c4e83c8827e4da3c038692a736dd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 418.90588
+      value: -393
       objectReference: {fileID: 0}
     - target: {fileID: 8771042627555734869, guid: 7bb1c4e83c8827e4da3c038692a736dd, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.30724168
+      value: 0.9032033
       objectReference: {fileID: 0}
     - target: {fileID: 8771042627555734869, guid: 7bb1c4e83c8827e4da3c038692a736dd, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8771042627555734869, guid: 7bb1c4e83c8827e4da3c038692a736dd, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.95163155
+      value: -0.429213
       objectReference: {fileID: 0}
     - target: {fileID: 8771042627555734869, guid: 7bb1c4e83c8827e4da3c038692a736dd, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8771042627555734869, guid: 7bb1c4e83c8827e4da3c038692a736dd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -121,8 +242,39 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4557294940182872753, guid: 7bb1c4e83c8827e4da3c038692a736dd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8093286025372285383}
   m_SourcePrefab: {fileID: 100100000, guid: 7bb1c4e83c8827e4da3c038692a736dd, type: 3}
+--- !u!1 &826426173205433071 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4557294940182872753, guid: 7bb1c4e83c8827e4da3c038692a736dd, type: 3}
+  m_PrefabInstance: {fileID: 3766924242209720414}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8093286025372285383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 826426173205433071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29a074d529cf945029ef7cf40540c9df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Splines::UnityEngine.Splines.SplineAnimate
+  m_Target: {fileID: 2159019051874486062}
+  m_PlayOnAwake: 1
+  m_LoopMode: 1
+  m_Method: 1
+  m_Duration: 183.0848
+  m_MaxSpeed: 15
+  m_EasingMode: 0
+  m_AlignmentMode: 1
+  m_ObjectForwardAxis: 2
+  m_ObjectUpAxis: 1
+  m_StartOffset: 0
 --- !u!4 &5620436739122494731 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8771042627555734869, guid: 7bb1c4e83c8827e4da3c038692a736dd, type: 3}
