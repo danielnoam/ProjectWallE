@@ -8,13 +8,19 @@ namespace ProjectWallE
     [Serializable]
     public class CarControllerVisuals
     {
+        [Header("References")]
         [Tooltip("Make sure this array and the corresponding steeringTires array in CarController are in the same order")]
         [SerializeField] private TireVisual[] steeringTires;
         [Tooltip("Make sure this array and the corresponding staticTires array in CarController are in the same order")]
         [SerializeField] private TireVisual[] staticTires;
+        
+        [Header("Suspension")]
         [SerializeField] private float suspensionReturnSpeed = 5f;
         [SerializeField] private float suspensionSmoothness = 10f;
         [SerializeField] private float wheelRadius = 1.5f;
+        
+        [Header("Skid marks settings")]
+        [SerializeField, Range(0f,0.2f)] private float skidGroundOffset = 0;
 
         private readonly List<TireVisual> _allTireVisuals = new List<TireVisual>();
         private Transform _carTransform;
@@ -69,6 +75,13 @@ namespace ProjectWallE
                 visual.steerY = rotation;
                 ApplyVisualRotation(visual);
             }
+        }
+
+        public void UpdateSkidTrailHeight(float groundHitDistance, int index)
+        {
+            var vector3 = _allTireVisuals[index].skidTrailTransform.localPosition;
+            vector3.y = -groundHitDistance + skidGroundOffset;
+            _allTireVisuals[index].skidTrailTransform.localPosition = vector3;
         }
 
         #region Helpers

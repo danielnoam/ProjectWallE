@@ -163,6 +163,7 @@ namespace _2_Scripts
                         ForceMode.Force);
 
                     visuals.UpdateTireSuspensionVisuals(true, i, offset);
+                    visuals.UpdateSkidTrailHeight(hit.distance, i);
                 }
                 else
                 {

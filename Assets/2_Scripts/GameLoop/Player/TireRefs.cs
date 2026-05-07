@@ -29,6 +29,7 @@ namespace _2_Scripts
     public class TireVisual
     {
         public Transform visTransform;
+        public Transform skidTrailTransform;
 
         [NonSerialized] public float spinX;
         [NonSerialized] public float steerY;
