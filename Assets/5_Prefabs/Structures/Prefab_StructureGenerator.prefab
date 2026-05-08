@@ -119,7 +119,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.Utilities.SimpleAnimator
   playOnStart:
     isSet: 0
-    hideValueIfSet: 0
+    hideWhenUnchecked: 0
     value: 0
   clips:
   - {fileID: 7400000, guid: d8f012a2bbaa68b4f95245e07a942d6c, type: 2}
@@ -163,11 +163,13 @@ MonoBehaviour:
     fixIcon: {fileID: 21300000, guid: f97c6fce79c949d4d9442abdb8587a5a, type: 3}
     demolishIcon: {fileID: 21300000, guid: bdc8187f8faf27141b9a058f291e0ad0, type: 3}
     ghostPrefab: {fileID: -768713031059423752, guid: 71da1a4c5b42ee54bbc27070f68a635e, type: 3}
+    podPrefab: {fileID: 0}
   damageEffects:
     punchStrength: 1
     punchDuration: 0.15
     punchEase: 1
-    emissionColor: {fileID: 11400000, guid: a96c7138587d94644ace68611d614fe6, type: 2}
+    emissionColor: {fileID: 0}
+    materialColor: {fileID: 11400000, guid: e0eba0be932fbe44ea4eb77f31df8831, type: 2}
     hitSoundId: Damaged
   buildEffect:
     duration: 0.3
@@ -176,7 +178,7 @@ MonoBehaviour:
     buildSoundId: Build
     playAnimation:
       isSet: 1
-      hideValueIfSet: 0
+      hideWhenUnchecked: 0
       value:
         simpleAnimator: {fileID: 2218465062466442339}
         clipName: GeneratorBuild

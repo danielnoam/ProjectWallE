@@ -139,13 +139,15 @@ MonoBehaviour:
     punchStrength: 1
     punchDuration: 0.15
     punchEase: 1
-    emissionColor: {fileID: 11400000, guid: 8bf95861b5525384394ed765bdbfb105, type: 2}
+    emissionColor: {fileID: 0}
+    materialColor: {fileID: 11400000, guid: 6a0d274f87949b441b5db601f2545d11, type: 2}
     hitSoundId: NormalHit
   criticalDamageEffects:
     punchStrength: 1
     punchDuration: 0.15
     punchEase: 1
-    emissionColor: {fileID: 11400000, guid: ef8eb77c9e380be48a477d6f92e3d209, type: 2}
+    emissionColor: {fileID: 0}
+    materialColor: {fileID: 11400000, guid: 3f65c9359762ee741b27f094dbe4ad68, type: 2}
     hitSoundId: CriticalHit
   deathEffect:
     effectType: 1

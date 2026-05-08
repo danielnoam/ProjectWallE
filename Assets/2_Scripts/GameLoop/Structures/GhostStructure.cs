@@ -5,8 +5,8 @@ namespace ProjectWallE.GameLoop
 {
     public class GhostStructure : MonoBehaviour
     {
-        [SerializeField] private SOColorHDR canBuildColor;
-        [SerializeField] private SOColorHDR blockBuildColor;
+        [SerializeField] private SOColor canBuildColor;
+        [SerializeField] private SOColor blockBuildColor;
 
         private static readonly int ScanlinesColor = Shader.PropertyToID("_Scanlines_Color");
         private Material[] _materials;

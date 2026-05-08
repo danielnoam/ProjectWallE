@@ -131,7 +131,7 @@ namespace ProjectWallE.GameLoop
         [SerializeField] private float punchStrength = 1f;
         [SerializeField] private float punchDuration = 0.15f;
         [SerializeField] private Ease punchEase = Ease.Linear;
-        [SerializeField] private SOColorHDR emissionColor;
+        [SerializeField] private SOColor materialColor;
         [SerializeField, AudioLibraryID] private string hitSoundId;
 
         public static readonly int EmissionStrength = Shader.PropertyToID("_Emission_Strength");
@@ -140,9 +140,9 @@ namespace ProjectWallE.GameLoop
 
         private void PunchEmission(Material material)
         {
-            if (!material || !emissionColor) return;
+            if (!material || !materialColor) return;
 
-            material.SetColor(EmissionColorID, emissionColor.Value);
+            material.SetColor(EmissionColorID, materialColor.Value);
             var seq = Sequence.Create();
             seq.Group(Tween.MaterialProperty(material, EmissionStrength, punchStrength, punchDuration * 0.5f, punchEase));
             seq.Chain(Tween.MaterialProperty(material, EmissionStrength, 0f, punchDuration * 0.5f, punchEase));
@@ -150,10 +150,10 @@ namespace ProjectWallE.GameLoop
 
         private void PunchEmission(Material[] materials)
         {
-            if (materials == null || materials.Length == 0 || !emissionColor) return;
+            if (materials == null || materials.Length == 0 || !materialColor) return;
 
             foreach (var mat in materials)
-                mat.SetColor(EmissionColorID, emissionColor.Value);
+                mat.SetColor(EmissionColorID, materialColor.Value);
 
             var seq = Sequence.Create();
             foreach (var mat in materials)
