@@ -43,9 +43,9 @@ namespace _2_Scripts
         
         private CarLongitudinalState _longitudinalState;
 
+        private float _carSpeed;
         private bool _wasBraking;
         private float _currentSteering;
-        private float _currentGripFactor;
         private float _groundedRatio;
         private float _airborneFactor;
         private float _handbrake01;
@@ -60,7 +60,9 @@ namespace _2_Scripts
         /// </summary>
         private float GravityControlFactor => settings.GravityStrength * 0.25f;
 
+        public float CarSpeed => _carSpeed;
         public CarBoost CarBoost => carBoost;
+        public CarInput CarInput => _carInput;
         public Vector3 CenterOfMassOffset => centerOfMassOffset;
         public bool canBuild { get; private set; } = true;
         public bool canShoot { get; private set; } = false;
@@ -129,6 +131,8 @@ namespace _2_Scripts
         public void ApplyLateFixedUpdate()
         {
             StopJittering();
+            foreach (var tire in _allTires) 
+                tire.isGroundedLastFixedFrame = tire.isGroundedExtended;
         }
 
         #region Suspension
@@ -160,6 +164,7 @@ namespace _2_Scripts
                         ForceMode.Force);
 
                     visuals.UpdateTireSuspensionVisuals(true, i, offset);
+                    visuals.UpdateSkidTrailHeight(hit.distance, i);
                 }
                 else
                 {
@@ -207,6 +212,10 @@ namespace _2_Scripts
 
             ApplyFrictionPerTiresType(steeringTires, settings.SteeringTiresFrictionCurve);
             ApplyFrictionPerTiresType(staticTires, settings.StaticTiresFrictionCurve);
+            
+            //visuals
+            for (int i = 0; i < _allTires.Count; i++)
+                visuals.ActivateSkidTrails(_allTires[i].isGroundedExact ? Mathf.Abs(_allTires[i].slippingAmount) : 0f, i);
         }
 
         private void ApplyTireFrictionModifiers(Vector3 planeNormal)
@@ -237,17 +246,21 @@ namespace _2_Scripts
         {
             foreach (Tire tire in tires)
             {
-                if (!tire.isGroundedExtended) continue;
+                if (!tire.isGroundedExtended)
+                {
+                    tire.ResetGrip(frictionCurve);
+                    continue;
+                }
 
                 Vector3 tireVel = _playerRb.GetPointVelocity(tire.tireTransform.position);
                 float steeringVel = Vector3.Dot(tire.tireTransform.right, tireVel);
 
-                float gripFactor = CalcCurrentTireGripFactor(tire, frictionCurve, tireVel);
-                gripFactor *= _airborneFactor;
-                gripFactor *= _slippingFactor;
-                gripFactor = Mathf.Lerp(gripFactor, settings.HandBrakeGrip, _handbrake01);
+                tire.gripFactor = CalcCurrentTireGripFactor(tire, frictionCurve, tireVel);
+                tire.gripFactor *= _airborneFactor;
+                tire.gripFactor *= _slippingFactor;
+                tire.gripFactor = Mathf.Lerp(tire.gripFactor, settings.HandBrakeGrip, _handbrake01);
                 
-                float desiredVelChange = -steeringVel * gripFactor;
+                float desiredVelChange = -steeringVel * tire.gripFactor;
                 float desiredAccel = desiredVelChange / Time.fixedDeltaTime;
 
                 if (!_carInput.HandBreakHeld)
@@ -275,16 +288,18 @@ namespace _2_Scripts
                 return frictionCurve.Evaluate(0f);
             
             Vector3 tireVelAlongGround = Vector3.ProjectOnPlane(tireVel, tire.extendedGroundHit.normal);
-            float slippingAmount = Mathf.Clamp(
+            tire.slippingAmount = Mathf.Clamp(
                 Vector3.Dot(tire.tireTransform.right, tireVelAlongGround.normalized),
                 -1f,
                 1f);
 
-            float gripFactor = frictionCurve.Evaluate(Mathf.Abs(slippingAmount));
+            float gripFactor = frictionCurve.Evaluate(Mathf.Abs(tire.slippingAmount));
             gripFactor = Mathf.Clamp(gripFactor * GetNormalForceGripFactor(tire, tireVel.magnitude), frictionCurve.Evaluate(1f), 1);
-            
-            _currentGripFactor = Mathf.MoveTowards(_currentGripFactor, gripFactor, Time.fixedDeltaTime);
-            return _currentGripFactor;
+
+            bool hasLanded = tire.isGroundedExtended && !tire.isGroundedLastFixedFrame;
+            tire.gripFactor = hasLanded ? gripFactor : 
+                Mathf.MoveTowards(tire.gripFactor, gripFactor, 2f * Time.fixedDeltaTime);
+            return tire.gripFactor;
         }
 
         private float GetNormalForceGripFactor(Tire tire, float tireVelMag)
@@ -313,24 +328,24 @@ namespace _2_Scripts
 
         private void ApplyLongitudinalMovement()
         {
-            float carSpeed = Vector3.Dot(transform.forward, _playerRb.linearVelocity);
+            _carSpeed = Vector3.Dot(transform.forward, _playerRb.linearVelocity);
             
             UpdateLongitudinalState();
             GetLongitudinalValues(out float topForwardSpeed, out float topBackwardSpeed,
                                   out float accelForce, out float brakeForce);
             
-            ApplyEngineBreaking(carSpeed);
+            ApplyEngineBreaking(_carSpeed);
 
             if (_carInput.Acceleration > 0 || _carInput.BoostHeld)
-                ApplyForwardAcceleration(carSpeed, topForwardSpeed, accelForce, brakeForce);
+                ApplyForwardAcceleration(_carSpeed, topForwardSpeed, accelForce, brakeForce);
             else if (_carInput.Acceleration < 0)
-                ApplyBackwardsAcceleration(carSpeed, topBackwardSpeed, accelForce, brakeForce);
+                ApplyBackwardsAcceleration(_carSpeed, topBackwardSpeed, accelForce, brakeForce);
 
             if (CarBoost.CanBoost(out float boostAccel, out float boostSpeedFactor))
-                ApplyBoost(carSpeed, boostAccel, boostSpeedFactor);
+                ApplyBoost(_carSpeed, boostAccel, boostSpeedFactor);
 
             for (int i = 0; i < _allTires.Count; i++)
-                visuals.RotateWheels(carSpeed, i);
+                visuals.RotateWheels(_carSpeed, i);
         }
         
         private void ApplyForwardAcceleration(float carSpeed, float topSpeed, float accelForce, float brakeForce)
@@ -590,18 +605,7 @@ namespace _2_Scripts
                 ? (normalSum / groundedCount).normalized
                 : transform.up;
         }
-
-        private bool IsCarGrounded()
-        {
-            foreach (Tire tire in _allTires)
-            {
-                if (tire.isGroundedExtended)
-                    return true;
-            }
-
-            return false;
-        }
-
+        
         private List<Tire> GetAllTires()
         {
             var allTires = new List<Tire>(steeringTires);
@@ -629,6 +633,17 @@ namespace _2_Scripts
             _playerRb.angularVelocity = Vector3.zero;
         }
         
+        public bool IsCarGrounded()
+        {
+            foreach (Tire tire in _allTires)
+            {
+                if (tire.isGroundedExtended)
+                    return true;
+            }
+
+            return false;
+        }
+
         public bool IsTireGrounded(int index) => _allTires[index].isGroundedExact;
         #endregion
     }

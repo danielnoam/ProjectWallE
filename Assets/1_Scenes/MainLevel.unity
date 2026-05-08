@@ -898,7 +898,7 @@ Terrain:
   m_ScaleInLightmap: 0.042666666
   m_LightmapParameters: {fileID: 15203, guid: 0000000000000000f000000000000000, type: 0}
   m_GroupingID: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 129
   m_AllowAutoConnect: 1
   m_EnableHeightmapRayTracing: 1
   m_EnableTreesAndDetailsRayTracing: 0
@@ -2325,7 +2325,7 @@ Terrain:
   m_ScaleInLightmap: 1
   m_LightmapParameters: {fileID: 15203, guid: 0000000000000000f000000000000000, type: 0}
   m_GroupingID: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 129
   m_AllowAutoConnect: 1
   m_EnableHeightmapRayTracing: 1
   m_EnableTreesAndDetailsRayTracing: 0
@@ -4894,7 +4894,7 @@ Terrain:
   m_ScaleInLightmap: 0.042666666
   m_LightmapParameters: {fileID: 15203, guid: 0000000000000000f000000000000000, type: 0}
   m_GroupingID: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 129
   m_AllowAutoConnect: 1
   m_EnableHeightmapRayTracing: 1
   m_EnableTreesAndDetailsRayTracing: 0
@@ -9412,6 +9412,22 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 397844477742906942, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 397844477742906942, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 397844477742906942, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 397844477742906942, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0
+      objectReference: {fileID: 0}
     - target: {fileID: 730545931457871299, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -9524,6 +9540,26 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -98.21
       objectReference: {fileID: 0}
+    - target: {fileID: 2535925265165959792, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2535925265165959792, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2535925265165959792, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2535925265165959792, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2535925265165959792, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2873257058417860846, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -9561,8 +9597,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3687828784084221649, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3687828784084221649, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3687828784084221649, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3687828784084221649, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -70
       objectReference: {fileID: 0}
     - target: {fileID: 4327746996955536013, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
       propertyPath: m_AnchorMax.y
@@ -10237,27 +10285,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5620436739122494731, guid: f595b4b97f1afd14291332f8cb4af61b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -739.2
+      value: -281
       objectReference: {fileID: 0}
     - target: {fileID: 5620436739122494731, guid: f595b4b97f1afd14291332f8cb4af61b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 15.6
+      value: -393
       objectReference: {fileID: 0}
     - target: {fileID: 5620436739122494731, guid: f595b4b97f1afd14291332f8cb4af61b, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.45240122
+      value: 0.92770743
       objectReference: {fileID: 0}
     - target: {fileID: 5620436739122494731, guid: f595b4b97f1afd14291332f8cb4af61b, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5620436739122494731, guid: f595b4b97f1afd14291332f8cb4af61b, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.8918146
+      value: -0.3733082
       objectReference: {fileID: 0}
     - target: {fileID: 5620436739122494731, guid: f595b4b97f1afd14291332f8cb4af61b, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5620436739122494731, guid: f595b4b97f1afd14291332f8cb4af61b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -10265,15 +10313,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6240379487131827091, guid: f595b4b97f1afd14291332f8cb4af61b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 403
       objectReference: {fileID: 0}
     - target: {fileID: 6240379487131827091, guid: f595b4b97f1afd14291332f8cb4af61b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 311
       objectReference: {fileID: 0}
     - target: {fileID: 6240379487131827091, guid: f595b4b97f1afd14291332f8cb4af61b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 264
       objectReference: {fileID: 0}
     - target: {fileID: 6240379487131827091, guid: f595b4b97f1afd14291332f8cb4af61b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -10484,7 +10532,7 @@ Terrain:
   m_ScaleInLightmap: 0.042666666
   m_LightmapParameters: {fileID: 15203, guid: 0000000000000000f000000000000000, type: 0}
   m_GroupingID: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 129
   m_AllowAutoConnect: 1
   m_EnableHeightmapRayTracing: 1
   m_EnableTreesAndDetailsRayTracing: 0
@@ -10591,7 +10639,7 @@ Terrain:
   m_ScaleInLightmap: 0.042666666
   m_LightmapParameters: {fileID: 15203, guid: 0000000000000000f000000000000000, type: 0}
   m_GroupingID: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 129
   m_AllowAutoConnect: 1
   m_EnableHeightmapRayTracing: 1
   m_EnableTreesAndDetailsRayTracing: 0
@@ -12461,7 +12509,7 @@ Terrain:
   m_ScaleInLightmap: 0.042666666
   m_LightmapParameters: {fileID: 15203, guid: 0000000000000000f000000000000000, type: 0}
   m_GroupingID: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 129
   m_AllowAutoConnect: 1
   m_EnableHeightmapRayTracing: 1
   m_EnableTreesAndDetailsRayTracing: 0
@@ -13193,7 +13241,7 @@ Terrain:
   m_ScaleInLightmap: 0.042666666
   m_LightmapParameters: {fileID: 15203, guid: 0000000000000000f000000000000000, type: 0}
   m_GroupingID: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 129
   m_AllowAutoConnect: 1
   m_EnableHeightmapRayTracing: 1
   m_EnableTreesAndDetailsRayTracing: 0
@@ -15161,7 +15209,7 @@ Terrain:
   m_ScaleInLightmap: 0.042666666
   m_LightmapParameters: {fileID: 15203, guid: 0000000000000000f000000000000000, type: 0}
   m_GroupingID: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 129
   m_AllowAutoConnect: 1
   m_EnableHeightmapRayTracing: 1
   m_EnableTreesAndDetailsRayTracing: 0
@@ -15676,10 +15724,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerManager
       objectReference: {fileID: 0}
-    - target: {fileID: 8828607242384971384, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
-      propertyPath: fuelConsumption
-      value: 25
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15926,7 +15970,7 @@ Terrain:
   m_ScaleInLightmap: 0.042666666
   m_LightmapParameters: {fileID: 15203, guid: 0000000000000000f000000000000000, type: 0}
   m_GroupingID: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 129
   m_AllowAutoConnect: 1
   m_EnableHeightmapRayTracing: 1
   m_EnableTreesAndDetailsRayTracing: 0

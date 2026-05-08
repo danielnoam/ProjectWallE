@@ -15,13 +15,23 @@ namespace _2_Scripts
         public RaycastHit extendedGroundHit;
         [HideInInspector] public LayerMask hitLayer;
         [HideInInspector] public bool isMoving;
+        [HideInInspector] public bool isGroundedLastFixedFrame;
+        [HideInInspector] public float gripFactor;
+        [HideInInspector] public float slippingAmount;
         [HideInInspector] public float normalForceMag = 0f;
 
         public void Initialize()
         {
             isGroundedExact = false;
             isGroundedExtended = false;
+            isGroundedLastFixedFrame = false;
             isMoving = false;
+        }
+
+        public void ResetGrip(AnimationCurve frictionCurve)
+        {
+            gripFactor = frictionCurve.Evaluate(0);
+            slippingAmount = 0f;
         }
     }
     
@@ -29,6 +39,7 @@ namespace _2_Scripts
     public class TireVisual
     {
         public Transform visTransform;
+        public Transform skidTrailTransform;
 
         [NonSerialized] public float spinX;
         [NonSerialized] public float steerY;
