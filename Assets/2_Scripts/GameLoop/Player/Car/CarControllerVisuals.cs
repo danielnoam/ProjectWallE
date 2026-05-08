@@ -13,6 +13,8 @@ namespace ProjectWallE
         [SerializeField] private TireVisual[] steeringTires;
         [Tooltip("Make sure this array and the corresponding staticTires array in CarController are in the same order")]
         [SerializeField] private TireVisual[] staticTires;
+        [Tooltip("Make sure this array and the corresponding _allTires array in CarController are in the same order")]
+        [SerializeField] private TrailRenderer[] tiresSkidTrails;
         
         [Header("Suspension")]
         [SerializeField] private float suspensionReturnSpeed = 5f;
@@ -21,6 +23,7 @@ namespace ProjectWallE
         
         [Header("Skid marks settings")]
         [SerializeField, Range(0f,0.2f)] private float skidGroundOffset = 0;
+        [SerializeField, Range(0f,1f)] private float skidSlippingAmount = 0;
 
         private readonly List<TireVisual> _allTireVisuals = new List<TireVisual>();
         private Transform _carTransform;
@@ -82,6 +85,11 @@ namespace ProjectWallE
             var vector3 = _allTireVisuals[index].skidTrailTransform.localPosition;
             vector3.y = -groundHitDistance + skidGroundOffset;
             _allTireVisuals[index].skidTrailTransform.localPosition = vector3;
+        }
+
+        public void ActivateSkidTrails(float slippingAmount, int index)
+        {
+            tiresSkidTrails[index].emitting = slippingAmount >= skidSlippingAmount;
         }
 
         #region Helpers
