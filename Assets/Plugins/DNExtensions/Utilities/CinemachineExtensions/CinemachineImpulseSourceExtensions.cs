@@ -28,8 +28,6 @@ namespace DNExtensions.Utilities.CinemachineExtensions
                 DissipationRate = settings.dissipationRate,
                 PropagationSpeed = settings.propagationSpeed
             };
-            
-            impulseDefinition.OnValidate();
 
             Vector3 velocity = settings.velocity;
             velocity *= settings.intensity;

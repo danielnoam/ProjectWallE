@@ -8,7 +8,6 @@ namespace DNExtensions.Utilities.CinemachineExtensions
     /// Cinemachine extension that applies rotation-based camera shake, driven by events.
     /// Add this to a CinemachineCamera and call Shake() to trigger.
     /// </summary>
-    [AddComponentMenu("DNExtensions/Cinemachine/Rotation Shake")]
     public class CinemachineRotationShake : CinemachineExtension
     {
         private readonly List<ShakeInstance> _activeShakes = new();

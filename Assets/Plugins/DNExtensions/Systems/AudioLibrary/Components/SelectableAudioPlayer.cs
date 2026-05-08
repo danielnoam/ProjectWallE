@@ -11,14 +11,16 @@ namespace DNExtensions.Systems.AudioLibrary
     {
         [SerializeField] private bool onSelect;
         [SerializeField, AudioLibraryID] private string selectAudioID = string.Empty;
-
         [SerializeField] private bool onDeselect;
         [SerializeField, AudioLibraryID] private string deselectAudioID = string.Empty;
-
         [SerializeField] private bool onSubmit;
         [SerializeField, AudioLibraryID] private string submitAudioID = string.Empty;
-
         [SerializeField, HideInInspector, AutoGetSelf] private Selectable selectable;
+
+        private void OnValidate()
+        {
+            AutoGetSystem.Process(this);
+        }
 
         private void Awake()
         {

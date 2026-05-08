@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
   m_Time: 5.5
+  skipInEditor: 0
   enemyCount: 6
   enemyType: 1
   enemies:
@@ -37,6 +38,7 @@ MonoBehaviour:
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
   m_Time: 9.98333333333336
+  skipInEditor: 0
   enemyCount: 8
   enemyType: 1
   enemies:
@@ -61,6 +63,7 @@ MonoBehaviour:
   m_Name: Toggle Enemy Spawn Point Marker
   m_EditorClassIdentifier: Assembly-CSharp::ToggleEnemySpawnPointMarker
   m_Time: 7.966666666666692
+  skipInEditor: 0
   enemySpawnPoint:
     exposedName: fcadd405a0ff92246bb5a968c3399b68
     defaultValue: {fileID: 0}
@@ -78,6 +81,7 @@ MonoBehaviour:
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
   m_Time: 6.816666666666666
+  skipInEditor: 0
   enemyCount: 5
   enemyType: 0
   enemies:
@@ -122,6 +126,7 @@ MonoBehaviour:
   m_Name: Set Active Player Spawn Point Marker
   m_EditorClassIdentifier: Assembly-CSharp::SetActivePlayerSpawnPointMarker
   m_Time: 0.48333333333333334
+  skipInEditor: 0
   playerSpawnPoint:
     exposedName: 567401d39d8f0034b85f9d33f66e2bb4
     defaultValue: {fileID: 0}
@@ -138,6 +143,7 @@ MonoBehaviour:
   m_Name: Spawn Structure Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnStructureMarker
   m_Time: 3.5166666666666666
+  skipInEditor: 0
   podCameraMode: 1
   structureToSpawn: {fileID: 6487620541022002554, guid: 3b1b64788b055e0498a63ea738b3ba50, type: 3}
   structureSpawnPoint:
@@ -156,6 +162,7 @@ MonoBehaviour:
   m_Name: Objective Marker
   m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
   m_Time: 4.483333333333333
+  skipInEditor: 0
   objectives:
   - rid: 1993976625937514496
   references:
@@ -171,7 +178,7 @@ MonoBehaviour:
         showOnRadar: 1
         tutorialTextOverride:
           isSet: 0
-          hideValueIfSet: 0
+          hideWhenUnchecked: 0
           value: 
         radius: 30
 --- !u!114 &11400000
@@ -209,6 +216,7 @@ MonoBehaviour:
   m_Name: Objective Marker
   m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
   m_Time: 3
+  skipInEditor: 0
   objectives:
   - rid: 1993976625937514505
   references:
@@ -224,7 +232,7 @@ MonoBehaviour:
         showOnRadar: 1
         tutorialTextOverride:
           isSet: 0
-          hideValueIfSet: 0
+          hideWhenUnchecked: 0
           value: 
         radius: 7
 --- !u!114 &2138337481656018860
@@ -240,6 +248,7 @@ MonoBehaviour:
   m_Name: Objective Marker
   m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
   m_Time: 5.916666666666667
+  skipInEditor: 0
   objectives:
   - rid: 1993976625937514497
   references:
@@ -255,7 +264,7 @@ MonoBehaviour:
         showOnRadar: 1
         tutorialTextOverride:
           isSet: 0
-          hideValueIfSet: 0
+          hideWhenUnchecked: 0
           value: 
         enemyPrefab: {fileID: 0}
         killCount: 6
@@ -283,6 +292,7 @@ MonoBehaviour:
   m_Name: Objective Marker
   m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
   m_Time: 1.5
+  skipInEditor: 0
   objectives:
   - rid: 1993976599894032386
   references:
@@ -298,7 +308,7 @@ MonoBehaviour:
         showOnRadar: 1
         tutorialTextOverride:
           isSet: 0
-          hideValueIfSet: 0
+          hideWhenUnchecked: 0
           value: 
         requirement: 1
 --- !u!114 &4621279658087295958
@@ -314,6 +324,7 @@ MonoBehaviour:
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
   m_Time: 10.150000000000023
+  skipInEditor: 0
   enemyCount: 2
   enemyType: 1
   enemies:
@@ -377,6 +388,7 @@ MonoBehaviour:
   m_Name: Objective Marker
   m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
   m_Time: 1.9833333333333334
+  skipInEditor: 0
   objectives:
   - rid: 1993976599894032391
   references:
@@ -392,7 +404,7 @@ MonoBehaviour:
         showOnRadar: 1
         tutorialTextOverride:
           isSet: 0
-          hideValueIfSet: 0
+          hideWhenUnchecked: 0
           value: 
         radius: 20
 --- !u!114 &6827295725405647289
@@ -408,6 +420,7 @@ MonoBehaviour:
   m_Name: Objective Marker
   m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
   m_Time: 1
+  skipInEditor: 0
   objectives:
   - rid: 1993976599894032384
   references:
@@ -423,7 +436,7 @@ MonoBehaviour:
         showOnRadar: 1
         tutorialTextOverride:
           isSet: 0
-          hideValueIfSet: 0
+          hideWhenUnchecked: 0
           value: 
         radius: 20
 --- !u!114 &8276866819151220175
@@ -439,6 +452,7 @@ MonoBehaviour:
   m_Name: Teleport Player To Spawn Point Marker
   m_EditorClassIdentifier: Assembly-CSharp::TeleportPlayerToSpawnPointMarker
   m_Time: 0
+  skipInEditor: 1
   usePod: 1
   playerSpawnPoint:
     exposedName: e47c2d01abf560247b6c973d56506e35
@@ -456,6 +470,7 @@ MonoBehaviour:
   m_Name: Objective Marker
   m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
   m_Time: 7.483333333333349
+  skipInEditor: 0
   objectives:
   - rid: 1993976625937514506
   - rid: 1993976625937514507
@@ -472,7 +487,7 @@ MonoBehaviour:
         showOnRadar: 1
         tutorialTextOverride:
           isSet: 0
-          hideValueIfSet: 0
+          hideWhenUnchecked: 0
           value: 
         structurePrefab: {fileID: 9177759699372231121, guid: 290c791e53f525645b9870cd63da954e, type: 3}
     - rid: 1993976625937514507
@@ -485,7 +500,7 @@ MonoBehaviour:
         showOnRadar: 1
         tutorialTextOverride:
           isSet: 0
-          hideValueIfSet: 0
+          hideWhenUnchecked: 0
           value: 
         structurePrefab: {fileID: 7498951326900205619, guid: 22eee64180129c841a1ce897f19c4847, type: 3}
 --- !u!114 &8979726575955328570
@@ -501,6 +516,7 @@ MonoBehaviour:
   m_Name: Objective Marker
   m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
   m_Time: 2.5166666666666666
+  skipInEditor: 0
   objectives:
   - rid: 1993976600566169689
   references:
@@ -516,6 +532,6 @@ MonoBehaviour:
         showOnRadar: 1
         tutorialTextOverride:
           isSet: 0
-          hideValueIfSet: 0
+          hideWhenUnchecked: 0
           value: 
         requiredDuration: 0.5

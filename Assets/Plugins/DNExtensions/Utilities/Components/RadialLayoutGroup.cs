@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 #if UNITY_EDITOR
-using UnityEditor; 
+using UnityEditor;
 #endif
 
 
@@ -12,20 +12,20 @@ namespace DNExtensions.Utilities
     public class RadialLayoutGroup : LayoutGroup
     {
         [Header("Radial Settings")]
-        public float radius = 100f;
-        public Vector2 offset = Vector2.zero;
-        [Range(0f, 360f)] public float startAngle;
-        [Range(0f, 360f)] public float endAngle = 360f;
+        [SerializeField] private float radius = 100f;
+        [SerializeField] private Vector2 offset = Vector2.zero;
+        [SerializeField, Range(0f, 360f)] private float startAngle;
+        [SerializeField, Range(0f, 360f)] private float endAngle = 360f;
         [Tooltip("If true, only visible children are arranged, otherwise all children are arranged")]
-        public bool onlyLayoutVisible = true;
+        [SerializeField] private bool onlyLayoutVisible = true;
         
         [Header("Child Settings")]
         [Tooltip("If true, child size is taken from the child's layout element component, otherwise child size is controlled by childSize")]
-        public bool controlChildSize;
-        [EnableIf("controlChildSize")] public Vector2 childSize = new Vector2(50f, 50f);
+        [SerializeField] private bool controlChildSize;
+        [SerializeField, EnableIf("controlChildSize")] private Vector2 childSize = new Vector2(50f, 50f);
         [Tooltip("If true, children are rotated to face away from the center of the radial group")]
-        public bool rotateChildren;
-        [EnableIf("rotateChildren")] public float childRotationOffset = -90f;
+        [SerializeField] private bool rotateChildren;
+        [SerializeField, EnableIf("rotateChildren")] private float childRotationOffset = -90f;
         
         
         public float Radius
@@ -50,6 +50,36 @@ namespace DNExtensions.Utilities
         {
             get => endAngle;
             set { endAngle = value; SetDirty(); }
+        }
+
+        public bool OnlyLayoutVisible
+        {
+            get => onlyLayoutVisible;
+            set { onlyLayoutVisible = value; SetDirty(); }
+        }
+
+        public bool ControlChildSize
+        {
+            get => controlChildSize;
+            set { controlChildSize = value; SetDirty(); }
+        }
+        
+        public Vector2 ChildSize
+        {
+            get => childSize;
+            set { childSize = value; SetDirty(); }
+        }
+        
+        public bool RotateChildren
+        {
+            get => rotateChildren;
+            set { rotateChildren = value; SetDirty(); }
+        }
+
+        public float ChildRotationOffset
+        {
+            get => childRotationOffset;
+            set { childRotationOffset = value; SetDirty(); }
         }
         
         public override void CalculateLayoutInputHorizontal()
