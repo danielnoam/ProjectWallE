@@ -59,6 +59,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
+  m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -1995,6 +1996,7 @@ MonoBehaviour:
   showDuration: 0.25
   hideDuration: 0.15
   animationEase: 1
+  radarSystem: {fileID: 0}
 --- !u!1 &3790620818070257813
 GameObject:
   m_ObjectHideFlags: 0
@@ -2611,6 +2613,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7598425740108636948}
   - component: {fileID: 3060255639997846938}
+  - component: {fileID: 6005403859938918330}
   m_Layer: 5
   m_Name: ResourcesAndStrucutres
   m_TagString: Untagged
@@ -2665,6 +2668,28 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &6005403859938918330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5381400796587262720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8bb1e952934416eaec47e43a844d93c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIManager
+  resourcesIcon: {fileID: 363022442226884159}
+  structuresHolder: {fileID: 3687828784084221649}
+  structuresShowDuration: 0.25
+  structuresHideDuration: 0.15
+  structuresAnimationEase: 4
+  basesIcon: {fileID: 4245162478170404413}
+  turretsIcon: {fileID: 6398248033150372285}
+  generatorsIcon: {fileID: 4173332216459942207}
+  rampsIcon: {fileID: 3178336049611760012}
+  player: {fileID: 0}
 --- !u!1 &5385232110899335736
 GameObject:
   m_ObjectHideFlags: 0
@@ -2873,6 +2898,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
+  m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -2929,6 +2955,7 @@ GameObject:
   - component: {fileID: 223101450844771338}
   - component: {fileID: 8327459700959598538}
   - component: {fileID: 7683153968864467145}
+  - component: {fileID: 8957395745777449265}
   m_Layer: 5
   m_Name: Rader
   m_TagString: Untagged
@@ -2985,12 +3012,26 @@ MonoBehaviour:
   radiusMultiplier: 0.9
   rotationTarget:
     isSet: 1
-    hideValueIfSet: 0
+    hideWhenUnchecked: 0
     value: {fileID: 0}
   radarPanel: {fileID: 223101450844771338}
   blipHolder: {fileID: 4978548179791896118}
   blipPrefab: {fileID: 3450139904594665356, guid: 7729006d80587cc40b41c516fbfa0563, type: 3}
   pingPrefab: {fileID: -7297132951219634776, guid: 676f2351e8b572f45989b676f1cf220d, type: 3}
+--- !u!114 &8957395745777449265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6172212758870137155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 836f91c7a4514d4b96e81e6f8bd6e4ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.UI.RadarDisplay
+  radarSystem: {fileID: 7683153968864467145}
+  player: {fileID: 0}
 --- !u!1 &6285127701447914599
 GameObject:
   m_ObjectHideFlags: 0
@@ -3000,7 +3041,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2511459106181821316}
-  - component: {fileID: 6515482000701182849}
   m_Layer: 5
   m_Name: HUD
   m_TagString: Untagged
@@ -3021,9 +3061,9 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7598425740108636948}
+  - {fileID: 8947753263756713239}
   - {fileID: 223101450844771338}
   - {fileID: 6980470777391325036}
-  - {fileID: 8947753263756713239}
   m_Father: {fileID: 1740863921015327291}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -3031,41 +3071,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &6515482000701182849
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6285127701447914599}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8bb1e952934416eaec47e43a844d93c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UIManager
-  fadeDuration: 0.5
-  canvasGroup: {fileID: 964180810354370604}
-  resourcesIcon: {fileID: 363022442226884159}
-  structuresHolder: {fileID: 3687828784084221649}
-  structuresShowDuration: 0.25
-  structuresHideDuration: 0.15
-  structuresAnimationEase: 4
-  basesIcon: {fileID: 4245162478170404413}
-  turretsIcon: {fileID: 6398248033150372285}
-  generatorsIcon: {fileID: 4173332216459942207}
-  rampsIcon: {fileID: 3178336049611760012}
-  fuelBar: {fileID: 6222407801157596940}
-  healthBar: {fileID: 604054242566132265}
-  switchIcon: {fileID: 4876008509774851714}
-  buildIcon: {fileID: 6281768265807176345}
-  supportIcon: {fileID: 2422758255442577192}
-  basicAttackIcon: {fileID: 2141308938926434303}
-  specialAttackIcon: {fileID: 5541646901790608830}
-  jumpIcon: {fileID: 3424540411953728746}
-  boostIcon: {fileID: 5410731817266903963}
-  brakeIcon: {fileID: 4201787158503226699}
-  radarSystem: {fileID: 7683153968864467145}
-  player: {fileID: 0}
 --- !u!1 &6424649970019128349
 GameObject:
   m_ObjectHideFlags: 0
@@ -3967,8 +3972,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8947753263756713239}
   - component: {fileID: 964180810354370604}
+  - component: {fileID: 5225562518049126349}
   m_Layer: 5
-  m_Name: Player
+  m_Name: Status
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4007,6 +4013,31 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &5225562518049126349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8493187913862588396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cc5cafcdc7a40cbafea9dd2f86bc437, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.UI.PlayerStatusDisplay
+  fadeDuration: 0.5
+  canvasGroup: {fileID: 964180810354370604}
+  fuelBar: {fileID: 6222407801157596940}
+  healthBar: {fileID: 604054242566132265}
+  switchIcon: {fileID: 4876008509774851714}
+  buildIcon: {fileID: 6281768265807176345}
+  supportIcon: {fileID: 2422758255442577192}
+  basicAttackIcon: {fileID: 2141308938926434303}
+  specialAttackIcon: {fileID: 5541646901790608830}
+  jumpIcon: {fileID: 3424540411953728746}
+  boostIcon: {fileID: 5410731817266903963}
+  brakeIcon: {fileID: 4201787158503226699}
+  player: {fileID: 0}
 --- !u!1 &8706452261946683726
 GameObject:
   m_ObjectHideFlags: 0

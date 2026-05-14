@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
 using DNExtensions.Systems.Scriptables;
+using DNExtensions.Utilities.AutoGet;
 using ProjectWallE.GameLoop;
 using PrimeTween;
 using TMPEffects.Components;
@@ -167,6 +168,8 @@ namespace ProjectWallE.UI
 
         private void UpdateObjectivesDisplay()
         {
+            if (objectivesWriter && objectivesWriter.enabled) return;
+            
             _objectiveBuilder.Clear();
 
             foreach (var objective in _activeObjectives)
@@ -200,6 +203,8 @@ namespace ProjectWallE.UI
 
         private void UpdateTutorialDisplay()
         {
+            if (tutorialWriter && tutorialWriter.enabled) return;
+            
             BuildTutorialText();
 
             bool hasTutorial = _tutorialBuilder.Length > 0;

@@ -45,8 +45,9 @@ namespace ProjectWallE
 
         public Vector3 CenterOfMassOffset => centerOfMassOffset;
 
-        public bool canBuild { get; private set; } = true;
-        public bool canShoot { get; private set; } = true;
+        public bool BuildEnabled { get; private set; } = true;
+        public bool ShootEnabled { get; private set; } = true;
+        public bool SupportEnabled { get; } =  true;
 
         public void Initialize(PlayerReferences playerReferences)
         {

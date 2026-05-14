@@ -228,13 +228,14 @@ namespace ProjectWallE.GameLoop
 
         public override string Description => "Go to target";
         public override string ProgressText => IsCompleted ? "Complete" : 
-            _currentDistance >= 10f ? $"{_currentDistance:F0}m" : $"{_currentDistance:F1}m";
+            _currentDistance >= 10f ? $"{_currentDistance:F0}m" :
+            $"{_currentDistance:F1}m";
 
         protected override string DefaultTutorialText => "";
 
         protected override void OnInitialize(IExposedPropertyTable resolver = null)
         {
-            _currentDistance = float.MaxValue;
+            _currentDistance = 0;
             _player = PlayerManager.Instance.transform;
         }
 

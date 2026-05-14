@@ -1,5 +1,6 @@
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.AutoGet;
+using PrimeTween;
 using TMPro;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ namespace ProjectWallE.GameLoop.UI
     {
         [Header("Settings")]
         [SerializeField] private bool showDistance;
+        [SerializeField] private float tweenDuration = 0.3f;
 
         [Header("References")]
         [SerializeField, AutoGetSelf] private Note note;
@@ -18,10 +20,17 @@ namespace ProjectWallE.GameLoop.UI
 
         private Transform _player;
         private bool _active;
+        private Vector3 _markerBaseScale;
+        private Tween _markerTween;
 
         private void Awake()
         {
-            inGameMarker?.SetActive(false);
+            if (inGameMarker)
+            {
+                _markerBaseScale = inGameMarker.transform.localScale;
+                inGameMarker.transform.localScale = Vector3.zero;
+                inGameMarker.SetActive(false);
+            }
         }
 
         private void Update()
@@ -36,7 +45,13 @@ namespace ProjectWallE.GameLoop.UI
         {
             _active = true;
 
-            inGameMarker?.SetActive(showInGame);
+            if (inGameMarker && showInGame)
+            {
+                inGameMarker.SetActive(true);
+                _markerTween.Stop();
+                _markerTween = Tween.Scale(inGameMarker.transform, _markerBaseScale, tweenDuration, Ease.OutBack);
+            }
+
             if (distanceLabel) distanceLabel.gameObject.SetActive(showInGame && showDistance);
 
             if (showOnRadar && radarTarget)
@@ -46,15 +61,20 @@ namespace ProjectWallE.GameLoop.UI
             }
 
             if (!_player)
-            {
                 _player = PlayerManager.Instance ? PlayerManager.Instance.transform : null;
-            }
         }
 
         public void OnObjectiveCompleted(bool showInGame, bool showOnRadar)
         {
             _active = false;
-            inGameMarker?.SetActive(false);
+
+            if (inGameMarker && showInGame)
+            {
+                _markerTween.Stop();
+                _markerTween = Tween.Scale(inGameMarker.transform, Vector3.zero, tweenDuration, Ease.InBack)
+                    .OnComplete(inGameMarker, static target => target.SetActive(false));
+            }
+
             if (showOnRadar && radarTarget) radarTarget.DisableBlip();
         }
     }

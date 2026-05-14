@@ -55,7 +55,7 @@ namespace ProjectWallE.GameLoop.Player
 
         private void Update()
         {
-            if (!playerManager || !playerManager.CanBuild) return;
+            if (!playerManager || !playerManager.CanSupport) return;
 
             CastTargetRay();
 

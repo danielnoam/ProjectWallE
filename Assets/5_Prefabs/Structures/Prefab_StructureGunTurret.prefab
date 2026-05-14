@@ -154,7 +154,6 @@ MonoBehaviour:
     punchStrength: 1
     punchDuration: 0.15
     punchEase: 1
-    emissionColor: {fileID: 0}
     materialColor: {fileID: 11400000, guid: e0eba0be932fbe44ea4eb77f31df8831, type: 2}
     hitSoundId: Damaged
   buildEffect:
@@ -236,7 +235,7 @@ MonoBehaviour:
       data:
         maxHealth: 300
         cost: 200
-        fixCostPerHealthPoint: 0.5
+        fixCostPerHealthPoint: 0.25
         detectionRadius: 50
         attackRotationSpeed: 125
         attackCooldown: 0.25

@@ -17,7 +17,7 @@ MonoBehaviour:
   podPrefab: {fileID: 826211790791627871, guid: d3cd268ca72788b4e88f4fd0255a36b5, type: 3}
   cost: 250
   podCount: 6
-  scatterRadius: 20
+  scatterRadius: 25
   onImpact:
   - rid: 126016798228742234
   - rid: 126016798228742236
@@ -30,7 +30,7 @@ MonoBehaviour:
     - rid: 126016798228742234
       type: {class: DamageBehavior, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
-        radius: 10
+        radius: 15
         damageRange:
           minValue: 50
           maxValue: 100

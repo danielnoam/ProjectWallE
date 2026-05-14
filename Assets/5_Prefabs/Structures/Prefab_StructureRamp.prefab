@@ -164,7 +164,6 @@ MonoBehaviour:
     punchStrength: 1
     punchDuration: 0.15
     punchEase: 1
-    emissionColor: {fileID: 0}
     materialColor: {fileID: 11400000, guid: e0eba0be932fbe44ea4eb77f31df8831, type: 2}
     hitSoundId: Damaged
   buildEffect:
@@ -212,13 +211,13 @@ MonoBehaviour:
       data:
         maxHealth: 800
         cost: 200
-        fixCostPerHealthPoint: 0.5
+        fixCostPerHealthPoint: 0.25
     - rid: 4437626158574207055
       type: {class: StructureLevelData, ns: , asm: Assembly-CSharp}
       data:
         maxHealth: 600
         cost: 400
-        fixCostPerHealthPoint: 0.5
+        fixCostPerHealthPoint: 0.25
 --- !u!1 &8451801116168845029
 GameObject:
   m_ObjectHideFlags: 0

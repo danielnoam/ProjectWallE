@@ -64,8 +64,9 @@ namespace _2_Scripts
         public CarBoost CarBoost => carBoost;
         public CarInput CarInput => _carInput;
         public Vector3 CenterOfMassOffset => centerOfMassOffset;
-        public bool canBuild { get; private set; } = true;
-        public bool canShoot { get; private set; } = false;
+        public bool BuildEnabled { get; private set; } = true;
+        public bool ShootEnabled { get; private set; } = false;
+        public bool SupportEnabled { get; } =  true;
 
         public event Action OnBrakeStarted;
 

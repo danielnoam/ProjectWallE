@@ -15,9 +15,9 @@ namespace DNExtensions.Utilities
 
         [Header("Scale Settings")]
         [SerializeField] private bool distanceToCameraAffectsScale = true;
-        [SerializeField, MinMaxRange(1, 2), EnableIf("distanceToCameraAffectsScale")]
+        [SerializeField, MinMaxRange(0, 10), EnableIf("distanceToCameraAffectsScale")]
         private RangedFloat minMaxScaleMultiplier = new RangedFloat(1, 1.5f);
-        [SerializeField, MinMaxRange(0, 50), EnableIf("distanceToCameraAffectsScale")]
+        [SerializeField, MinMaxRange(0, 1000), EnableIf("distanceToCameraAffectsScale")]
         private RangedFloat minMaxDistance = new RangedFloat(5, 15);
 
         private Camera _cam;

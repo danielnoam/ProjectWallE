@@ -29,7 +29,7 @@ MonoBehaviour:
         showOnRadar: 1
         tutorialTextOverride:
           isSet: 0
-          hideValueIfSet: 0
+          hideWhenUnchecked: 0
           value: 
         attackType: 0
         attackCount: 5
@@ -213,7 +213,7 @@ MonoBehaviour:
         showOnRadar: 1
         tutorialTextOverride:
           isSet: 0
-          hideValueIfSet: 0
+          hideWhenUnchecked: 0
           value: 
         radius: 5
     - rid: 126016452965957720
@@ -226,7 +226,7 @@ MonoBehaviour:
         showOnRadar: 1
         tutorialTextOverride:
           isSet: 0
-          hideValueIfSet: 0
+          hideWhenUnchecked: 0
           value: 
         enemyPrefab: {fileID: 0}
         killCount: 10
@@ -251,7 +251,7 @@ MonoBehaviour:
         showOnRadar: 1
         tutorialTextOverride:
           isSet: 0
-          hideValueIfSet: 0
+          hideWhenUnchecked: 0
           value: 
         attackType: 0
         attackCount: 1
@@ -409,6 +409,7 @@ MonoBehaviour:
     - {fileID: 4924236925050985226}
     - {fileID: -9136246952162102304}
     - {fileID: -4322395935307254703}
+    - {fileID: 7249389198868357089}
 --- !u!114 &6138156276450442711
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -448,6 +449,22 @@ MonoBehaviour:
   spawnPoint:
     exposedName: 484274ddc675ccf4ca4a18b8a0fd0641
     defaultValue: {fileID: 0}
+--- !u!114 &7249389198868357089
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd5511dff6f84ce8a7e93b16a19b6da9, type: 3}
+  m_Name: Set Player Features Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SetPlayerFeaturesMarker
+  m_Time: 1.75
+  skipInEditor: 0
+  featuresToEnable: 0
+  featuresToDisable: 0
 --- !u!114 &7862011037116891823
 MonoBehaviour:
   m_ObjectHideFlags: 1
