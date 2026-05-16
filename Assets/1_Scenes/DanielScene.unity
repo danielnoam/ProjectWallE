@@ -1454,7 +1454,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &534876688
 Transform:
   m_ObjectHideFlags: 0
@@ -1477,7 +1477,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 534876687}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4265a795d7a52e54ab81f7ab753bd4d0, type: 3}
   m_Name: 
@@ -1550,12 +1550,12 @@ MeshRenderer:
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &534876691
 MeshFilter:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 8
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 534876687}
-  m_Mesh: {fileID: 0}
+  m_Mesh: {fileID: 4300000, guid: 2018b666c9d9d884fa1918ba7bd03d15, type: 2}
 --- !u!114 &534876692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4126,10 +4126,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1149265311}
     m_Modifications:
-    - target: {fileID: 906084686165179424, guid: 1758d29a640f4c74faaab208d7639de5, type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 2100000, guid: 1b0e37cdfbeffaa4a85d382ed0732e27, type: 2}
     - target: {fileID: 2414026309423491785, guid: 1758d29a640f4c74faaab208d7639de5, type: 3}
       propertyPath: minMaxDistance.maxValue
       value: 200
