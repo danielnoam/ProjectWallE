@@ -135,7 +135,7 @@ MonoBehaviour:
   m_Name: Set Player Features Marker
   m_EditorClassIdentifier: Assembly-CSharp::SetPlayerFeaturesMarker
   m_Time: 0.11666666666666667
-  skipInEditor: 0
+  skipInEditor: 1
   featuresToEnable: 0
   featuresToDisable: 6
 --- !u!114 &-1437873463853390471
@@ -515,7 +515,7 @@ MonoBehaviour:
   m_Name: Teleport Player To Spawn Point Marker
   m_EditorClassIdentifier: Assembly-CSharp::TeleportPlayerToSpawnPointMarker
   m_Time: 0
-  skipInEditor: 0
+  skipInEditor: 1
   usePod: 1
   playerSpawnPoint:
     exposedName: e47c2d01abf560247b6c973d56506e35
