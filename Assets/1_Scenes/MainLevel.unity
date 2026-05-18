@@ -5766,8 +5766,8 @@ MonoBehaviour:
     name: Prefab_Bush
     seed: 3546
     probability: 5.1
-    collisionCheck: 1
-    rejectUnderwater: 1
+    collisionCheck: 0
+    rejectUnderwater: 0
     heightRange: {x: 0, y: 47.576843}
     slopeRange: {x: 0, y: 34.12844}
     curvatureRange: {x: 0, y: 1}
@@ -5775,14 +5775,14 @@ MonoBehaviour:
     - name: GrassLayer
       layerID: 0
       threshold: 0
-    instanceCount: 74
+    instanceCount: 77
     prefabs:
     - index: 0
       probability: 100
       prefab: {fileID: 950980509522303722, guid: e74571977a1e97a448d82592640f3d6e, type: 3}
     distance: 19.6
     scaleRange: {x: 0.8, y: 1.2}
-    sinkAmount: 0
+    sinkAmount: 0.285
   - enabled: 1
     name: Prefab_Rock1
     seed: 3064
@@ -5809,8 +5809,8 @@ MonoBehaviour:
     name: Grass
     seed: 7765
     probability: 100
-    collisionCheck: 1
-    rejectUnderwater: 1
+    collisionCheck: 0
+    rejectUnderwater: 0
     heightRange: {x: 0, y: 90}
     slopeRange: {x: 0, y: 60}
     curvatureRange: {x: 0, y: 0.79204893}
@@ -5818,7 +5818,7 @@ MonoBehaviour:
     - name: GrassLayer
       layerID: 0
       threshold: 0.134
-    instanceCount: 3209
+    instanceCount: 3415
     index: 0
     type: 0
     renderAsBillboard: 0
