@@ -134,7 +134,7 @@ Material:
     - _CastShadows: 0
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
-    - _Cull: 0
+    - _Cull: 2
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
@@ -163,10 +163,10 @@ Material:
     - _Sway_Speed: 0.2
     - _Sway_Strength: 0.1
     - _TerrainSize: 100
-    - _Terrain_Size: 600
+    - _Terrain_Size: 900
     - _Wave_Speed: 0.1
     - _Wave_Strength: 0.01
-    - _Wind_Height: 0.4
+    - _Wind_Height: 0.22
     - _Wind_Noise_Scale: 200
     - _Wind_Noise_Speed: 0.2
     - _Wind_Speed: 0.218
@@ -188,6 +188,6 @@ Material:
     - _Top_Color: {r: 0.14976415, g: 0.7987421, b: 0, a: 1}
     - _Top_Color_Multiplier: {r: 0, g: 0.24313727, b: 0.06666667, a: 1}
     - _Wind_Noise_Constrast: {r: 0.2, g: 1, b: 0, a: 0}
-    - _Wind_Noise_Scale: {r: 500, g: 500, b: 0, a: 0}
+    - _Wind_Noise_Scale: {r: 200, g: 200, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
