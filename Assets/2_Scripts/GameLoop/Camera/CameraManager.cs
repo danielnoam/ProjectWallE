@@ -1,5 +1,6 @@
 using System;
 using DNExtensions.Utilities;
+using DNExtensions.Utilities.AutoGet;
 using DNExtensions.Utilities.CinemachineExtensions;
 using ProjectWallE.GameLoop;
 using Unity.Cinemachine;
@@ -37,16 +38,22 @@ namespace ProjectWallE
         [SerializeField] private CinemachineImpulseSource impulseSource;
         [SerializeField] private CinemachineRotationShake rotationShake;
         [SerializeField] private Transform cameraTarget;
-
+        [SerializeField, AutoGetScene] private PlayerManager playerManager;
+        [SerializeField, AutoGetSelf] private PlayerManagerInput input;
+        
         private Transform _podLookTarget;
-        private PlayerManager _playerManager;
-        private PlayerManagerInput _input;
+        
         private CameraAutoAlign _cameraAutoAlign;
         private Pod _activePod;
         
         private bool _cameraLocked;
         private float _yaw;
         private float _pitch;
+
+        private void OnValidate()
+        {
+            AutoGetSystem.Process(this);
+        }
 
         private void Awake()
         {
@@ -56,9 +63,6 @@ namespace ProjectWallE
                 return;
             } 
             Instance = this;
-            
-            _playerManager = FindFirstObjectByType<PlayerManager>();
-            _input = GetComponent<PlayerManagerInput>();
 
             Vector3 euler = cameraTarget.rotation.eulerAngles;
             _yaw = euler.y;
@@ -73,19 +77,19 @@ namespace ProjectWallE
         {
             DeploymentManager.OnPodLaunched += OnPodLaunched;
             
-            if (_playerManager != null)
+            if (playerManager != null)
             {
-                _playerManager.OnControllerChanged += OnControllerSwitch;
-                _playerManager.OnDamaged += OnDamaged;
-                _playerManager.OnDeath += OnDeath;
-                _playerManager.StructureBuilder.ActionsMenuRequested += OnMenuActionRequested;
-                _playerManager.StructureBuilder.BuildMenuRequested += OnBuildMenuRequested;
-                _playerManager.StructureBuilder.MenuCloseRequested += OnMenuCloseRequested;
-                _playerManager.SupportCaller.SupportMenuRequested += SupportCallerOnSupportMenuRequested;
-                _playerManager.SupportCaller.MenuCloseRequested += OnMenuCloseRequested;
+                playerManager.OnControllerChanged += OnControllerSwitch;
+                playerManager.OnDamaged += OnDamaged;
+                playerManager.OnDeath += OnDeath;
+                playerManager.StructureBuilder.ActionsMenuRequested += OnMenuActionRequested;
+                playerManager.StructureBuilder.BuildMenuRequested += OnBuildMenuRequested;
+                playerManager.StructureBuilder.MenuCloseRequested += OnMenuCloseRequested;
+                playerManager.SupportCaller.SupportMenuRequested += SupportCallerOnSupportMenuRequested;
+                playerManager.SupportCaller.MenuCloseRequested += OnMenuCloseRequested;
 
-                _playerManager.Shooter.OnAttack1 += OnAttack1;
-                _playerManager.Shooter.OnAttack2 += OnAttack2;
+                playerManager.Shooter.OnAttack1 += OnAttack1;
+                playerManager.Shooter.OnAttack2 += OnAttack2;
             }
         }
 
@@ -99,18 +103,18 @@ namespace ProjectWallE
         {
             DeploymentManager.OnPodLaunched -= OnPodLaunched;
             
-            if (_playerManager != null)
+            if (playerManager != null)
             {
-                _playerManager.OnControllerChanged -= OnControllerSwitch;
-                _playerManager.OnDamaged -= OnDamaged;
-                _playerManager.OnDeath -= OnDeath;
-                _playerManager.StructureBuilder.ActionsMenuRequested -= OnMenuActionRequested;
-                _playerManager.StructureBuilder.BuildMenuRequested -= OnBuildMenuRequested;
-                _playerManager.StructureBuilder.MenuCloseRequested -= OnMenuCloseRequested;
-                _playerManager.SupportCaller.SupportMenuRequested -= SupportCallerOnSupportMenuRequested;
-                _playerManager.SupportCaller.MenuCloseRequested -= OnMenuCloseRequested;
-                _playerManager.Shooter.OnAttack1 -= OnAttack1;
-                _playerManager.Shooter.OnAttack2 -= OnAttack2;
+                playerManager.OnControllerChanged -= OnControllerSwitch;
+                playerManager.OnDamaged -= OnDamaged;
+                playerManager.OnDeath -= OnDeath;
+                playerManager.StructureBuilder.ActionsMenuRequested -= OnMenuActionRequested;
+                playerManager.StructureBuilder.BuildMenuRequested -= OnBuildMenuRequested;
+                playerManager.StructureBuilder.MenuCloseRequested -= OnMenuCloseRequested;
+                playerManager.SupportCaller.SupportMenuRequested -= SupportCallerOnSupportMenuRequested;
+                playerManager.SupportCaller.MenuCloseRequested -= OnMenuCloseRequested;
+                playerManager.Shooter.OnAttack1 -= OnAttack1;
+                playerManager.Shooter.OnAttack2 -= OnAttack2;
             }
         }
 
@@ -157,7 +161,7 @@ namespace ProjectWallE
         {
             if (_activePod)
             {
-                Vector3 dir = (_activePod.transform.position - _playerManager.transform.position).normalized;
+                Vector3 dir = (_activePod.transform.position - playerManager.transform.position).normalized;
                 _yaw = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
                 _pitch = -Mathf.Asin(dir.y) * Mathf.Rad2Deg;
                 _pitch = Mathf.Clamp(_pitch, -cameraVerticalClamp, cameraVerticalClamp);
@@ -169,7 +173,7 @@ namespace ProjectWallE
             }
 
             _activePod = null;
-            SwitchActiveCamera(_playerManager.ControllerType == ControllerType.Robot ? robotCamera : carCamera);
+            SwitchActiveCamera(playerManager.ControllerType == ControllerType.Robot ? robotCamera : carCamera);
         }
         
         private void OnDamaged(float damage)
@@ -213,7 +217,7 @@ namespace ProjectWallE
 
         private void UpdateCameraMovement()
         {
-            cameraTarget.position = _playerManager.transform.position;
+            cameraTarget.position = playerManager.transform.position;
 
             if (_cameraLocked || _activePod) return;
 
@@ -229,7 +233,7 @@ namespace ProjectWallE
             }
             else if (_cameraAutoAlign != null && _cameraAutoAlign.CanAlign(out float xOffset))
             {
-                Quaternion target = Quaternion.Euler(_playerManager.transform.eulerAngles.x + xOffset, _playerManager.transform.eulerAngles.y, 0f);
+                Quaternion target = Quaternion.Euler(playerManager.transform.eulerAngles.x + xOffset, playerManager.transform.eulerAngles.y, 0f);
                 cameraTarget.rotation = Quaternion.Slerp(cameraTarget.rotation, target, Time.deltaTime * _cameraAutoAlign.Strength);
 
                 // Sync yaw/pitch so there's no snap when the player looks again
@@ -245,9 +249,9 @@ namespace ProjectWallE
         
         private Vector2 GetScaledLookDelta()
         {
-            Vector2 rawLook = _input.LookInput;
+            Vector2 rawLook = input.LookInput;
 
-            if (_input.IsGamepadLook)
+            if (input.IsGamepadLook)
                 return rawLook * (gamepadLookSensitivity * Time.deltaTime);
 
             return rawLook * mouseLookSensitivity;
@@ -255,7 +259,7 @@ namespace ProjectWallE
         
         private void UpdateCarFOV()
         {
-            var horizontalVelocity = _playerManager.Velocity.SetY(0f);
+            var horizontalVelocity = playerManager.Velocity.SetY(0f);
             float t = Mathf.InverseLerp(speedMagnitudeRange.minValue, speedMagnitudeRange.maxValue, horizontalVelocity.magnitude);
             carCamera.Lens.FieldOfView = Mathf.Lerp(fovRange.minValue, fovRange.maxValue, t);
         }

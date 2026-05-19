@@ -5282,8 +5282,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 591326626}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 300, y: 350, z: 300}
+  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 300, y: 950, z: 300}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5365,7 +5365,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 2000
+  far clip plane: 3000
   field of view: 60
   orthographic: 1
   orthographic size: 900
@@ -5374,7 +5374,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 136
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 8400000, guid: dbbd785327d1d174493091bddd26df80, type: 2}
+  m_TargetTexture: {fileID: 8400000, guid: 6956a0044a9107b459f275ff6540307a, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -5397,7 +5397,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TerrainCamera
   cam: {fileID: 591326629}
-  terrain: {fileID: 0}
+  terrains:
+  - {fileID: 1967514117}
+  - {fileID: 323455981}
+  - {fileID: 1633914726}
+  - {fileID: 2057940224}
+  - {fileID: 181516863}
+  - {fileID: 1328268349}
+  - {fileID: 584697451}
+  - {fileID: 1777015957}
+  - {fileID: 1332785733}
+  terrainOffset: {x: -600, y: -600}
+  terrainSize: 1800
 --- !u!1 &603657216
 GameObject:
   m_ObjectHideFlags: 0
@@ -5761,64 +5772,22 @@ MonoBehaviour:
   - {fileID: 1967514117}
   - {fileID: 2057940224}
   visibleTerrainsOnly: 0
-  treeTypes:
-  - enabled: 1
-    name: Prefab_Bush
-    seed: 3546
-    probability: 5.1
-    collisionCheck: 0
-    rejectUnderwater: 0
-    heightRange: {x: 0, y: 47.576843}
-    slopeRange: {x: 0, y: 34.12844}
-    curvatureRange: {x: 0, y: 1}
-    layerMasks:
-    - name: GrassLayer
-      layerID: 0
-      threshold: 0
-    instanceCount: 77
-    prefabs:
-    - index: 0
-      probability: 100
-      prefab: {fileID: 950980509522303722, guid: e74571977a1e97a448d82592640f3d6e, type: 3}
-    distance: 19.6
-    scaleRange: {x: 0.8, y: 1.2}
-    sinkAmount: 0.285
-  - enabled: 1
-    name: Prefab_Rock1
-    seed: 3064
-    probability: 44.6
-    collisionCheck: 0
-    rejectUnderwater: 0
-    heightRange: {x: 0, y: 1000}
-    slopeRange: {x: 0, y: 60}
-    curvatureRange: {x: 0, y: 1}
-    layerMasks:
-    - name: RockLayer
-      layerID: 2
-      threshold: 0
-    instanceCount: 1034
-    prefabs:
-    - index: 1
-      probability: 100
-      prefab: {fileID: 6730258244586908540, guid: 80e1d062e1fe4e94e9b8724bec8f7688, type: 3}
-    distance: 5
-    scaleRange: {x: 0.20428127, y: 0.20428127}
-    sinkAmount: 0
+  treeTypes: []
   grassPrefabs:
   - enabled: 1
     name: Grass
-    seed: 7765
-    probability: 100
-    collisionCheck: 0
-    rejectUnderwater: 0
+    seed: 43314
+    probability: 80.9
+    collisionCheck: 1
+    rejectUnderwater: 1
     heightRange: {x: 0, y: 90}
-    slopeRange: {x: 0, y: 60}
-    curvatureRange: {x: 0, y: 0.79204893}
+    slopeRange: {x: 0, y: 29.449541}
+    curvatureRange: {x: 0, y: 1}
     layerMasks:
     - name: GrassLayer
       layerID: 0
-      threshold: 0.134
-    instanceCount: 3415
+      threshold: 0.584
+    instanceCount: 163121
     index: 0
     type: 0
     renderAsBillboard: 0
@@ -5833,9 +5802,9 @@ MonoBehaviour:
     mainColor: {r: 1, g: 1, b: 1, a: 1}
     secondaryColor: {r: 1, g: 1, b: 1, a: 1}
     linkColors: 1
-    minMaxHeight: {x: 4, y: 5}
+    minMaxHeight: {x: 3.642202, y: 5}
     minMaxWidth: {x: 2, y: 3}
-    noiseSize: 1.88
+    noiseSize: 1
   terrainSettings:
     drawTreesAndFoliage: 1
     preservePrefabLayer: 1
@@ -5859,7 +5828,7 @@ MonoBehaviour:
   autoRespawnTrees: 1
   terrainMinMaxHeight: {x: 28.584507, y: 71.41549}
   detailResolution: 256
-  detailResolutionIndex: 0
+  detailResolutionIndex: 1
   grassPatchSize: 128
   grassPatchSizeIndex: 4
   tempColliders: []

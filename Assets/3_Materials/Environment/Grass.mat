@@ -96,7 +96,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Terrain_Texture:
-        m_Texture: {fileID: 8400000, guid: dbbd785327d1d174493091bddd26df80, type: 2}
+        m_Texture: {fileID: 8400000, guid: 6956a0044a9107b459f275ff6540307a, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture2DAsset_62849cfba4ac4edda8bfb0c664439045_Out_0_Texture2D:
@@ -124,6 +124,7 @@ Material:
     - _AddPrecomputedVelocity: 0
     - _AlphaClip: 1
     - _AlphaToMask: 1
+    - _Ambient_Occlusion: 1
     - _BOTTOMCOLOR: 0
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
@@ -153,7 +154,7 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 0
-    - _Smoothness: 0.5
+    - _Smoothness: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -163,7 +164,7 @@ Material:
     - _Sway_Speed: 0.2
     - _Sway_Strength: 0.1
     - _TerrainSize: 100
-    - _Terrain_Size: 900
+    - _Terrain_Size: 1800
     - _Wave_Speed: 0.1
     - _Wave_Strength: 0.01
     - _Wind_Height: 0.22
@@ -184,8 +185,8 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _Terrain_Offset: {r: 0, g: 0, b: 0, a: 0}
-    - _Top_Color: {r: 0.14976415, g: 0.7987421, b: 0, a: 1}
+    - _Terrain_Offset: {r: -600, g: -600, b: 0, a: 0}
+    - _Top_Color: {r: 0.10895302, g: 0.5849056, b: 0, a: 1}
     - _Top_Color_Multiplier: {r: 0, g: 0.24313727, b: 0.06666667, a: 1}
     - _Wind_Noise_Constrast: {r: 0.2, g: 1, b: 0, a: 0}
     - _Wind_Noise_Scale: {r: 200, g: 200, b: 0, a: 0}
