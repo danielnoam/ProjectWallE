@@ -194,7 +194,7 @@ namespace ProjectWallE.GameLoop
 
         private float _elapsed;
 
-        public override string Description => $"Survive for {duration} seconds";
+        public override string Description => $"Survive";
         public override string ProgressText => IsCompleted ? "Complete" : $"{_elapsed:F1}s / {duration:F1}s";
         
 

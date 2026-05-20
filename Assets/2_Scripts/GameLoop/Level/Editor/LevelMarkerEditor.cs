@@ -21,7 +21,7 @@ public class SpawnEnemyWaveMarkerEditor : MarkerEditor
     {
         return new MarkerDrawOptions
         {
-            tooltip = $"Spawn {((SpawnEnemyWaveMarker)marker).EnemyCount} enemies",
+            tooltip = $"Spawn enemies",
         };
     }
 }
