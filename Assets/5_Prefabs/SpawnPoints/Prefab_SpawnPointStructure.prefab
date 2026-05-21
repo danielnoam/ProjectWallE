@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2580018003251101731}
   - component: {fileID: 3362832883325170318}
+  - component: {fileID: 5589287763854135712}
   m_Layer: 0
   m_Name: Prefab_SpawnPointStructure
   m_TagString: Untagged
@@ -45,4 +46,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StructureSpawnPoint
   spawnAtStart: 0
+  podCameraMode: 0
   structurePrefab: {fileID: 0}
+--- !u!114 &5589287763854135712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2034748791248471063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e1fb935ed8d45e085c29b5777cf3b12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AlignToTerrain
+  setPosition: 1
+  setRotation: 1

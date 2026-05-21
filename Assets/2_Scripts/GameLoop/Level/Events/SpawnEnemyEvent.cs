@@ -6,15 +6,7 @@ using UnityEngine.Playables;
 [Serializable]
 public class SpawnEnemyEvent : BaseLevelEventAsset
 {
-    [Header("Spawn")]
-    public float spawnInterval = 1f;
-    [SerializeField] private EnemySpawnParams spawnParams;
-
-    public override void Execute(IExposedPropertyTable resolver = null)
-    {
-        spawnParams.Initialize(resolver);
-        spawnParams.Spawn();
-    }
+    [SerializeField] private EnemySpawnerConfig spawner;
 
     public override Playable CreatePlayable(PlayableGraph graph, GameObject owner)
     {
@@ -22,7 +14,10 @@ public class SpawnEnemyEvent : BaseLevelEventAsset
         var behaviour = playable.GetBehaviour();
         behaviour.EventAsset = this;
         behaviour.Resolver = graph.GetResolver();
-        behaviour.Interval = spawnInterval;
+        behaviour.Interval = spawner.spawnInterval;
+        spawner.Initialize(graph.GetResolver());
         return playable;
     }
+
+    public override void Execute(IExposedPropertyTable resolver = null) => spawner.Spawn();
 }

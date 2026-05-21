@@ -26,5 +26,7 @@ namespace ProjectWallE.GameLoop
             _timer -= spawnInterval;
             spawnParams.Spawn();
         }
+        
+        public void Spawn() => spawnParams.Spawn();
     }
 }

@@ -22,16 +22,23 @@ MonoBehaviour:
       - item: {fileID: 622395889724703068, guid: 311465a237bc47a4a80317173bf23667, type: 3}
         chance: 100
         isLocked: 0
-    spawnPosition: 2
-    spawnPoint:
-      exposedName: 346f3790ba46dcf4f96639a175a5016a
-      defaultValue: {fileID: 0}
+    spawnPosition: 1
     spawnPoints:
       internalItems:
       - item:
-          exposedName: 97d5d789-a7a8-414f-b737-cf5586f377e2
+          exposedName: 3d694537-973b-4aba-885a-d9ad2ea7c307
           defaultValue: {fileID: 0}
-        chance: 29
+        chance: 34
+        isLocked: 0
+      - item:
+          exposedName: 3d694537-973b-4aba-885a-d9ad2ea7c307
+          defaultValue: {fileID: 0}
+        chance: 33
+        isLocked: 0
+      - item:
+          exposedName: 3d694537-973b-4aba-885a-d9ad2ea7c307
+          defaultValue: {fileID: 0}
+        chance: 33
         isLocked: 0
 --- !u!114 &-8814279413209688959
 MonoBehaviour:
@@ -64,16 +71,18 @@ MonoBehaviour:
   m_Time: 10.016666666666667
   skipInEditor: 0
   spawnParams:
-    count: 3
+    count: 4
     enemyType: 0
     enemies:
       internalItems: []
-    spawnPosition: 0
-    spawnPoint:
-      exposedName: 
-      defaultValue: {fileID: 0}
+    spawnPosition: 1
     spawnPoints:
-      internalItems: []
+      internalItems:
+      - item:
+          exposedName: 8a737158-08cf-4653-adcf-f5b36a8415c8
+          defaultValue: {fileID: 0}
+        chance: 0
+        isLocked: 0
 --- !u!114 &-7803992468192868248
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -92,37 +101,24 @@ MonoBehaviour:
     count: 3
     enemyType: 1
     enemies:
-      internalItems: []
-    spawnPosition: 0
-    spawnPoint:
-      exposedName: 
-      defaultValue: {fileID: 0}
+      internalItems:
+      - item: {fileID: -4769723865369596212, guid: 942ec3fb68d51bb418bece848d6bfd88, type: 3}
+        chance: 10
+        isLocked: 0
+      - item: {fileID: 622395889724703068, guid: 311465a237bc47a4a80317173bf23667, type: 3}
+        chance: 10
+        isLocked: 0
+      - item: {fileID: 622395889724703068, guid: 83a877ad3335ba24198f58c9720f05c5, type: 3}
+        chance: 15
+        isLocked: 0
+    spawnPosition: 1
     spawnPoints:
-      internalItems: []
---- !u!114 &-7644249815851133263
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9616d1e4bad49f1bc525bc4810b87e1, type: 3}
-  m_Name: SpawnEnemyEvent
-  m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyEvent
-  spawnInterval: 1
-  spawnParams:
-    count: 3
-    enemyType: 0
-    enemies:
-      internalItems: []
-    spawnPosition: 2
-    spawnPoint:
-      exposedName: 
-      defaultValue: {fileID: 0}
-    spawnPoints:
-      internalItems: []
+      internalItems:
+      - item:
+          exposedName: 1ed3c09b-227c-4496-95e3-02c2751cb780
+          defaultValue: {fileID: 0}
+        chance: 0
+        isLocked: 0
 --- !u!114 &-6682765416599569745
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -156,16 +152,24 @@ MonoBehaviour:
   m_Time: 6.483333333333333
   skipInEditor: 0
   spawnParams:
-    count: 3
+    count: 5
     enemyType: 1
     enemies:
-      internalItems: []
-    spawnPosition: 0
-    spawnPoint:
-      exposedName: 
-      defaultValue: {fileID: 0}
+      internalItems:
+      - item: {fileID: 622395889724703068, guid: 83a877ad3335ba24198f58c9720f05c5, type: 3}
+        chance: 10
+        isLocked: 0
+      - item: {fileID: 622395889724703068, guid: 311465a237bc47a4a80317173bf23667, type: 3}
+        chance: 10
+        isLocked: 0
+    spawnPosition: 1
     spawnPoints:
-      internalItems: []
+      internalItems:
+      - item:
+          exposedName: 401a1c05-c458-4ad2-b889-a37cb6f8a7dc
+          defaultValue: {fileID: 0}
+        chance: 100
+        isLocked: 0
 --- !u!114 &-2831747386146784124
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -186,76 +190,7 @@ MonoBehaviour:
   m_Curves: {fileID: 0}
   m_Parent: {fileID: 11400000}
   m_Children: []
-  m_Clips:
-  - m_Version: 1
-    m_Start: 0.4666666666666667
-    m_ClipIn: 0
-    m_Asset: {fileID: -7644249815851133263}
-    m_Duration: 5
-    m_TimeScale: 1
-    m_ParentTrack: {fileID: -2831747386146784124}
-    m_EaseInDuration: 0
-    m_EaseOutDuration: 0
-    m_BlendInDuration: -1
-    m_BlendOutDuration: -1
-    m_MixInCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_MixOutCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    m_BlendInCurveMode: 0
-    m_BlendOutCurveMode: 0
-    m_ExposedParameterNames: []
-    m_AnimationCurves: {fileID: 0}
-    m_Recordable: 0
-    m_PostExtrapolationMode: 0
-    m_PreExtrapolationMode: 0
-    m_PostExtrapolationTime: 0
-    m_PreExtrapolationTime: 0
-    m_DisplayName: SpawnEnemyEvent
+  m_Clips: []
   m_Markers:
     m_Objects: []
 --- !u!114 &-1907706761099275582
@@ -384,9 +319,6 @@ MonoBehaviour:
             enemies:
               internalItems: []
             spawnPosition: 0
-            spawnPoint:
-              exposedName: 
-              defaultValue: {fileID: 0}
             spawnPoints:
               internalItems: []
 --- !u!114 &11400000
@@ -485,9 +417,6 @@ MonoBehaviour:
             enemies:
               internalItems: []
             spawnPosition: 0
-            spawnPoint:
-              exposedName: 
-              defaultValue: {fileID: 0}
             spawnPoints:
               internalItems: []
 --- !u!114 &2869200150117115032
@@ -629,9 +558,6 @@ MonoBehaviour:
             enemies:
               internalItems: []
             spawnPosition: 0
-            spawnPoint:
-              exposedName: 
-              defaultValue: {fileID: 0}
             spawnPoints:
               internalItems: []
 --- !u!114 &5586992869872184875
@@ -698,16 +624,23 @@ MonoBehaviour:
   m_Time: 10.533333333333333
   skipInEditor: 0
   spawnParams:
-    count: 3
+    count: 7
     enemyType: 0
     enemies:
       internalItems: []
-    spawnPosition: 0
-    spawnPoint:
-      exposedName: 
-      defaultValue: {fileID: 0}
+    spawnPosition: 1
     spawnPoints:
-      internalItems: []
+      internalItems:
+      - item:
+          exposedName: 9dcf0d75-3ef9-4b06-b573-8c98ba2b1c14
+          defaultValue: {fileID: 0}
+        chance: 0
+        isLocked: 0
+      - item:
+          exposedName: 9dcf0d75-3ef9-4b06-b573-8c98ba2b1c14
+          defaultValue: {fileID: 0}
+        chance: 0
+        isLocked: 0
 --- !u!114 &5691303165561134707
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -787,16 +720,18 @@ MonoBehaviour:
   m_Time: 11
   skipInEditor: 0
   spawnParams:
-    count: 3
+    count: 6
     enemyType: 0
     enemies:
       internalItems: []
-    spawnPosition: 0
-    spawnPoint:
-      exposedName: 
-      defaultValue: {fileID: 0}
+    spawnPosition: 1
     spawnPoints:
-      internalItems: []
+      internalItems:
+      - item:
+          exposedName: 7f0ce416-43b4-4ac6-803c-f39fcf1a98c7
+          defaultValue: {fileID: 0}
+        chance: 0
+        isLocked: 0
 --- !u!114 &7495273874607471889
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -839,9 +774,6 @@ MonoBehaviour:
             enemies:
               internalItems: []
             spawnPosition: 0
-            spawnPoint:
-              exposedName: 
-              defaultValue: {fileID: 0}
             spawnPoints:
               internalItems: []
 --- !u!114 &7703248174679813625
@@ -981,9 +913,6 @@ MonoBehaviour:
             enemies:
               internalItems: []
             spawnPosition: 0
-            spawnPoint:
-              exposedName: 
-              defaultValue: {fileID: 0}
             spawnPoints:
               internalItems: []
 --- !u!114 &8979726575955328570

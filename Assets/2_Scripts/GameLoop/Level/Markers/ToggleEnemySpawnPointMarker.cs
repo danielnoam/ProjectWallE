@@ -6,7 +6,7 @@ using UnityEngine;
 public class ToggleEnemySpawnPointMarker : BaseLevelEventMarker
 {
     [Header("Spawn Point")]
-    [SerializeField] private ExposedReference<EnemySpawnPoint> enemySpawnPoint;
+    [SerializeField, ScenePicker] private ExposedReference<EnemySpawnPoint> enemySpawnPoint;
     [SerializeField] private bool spawnPointState = true;
     
     public bool SpawnPointState => spawnPointState;

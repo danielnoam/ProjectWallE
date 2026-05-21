@@ -403,6 +403,7 @@ GameObject:
   - component: {fileID: 654480375333482949}
   - component: {fileID: 8556568562421680397}
   - component: {fileID: 947976188058488180}
+  - component: {fileID: 5798069354323884684}
   m_Layer: 0
   m_Name: Prefab_ObjeciveMarker
   m_TagString: Untagged
@@ -483,6 +484,21 @@ MonoBehaviour:
   radarTarget: {fileID: 8556568562421680397}
   inGameMarker: {fileID: 3336953420495808692}
   distanceLabel: {fileID: 5861459723668551780}
+--- !u!114 &5798069354323884684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8108797269066176244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e1fb935ed8d45e085c29b5777cf3b12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AlignToTerrain
+  setPosition: 1
+  positionOffset: {x: 0, y: 5, z: 0}
+  setRotation: 1
 --- !u!1 &8983036073911296936
 GameObject:
   m_ObjectHideFlags: 0

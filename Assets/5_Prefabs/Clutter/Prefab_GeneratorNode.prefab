@@ -79,6 +79,7 @@ GameObject:
   - component: {fileID: 8283484668720303055}
   - component: {fileID: 4699676492166358344}
   - component: {fileID: 1335351832164163025}
+  - component: {fileID: 8342032229372018260}
   m_Layer: 7
   m_Name: Prefab_GeneratorNode
   m_TagString: Untagged
@@ -155,6 +156,21 @@ MonoBehaviour:
   - {fileID: 2308925685089836474, guid: eb9518b19b0f8d64fa00d3c4d128b9bf, type: 3}
   snapOffset: {x: 0, y: -0.04, z: 0}
   visuals: {fileID: 3679374763186594111}
+--- !u!114 &8342032229372018260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8586392545539170314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e1fb935ed8d45e085c29b5777cf3b12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AlignToTerrain
+  setPosition: 1
+  positionOffset: {x: 0, y: 0.5, z: 0}
+  setRotation: 1
 --- !u!1001 &360012469212327195
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -9,7 +9,7 @@ namespace ProjectWallE.GameLoop
     public abstract class BaseLevelObjective
     {
         [Header("Marker")]
-        [SerializeField] protected ExposedReference<ObjectiveGameMarker> objectiveMarker;
+        [SerializeField, ScenePicker] protected ExposedReference<ObjectiveGameMarker> objectiveMarker;
         [SerializeField] protected bool showInGame = true;
         [SerializeField] protected bool showOnRadar = true;
 

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ProjectWallE.GameLoop
 {
     public enum EnemySourceType { Random, Specific }
-    public enum SpawnPositionType { Random, Specific, RandomFromSpecific }
+    public enum SpawnPositionType { Random, Specific }
 
     [Serializable]
     public class EnemySpawnParams
@@ -17,25 +17,20 @@ namespace ProjectWallE.GameLoop
 
         [Header("Position")]
         [SerializeField] private SpawnPositionType spawnPosition = SpawnPositionType.Random;
-        [SerializeField, ShowIf("spawnPosition", SpawnPositionType.Specific)] private ExposedReference<EnemySpawnPoint> spawnPoint;
-        [SerializeField, ShowIf("spawnPosition", SpawnPositionType.RandomFromSpecific)] private ChanceList<ExposedReference<EnemySpawnPoint>> spawnPoints;
-
-        private EnemySpawnPoint _resolvedPoint;
+        [SerializeField, ShowIf("spawnPosition", SpawnPositionType.Specific), ScenePicker] private ChanceList<ExposedReference<EnemySpawnPoint>> spawnPoints;
+        
         private ChanceList<EnemySpawnPoint> _resolvedSpawnPoints;
 
         public void Initialize(IExposedPropertyTable resolver = null)
         {
-            _resolvedPoint = spawnPosition == SpawnPositionType.Specific ? spawnPoint.Resolve(resolver) : null;
-
-            if (spawnPosition == SpawnPositionType.RandomFromSpecific)
+            if (spawnPosition != SpawnPositionType.Specific) return;
+    
+            _resolvedSpawnPoints = new ChanceList<EnemySpawnPoint>();
+            var rawList = spawnPoints.ToList();
+            for (int i = 0; i < rawList.Count; i++)
             {
-                _resolvedSpawnPoints = new ChanceList<EnemySpawnPoint>();
-                var rawList = spawnPoints.ToList();
-                for (int i = 0; i < rawList.Count; i++)
-                {
-                    var resolved = rawList[i].Resolve(resolver);
-                    if (resolved) _resolvedSpawnPoints.AddItem(resolved, spawnPoints.GetChance(i));
-                }
+                var resolved = rawList[i].Resolve(resolver);
+                if (resolved) _resolvedSpawnPoints.AddItem(resolved, spawnPoints.GetChance(i));
             }
         }
 
@@ -45,8 +40,7 @@ namespace ProjectWallE.GameLoop
 
             EnemySpawnPoint point = spawnPosition switch
             {
-                SpawnPositionType.Specific => _resolvedPoint,
-                SpawnPositionType.RandomFromSpecific => _resolvedSpawnPoints?.GetRandomItem(),
+                SpawnPositionType.Specific => _resolvedSpawnPoints?.GetRandomItem(),
                 _ => null
             };
 

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6577739461273134336}
   - component: {fileID: 3938091240067216367}
   - component: {fileID: 4899696076378500608}
+  - component: {fileID: 4543973850664985747}
   m_Layer: 0
   m_Name: Prefab_ResourceBoostZone
   m_TagString: Untagged
@@ -68,6 +69,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceBoostZone
   boostMultiplier: 2
+--- !u!114 &4543973850664985747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8914533132315614300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e1fb935ed8d45e085c29b5777cf3b12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AlignToTerrain
+  setPosition: 1
+  positionOffset: {x: 0, y: 0, z: 0}
+  setRotation: 1
 --- !u!1001 &3893199078213746603
 PrefabInstance:
   m_ObjectHideFlags: 0
