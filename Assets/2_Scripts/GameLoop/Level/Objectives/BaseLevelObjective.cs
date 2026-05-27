@@ -1,4 +1,5 @@
 using System;
+using DNExtensions.Utilities;
 using DNExtensions.Utilities.CustomFields;
 using ProjectWallE.GameLoop.UI;
 using UnityEngine;
@@ -23,6 +24,7 @@ namespace ProjectWallE.GameLoop
 
         protected ObjectiveGameMarker ResolvedMarker { get; private set; }
 
+        public bool HasMarker => objectiveMarker.Resolve(null);
         public bool IsCompleted => _isCompleted;
         public string TutorialText => tutorialTextOverride.isSet ? tutorialTextOverride.Value : DefaultTutorialText;
         public abstract string Description { get; }

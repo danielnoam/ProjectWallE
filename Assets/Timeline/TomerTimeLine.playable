@@ -12,16 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
-  m_Time: 4.5
+  m_Time: 7.583333333333333
   skipInEditor: 0
   spawnParams:
-    count: 5
     enemyType: 1
+    count: 5
     enemies:
       internalItems:
       - item: {fileID: 622395889724703068, guid: 311465a237bc47a4a80317173bf23667, type: 3}
         chance: 100
         isLocked: 0
+    enemyEntries: []
     spawnPosition: 1
     spawnPoints:
       internalItems:
@@ -52,7 +53,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd5511dff6f84ce8a7e93b16a19b6da9, type: 3}
   m_Name: Set Player Features Marker
   m_EditorClassIdentifier: Assembly-CSharp::SetPlayerFeaturesMarker
-  m_Time: 5.516666666666667
+  m_Time: 8.599999999999987
   skipInEditor: 0
   featuresToEnable: 2
   featuresToDisable: 0
@@ -68,13 +69,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
-  m_Time: 10.016666666666667
+  m_Time: 13.099999999999948
   skipInEditor: 0
   spawnParams:
-    count: 4
     enemyType: 0
+    count: 4
     enemies:
       internalItems: []
+    enemyEntries: []
     spawnPosition: 1
     spawnPoints:
       internalItems:
@@ -95,11 +97,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
-  m_Time: 8.49999999999999
+  m_Time: 11.583333333333268
   skipInEditor: 0
   spawnParams:
-    count: 3
     enemyType: 1
+    count: 3
     enemies:
       internalItems:
       - item: {fileID: -4769723865369596212, guid: 942ec3fb68d51bb418bece848d6bfd88, type: 3}
@@ -111,6 +113,7 @@ MonoBehaviour:
       - item: {fileID: 622395889724703068, guid: 83a877ad3335ba24198f58c9720f05c5, type: 3}
         chance: 15
         isLocked: 0
+    enemyEntries: []
     spawnPosition: 1
     spawnPoints:
       internalItems:
@@ -149,11 +152,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
-  m_Time: 6.483333333333333
+  m_Time: 9.566666666666649
   skipInEditor: 0
   spawnParams:
-    count: 5
     enemyType: 1
+    count: 5
     enemies:
       internalItems:
       - item: {fileID: 622395889724703068, guid: 83a877ad3335ba24198f58c9720f05c5, type: 3}
@@ -162,6 +165,7 @@ MonoBehaviour:
       - item: {fileID: 622395889724703068, guid: 311465a237bc47a4a80317173bf23667, type: 3}
         chance: 10
         isLocked: 0
+    enemyEntries: []
     spawnPosition: 1
     spawnPoints:
       internalItems:
@@ -257,7 +261,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Objective Marker
   m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
-  m_Time: 4
+  m_Time: 7.083333333333333
   skipInEditor: 0
   objectives:
   - rid: 1993976625937514496
@@ -289,7 +293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Start Objectives Marker
   m_EditorClassIdentifier: Assembly-CSharp::StartObjectivesMarker
-  m_Time: 11.516666666666667
+  m_Time: 14.599999999999948
   skipInEditor: 0
   objectives:
   - rid: 4199866606093860870
@@ -310,14 +314,15 @@ MonoBehaviour:
           value: 
         enemyPrefab: {fileID: 0}
         killCount: 17
-        spawnEnemies: 0
+        spawnEnemies: 1
         spawner:
           spawnInterval: 3
           spawnParams:
-            count: 3
             enemyType: 0
+            count: 1
             enemies:
               internalItems: []
+            enemyEntries: []
             spawnPosition: 0
             spawnPoints:
               internalItems: []
@@ -387,7 +392,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Objective Marker
   m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
-  m_Time: 5.016666666666667
+  m_Time: 8.099999999999994
   skipInEditor: 0
   objectives:
   - rid: 1993976625937514497
@@ -412,10 +417,11 @@ MonoBehaviour:
         spawner:
           spawnInterval: 3
           spawnParams:
-            count: 3
             enemyType: 0
+            count: 3
             enemies:
               internalItems: []
+            enemyEntries: []
             spawnPosition: 0
             spawnPoints:
               internalItems: []
@@ -431,13 +437,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 844512bbcc774b44b3c5e64aee9d8fbb, type: 3}
   m_Name: Spawn Structure Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnStructureMarker
-  m_Time: 7.5
+  m_Time: 10.583333333333293
   skipInEditor: 0
   podCameraMode: 1
   structureToSpawn: {fileID: 6487620541022002554, guid: 3b1b64788b055e0498a63ea738b3ba50, type: 3}
   structureSpawnPoint:
     exposedName: 335755da727832849b2e31ae373233e8
     defaultValue: {fileID: 0}
+--- !u!114 &3233409621997106567
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd5511dff6f84ce8a7e93b16a19b6da9, type: 3}
+  m_Name: Set Player Features Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SetPlayerFeaturesMarker
+  m_Time: 3.3833333333333333
+  skipInEditor: 0
+  featuresToEnable: 0
+  featuresToDisable: 8
 --- !u!114 &3501194080883682793
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -482,7 +504,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Start Objectives Marker
   m_EditorClassIdentifier: Assembly-CSharp::StartObjectivesMarker
-  m_Time: 9.483333333333333
+  m_Time: 12.566666666666613
   skipInEditor: 0
   objectives:
   - rid: 4199866606093860865
@@ -528,7 +550,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Start Objectives Marker
   m_EditorClassIdentifier: Assembly-CSharp::StartObjectivesMarker
-  m_Time: 6.983333333333333
+  m_Time: 10.066666666666645
   skipInEditor: 0
   objectives:
   - rid: 4199866606093860868
@@ -553,10 +575,11 @@ MonoBehaviour:
         spawner:
           spawnInterval: 3
           spawnParams:
-            count: 3
             enemyType: 0
+            count: 3
             enemies:
               internalItems: []
+            enemyEntries: []
             spawnPosition: 0
             spawnPoints:
               internalItems: []
@@ -609,6 +632,8 @@ MonoBehaviour:
     - {fileID: 5168069909312338161}
     - {fileID: 7495273874607471889}
     - {fileID: 8948110277889223247}
+    - {fileID: 3233409621997106567}
+    - {fileID: 5955797547463233454}
 --- !u!114 &5681630627237465900
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -621,13 +646,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
-  m_Time: 10.533333333333333
+  m_Time: 13.616666666666614
   skipInEditor: 0
   spawnParams:
-    count: 7
     enemyType: 0
+    count: 7
     enemies:
       internalItems: []
+    enemyEntries: []
     spawnPosition: 1
     spawnPoints:
       internalItems:
@@ -673,6 +699,22 @@ MonoBehaviour:
           hideWhenUnchecked: 0
           value: 
         radius: 20
+--- !u!114 &5955797547463233454
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd5511dff6f84ce8a7e93b16a19b6da9, type: 3}
+  m_Name: Set Player Features Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SetPlayerFeaturesMarker
+  m_Time: 7.016666666666667
+  skipInEditor: 0
+  featuresToEnable: 8
+  featuresToDisable: 0
 --- !u!114 &6827295725405647289
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -717,13 +759,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
-  m_Time: 11
+  m_Time: 14.083333333333279
   skipInEditor: 0
   spawnParams:
-    count: 6
     enemyType: 0
+    count: 6
     enemies:
       internalItems: []
+    enemyEntries: []
     spawnPosition: 1
     spawnPoints:
       internalItems:
@@ -744,7 +787,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Start Objectives Marker
   m_EditorClassIdentifier: Assembly-CSharp::StartObjectivesMarker
-  m_Time: 9
+  m_Time: 12.083333333333279
   skipInEditor: 0
   objectives:
   - rid: 4199866606093860869
@@ -769,10 +812,11 @@ MonoBehaviour:
         spawner:
           spawnInterval: 3
           spawnParams:
-            count: 3
             enemyType: 0
+            count: 3
             enemies:
               internalItems: []
+            enemyEntries: []
             spawnPosition: 0
             spawnPoints:
               internalItems: []
@@ -788,7 +832,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Start Objectives Marker
   m_EditorClassIdentifier: Assembly-CSharp::StartObjectivesMarker
-  m_Time: 7.999999999999999
+  m_Time: 11.083333333333279
   skipInEditor: 0
   objectives:
   - rid: 4199866606093860864
@@ -838,7 +882,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Objective Marker
   m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
-  m_Time: 6.016666666666667
+  m_Time: 9.099999999999977
   skipInEditor: 0
   objectives:
   - rid: 1993976625937514506
@@ -884,15 +928,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Start Objectives Marker
   m_EditorClassIdentifier: Assembly-CSharp::StartObjectivesMarker
-  m_Time: 13.016666666666667
+  m_Time: 15.033333333333314
   skipInEditor: 0
   objectives:
-  - rid: 4199866606093860871
+  - rid: 4199866766448394320
+  - rid: 4199866766448394321
   references:
     version: 2
     RefIds:
-    - rid: 4199866606093860871
-      type: {class: SurviveObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+    - rid: 4199866766448394320
+      type: {class: CallSupportAction, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         objectiveMarker:
           exposedName: 
@@ -903,18 +948,20 @@ MonoBehaviour:
           isSet: 0
           hideWhenUnchecked: 0
           value: 
-        duration: 30
-        spawnEnemies: 1
-        spawner:
-          spawnInterval: 3
-          spawnParams:
-            count: 3
-            enemyType: 0
-            enemies:
-              internalItems: []
-            spawnPosition: 0
-            spawnPoints:
-              internalItems: []
+        supportAction: {fileID: 0}
+    - rid: 4199866766448394321
+      type: {class: KillAllEnemiesObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        objectiveMarker:
+          exposedName: 
+          defaultValue: {fileID: 0}
+        showInGame: 1
+        showOnRadar: 1
+        tutorialTextOverride:
+          isSet: 0
+          hideWhenUnchecked: 0
+          value: 
+        completionDelay: 2
 --- !u!114 &8979726575955328570
 MonoBehaviour:
   m_ObjectHideFlags: 1

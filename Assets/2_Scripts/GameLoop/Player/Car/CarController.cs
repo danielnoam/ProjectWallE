@@ -64,6 +64,7 @@ namespace _2_Scripts
         public CarBoost CarBoost => carBoost;
         public CarInput CarInput => _carInput;
         public Vector3 CenterOfMassOffset => centerOfMassOffset;
+        public bool CanMove { get; set; } = true;
         public bool BuildEnabled { get; private set; } = true;
         public bool ShootEnabled { get; private set; } = false;
         public bool SupportEnabled { get; } =  true;
@@ -337,10 +338,13 @@ namespace _2_Scripts
             
             ApplyEngineBreaking(_carSpeed);
 
-            if (_carInput.Acceleration > 0 || _carInput.BoostHeld)
-                ApplyForwardAcceleration(_carSpeed, topForwardSpeed, accelForce, brakeForce);
-            else if (_carInput.Acceleration < 0)
-                ApplyBackwardsAcceleration(_carSpeed, topBackwardSpeed, accelForce, brakeForce);
+            if (CanMove)
+            {
+                if (_carInput.Acceleration > 0 || _carInput.BoostHeld)
+                    ApplyForwardAcceleration(_carSpeed, topForwardSpeed, accelForce, brakeForce);
+                else if (_carInput.Acceleration < 0)
+                    ApplyBackwardsAcceleration(_carSpeed, topBackwardSpeed, accelForce, brakeForce);
+            }
 
             if (CarBoost.CanBoost(out float boostAccel, out float boostSpeedFactor))
                 ApplyBoost(_carSpeed, boostAccel, boostSpeedFactor);

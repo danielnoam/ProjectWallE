@@ -51,4 +51,50 @@ namespace ProjectWallE.GameLoop
             }
         }
     }
+    
+    [Serializable]
+    [SerializableSelectorName("Kill All", "Enemy")]
+    public class KillAllEnemiesObjective : BaseLevelObjective
+    {
+        [Header("Settings")]
+        [Tooltip("Grace time after all enemies are killed before the objective is marked as complete. This allows for any last second spawns or effects to occur.")]
+        [SerializeField, Min(0f)] private float completionDelay = 2f;
+
+        private float _graceTimer;
+        private bool _hasSeenEnemy;
+
+        public override string Description => "Kill all enemies";
+        public override string ProgressText => IsCompleted ? "Complete" : $"{EnemyManager.Instance.ActiveEnemiesCount} remaining";
+
+        protected override string DefaultTutorialText => "";
+
+        protected override void OnInitialize(IExposedPropertyTable resolver = null)
+        {
+            _graceTimer = 0f;
+            _hasSeenEnemy = EnemyManager.Instance.ActiveEnemiesCount > 0;
+            Enemy.OnEnemyKilled += OnEnemyKilled;
+        }
+
+        protected override void OnDispose()
+        {
+            Enemy.OnEnemyKilled -= OnEnemyKilled;
+        }
+
+        public override void Tick(float deltaTime)
+        {
+            if (!_hasSeenEnemy) return;
+
+            if (EnemyManager.Instance.ActiveEnemiesCount == 0)
+            {
+                _graceTimer += deltaTime;
+                if (_graceTimer >= completionDelay) Complete();
+            }
+            else
+            {
+                _graceTimer = 0f;
+            }
+        }
+
+        private void OnEnemyKilled(Enemy enemy) => _hasSeenEnemy = true;
+    }
 }

@@ -17,7 +17,8 @@ namespace ProjectWallE
         Shoot      = 1 << 0,
         Build      = 1 << 1,
         AirSupport = 1 << 2,
-        All        = Shoot | Build | AirSupport
+        Movement = 1 << 3,
+        All        = Shoot | Build | AirSupport  | Movement,
     }
     
     public enum ControllerType
@@ -80,6 +81,7 @@ namespace ProjectWallE
         public bool CanBuild => _currentController.BuildEnabled && IsAlive && _enabledFeatures.HasFlag(PlayerFeature.Build);
         public bool CanShoot => _currentController.ShootEnabled && IsAlive && _enabledFeatures.HasFlag(PlayerFeature.Shoot);
         public bool CanSupport => _currentController.SupportEnabled && IsAlive && _enabledFeatures.HasFlag(PlayerFeature.AirSupport);
+        public bool CanMove => IsAlive && _enabledFeatures.HasFlag(PlayerFeature.Movement);
         public Vector3 Velocity => _rigidbody.linearVelocity;
         public bool IsAlive => _currentHealth > 0;
         public Team Team => Team.Player;
@@ -317,7 +319,7 @@ namespace ProjectWallE
             _currentController = isRobot ? robotController : carController;
             _currentController.gameObject.SetActive(true);
             _currentController.OnEnter();
-
+            _currentController.CanMove = CanMove;
             _rigidbody.centerOfMass = _currentController.CenterOfMassOffset;
 
             OnControllerChanged?.Invoke(controllerType);
@@ -434,6 +436,7 @@ namespace ProjectWallE
         {
             if (features == PlayerFeature.None) return;
             _enabledFeatures |= features;
+            _currentController.CanMove = CanMove;
             OnFeaturesChanged?.Invoke(_enabledFeatures);
         }
 
@@ -441,6 +444,7 @@ namespace ProjectWallE
         {
             if (features == PlayerFeature.None) return;
             _enabledFeatures &= ~features;
+            _currentController.CanMove = CanMove;
             OnFeaturesChanged?.Invoke(_enabledFeatures);
         }
 
