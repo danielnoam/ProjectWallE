@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71ede4ce85554223a81e51fcc2ea5d1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSpawnPoint
-  spawnHeight: 1
+  spawnHeight: 2
   spawnRotationY: 0
 --- !u!114 &5655525042541377159
 MonoBehaviour:
@@ -60,4 +60,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AlignToTerrain
   setPosition: 1
+  positionOffset: {x: 0, y: 0, z: 0}
   setRotation: 1

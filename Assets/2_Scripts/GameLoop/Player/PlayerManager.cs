@@ -283,6 +283,7 @@ namespace ProjectWallE
             _podInFlight = false;
             gfx?.SetActive(true);
             _currentHealth = maxHealth;
+            _currentController.CanMove = CanMove;
             OnHealthChanged?.Invoke(_currentHealth, maxHealth);
             OnSpawn?.Invoke();
             _respawnCoroutine = null;
@@ -436,7 +437,7 @@ namespace ProjectWallE
         {
             if (features == PlayerFeature.None) return;
             _enabledFeatures |= features;
-            _currentController.CanMove = CanMove;
+            if (IsAlive) _currentController.CanMove = CanMove;
             OnFeaturesChanged?.Invoke(_enabledFeatures);
         }
 
@@ -444,7 +445,7 @@ namespace ProjectWallE
         {
             if (features == PlayerFeature.None) return;
             _enabledFeatures &= ~features;
-            _currentController.CanMove = CanMove;
+            if (IsAlive) _currentController.CanMove = CanMove;
             OnFeaturesChanged?.Invoke(_enabledFeatures);
         }
 

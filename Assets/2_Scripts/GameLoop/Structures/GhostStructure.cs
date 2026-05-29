@@ -30,6 +30,8 @@ namespace ProjectWallE.GameLoop
         {
             if (_materials == null) return;
             if (_confirmSequence.isAlive) _confirmSequence.Stop();
+            
+            transform.localScale = Vector3.one;
             var color = canBuild ? canBuildColor.Value : blockBuildColor.Value;
             foreach (var mat in _materials)
                 mat.SetVector(ScanlinesColor, color);

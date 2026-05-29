@@ -20,9 +20,10 @@ namespace ProjectWallE
         [SerializeField] private float gamepadLookSensitivity = 180f;
         [SerializeField, Range(1, 89)] private float cameraVerticalClamp = 80f;
         
-        [Header("Car FOV Settings")]
+        [Header("Car Settings")]
         [SerializeField, MinMaxRange(0f, 50f)] private RangedFloat speedMagnitudeRange = new RangedFloat(15f, 30f);
         [SerializeField, MinMaxRange(0f, 150)] private RangedFloat fovRange = new RangedFloat(75f, 90f);
+        [SerializeField, MinMaxRange(0f, 5f)] private RangedFloat shakeAmplitudeRange = new RangedFloat(0f, 1f);
         
         [Header("Shake Settings")]
         [SerializeField] private ImpulseSettings damageImpulseSettings;
@@ -37,6 +38,7 @@ namespace ProjectWallE
         [SerializeField] private CinemachineCamera carCamera;
         [SerializeField] private CinemachineImpulseSource impulseSource;
         [SerializeField] private CinemachineRotationShake rotationShake;
+        [SerializeField] private CinemachineBasicMultiChannelPerlin carNoise;
         [SerializeField] private Transform cameraTarget;
         [SerializeField, AutoGetScene] private PlayerManager playerManager;
         [SerializeField, AutoGetSelf] private PlayerManagerInput input;
@@ -122,7 +124,7 @@ namespace ProjectWallE
         {
             if (_activePod) _podLookTarget.position = _activePod.transform.position;
             UpdateCameraMovement();
-            UpdateCarFOV();
+            UpdateCarEffects();
         }
         
         private void OnDeath(IDamageable attacker)
@@ -257,11 +259,12 @@ namespace ProjectWallE
             return rawLook * mouseLookSensitivity;
         }
         
-        private void UpdateCarFOV()
+        private void UpdateCarEffects()
         {
             var horizontalVelocity = playerManager.Velocity.SetY(0f);
             float t = Mathf.InverseLerp(speedMagnitudeRange.minValue, speedMagnitudeRange.maxValue, horizontalVelocity.magnitude);
             carCamera.Lens.FieldOfView = Mathf.Lerp(fovRange.minValue, fovRange.maxValue, t);
+            if (carNoise) carNoise.AmplitudeGain = Mathf.Lerp(shakeAmplitudeRange.minValue, shakeAmplitudeRange.maxValue, t);
         }
 
         private void SwitchActiveCamera(CinemachineCamera cam)

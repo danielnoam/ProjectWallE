@@ -27,19 +27,14 @@ MonoBehaviour:
     spawnPoints:
       internalItems:
       - item:
-          exposedName: 3d694537-973b-4aba-885a-d9ad2ea7c307
+          exposedName: 81c702de-efe9-4a11-90ac-a58753b7abba
           defaultValue: {fileID: 0}
-        chance: 34
+        chance: 77
         isLocked: 0
       - item:
-          exposedName: 3d694537-973b-4aba-885a-d9ad2ea7c307
+          exposedName: 81c702de-efe9-4a11-90ac-a58753b7abba
           defaultValue: {fileID: 0}
-        chance: 33
-        isLocked: 0
-      - item:
-          exposedName: 3d694537-973b-4aba-885a-d9ad2ea7c307
-          defaultValue: {fileID: 0}
-        chance: 33
+        chance: 23
         isLocked: 0
 --- !u!114 &-8814279413209688959
 MonoBehaviour:
@@ -73,7 +68,7 @@ MonoBehaviour:
   skipInEditor: 0
   spawnParams:
     enemyType: 0
-    count: 4
+    count: 10
     enemies:
       internalItems: []
     enemyEntries: []
@@ -81,9 +76,19 @@ MonoBehaviour:
     spawnPoints:
       internalItems:
       - item:
-          exposedName: 8a737158-08cf-4653-adcf-f5b36a8415c8
+          exposedName: 8ed0952b-74a3-4d6c-9473-b4ef56e44170
           defaultValue: {fileID: 0}
-        chance: 0
+        chance: 34
+        isLocked: 0
+      - item:
+          exposedName: 8ed0952b-74a3-4d6c-9473-b4ef56e44170
+          defaultValue: {fileID: 0}
+        chance: 33
+        isLocked: 0
+      - item:
+          exposedName: 8ed0952b-74a3-4d6c-9473-b4ef56e44170
+          defaultValue: {fileID: 0}
+        chance: 33
         isLocked: 0
 --- !u!114 &-7803992468192868248
 MonoBehaviour:
@@ -101,17 +106,17 @@ MonoBehaviour:
   skipInEditor: 0
   spawnParams:
     enemyType: 1
-    count: 3
+    count: 10
     enemies:
       internalItems:
       - item: {fileID: -4769723865369596212, guid: 942ec3fb68d51bb418bece848d6bfd88, type: 3}
-        chance: 10
+        chance: 27
         isLocked: 0
       - item: {fileID: 622395889724703068, guid: 311465a237bc47a4a80317173bf23667, type: 3}
-        chance: 10
+        chance: 63
         isLocked: 0
       - item: {fileID: 622395889724703068, guid: 83a877ad3335ba24198f58c9720f05c5, type: 3}
-        chance: 15
+        chance: 10
         isLocked: 0
     enemyEntries: []
     spawnPosition: 1
@@ -140,6 +145,24 @@ MonoBehaviour:
     exposedName: fcadd405a0ff92246bb5a968c3399b68
     defaultValue: {fileID: 0}
   spawnPointState: 1
+--- !u!114 &-6161496143796089948
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d09b01d4b9a242f59f452dd030b5551c, type: 3}
+  m_Name: Toggle Enemy Spawn Point Marker
+  m_EditorClassIdentifier: Assembly-CSharp::ToggleEnemySpawnPointMarker
+  m_Time: 14.65
+  skipInEditor: 0
+  enemySpawnPoint:
+    exposedName: 504f165e-7b73-44fa-b265-32355d1866c1
+    defaultValue: {fileID: 0}
+  spawnPointState: 1
 --- !u!114 &-3239118803876111203
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -160,19 +183,24 @@ MonoBehaviour:
     enemies:
       internalItems:
       - item: {fileID: 622395889724703068, guid: 83a877ad3335ba24198f58c9720f05c5, type: 3}
-        chance: 10
+        chance: 30
         isLocked: 0
       - item: {fileID: 622395889724703068, guid: 311465a237bc47a4a80317173bf23667, type: 3}
-        chance: 10
+        chance: 70
         isLocked: 0
     enemyEntries: []
     spawnPosition: 1
     spawnPoints:
       internalItems:
       - item:
-          exposedName: 401a1c05-c458-4ad2-b889-a37cb6f8a7dc
+          exposedName: 02bb1920-67e1-4641-880e-141a52e02635
           defaultValue: {fileID: 0}
-        chance: 100
+        chance: 50
+        isLocked: 0
+      - item:
+          exposedName: 02bb1920-67e1-4641-880e-141a52e02635
+          defaultValue: {fileID: 0}
+        chance: 50
         isLocked: 0
 --- !u!114 &-2831747386146784124
 MonoBehaviour:
@@ -209,10 +237,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd5511dff6f84ce8a7e93b16a19b6da9, type: 3}
   m_Name: Set Player Features Marker
   m_EditorClassIdentifier: Assembly-CSharp::SetPlayerFeaturesMarker
-  m_Time: 0.11666666666666667
+  m_Time: 0.15
   skipInEditor: 1
   featuresToEnable: 0
   featuresToDisable: 6
+--- !u!114 &-1360289467457274172
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd5511dff6f84ce8a7e93b16a19b6da9, type: 3}
+  m_Name: Set Player Features Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SetPlayerFeaturesMarker
+  m_Time: 14.2
+  skipInEditor: 0
+  featuresToEnable: 4
+  featuresToDisable: 0
 --- !u!114 &-1206158933409946082
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -293,15 +337,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Start Objectives Marker
   m_EditorClassIdentifier: Assembly-CSharp::StartObjectivesMarker
-  m_Time: 14.599999999999948
+  m_Time: 14.050000000000002
   skipInEditor: 0
   objectives:
-  - rid: 4199866606093860870
+  - rid: 4199866806874931463
   references:
     version: 2
     RefIds:
-    - rid: 4199866606093860870
-      type: {class: KillEnemiesObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+    - rid: 4199866806874931463
+      type: {class: KillAllEnemiesObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         objectiveMarker:
           exposedName: 
@@ -312,20 +356,7 @@ MonoBehaviour:
           isSet: 0
           hideWhenUnchecked: 0
           value: 
-        enemyPrefab: {fileID: 0}
-        killCount: 17
-        spawnEnemies: 1
-        spawner:
-          spawnInterval: 3
-          spawnParams:
-            enemyType: 0
-            count: 1
-            enemies:
-              internalItems: []
-            enemyEntries: []
-            spawnPosition: 0
-            spawnPoints:
-              internalItems: []
+        completionDelay: 5
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -348,6 +379,78 @@ MonoBehaviour:
     m_ScenePreview: 1
   m_DurationMode: 1
   m_MarkerTrack: {fileID: 0}
+--- !u!114 &598534368682470053
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d09b01d4b9a242f59f452dd030b5551c, type: 3}
+  m_Name: Toggle Enemy Spawn Point Marker
+  m_EditorClassIdentifier: Assembly-CSharp::ToggleEnemySpawnPointMarker
+  m_Time: 14.8
+  skipInEditor: 0
+  enemySpawnPoint:
+    exposedName: 46842fd1-78fc-47b7-8efc-9a249b74a139
+    defaultValue: {fileID: 0}
+  spawnPointState: 1
+--- !u!114 &1211149042844823367
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
+  m_Name: Start Objectives Marker
+  m_EditorClassIdentifier: Assembly-CSharp::StartObjectivesMarker
+  m_Time: 15.016666666666667
+  skipInEditor: 0
+  objectives:
+  - rid: 4199866806874931464
+  references:
+    version: 2
+    RefIds:
+    - rid: 4199866806874931464
+      type: {class: SurviveObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        objectiveMarker:
+          exposedName: 
+          defaultValue: {fileID: 0}
+        showInGame: 1
+        showOnRadar: 1
+        tutorialTextOverride:
+          isSet: 0
+          hideWhenUnchecked: 0
+          value: 
+        duration: 120
+        spawnEnemies: 1
+        spawner:
+          spawnInterval: 5
+          spawnParams:
+            enemyType: 0
+            count: 2
+            enemies:
+              internalItems: []
+            enemyEntries: []
+            spawnPosition: 0
+            spawnPoints:
+              internalItems:
+              - item:
+                  exposedName: 51683bdc-1687-40c5-9650-db28bdf42b8b
+                  defaultValue: {fileID: 0}
+                chance: 50
+                isLocked: 0
+              - item:
+                  exposedName: 51683bdc-1687-40c5-9650-db28bdf42b8b
+                  defaultValue: {fileID: 0}
+                chance: 50
+                isLocked: 0
 --- !u!114 &1572475322290309063
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -412,7 +515,7 @@ MonoBehaviour:
           hideWhenUnchecked: 0
           value: 
         enemyPrefab: {fileID: 0}
-        killCount: 6
+        killCount: 5
         spawnEnemies: 0
         spawner:
           spawnInterval: 3
@@ -538,6 +641,24 @@ MonoBehaviour:
           hideWhenUnchecked: 0
           value: Build a Generator on a resource node
         structurePrefab: {fileID: 2308925685089836474, guid: eb9518b19b0f8d64fa00d3c4d128b9bf, type: 3}
+--- !u!114 &4526934446136082352
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d09b01d4b9a242f59f452dd030b5551c, type: 3}
+  m_Name: Toggle Enemy Spawn Point Marker
+  m_EditorClassIdentifier: Assembly-CSharp::ToggleEnemySpawnPointMarker
+  m_Time: 14.4
+  skipInEditor: 0
+  enemySpawnPoint:
+    exposedName: 33611ccc-713a-417b-9d6b-e2ad5af12292
+    defaultValue: {fileID: 0}
+  spawnPointState: 1
 --- !u!114 &5168069909312338161
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -626,47 +747,17 @@ MonoBehaviour:
     - {fileID: 2869200150117115032}
     - {fileID: 3576929286620625831}
     - {fileID: -728732489931341432}
-    - {fileID: 5681630627237465900}
     - {fileID: 7172977050778211017}
     - {fileID: -8110904533396331235}
     - {fileID: 5168069909312338161}
     - {fileID: 7495273874607471889}
-    - {fileID: 8948110277889223247}
     - {fileID: 3233409621997106567}
     - {fileID: 5955797547463233454}
---- !u!114 &5681630627237465900
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
-  m_Name: Spawn Enemy Wave Marker
-  m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
-  m_Time: 13.616666666666614
-  skipInEditor: 0
-  spawnParams:
-    enemyType: 0
-    count: 7
-    enemies:
-      internalItems: []
-    enemyEntries: []
-    spawnPosition: 1
-    spawnPoints:
-      internalItems:
-      - item:
-          exposedName: 9dcf0d75-3ef9-4b06-b573-8c98ba2b1c14
-          defaultValue: {fileID: 0}
-        chance: 0
-        isLocked: 0
-      - item:
-          exposedName: 9dcf0d75-3ef9-4b06-b573-8c98ba2b1c14
-          defaultValue: {fileID: 0}
-        chance: 0
-        isLocked: 0
+    - {fileID: 1211149042844823367}
+    - {fileID: 4526934446136082352}
+    - {fileID: -6161496143796089948}
+    - {fileID: 598534368682470053}
+    - {fileID: -1360289467457274172}
 --- !u!114 &5691303165561134707
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -759,7 +850,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
-  m_Time: 14.083333333333279
+  m_Time: 13.533333333333333
   skipInEditor: 0
   spawnParams:
     enemyType: 0
@@ -916,52 +1007,6 @@ MonoBehaviour:
           hideWhenUnchecked: 0
           value: 
         structurePrefab: {fileID: 7498951326900205619, guid: 22eee64180129c841a1ce897f19c4847, type: 3}
---- !u!114 &8948110277889223247
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
-  m_Name: Start Objectives Marker
-  m_EditorClassIdentifier: Assembly-CSharp::StartObjectivesMarker
-  m_Time: 15.033333333333314
-  skipInEditor: 0
-  objectives:
-  - rid: 4199866766448394320
-  - rid: 4199866766448394321
-  references:
-    version: 2
-    RefIds:
-    - rid: 4199866766448394320
-      type: {class: CallSupportAction, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
-      data:
-        objectiveMarker:
-          exposedName: 
-          defaultValue: {fileID: 0}
-        showInGame: 1
-        showOnRadar: 1
-        tutorialTextOverride:
-          isSet: 0
-          hideWhenUnchecked: 0
-          value: 
-        supportAction: {fileID: 0}
-    - rid: 4199866766448394321
-      type: {class: KillAllEnemiesObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
-      data:
-        objectiveMarker:
-          exposedName: 
-          defaultValue: {fileID: 0}
-        showInGame: 1
-        showOnRadar: 1
-        tutorialTextOverride:
-          isSet: 0
-          hideWhenUnchecked: 0
-          value: 
-        completionDelay: 2
 --- !u!114 &8979726575955328570
 MonoBehaviour:
   m_ObjectHideFlags: 1

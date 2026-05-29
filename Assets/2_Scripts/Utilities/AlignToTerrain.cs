@@ -1,9 +1,7 @@
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.Button;
-using UnityEditor;
 using UnityEngine;
 
-[CanEditMultipleObjects]
 public class AlignToTerrain : MonoBehaviour
 {
     [Header("Settings")]
