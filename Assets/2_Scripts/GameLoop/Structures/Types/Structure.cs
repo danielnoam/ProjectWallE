@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DNExtensions.Systems.Scriptables;
 using DNExtensions.Utilities.AutoGet;
 using DNExtensions.Utilities.Button;
 using DNExtensions.Utilities.CustomFields;
@@ -24,9 +25,9 @@ public struct StructureUIData
 {
     [SerializeField] private string label;
     [SerializeField] private Sprite icon;
-    [SerializeField] private Sprite upgradeIcon;
-    [SerializeField] private Sprite fixIcon;
-    [SerializeField] private Sprite demolishIcon;
+    [SerializeField] private SOSprite upgradeIcon;
+    [SerializeField] private SOSprite fixIcon;
+    [SerializeField] private SOSprite demolishIcon;
     [SerializeField] private GhostStructure ghostPrefab;
     [SerializeField] private Pod podPrefab;
     
@@ -38,6 +39,7 @@ public struct StructureUIData
     public GhostStructure GhostPrefab => ghostPrefab;
     public Pod PodPrefab => podPrefab;
 }
+
 
 [DisallowMultipleComponent]
 [SelectionBase]
