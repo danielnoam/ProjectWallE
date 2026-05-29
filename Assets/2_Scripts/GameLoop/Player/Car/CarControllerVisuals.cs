@@ -22,7 +22,7 @@ namespace ProjectWallE
         [SerializeField] private float wheelRadius = 1.5f;
         
         [Header("Skid marks settings")]
-        [SerializeField, Range(0f,0.2f)] private float skidGroundOffset = 0;
+        [SerializeField, Range(-0.2f,0.2f)] private float skidGroundOffset = 0;
         [SerializeField, Range(0f,1f)] private float skidSlippingAmount = 0;
 
         private readonly List<TireVisual> _allTireVisuals = new List<TireVisual>();
@@ -80,11 +80,11 @@ namespace ProjectWallE
             }
         }
 
-        public void UpdateSkidTrailHeight(float groundHitDistance, int index)
+        public void UpdateSkidTrailHeight(float groundHitDistance,int index, Tire tire)
         {
-            var vector3 = _allTireVisuals[index].skidTrailTransform.localPosition;
-            vector3.y = -groundHitDistance + skidGroundOffset;
-            _allTireVisuals[index].skidTrailTransform.localPosition = vector3;
+            var vector3 = tire.tireTransform.position;
+            vector3.y -= groundHitDistance - skidGroundOffset;
+            _allTireVisuals[index].skidTrailTransform.position = vector3;
         }
 
         public void ActivateSkidTrails(float slippingAmount, int index)
@@ -117,9 +117,11 @@ namespace ProjectWallE
 
         public void ResetVisuals()
         {
-            foreach (var tireVisual in _allTireVisuals)
+            for (var i = 0; i < _allTireVisuals.Count; i++)
             {
+                var tireVisual = _allTireVisuals[i];
                 tireVisual.ResetVisual();
+                ActivateSkidTrails(-1f, i);
             }
         }
 

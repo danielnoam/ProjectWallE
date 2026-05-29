@@ -106,6 +106,10 @@ namespace _2_Scripts
         public void OnExit()
         {
             visuals?.ResetVisuals();
+            foreach (var tire in _allTires)
+            {
+                tire.ResetGrip(settings.StaticTiresFrictionCurve);
+            }
         }
 
         public void ApplyFixedUpdate()
@@ -166,7 +170,7 @@ namespace _2_Scripts
                         ForceMode.Force);
 
                     visuals.UpdateTireSuspensionVisuals(true, i, offset);
-                    visuals.UpdateSkidTrailHeight(hit.distance, i);
+                    visuals.UpdateSkidTrailHeight(hit.distance, i, tire);
                 }
                 else
                 {
@@ -217,7 +221,7 @@ namespace _2_Scripts
             
             //visuals
             for (int i = 0; i < _allTires.Count; i++)
-                visuals.ActivateSkidTrails(_allTires[i].isGroundedExact ? Mathf.Abs(_allTires[i].slippingAmount) : 0f, i);
+                visuals.ActivateSkidTrails(_allTires[i].isGroundedExact ? Mathf.Abs(_allTires[i].slippingAmount) : -1f, i);
         }
 
         private void ApplyTireFrictionModifiers(Vector3 planeNormal)
