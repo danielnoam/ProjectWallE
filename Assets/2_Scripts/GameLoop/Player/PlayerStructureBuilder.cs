@@ -268,22 +268,14 @@ namespace ProjectWallE.GameLoop.Player
         {
             if (!_canBuild) return;
 
-            if (ResourceManager.Instance)
-            {
-                if (!ResourceManager.Instance.TrySpendResources(structure.BuildCost))
-                {
-                    return;
-                }
-            }
+            if (ResourceManager.Instance && !ResourceManager.Instance.TrySpendResources(structure.BuildCost)) return;
 
             if (_targetedNode)
-            {
                 StructureManager.Instance?.DeployStructureOnNode(structure, _targetedNode);
-            }
             else
-            {
                 StructureManager.Instance?.DeployStructureOnGround(structure, _buildPoint, transform.forward, _buildNormal, PodCameraMode.None);
-            }
+
+            StructureManager.Instance?.ConfirmAndHideGhost();
         }
     }
 }

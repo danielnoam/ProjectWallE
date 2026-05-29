@@ -1,4 +1,5 @@
 using DNExtensions.Utilities.AutoGet;
+using ProjectWallE.GameLoop;
 using UnityEngine;
 
 namespace ProjectWallE.UI
@@ -27,6 +28,7 @@ namespace ProjectWallE.UI
 
         private void OnBuildMenuRequested(Structure[] structures, bool canBuild)
         {
+            if (RadialMenuManager.Instance && !RadialMenuManager.Instance.TryOpen(CloseMenu)) return;
             menuTitleText.text = "Structures";
             SetupMenu(structures, (element, structure) => ConfigureElement(element, structure, canBuild));
             OpenMenu();
@@ -36,7 +38,7 @@ namespace ProjectWallE.UI
         {
             if (!canBuild) selectedItemText.text = "Can't build here";
             bool canAfford = !ResourceManager.Instance || ResourceManager.Instance.CanAfford(structure.BuildCost);
-            
+
             element.Configure(
                 canBuild ? $"{structure.StructureUIData.Label}\nCost: {structure.BuildCost}" : "Can't build here",
                 structure.StructureUIData.Icon,

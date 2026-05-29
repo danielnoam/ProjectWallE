@@ -120,6 +120,13 @@ namespace ProjectWallE.GameLoop
             _activeGhost.transform.SetPositionAndRotation(position, rotation);
             _activeGhost.SetCanBuild(canBuild);
         }
+        
+        public void ConfirmAndHideGhost()
+        {
+            if (!_activeGhost) return;
+            _activeGhost.PlayConfirmAndDisable();
+            _activeGhost = null;
+        }
 
         #endregion
 

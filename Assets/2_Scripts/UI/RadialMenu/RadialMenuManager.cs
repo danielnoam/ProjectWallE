@@ -8,8 +8,10 @@ using UnityEngine;
 
 namespace ProjectWallE.GameLoop
 {
-    public class MenuEffectsController : MonoBehaviour
+    public class RadialMenuManager : MonoBehaviour
     {
+        public static RadialMenuManager Instance { get; private set; }
+
         [Header("TimeScale")]
         [SerializeField] private float slowScale = 0.05f;
         [SerializeField] private float slowDuration = 0.5f;
@@ -38,11 +40,14 @@ namespace ProjectWallE.GameLoop
         [SerializeField, AutoGetScene, HideInInspector] private StructureActionsMenu actionsMenu;
         [SerializeField, AutoGetScene, HideInInspector] private SupportActionsMenu supportMenu;
 
-        private float _savedStartAngle;
-        private float _savedEndAngle;
+        public bool IsMenuOpen => _closeActiveMenu != null;
+
+        private Action _closeActiveMenu;
         private int _openMenuCount;
         private Sequence _timeSequence;
         private RadialMenuElement _lastHoveredElement;
+        private float _savedStartAngle;
+        private float _savedEndAngle;
 
         private Action<RadialMenuElement, Structure> _onBuildHover;
         private Action<RadialMenuElement, Structure> _onBuildSelected;
@@ -55,6 +60,8 @@ namespace ProjectWallE.GameLoop
 
         private void Awake()
         {
+            Instance = this;
+
             _savedStartAngle = radialLayout.StartAngle;
             _savedEndAngle = radialLayout.EndAngle;
 
@@ -116,6 +123,13 @@ namespace ProjectWallE.GameLoop
             }
         }
 
+        public bool TryOpen(Action closeCallback)
+        {
+            if (_closeActiveMenu != null) return false;
+            _closeActiveMenu = closeCallback;
+            return true;
+        }
+
         private void OnElementHoverChanged(RadialMenuElement element)
         {
             if (_lastHoveredElement)
@@ -153,6 +167,7 @@ namespace ProjectWallE.GameLoop
 
         private void OnMenuClosed()
         {
+            _closeActiveMenu = null;
             _openMenuCount = Mathf.Max(0, _openMenuCount - 1);
             if (_openMenuCount > 0) return;
 

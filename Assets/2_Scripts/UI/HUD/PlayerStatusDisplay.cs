@@ -1,5 +1,6 @@
 using DNExtensions.Utilities.AutoGet;
 using PrimeTween;
+using ProjectWallE.GameLoop;
 using UnityEngine;
 
 namespace ProjectWallE.UI
@@ -51,6 +52,9 @@ namespace ProjectWallE.UI
             player.RobotController.OnJumped += OnJumped;
             player.Shooter.OnBasicCooldownUpdated += OnBasicCooldownUpdated;
             player.Shooter.OnSpecialCooldownUpdated += OnSpecialCooldownUpdated;
+            player.StructureBuilder.BuildMenuRequested += OnBuildMenuRequested;
+            player.StructureBuilder.ActionsMenuRequested += OnActionsMenuRequested;
+            player.SupportCaller.SupportMenuRequested += OnSupportMenuRequested;
 
             fuelBar.SetImmediate(100, 100);
             healthBar.SetImmediate(100, 100);
@@ -73,6 +77,9 @@ namespace ProjectWallE.UI
             player.RobotController.OnJumped -= OnJumped;
             player.Shooter.OnBasicCooldownUpdated -= OnBasicCooldownUpdated;
             player.Shooter.OnSpecialCooldownUpdated -= OnSpecialCooldownUpdated;
+            player.StructureBuilder.BuildMenuRequested -= OnBuildMenuRequested;
+            player.StructureBuilder.ActionsMenuRequested -= OnActionsMenuRequested;
+            player.SupportCaller.SupportMenuRequested -= OnSupportMenuRequested;
         }
 
         private void OnPlayerSpawn()
@@ -118,8 +125,7 @@ namespace ProjectWallE.UI
 
         private void OnSwitchCooldownUpdated(float currentCooldown, float maxCooldown)
         {
-            if (switchIcon && switchIcon.isActiveAndEnabled)
-                switchIcon.UpdateCooldown(currentCooldown, maxCooldown);
+            if (switchIcon && switchIcon.isActiveAndEnabled) switchIcon.UpdateCooldown(currentCooldown, maxCooldown);
         }
 
         private void OnBrakeStarted()
@@ -136,17 +142,30 @@ namespace ProjectWallE.UI
         {
             if (jumpIcon && jumpIcon.isActiveAndEnabled) jumpIcon.PunchIcon();
         }
+        
+        private void OnBuildMenuRequested(Structure[] _, bool __) 
+        { 
+            if (buildIcon && buildIcon.isActiveAndEnabled) buildIcon.PunchIcon(); 
+        }
+
+        private void OnActionsMenuRequested(Structure _) 
+        { 
+            if (buildIcon && buildIcon.isActiveAndEnabled) buildIcon.PunchIcon(); 
+        }
+
+        private void OnSupportMenuRequested(SOSupportActionData[] _) 
+        { 
+            if (supportIcon && supportIcon.isActiveAndEnabled) supportIcon.PunchIcon(); 
+        }
 
         private void OnBasicCooldownUpdated(float currentCooldown, float maxCooldown)
         {
-            if (basicAttackIcon && basicAttackIcon.isActiveAndEnabled)
-                basicAttackIcon.UpdateCooldown(currentCooldown, maxCooldown);
+            if (basicAttackIcon && basicAttackIcon.isActiveAndEnabled) basicAttackIcon.UpdateCooldown(currentCooldown, maxCooldown);
         }
 
         private void OnSpecialCooldownUpdated(float currentCooldown, float maxCooldown)
         {
-            if (specialAttackIcon && specialAttackIcon.isActiveAndEnabled)
-                specialAttackIcon.UpdateCooldown(currentCooldown, maxCooldown);
+            if (specialAttackIcon && specialAttackIcon.isActiveAndEnabled) specialAttackIcon.UpdateCooldown(currentCooldown, maxCooldown);
         }
 
         private void UpdateFuelBar(float currentFuel, float maxFuel)
@@ -158,5 +177,7 @@ namespace ProjectWallE.UI
         {
             if (healthBar) healthBar.SetValue(currentHealth, maxHealth);
         }
+        
+        
     }
 }
