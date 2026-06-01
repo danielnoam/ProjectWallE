@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2580018003251101731}
   - component: {fileID: 4129400820014243563}
+  - component: {fileID: 5655525042541377159}
   m_Layer: 0
   m_Name: Prefab_SpawnPointPlayer
   m_TagString: Untagged
@@ -44,4 +45,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71ede4ce85554223a81e51fcc2ea5d1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSpawnPoint
-  spawnHeight: 1
+  spawnHeight: 2
+  spawnRotationY: 0
+--- !u!114 &5655525042541377159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2034748791248471063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e1fb935ed8d45e085c29b5777cf3b12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AlignToTerrain
+  setPosition: 1
+  positionOffset: {x: 0, y: 0, z: 0}
+  setRotation: 1

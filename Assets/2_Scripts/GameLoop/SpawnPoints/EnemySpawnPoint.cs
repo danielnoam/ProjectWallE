@@ -8,10 +8,8 @@ namespace ProjectWallE.GameLoop
         [Header("Settings")] 
         [SerializeField] private bool isActive = true;
         [SerializeField] private float spawnPointRange = 10f;
-        [SerializeField] private float spawnHeight = 5f;
 
         public float SpawnPointRange => spawnPointRange;
-        public float SpawnHeight => spawnHeight;
 
         private void OnValidate()
         {
@@ -55,12 +53,9 @@ namespace ProjectWallE.GameLoop
             Handles.color = isActive ? Color.red : Color.gray;
             Handles.DrawWireDisc(transform.position, Vector3.up, spawnPointRange);
 
-            if (spawnHeight != 0)
-            {
-                Vector3 topPoint = transform.position + Vector3.up * spawnHeight;
-                Handles.DrawLine(transform.position, topPoint);
-                Handles.DrawWireDisc(topPoint, Vector3.up, 0.5f);
-            }
+            Vector3 topPoint = transform.position + Vector3.up * 2;
+            Handles.DrawLine(transform.position, topPoint);
+            Handles.DrawWireDisc(topPoint, Vector3.up, 0.5f);
 
             var enemyString = $"Enemy Spawn Point: {(isActive ? "Active" : "Not Active")}";
             Handles.Label(

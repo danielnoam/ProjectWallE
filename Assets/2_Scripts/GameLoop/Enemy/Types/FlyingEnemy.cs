@@ -13,6 +13,9 @@ namespace ProjectWallE.GameLoop
         {
             base.Initialize();
             flyingAgent.UpdateRotation = !AimingControlsBodyRotation;
+            Vector3 pos = transform.position;
+            pos.y += 2f; // spawn offset so it wont spawn in ground
+            transform.position = pos;
         }
 
         protected override void OnUpdate()

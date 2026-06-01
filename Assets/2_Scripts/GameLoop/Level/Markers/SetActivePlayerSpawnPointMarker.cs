@@ -7,7 +7,7 @@ using UnityEngine;
 public class SetActivePlayerSpawnPointMarker : BaseLevelEventMarker
 {
     [Header("Spawn Point")]
-    [SerializeField] private ExposedReference<PlayerSpawnPoint> playerSpawnPoint;
+    [SerializeField, ScenePicker] private ExposedReference<PlayerSpawnPoint> playerSpawnPoint;
     
     protected override void OnExecute(IExposedPropertyTable resolver = null)
     {

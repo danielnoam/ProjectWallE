@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48fdd8f2443f4a388d459120750be04e, type: 3}
+  m_Name: Cluster SOSupportData
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.SOSupportData
+  label: Cluster
+  icon: {fileID: 21300000, guid: 62e112137f8377043acef3185ee8bcd6, type: 3}
+  podPrefab: {fileID: 826211790791627871, guid: d3cd268ca72788b4e88f4fd0255a36b5, type: 3}
+  cost: 250
+  podCount: 6
+  scatterRadius: 25
+  onImpact:
+  - rid: 126016798228742234
+  - rid: 126016798228742236
+  - rid: 126016798228742237
+  - rid: 4199866168745656400
+  - rid: 4199866171927298151
+  references:
+    version: 2
+    RefIds:
+    - rid: 126016798228742234
+      type: {class: DamageBehavior, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        radius: 15
+        damageRange:
+          minValue: 50
+          maxValue: 100
+        hitLayers: {fileID: 11400000, guid: 858ceb8d9b448d24d94c04812c01cb15, type: 2}
+    - rid: 126016798228742236
+      type: {class: PushBehavior, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        radius: 10
+        pushStrength:
+          minValue: 3
+          maxValue: 15
+    - rid: 126016798228742237
+      type: {class: VisualImpactEffect, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        effect:
+          effectType: 1
+          visualEffect: {fileID: -646395566823460614, guid: c8931742fb422eb4d862e8bfe7ea43d5, type: 3}
+          visualEffects: []
+          soundId: PodCollision
+    - rid: 4199866168745656400
+      type: {class: DecalImpactEffect, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        decal: {fileID: 3143388929836681745, guid: e4762635f7768174ea6f494a962e3214, type: 3}
+    - rid: 4199866171927298151
+      type: {class: GenerateImpulseBehavior, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        impulseSettings:
+          impulseChannel: 1
+          impulseType: 1
+          impulseShape: 4
+          duration: 0.2
+          intensity: 0.5
+          velocity: {x: 1, y: 1, z: 1}
+          dissipationDistance: 100
+          dissipationRate: 0.25
+          propagationSpeed: 343

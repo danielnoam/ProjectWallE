@@ -13,8 +13,10 @@ namespace ProjectWallE
     
     public interface IPlayerController
     {
-        bool canBuild {get;}
-        bool canShoot {get;}
+        bool CanMove { get; set; }
+        bool BuildEnabled {get;}
+        bool ShootEnabled {get;}
+        bool SupportEnabled { get; }
         public void ApplyFixedUpdate();
         public void ApplyUpdate();
         public void ApplyLateUpdate();

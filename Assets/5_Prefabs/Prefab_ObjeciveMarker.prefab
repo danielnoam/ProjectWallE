@@ -161,7 +161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 1b0e37cdfbeffaa4a85d382ed0732e27, type: 2}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -236,7 +236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 1b0e37cdfbeffaa4a85d382ed0732e27, type: 2}
   m_Color: {r: 1, g: 0.7490196, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -321,8 +321,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 1m
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: aaba39b69f225274c90a1f9de860b1bf, type: 2}
-  m_sharedMaterial: {fileID: 2282368051087302162, guid: aaba39b69f225274c90a1f9de860b1bf, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0a31e45056ec6b0449b13f5eeec40547, type: 2}
+  m_sharedMaterial: {fileID: 2282368051087302162, guid: 0a31e45056ec6b0449b13f5eeec40547, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -403,6 +403,7 @@ GameObject:
   - component: {fileID: 654480375333482949}
   - component: {fileID: 8556568562421680397}
   - component: {fileID: 947976188058488180}
+  - component: {fileID: 5798069354323884684}
   m_Layer: 0
   m_Name: Prefab_ObjeciveMarker
   m_TagString: Untagged
@@ -478,10 +479,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.ObjectiveGameMarker
   showDistance: 1
+  tweenDuration: 0.3
   note: {fileID: 654480375333482949}
   radarTarget: {fileID: 8556568562421680397}
   inGameMarker: {fileID: 3336953420495808692}
   distanceLabel: {fileID: 5861459723668551780}
+--- !u!114 &5798069354323884684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8108797269066176244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e1fb935ed8d45e085c29b5777cf3b12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AlignToTerrain
+  setPosition: 1
+  positionOffset: {x: 0, y: 5, z: 0}
+  setRotation: 1
 --- !u!1 &8983036073911296936
 GameObject:
   m_ObjectHideFlags: 0
@@ -550,7 +567,7 @@ MonoBehaviour:
   distanceToCameraAffectsScale: 1
   minMaxScaleMultiplier:
     minValue: 1
-    maxValue: 2
+    maxValue: 5
   minMaxDistance:
-    minValue: 5
-    maxValue: 15
+    minValue: 20
+    maxValue: 100

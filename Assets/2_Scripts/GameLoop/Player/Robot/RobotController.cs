@@ -45,8 +45,10 @@ namespace ProjectWallE
 
         public Vector3 CenterOfMassOffset => centerOfMassOffset;
 
-        public bool canBuild { get; private set; } = true;
-        public bool canShoot { get; private set; } = true;
+        public bool CanMove { get; set; } = true;
+        public bool BuildEnabled { get; private set; } = true;
+        public bool ShootEnabled { get; private set; } = true;
+        public bool SupportEnabled { get; } =  true;
 
         public void Initialize(PlayerReferences playerReferences)
         {
@@ -111,7 +113,7 @@ namespace ProjectWallE
         private void UpdateLocomotion(RaycastHit hit)
         {
             _isSlopeSliding = false;
-            Vector3 moveDir = GetCameraRelativeDirection(_input.Movement);
+            Vector3 moveDir = CanMove ? GetCameraRelativeDirection(_input.Movement) : Vector3.zero;
 
             if (_isGrounded)
             {
@@ -250,7 +252,7 @@ namespace ProjectWallE
         private void UpdateJump(bool isGrounded, RaycastHit hit)
         {
             _isJumping = _isJumping && isGrounded;
-            if (!_isJumpAvail || !isGrounded || _isJumping) return;
+            if (!CanMove || !_isJumpAvail || !isGrounded || _isJumping) return;
 
             float groundOffset = settings.GroundHeight - hit.distance;
             Jump(groundOffset);

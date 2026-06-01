@@ -159,16 +159,15 @@ MonoBehaviour:
   structureUIData:
     label: Generator
     icon: {fileID: 21300000, guid: d819ffb64ff52294f87c1c5ca5eedb33, type: 3}
-    upgradeIcon: {fileID: 21300000, guid: e1eb68e1f83e0f8428d9583353dd12e5, type: 3}
-    fixIcon: {fileID: 21300000, guid: f97c6fce79c949d4d9442abdb8587a5a, type: 3}
-    demolishIcon: {fileID: 21300000, guid: bdc8187f8faf27141b9a058f291e0ad0, type: 3}
+    upgradeIcon: {fileID: 11400000, guid: 793cad816964e9444bd4014327c4f321, type: 2}
+    fixIcon: {fileID: 11400000, guid: aeb6ea366cfa4e74c9f78ad939a06355, type: 2}
+    demolishIcon: {fileID: 11400000, guid: cf6adb5f54b980d4186fe4fef61f7a45, type: 2}
     ghostPrefab: {fileID: -768713031059423752, guid: 71da1a4c5b42ee54bbc27070f68a635e, type: 3}
     podPrefab: {fileID: 0}
   damageEffects:
     punchStrength: 1
     punchDuration: 0.15
     punchEase: 1
-    emissionColor: {fileID: 0}
     materialColor: {fileID: 11400000, guid: e0eba0be932fbe44ea4eb77f31df8831, type: 2}
     hitSoundId: Damaged
   buildEffect:
@@ -237,7 +236,7 @@ MonoBehaviour:
       data:
         maxHealth: 100
         cost: 100
-        fixCostPerHealthPoint: 0.5
+        fixCostPerHealthPoint: 0.25
         generationInterval: 2
         resourcesPerInterval: 1
     - rid: 4437626180964712525
@@ -245,7 +244,7 @@ MonoBehaviour:
       data:
         maxHealth: 200
         cost: 200
-        fixCostPerHealthPoint: 0.5
+        fixCostPerHealthPoint: 0.25
         generationInterval: 1
         resourcesPerInterval: 1
 --- !u!82 &1674811526504661842

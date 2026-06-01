@@ -3,12 +3,6 @@ using DNExtensions.Utilities;
 using ProjectWallE.GameLoop;
 using UnityEngine;
 
-public enum SpawnType
-{
-    Random,
-    Specific
-}
-
 public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager Instance { get; private set; }
@@ -22,6 +16,8 @@ public class EnemyManager : MonoBehaviour
     private Transform _enemyHolder;
     private readonly ChanceList<EnemySpawnPoint> _activeSpawnPoints = new ChanceList<EnemySpawnPoint>();
     private readonly List<Enemy> _activeEnemies = new List<Enemy>();
+    
+    public int ActiveEnemiesCount => _activeEnemies.Count;
     
     private void Awake()
     {

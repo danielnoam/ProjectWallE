@@ -52,18 +52,6 @@ namespace ProjectWallE.GameLoop
         {
             Clear();
         }
-        
-        [Button(ButtonPlayMode.OnlyWhenNotPlaying)]
-        private void AlignToGround()
-        {
-            if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out RaycastHit hit, 50f))
-            {
-                transform.position = hit.point + Vector3.up/2;
-                Vector3 projectedForward = Vector3.ProjectOnPlane(transform.forward, hit.normal).normalized;
-                if (projectedForward.sqrMagnitude < 0.001f) projectedForward = Vector3.ProjectOnPlane(Vector3.forward, hit.normal).normalized;
-                transform.rotation = Quaternion.LookRotation(projectedForward, hit.normal);
-            } 
-        }
 
 #if UNITY_EDITOR
         private void OnDrawGizmos()

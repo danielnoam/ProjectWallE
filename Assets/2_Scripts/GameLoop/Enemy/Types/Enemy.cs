@@ -32,6 +32,7 @@ namespace ProjectWallE.GameLoop
         
         [Header("Settings")]
         [SerializeField] private float maxHealth = 100f;
+        [SerializeField, Min(0)] private int resourceWorth = 25;
         [SerializeField] private bool canBePushed = true;
 
         [Header("Targeting")]
@@ -183,6 +184,7 @@ namespace ProjectWallE.GameLoop
 
         private void Die()
         {
+            ResourceManager.Instance?.AddResources(resourceWorth);
             deathEffect?.Play(transform.position);
             OnDeath?.Invoke(this);
             OnEnemyKilled?.Invoke(this);
@@ -261,7 +263,7 @@ namespace ProjectWallE.GameLoop
             attackStrategy?.Reset();
         }
         
-        public void Deploy(DeploymentRequest deploymentRequest, BehaviorRequest behaviorRequest)
+        public virtual void Deploy(DeploymentRequest deploymentRequest, BehaviorRequest behaviorRequest)
         {
 
         }

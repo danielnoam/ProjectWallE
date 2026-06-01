@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2580018003251101731}
   - component: {fileID: 5206305802732792359}
+  - component: {fileID: 4354528018588298644}
   m_Layer: 0
   m_Name: Prefab_SpawnPointEnemy
   m_TagString: Untagged
@@ -47,3 +48,17 @@ MonoBehaviour:
   isActive: 1
   spawnPointRange: 25
   spawnHeight: 2
+--- !u!114 &4354528018588298644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2034748791248471063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e1fb935ed8d45e085c29b5777cf3b12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AlignToTerrain
+  setPosition: 1
+  setRotation: 1

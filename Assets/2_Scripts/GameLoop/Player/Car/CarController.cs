@@ -64,8 +64,10 @@ namespace _2_Scripts
         public CarBoost CarBoost => carBoost;
         public CarInput CarInput => _carInput;
         public Vector3 CenterOfMassOffset => centerOfMassOffset;
-        public bool canBuild { get; private set; } = true;
-        public bool canShoot { get; private set; } = false;
+        public bool CanMove { get; set; } = true;
+        public bool BuildEnabled { get; private set; } = true;
+        public bool ShootEnabled { get; private set; } = false;
+        public bool SupportEnabled { get; } =  true;
 
         public event Action OnBrakeStarted;
 
@@ -104,6 +106,10 @@ namespace _2_Scripts
         public void OnExit()
         {
             visuals?.ResetVisuals();
+            foreach (var tire in _allTires)
+            {
+                tire.ResetGrip(settings.StaticTiresFrictionCurve);
+            }
         }
 
         public void ApplyFixedUpdate()
@@ -164,7 +170,7 @@ namespace _2_Scripts
                         ForceMode.Force);
 
                     visuals.UpdateTireSuspensionVisuals(true, i, offset);
-                    visuals.UpdateSkidTrailHeight(hit.distance, i);
+                    visuals.UpdateSkidTrailHeight(hit.distance, i, tire);
                 }
                 else
                 {
@@ -215,7 +221,7 @@ namespace _2_Scripts
             
             //visuals
             for (int i = 0; i < _allTires.Count; i++)
-                visuals.ActivateSkidTrails(_allTires[i].isGroundedExact ? Mathf.Abs(_allTires[i].slippingAmount) : 0f, i);
+                visuals.ActivateSkidTrails(_allTires[i].isGroundedExact ? Mathf.Abs(_allTires[i].slippingAmount) : -1f, i);
         }
 
         private void ApplyTireFrictionModifiers(Vector3 planeNormal)
@@ -336,10 +342,13 @@ namespace _2_Scripts
             
             ApplyEngineBreaking(_carSpeed);
 
-            if (_carInput.Acceleration > 0 || _carInput.BoostHeld)
-                ApplyForwardAcceleration(_carSpeed, topForwardSpeed, accelForce, brakeForce);
-            else if (_carInput.Acceleration < 0)
-                ApplyBackwardsAcceleration(_carSpeed, topBackwardSpeed, accelForce, brakeForce);
+            if (CanMove)
+            {
+                if (_carInput.Acceleration > 0 || _carInput.BoostHeld)
+                    ApplyForwardAcceleration(_carSpeed, topForwardSpeed, accelForce, brakeForce);
+                else if (_carInput.Acceleration < 0)
+                    ApplyBackwardsAcceleration(_carSpeed, topBackwardSpeed, accelForce, brakeForce);
+            }
 
             if (CarBoost.CanBoost(out float boostAccel, out float boostSpeedFactor))
                 ApplyBoost(_carSpeed, boostAccel, boostSpeedFactor);

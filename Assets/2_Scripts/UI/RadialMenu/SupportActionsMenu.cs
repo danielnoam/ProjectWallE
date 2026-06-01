@@ -29,6 +29,7 @@ namespace ProjectWallE.UI
 
         private void OnSupportCallerMenuRequested(SOSupportActionData[] supports)
         {
+            if (RadialMenuManager.Instance && !RadialMenuManager.Instance.TryOpen(CloseMenu)) return;
             menuTitleText.text = "Air Support";
             SetupMenu(supports, ConfigureElement);
             OpenMenu();

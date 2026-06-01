@@ -145,16 +145,15 @@ MonoBehaviour:
   structureUIData:
     label: Gun Turret
     icon: {fileID: 21300000, guid: 81e67275c7e36e9488c9512af66d3110, type: 3}
-    upgradeIcon: {fileID: 21300000, guid: e1eb68e1f83e0f8428d9583353dd12e5, type: 3}
-    fixIcon: {fileID: 21300000, guid: f97c6fce79c949d4d9442abdb8587a5a, type: 3}
-    demolishIcon: {fileID: 21300000, guid: bdc8187f8faf27141b9a058f291e0ad0, type: 3}
+    upgradeIcon: {fileID: 11400000, guid: 793cad816964e9444bd4014327c4f321, type: 2}
+    fixIcon: {fileID: 11400000, guid: aeb6ea366cfa4e74c9f78ad939a06355, type: 2}
+    demolishIcon: {fileID: 11400000, guid: cf6adb5f54b980d4186fe4fef61f7a45, type: 2}
     ghostPrefab: {fileID: 4704131213688510150, guid: 426c364c338c3854db11b47e2e7874ec, type: 3}
     podPrefab: {fileID: 0}
   damageEffects:
     punchStrength: 1
     punchDuration: 0.15
     punchEase: 1
-    emissionColor: {fileID: 0}
     materialColor: {fileID: 11400000, guid: e0eba0be932fbe44ea4eb77f31df8831, type: 2}
     hitSoundId: Damaged
   buildEffect:
@@ -236,7 +235,7 @@ MonoBehaviour:
       data:
         maxHealth: 300
         cost: 200
-        fixCostPerHealthPoint: 0.5
+        fixCostPerHealthPoint: 0.25
         detectionRadius: 50
         attackRotationSpeed: 125
         attackCooldown: 0.25

@@ -1,5 +1,6 @@
 using System;
 using DNExtensions.Utilities.AutoGet;
+using ProjectWallE.GameLoop;
 using UnityEngine;
 
 namespace ProjectWallE.UI
@@ -11,7 +12,7 @@ namespace ProjectWallE.UI
         public bool IsAvailable;
         public Action OnSelected;
     }
-    
+
     public class StructureActionsMenu : RadialMenu<StructureAction>
     {
         [SerializeField, AutoGetScene, HideInInspector] private PlayerManager player;
@@ -42,6 +43,7 @@ namespace ProjectWallE.UI
         private void OnActionsMenuRequested(Structure structure)
         {
             if (!structure) return;
+            RadialMenuManager.Instance?.TryOpen(CloseMenu);
             menuTitleText.text = structure.StructureUIData.Label;
             SetupMenu(structure.GetActions(), ConfigureElement);
             OpenMenu();

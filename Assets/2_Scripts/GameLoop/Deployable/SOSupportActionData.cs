@@ -1,3 +1,4 @@
+using System;
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.SerializableSelector;
 using UnityEngine;
@@ -7,6 +8,8 @@ namespace ProjectWallE.GameLoop
     [CreateAssetMenu(fileName = "New SOSupport Action Data", menuName = "Support Action Data")]
     public class SOSupportActionData : ScriptableObject, IDeployableWithPod
     {
+        public static event Action<SOSupportActionData> OnSupportActionCalled;
+        
         [Header("Identity")]
         [SerializeField] private string label;
         [SerializeField] private Sprite icon;
@@ -33,6 +36,8 @@ namespace ProjectWallE.GameLoop
             {
                 effect?.Execute(behaviorRequest);
             }
+            
+            OnSupportActionCalled?.Invoke(this);
         }
 
 

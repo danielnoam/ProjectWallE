@@ -9,15 +9,27 @@ using UnityEngine;
 
 namespace ProjectWallE
 {
+
+    [Flags]
+    public enum PlayerFeature
+    {
+        None       = 0,
+        Shoot      = 1 << 0,
+        Build      = 1 << 1,
+        AirSupport = 1 << 2,
+        Movement = 1 << 3,
+        All        = Shoot | Build | AirSupport  | Movement,
+    }
+    
     public enum ControllerType
     {
         Robot, Car
     }
-    
+
     public class PlayerManager : MonoBehaviour, IDamageable, IPushable, IDeployable
     {
-        public static PlayerManager Instance  { get; private set; }
-        
+        public static PlayerManager Instance { get; private set; }
+
         [Header("Settings")]
         [SerializeField, Min(10f)] private float maxHealth = 100f;
         [SerializeField] private float timeBeforeHealthRegen = 1.5f;
@@ -25,12 +37,12 @@ namespace ProjectWallE
         [SerializeField] private float respawnTime = 5f;
         [SerializeField] private int skipRespawnBaseCost = 250;
         [SerializeField] private float switchCooldown = 0.5f;
-        
+
         [Header("Collision")]
         [SerializeField] private float robotHeightCheck = 2;
         [SerializeField] private LayerMask groundLayer;
         [SerializeField] private LayerMask switchBlockLayer;
-        
+
         [Header("References")]
         [SerializeField] private GameObject gfx;
         [HideInInspector, SerializeField, AutoGetChildren] private CarController carController;
@@ -43,20 +55,21 @@ namespace ProjectWallE
         private PlayerManagerInput _input;
         private Rigidbody _rigidbody;
         private Transform _cameraTransform;
-        
+
         private ControllerType _controllerTypeEnum;
         private ControllerType _lastFrameControllerTypeEnum;
-        
+
         private IPlayerController _currentController;
-        
+
         private Coroutine _respawnCoroutine;
         private Coroutine _lateFixedUpdateCoroutine;
-        
+
         private float _currentHealth;
         private float _switchTimer;
         private float _lastDamageTime;
         private int _currentSkipCost;
         private bool _podInFlight;
+        private PlayerFeature _enabledFeatures = PlayerFeature.All;
 
         public ControllerType ControllerType => _controllerTypeEnum;
         public CarController CarController => carController;
@@ -65,12 +78,14 @@ namespace ProjectWallE
         public PlayerShooter Shooter => shooter;
         public PlayerAimer Aimer => aimer;
         public PlayerSupportCaller SupportCaller => supportCaller;
-        public bool CanBuild => _currentController.canBuild && IsAlive;
-        public bool CanShoot => _currentController.canShoot && IsAlive;
+        public bool CanBuild => _currentController.BuildEnabled && IsAlive && _enabledFeatures.HasFlag(PlayerFeature.Build);
+        public bool CanShoot => _currentController.ShootEnabled && IsAlive && _enabledFeatures.HasFlag(PlayerFeature.Shoot);
+        public bool CanSupport => _currentController.SupportEnabled && IsAlive && _enabledFeatures.HasFlag(PlayerFeature.AirSupport);
+        public bool CanMove => IsAlive && _enabledFeatures.HasFlag(PlayerFeature.Movement);
         public Vector3 Velocity => _rigidbody.linearVelocity;
         public bool IsAlive => _currentHealth > 0;
         public Team Team => Team.Player;
-
+        public PlayerFeature EnabledFeatures => _enabledFeatures;
 
         public event Action<IDamageable> OnDeath;
         public event Action OnSpawn;
@@ -81,8 +96,7 @@ namespace ProjectWallE
         public event Action OnControllerSwitchFailed;
         public event Action<float, int> OnRespawnTick;
         public event Action<float, float> OnSwitchCooldownUpdated;
-        
-        
+        public event Action<PlayerFeature> OnFeaturesChanged;
 
         private void OnValidate()
         {
@@ -97,7 +111,7 @@ namespace ProjectWallE
                 return;
             }
             Instance = this;
-            
+
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
@@ -138,7 +152,7 @@ namespace ProjectWallE
         private void Update()
         {
             if (!IsAlive) return;
-            
+
             _currentController.ApplyUpdate();
             if (_input.SwitchPressed) SwitchControllerEnum();
             UpdateSwitchCooldown();
@@ -164,25 +178,23 @@ namespace ProjectWallE
             _currentController?.ApplyLateFixedUpdate();
         }
 
-        #region Controller
-
         private void SwitchControllerEnum()
         {
             if (!IsAlive) return;
-            
+
             if (_controllerTypeEnum == ControllerType.Car && !CanSwitchToRobot())
             {
                 OnControllerSwitchFailed?.Invoke();
                 return;
             }
-            
+
             if (Time.time < _switchTimer + switchCooldown) return;
 
-            _controllerTypeEnum = _controllerTypeEnum == ControllerType.Robot 
-                ? ControllerType.Car 
+            _controllerTypeEnum = _controllerTypeEnum == ControllerType.Robot
+                ? ControllerType.Car
                 : ControllerType.Robot;
         }
-        
+
         private void UpdateSwitchCooldown()
         {
             float elapsed = Time.time - _switchTimer;
@@ -199,10 +211,6 @@ namespace ProjectWallE
             _switchTimer = Time.time;
         }
 
-        #endregion
-
-        #region LifeCycle
-                
         private void Die(IDamageable attacker = null)
         {
             ResetRbVelocity();
@@ -232,15 +240,15 @@ namespace ProjectWallE
             else if (LevelManager.Instance) Respawn(LevelManager.Instance.ActivePlayerSpawnPoint);
             else Respawn(transform.position, transform.rotation);
         }
-        
+
         private void OnSkipRespawnRequested()
         {
             if (IsAlive || _podInFlight) return;
-    
+
             if (ResourceManager.Instance && ResourceManager.Instance.TrySpendResources(_currentSkipCost))
             {
                 if (_respawnCoroutine != null) StopCoroutine(_respawnCoroutine);
-                
+
                 if (DeploymentManager.Instance) CallRespawnPod();
                 else if (LevelManager.Instance) Respawn(LevelManager.Instance.ActivePlayerSpawnPoint);
                 else Respawn(transform.position, transform.rotation);
@@ -253,10 +261,10 @@ namespace ProjectWallE
 
             _currentHealth += healthRegenRate * Time.deltaTime;
             _currentHealth = Mathf.Min(_currentHealth, maxHealth);
-            
+
             OnHealthChanged?.Invoke(_currentHealth, maxHealth);
         }
-        
+
         private void Respawn(PlayerSpawnPoint spawnPoint)
         {
             Teleport(spawnPoint);
@@ -275,20 +283,21 @@ namespace ProjectWallE
             _podInFlight = false;
             gfx?.SetActive(true);
             _currentHealth = maxHealth;
+            _currentController.CanMove = CanMove;
             OnHealthChanged?.Invoke(_currentHealth, maxHealth);
             OnSpawn?.Invoke();
             _respawnCoroutine = null;
         }
-        
+
         private void CallRespawnPod()
         {
             _podInFlight = true;
 
             Vector3 spawnPosition = LevelManager.Instance && LevelManager.Instance.ActivePlayerSpawnPoint
-                ? LevelManager.Instance.ActivePlayerSpawnPoint.SpawnPosition 
+                ? LevelManager.Instance.ActivePlayerSpawnPoint.SpawnPosition
                 : transform.position;
             Quaternion spawnRotation = LevelManager.Instance && LevelManager.Instance.ActivePlayerSpawnPoint
-                ? LevelManager.Instance.ActivePlayerSpawnPoint.SpawnRotation 
+                ? LevelManager.Instance.ActivePlayerSpawnPoint.SpawnRotation
                 : transform.rotation;
 
             var request = new DeploymentRequest(spawnPosition, spawnRotation * Vector3.forward, null)
@@ -302,22 +311,18 @@ namespace ProjectWallE
             DeploymentManager.Instance.LaunchFromShip(this, request);
         }
 
-        #endregion
-        
-        #region Helpers
-
         private void EnableController(ControllerType controllerType)
         {
             bool isRobot = controllerType == ControllerType.Robot;
-            
+
             _currentController?.OnExit();
             _currentController?.gameObject.SetActive(false);
             _currentController = isRobot ? robotController : carController;
             _currentController.gameObject.SetActive(true);
             _currentController.OnEnter();
-
+            _currentController.CanMove = CanMove;
             _rigidbody.centerOfMass = _currentController.CenterOfMassOffset;
-            
+
             OnControllerChanged?.Invoke(controllerType);
         }
 
@@ -350,34 +355,30 @@ namespace ProjectWallE
             }
         }
 
-        #endregion
-
-        #region Public API
-        
         public void TakeDamage(float damage, IDamageable attacker = null)
         {
             if (damage <= 0 || _currentHealth <= 0) return;
-            
+
             _currentHealth -= damage;
             _lastDamageTime = Time.time;
-            
+
             OnDamaged?.Invoke(damage);
-            
+
             if (_currentHealth <= 0) Die(attacker);
-            
+
             OnHealthChanged?.Invoke(_currentHealth, maxHealth);
         }
 
         public void Heal(float healAmount)
         {
             if (healAmount <= 0 || _currentHealth <= 0 || _currentHealth >= maxHealth) return;
-            
+
             _currentHealth += healAmount;
             if (_currentHealth > maxHealth) _currentHealth = maxHealth;
 
             OnHealthChanged?.Invoke(_currentHealth, maxHealth);
         }
-        
+
         public void Teleport(Vector3 position, Quaternion rotation)
         {
             ResetRbVelocity();
@@ -396,12 +397,12 @@ namespace ProjectWallE
             if (!IsAlive) return;
             _rigidbody.AddForce(direction * force, ForceMode.Impulse);
         }
-        
+
         public void Deploy(DeploymentRequest deploymentRequest, BehaviorRequest behaviorRequest)
         {
             Respawn(deploymentRequest.TargetPosition, Quaternion.LookRotation(deploymentRequest.TargetForward));
         }
-        
+
         public void CallPodTo(PlayerSpawnPoint spawnPoint)
         {
             if (!DeploymentManager.Instance || !spawnPoint) return;
@@ -411,7 +412,7 @@ namespace ProjectWallE
                 StopCoroutine(_respawnCoroutine);
                 _respawnCoroutine = null;
             }
-            
+
             if (IsAlive)
             {
                 ResetRbVelocity();
@@ -432,8 +433,21 @@ namespace ProjectWallE
             DeploymentManager.Instance.LaunchFromShip(this, request);
         }
 
-        #endregion
-        
+        public void EnableFeatures(PlayerFeature features)
+        {
+            if (features == PlayerFeature.None) return;
+            _enabledFeatures |= features;
+            if (IsAlive) _currentController.CanMove = CanMove;
+            OnFeaturesChanged?.Invoke(_enabledFeatures);
+        }
+
+        public void DisableFeatures(PlayerFeature features)
+        {
+            if (features == PlayerFeature.None) return;
+            _enabledFeatures &= ~features;
+            if (IsAlive) _currentController.CanMove = CanMove;
+            OnFeaturesChanged?.Invoke(_enabledFeatures);
+        }
 
         private void OnDrawGizmosSelected()
         {

@@ -39,6 +39,7 @@ namespace ProjectWallE.GameLoop
         public Vector3 Destination { get; private set; }
         public bool HasPath { get; private set; }
         public bool UpdateRotation { get; set; } = true;
+        public float FlightHeight => flightHeight;
 
         private void OnValidate()
         {

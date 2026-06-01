@@ -55,7 +55,7 @@ namespace ProjectWallE.GameLoop.Player
 
         private void Update()
         {
-            if (!playerManager || !playerManager.CanBuild) return;
+            if (!playerManager || !playerManager.CanSupport) return;
 
             CastTargetRay();
 
@@ -86,13 +86,13 @@ namespace ProjectWallE.GameLoop.Player
                 _hasTarget = true;
                 if (_menuOpen)
                 {
-                    BuildPrompt.Instance?.Show(_targetPoint);
+                    AirSupportPrompt.Instance?.Show(_targetPoint, _targetNormal);
                 }
             }
             else
             {
                 _hasTarget = false;
-                if (_menuOpen) BuildPrompt.Instance?.Hide();
+                if (_menuOpen) AirSupportPrompt.Instance?.Hide();
             }
         }
 
@@ -104,7 +104,7 @@ namespace ProjectWallE.GameLoop.Player
 
         private void CloseMenu()
         {
-            BuildPrompt.Instance?.Hide();
+            AirSupportPrompt.Instance?.Hide();
             _menuOpen = false;
             MenuCloseRequested?.Invoke();
         }
@@ -120,6 +120,7 @@ namespace ProjectWallE.GameLoop.Player
             if (!_hasTarget) return;
             if (ResourceManager.Instance && !ResourceManager.Instance.TrySpendResources(data.Cost)) return;
             FireSupport(data, _targetPoint, _targetNormal);
+            AirSupportConfirmation.Instance?.Show(_targetPoint, _targetNormal);
         }
 
         private void OnDeath(IDamageable damageable) => CloseMenu();
