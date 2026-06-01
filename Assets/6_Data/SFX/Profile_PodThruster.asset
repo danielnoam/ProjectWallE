@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ee7d95efa184de2b18dfff76533a189, type: 3}
   m_Name: Profile_PodThruster
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.Systems.AudioLibrary.SOAudioProfile
-  clips: []
+  clips:
+  - {fileID: 8300000, guid: 79ae0f0df0b373a47a481514e16bb909, type: 3}
   volume:
     minValue: 0.5
     maxValue: 0.5
   pitch:
-    minValue: 0.9
+    minValue: 1.1
     maxValue: 1.1
   stereoPan: 0
   spatialBlend: 1
@@ -29,6 +30,6 @@ MonoBehaviour:
   set3DSettings: 1
   dopplerLevel: 0
   spread: 0
-  minDistance: 15
+  minDistance: 0
   maxDistance: 500
   rolloffMode: 0
