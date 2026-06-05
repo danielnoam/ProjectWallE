@@ -10,25 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ee7d95efa184de2b18dfff76533a189, type: 3}
-  m_Name: Profile_EnemyArmed
+  m_Name: Profile_Drift
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.Systems.AudioLibrary.SOAudioProfile
   clips:
-  - {fileID: 8300000, guid: b7b05761fc685e443918d7132ec52df9, type: 3}
+  - {fileID: 8300000, guid: d604cb626e9696b4a907cd362dfebb37, type: 3}
   volume:
     minValue: 1
     maxValue: 1
   pitch:
-    minValue: 0.7
-    maxValue: 0.9
+    minValue: 1
+    maxValue: 1
   stereoPan: 0
   spatialBlend: 1
   reverbZoneMix: 1
   bypassEffects: 0
   bypassListenerEffects: 0
-  bypassReverbZones: 0
+  bypassReverbZones: 1
   loop: 0
   set3DSettings: 1
-  dopplerLevel: 0
+  dopplerLevel: 1
   spread: 0
   minDistance: 1
   maxDistance: 500
