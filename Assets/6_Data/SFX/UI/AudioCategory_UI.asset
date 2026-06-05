@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9a53b1ca0a9491e95b1a0d46de56eec, type: 3}
+  m_Name: AudioCategory_UI
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.Systems.AudioLibrary.SOAudioCategory
+  label: UI
+  audioMixerGroup: {fileID: -8484508710474354332, guid: 6d307fcdc9063864f92ead1a27b76789, type: 2}
+  audioMappings:
+  - id: ButtonHovered
+    audioObject: {fileID: 11400000, guid: f0026a0f30ad95e478c17f7c2bed4498, type: 2}
+  - id: ButtonPressed
+    audioObject: {fileID: 11400000, guid: ad73fc8f0048a1a46bbb737a635c7dc5, type: 2}
+  - id: RadialMenuOpen
+    audioObject: {fileID: 11400000, guid: 7fa8c580499931042a2db554520c13f5, type: 2}
+  - id: RadialMenuClose
+    audioObject: {fileID: 11400000, guid: ba1f78513e9136b459b1183788b90d35, type: 2}
+  - id: RadialMenuElementHover
+    audioObject: {fileID: 11400000, guid: 5a480ab75a1c7f440a4dc47e3d8800ae, type: 2}
+  - id: RadialMenuElementSelected
+    audioObject: {fileID: 11400000, guid: 1b8c3c146915e0843b4e531c6ac364d2, type: 2}
+  - id: ObjectiveCompleted
+    audioObject: {fileID: 11400000, guid: 0d7a6e1ceb4375347abfda8e7bdb47de, type: 2}
+  - id: ObjectiveWriter
+    audioObject: {fileID: 11400000, guid: b1cf3aca88be46541ba6cd796e5a833e, type: 2}
