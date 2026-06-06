@@ -73,6 +73,9 @@ namespace ProjectWallE.UI
                 tutorialWriter.OnFinishWriter.AddListener(_ => tutorialWriter.enabled = false);
                 tutorialWriter.OnCharacterShown.AddListener((_, _) => AudioLibrary.Play(writerSFX));
             }
+            
+            tutorialText.text = string.Empty;
+            objectivesText.text = string.Empty;
         }
 
         private void OnEnable()

@@ -2,9 +2,10 @@ using UnityEngine;
 
 namespace ProjectWallE.GameLoop
 {
-    public class ShipCannon : MonoBehaviour
+    public class PlayerShipCannon : MonoBehaviour
     {
         [Header("Settings")]
+        [SerializeField] private Transform effectPosition;
         [SerializeField] private VisualEffectAction cannonEffect;
         
         
@@ -20,7 +21,7 @@ namespace ProjectWallE.GameLoop
 
         public void PlayEffects()
         {
-           cannonEffect?.Play(transform.position);
+            cannonEffect?.Play(effectPosition? effectPosition.position : transform.position);
         }
     }
 }

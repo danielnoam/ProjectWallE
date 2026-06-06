@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 namespace ProjectWallE.GameLoop
 {
     public enum PodCameraMode { None, LookAt, Follow }
-    
+
     public struct DeploymentRequest
     {
         public Vector3 TargetPosition;
@@ -30,8 +30,8 @@ namespace ProjectWallE.GameLoop
             CameraMode = PodCameraMode.None;
         }
     }
-    
-    
+
+
     [DefaultExecutionOrder(-100)]
     public class DeploymentManager : MonoBehaviour
     {
@@ -41,8 +41,9 @@ namespace ProjectWallE.GameLoop
         [Header("Settings")]
         [SerializeField] private float skyDropHeight = 300f;
         [SerializeField] private Pod podPrefab;
-        
-        private readonly List<ShipCannon> _shipSpawnCannons = new List<ShipCannon>();
+
+        private readonly List<PlayerShipCannon> _shipSpawnCannons = new List<PlayerShipCannon>();
+        private readonly Dictionary<EnemyBase, List<EnemyBaseCannon>> _baseCannonMap = new Dictionary<EnemyBase, List<EnemyBaseCannon>>();
 
         private Transform _podHolder;
 
@@ -57,8 +58,8 @@ namespace ProjectWallE.GameLoop
             Instance = this;
             _podHolder = new GameObject("PodHolder").transform;
         }
-        
-        
+
+
         private void SpawnPod<T>(T deployable, DeploymentRequest request, Vector3 spawnPosition, bool moveInArc) where T : MonoBehaviour, IDeployable
         {
             Pod prefab = deployable is IDeployableWithPod withPod && withPod.PodPrefab ? withPod.PodPrefab : podPrefab;
@@ -74,36 +75,62 @@ namespace ProjectWallE.GameLoop
             pod.Initialize(deployable, request, moveInArc);
             OnPodLaunched?.Invoke(request, pod);
         }
-        
-                
-        public void RegisterShipCannon(ShipCannon cannon)
+
+
+        public void RegisterShipCannon(PlayerShipCannon cannon)
         {
             if (_shipSpawnCannons.Contains(cannon)) return;
-            
             _shipSpawnCannons.Add(cannon);
         }
 
-        public void UnregisterShipCannon(ShipCannon cannon)
+        public void UnregisterShipCannon(PlayerShipCannon cannon)
         {
-            if (!_shipSpawnCannons.Contains(cannon)) return;
-            
             _shipSpawnCannons.Remove(cannon);
         }
-        
-        public void LaunchFromShip<T>(T deployable, DeploymentRequest request) where T : MonoBehaviour, IDeployable
-        {
-            if (_shipSpawnCannons.Count == 0)
-            {
-                LaunchFromSky(deployable, request);
-                return;
-            }
-            
-            var shipPositionIndex = Random.Range(0, _shipSpawnCannons.Count);
-            var shipPosition = _shipSpawnCannons[shipPositionIndex];
 
-            shipPosition.PlayEffects();
-            SpawnPod(deployable, request, shipPosition.transform.position, true);
+        public void RegisterBaseCannon(EnemyBase ownerBase, EnemyBaseCannon cannon)
+        {
+            if (!ownerBase) return;
+
+            if (!_baseCannonMap.TryGetValue(ownerBase, out var list))
+            {
+                list = new List<EnemyBaseCannon>();
+                _baseCannonMap[ownerBase] = list;
+            }
+
+            if (!list.Contains(cannon)) list.Add(cannon);
         }
+
+        public void UnregisterBaseCannon(EnemyBase ownerBase, EnemyBaseCannon cannon)
+        {
+            if (!ownerBase) return;
+            if (_baseCannonMap.TryGetValue(ownerBase, out var list))
+                list.Remove(cannon);
+        }
+
+        private EnemyBaseCannon GetBaseCannon(Vector3 targetPosition)
+        {
+            EnemyBase nearest = null;
+            float closestDist = float.MaxValue;
+
+            foreach (var kvp in _baseCannonMap)
+            {
+                if (!kvp.Key || kvp.Value.Count == 0) continue;
+
+                float dist = Vector3.Distance(targetPosition, kvp.Key.transform.position);
+                if (dist < closestDist)
+                {
+                    closestDist = dist;
+                    nearest = kvp.Key;
+                }
+            }
+
+            if (!nearest) return null;
+
+            var cannons = _baseCannonMap[nearest];
+            return cannons[Random.Range(0, cannons.Count)];
+        }
+
 
         public void LaunchFromSky<T>(T deployable, DeploymentRequest request) where T : MonoBehaviour, IDeployable
         {
@@ -117,6 +144,19 @@ namespace ProjectWallE.GameLoop
             SpawnPod(deployable, request, origin, false);
         }
 
+        public void LaunchFromShip<T>(T deployable, DeploymentRequest request) where T : MonoBehaviour, IDeployable
+        {
+            if (_shipSpawnCannons.Count == 0)
+            {
+                LaunchFromSky(deployable, request);
+                return;
+            }
+
+            var cannon = _shipSpawnCannons[Random.Range(0, _shipSpawnCannons.Count)];
+            cannon.PlayEffects();
+            SpawnPod(deployable, request, cannon.transform.position, true);
+        }
+
         public void LaunchFromShip(ScriptableObject deployable, DeploymentRequest request)
         {
             if (_shipSpawnCannons.Count == 0)
@@ -124,11 +164,36 @@ namespace ProjectWallE.GameLoop
                 LaunchFromSky(deployable, request);
                 return;
             }
-            
-            var shipPositionIndex = Random.Range(0, _shipSpawnCannons.Count);
-            var shipPosition = _shipSpawnCannons[shipPositionIndex];
-            shipPosition.PlayEffects();
-            SpawnPod(deployable, request, shipPosition.transform.position, true);
+
+            var cannon = _shipSpawnCannons[Random.Range(0, _shipSpawnCannons.Count)];
+            cannon.PlayEffects();
+            SpawnPod(deployable, request, cannon.transform.position, true);
+        }
+
+        public void LaunchFromBaseCannon<T>(T deployable, DeploymentRequest request) where T : MonoBehaviour, IDeployable
+        {
+            var cannon = GetBaseCannon(request.TargetPosition);
+            if (!cannon)
+            {
+                LaunchFromSky(deployable, request);
+                return;
+            }
+
+            cannon.PlayEffects();
+            SpawnPod(deployable, request, cannon.transform.position, true);
+        }
+
+        public void LaunchFromBaseCannon(ScriptableObject deployable, DeploymentRequest request)
+        {
+            var cannon = GetBaseCannon(request.TargetPosition);
+            if (!cannon)
+            {
+                LaunchFromSky(deployable, request);
+                return;
+            }
+
+            cannon.PlayEffects();
+            SpawnPod(deployable, request, cannon.transform.position, true);
         }
     }
 }
