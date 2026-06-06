@@ -21,6 +21,7 @@ namespace ProjectWallE
         private Transform _cameraTransform;
 
         private bool _isGrounded = false;
+        private float _robotSpeed;
 
         private bool _isJumpAvail = false;
         private bool _isJumping = false;
@@ -44,6 +45,8 @@ namespace ProjectWallE
         private float gravityControlFactor => settings.GravityStrength * 0.25f;
 
         public Vector3 CenterOfMassOffset => centerOfMassOffset;
+        public float RobotSpeed => _robotSpeed;
+        public RobotInput Input => _input;
 
         public bool CanMove { get; set; } = true;
         public bool BuildEnabled { get; private set; } = true;
@@ -136,6 +139,8 @@ namespace ProjectWallE
                 ApplyMoveAccelAtOffset(accel);
             else if (!_isSlopeSliding)
                 ApplyBrake(control, hit);
+            
+            _robotSpeed = Vector3.ProjectOnPlane(_playerRb.linearVelocity, hit.normal).magnitude;
         }
 
         private void ApplyMoveAccelAtOffset(Vector3 accel)

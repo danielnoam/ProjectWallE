@@ -17800,6 +17800,62 @@ PrefabInstance:
       propertyPath: actionsMenu
       value: 
       objectReference: {fileID: 1597918328}
+    - target: {fileID: 5155744165183285772, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: clipMaxRPM
+      value: 5500
+      objectReference: {fileID: 0}
+    - target: {fileID: 5155744165183285772, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: robotControllerSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 8cb9e39bf4d6079479b5bfc6b990bf03, type: 2}
+    - target: {fileID: 5155744165183285772, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: carEngineSfxSettings.maxRPM
+      value: 5500
+      objectReference: {fileID: 0}
+    - target: {fileID: 5155744165183285772, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: carEngineSfxSettings.volume
+      value: 0.211
+      objectReference: {fileID: 0}
+    - target: {fileID: 5155744165183285772, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: robotEngineSfxSettings.maxRPM
+      value: 3500
+      objectReference: {fileID: 0}
+    - target: {fileID: 5155744165183285772, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: robotEngineSfxSettings.minRPM
+      value: 2000
+      objectReference: {fileID: 0}
+    - target: {fileID: 5155744165183285772, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: robotEngineSfxSettings.volume
+      value: 0.211
+      objectReference: {fileID: 0}
+    - target: {fileID: 5155744165183285772, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: carEngineSfxSettings.blendRange
+      value: 1100
+      objectReference: {fileID: 0}
+    - target: {fileID: 5155744165183285772, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: robotEngineSfxSettings.maxPitch
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5155744165183285772, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: robotEngineSfxSettings.minPitch
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5155744165183285772, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: robotEngineSfxSettings.blendRange
+      value: 1100
+      objectReference: {fileID: 0}
+    - target: {fileID: 5155744165183285772, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: carEngineSfxSettings.rpmSmoothSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5155744165183285772, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: robotEngineSfxSettings.rpmSmoothSpeed
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 5155744165183285772, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: robotEngineSfxSettings.maxSpeedMultiplier
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5821086676760150823, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
       propertyPath: m_Name
       value: PlayerManager
