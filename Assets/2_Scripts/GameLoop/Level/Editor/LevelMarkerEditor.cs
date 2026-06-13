@@ -149,6 +149,40 @@ public class SetActivePlayerSpawnPointMarkerEditor : MarkerEditor
     }
 }
 
+[CustomTimelineEditor(typeof(SetShipSplineMarker))]
+public class SetShipSplineMarkerEditor : MarkerEditor
+{
+    private static readonly Color ShipColor = new Color(0.6f, 0.4f, 1f, 0.9f);
+
+    public override void DrawOverlay(IMarker marker, MarkerUIStates uiState, MarkerOverlayRegion region)
+    {
+        Rect markerRect = region.markerRegion;
+
+        Rect topBar = new Rect(markerRect.x - 2, markerRect.y, markerRect.width + 4, 3);
+        EditorGUI.DrawRect(topBar, ShipColor);
+
+        var ship = marker as SetShipSplineMarker;
+        if (ship != null && ship.Transition == SetShipSplineMarker.TransitionMode.Teleport)
+        {
+            Rect bottomBar = new Rect(markerRect.x - 2, markerRect.yMax - 3, markerRect.width + 4, 3);
+            EditorGUI.DrawRect(bottomBar, ShipColor);
+        }
+    }
+
+    public override MarkerDrawOptions GetMarkerOptions(IMarker marker)
+    {
+        var ship = marker as SetShipSplineMarker;
+        if (ship == null) return new MarkerDrawOptions { tooltip = "Set Ship Spline" };
+
+        string transition = ship.Transition == SetShipSplineMarker.TransitionMode.Teleport ? "Teleport" : "Over Time";
+
+        return new MarkerDrawOptions
+        {
+            tooltip = $"Set Ship Spline\n{ship.FollowMode} · {transition}"
+        };
+    }
+}
+
 [CustomTimelineEditor(typeof(SetPlayerFeaturesMarker))]
 public class SetPlayerFeaturesMarkerEditor : MarkerEditor
 {
