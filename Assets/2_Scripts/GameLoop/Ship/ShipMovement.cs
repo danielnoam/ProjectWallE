@@ -1,3 +1,4 @@
+using System;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Splines;
@@ -50,6 +51,16 @@ namespace ProjectWallE.GameLoop
         private float _pendingSpeed;
         private FollowMode _pendingMode;
         private EntryPoint _pendingEntry;
+
+
+        private void OnValidate()
+        {
+            if (startingSpline)
+            {
+                transform.position = startingSpline.transform.position;
+                transform.rotation = startingSpline.transform.rotation;
+            }
+        }
 
         private void Awake()
         {

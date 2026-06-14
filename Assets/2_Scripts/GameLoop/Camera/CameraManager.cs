@@ -47,6 +47,7 @@ namespace ProjectWallE
         
         private CameraAutoAlign _cameraAutoAlign;
         private Pod _activePod;
+        private PodCameraMode _activeCameraMode;
         
         private bool _cameraLocked;
         private float _yaw;
@@ -137,45 +138,63 @@ namespace ProjectWallE
         {
             if (request.CameraMode == PodCameraMode.None) return;
 
-            if (_activePod)
-            {
-                _activePod.OnLand -= OnPodLand;
-            }
+            if (_activePod) UnsubscribeFromPod();
 
             _activePod = pod;
-            _activePod.OnLand += OnPodLand;
+            _activeCameraMode = request.CameraMode;
+            _podLookTarget.position = pod.transform.position;
 
             switch (request.CameraMode)
             {
                 case PodCameraMode.LookAt:
                     lookAtPodCamera.LookAt = _podLookTarget;
                     SwitchActiveCamera(lookAtPodCamera);
+                    _activePod.OnLand += OnPodFinished;
                     break;
                 case PodCameraMode.Follow:
                     podCamera.Follow = _podLookTarget;
                     podCamera.LookAt = _podLookTarget;
                     SwitchActiveCamera(podCamera);
+                    _activePod.OnDeploy += OnPodFinished;
                     break;
             }
         }
 
-        private void OnPodLand()
+        private void OnPodFinished()
         {
             if (_activePod)
             {
-                Vector3 dir = (_activePod.transform.position - playerManager.transform.position).normalized;
-                _yaw = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
-                _pitch = -Mathf.Asin(dir.y) * Mathf.Rad2Deg;
-                _pitch = Mathf.Clamp(_pitch, -cameraVerticalClamp, cameraVerticalClamp);
+                if (_activeCameraMode == PodCameraMode.LookAt)
+                {
+                    Vector3 dir = (_activePod.transform.position - playerManager.transform.position).normalized;
+                    if (dir.sqrMagnitude > 0.0001f)
+                    {
+                        _yaw = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
+                        _pitch = -Mathf.Asin(dir.y) * Mathf.Rad2Deg;
+                        _pitch = Mathf.Clamp(_pitch, -cameraVerticalClamp, cameraVerticalClamp);
+                    }
+                }
+                else
+                {
+                    _yaw = playerManager.transform.eulerAngles.y;
+                    _pitch = 0f;
+                }
 
                 lookAtPodCamera.LookAt = null;
                 podCamera.Follow = null;
                 podCamera.LookAt = null;
-                _activePod.OnLand -= OnPodLand;
+                UnsubscribeFromPod();
             }
 
             _activePod = null;
             SwitchActiveCamera(playerManager.ControllerType == ControllerType.Robot ? robotCamera : carCamera);
+        }
+
+        private void UnsubscribeFromPod()
+        {
+            if (!_activePod) return;
+            _activePod.OnLand -= OnPodFinished;
+            _activePod.OnDeploy -= OnPodFinished;
         }
         
         private void OnDamaged(float damage)
@@ -237,8 +256,7 @@ namespace ProjectWallE
             {
                 Quaternion target = Quaternion.Euler(playerManager.transform.eulerAngles.x + xOffset, playerManager.transform.eulerAngles.y, 0f);
                 cameraTarget.rotation = Quaternion.Slerp(cameraTarget.rotation, target, Time.deltaTime * _cameraAutoAlign.Strength);
-
-                // Sync yaw/pitch so there's no snap when the player looks again
+                
                 _yaw = cameraTarget.eulerAngles.y;
                 _pitch = cameraTarget.eulerAngles.x;
                 if (_pitch > 180f) _pitch -= 360f;

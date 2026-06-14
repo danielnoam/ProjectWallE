@@ -26,7 +26,7 @@ namespace ProjectWallE
         Robot, Car
     }
 
-    public class PlayerManager : MonoBehaviour, IDamageable, IPushable, IDeployable
+    public class PlayerManager : MonoBehaviour, IDamageable, IPushable, IDeployableWithPod
     {
         public static PlayerManager Instance { get; private set; }
 
@@ -45,6 +45,7 @@ namespace ProjectWallE
 
         [Header("References")]
         [SerializeField] private GameObject gfx;
+        [SerializeField] private Pod podPrefab;
         [HideInInspector, SerializeField, AutoGetChildren] private CarController carController;
         [HideInInspector, SerializeField, AutoGetChildren] private RobotController robotController;
         [HideInInspector, SerializeField, AutoGetChildren] private PlayerStructureBuilder structureBuilder;
@@ -86,6 +87,7 @@ namespace ProjectWallE
         public bool IsAlive => _currentHealth > 0;
         public Team Team => Team.Player;
         public PlayerFeature EnabledFeatures => _enabledFeatures;
+        public Pod PodPrefab => podPrefab;
 
         public event Action<IDamageable> OnDeath;
         public event Action OnSpawn;
@@ -459,5 +461,7 @@ namespace ProjectWallE
             Gizmos.color = Color.red;
             Gizmos.DrawRay(transform.position, Vector3.up * robotHeightCheck);
         }
+
+
     }
 }
