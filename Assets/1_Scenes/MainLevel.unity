@@ -9430,7 +9430,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3062497052717991773, guid: 128903284a38bff4ea5054627f37660a, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3503836410232390380, guid: 128903284a38bff4ea5054627f37660a, type: 3}
       propertyPath: m_Name
@@ -15916,39 +15916,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 466508561834688592, guid: e74571977a1e97a448d82592640f3d6e, type: 3}
   m_PrefabInstance: {fileID: 1585731613}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1597918325 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4652565717212249930, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
-  m_PrefabInstance: {fileID: 1191233863}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 11c544bb5b72491a9c13e89795657d97, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.UI.SupportActionsMenu
---- !u!114 &1597918328 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1362821622492407948, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
-  m_PrefabInstance: {fileID: 1191233863}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf667956165c4d90b3fd437f60b617e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StructureActionsMenu
---- !u!114 &1597918329 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1106430957150463458, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
-  m_PrefabInstance: {fileID: 1191233863}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fcae9f839c9ed0541bf7fdc489847d17, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StructureRadialMenu
 --- !u!1001 &1599146876
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19094,22 +19061,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2737165017878004224, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
-      propertyPath: buildMenu
-      value: 
-      objectReference: {fileID: 1597918329}
-    - target: {fileID: 2737165017878004224, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
-      propertyPath: actionsMenu
-      value: 
-      objectReference: {fileID: 1597918328}
     - target: {fileID: 5821086676760150823, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
       propertyPath: m_Name
       value: PlayerManager
       objectReference: {fileID: 0}
-    - target: {fileID: 6197151567419236282, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
-      propertyPath: supportMenu
-      value: 
-      objectReference: {fileID: 1597918325}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
