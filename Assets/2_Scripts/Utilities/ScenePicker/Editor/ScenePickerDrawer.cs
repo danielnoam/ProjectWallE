@@ -247,7 +247,9 @@ internal class ScenePickerDrawer : PropertyDrawer
 
         int index = property.arraySize;
         property.InsertArrayElementAtIndex(index);
-        BindExposedReference(property.GetArrayElementAtIndex(index), obj, director);
+        var newEntry = property.GetArrayElementAtIndex(index);
+        newEntry.FindPropertyRelative("exposedName").stringValue = string.Empty;
+        BindExposedReference(newEntry, obj, director);
 
         property.serializedObject.ApplyModifiedProperties();
         EditorUtility.SetDirty(property.serializedObject.targetObject);
@@ -282,7 +284,10 @@ internal class ScenePickerDrawer : PropertyDrawer
         var newElement = internalItems.GetArrayElementAtIndex(index);
         newElement.FindPropertyRelative("chance").intValue = 10;
         newElement.FindPropertyRelative("isLocked").boolValue = false;
-        BindExposedReference(newElement.FindPropertyRelative("item"), obj, director);
+        var itemProp = newElement.FindPropertyRelative("item");
+        itemProp.FindPropertyRelative("exposedName").stringValue = string.Empty;
+
+        BindExposedReference(itemProp, obj, director);
 
         property.serializedObject.ApplyModifiedProperties();
         ChanceListPropertyDrawer.NormalizeViaSp(internalItems);

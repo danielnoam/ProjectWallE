@@ -1,4 +1,5 @@
 using System;
+using DNExtensions.Systems.AudioLibrary;
 using DNExtensions.Systems.VFXManager;
 using DNExtensions.Utilities.AutoGet;
 using DNExtensions.Utilities;
@@ -22,14 +23,18 @@ namespace ProjectWallE.GameLoop
         [Header("Radial Layout")]
         [SerializeField] private float angleAnimDuration = 0.3f;
         [SerializeField] private Ease angleAnimEase = Ease.OutBack;
+        [SerializeField, AudioLibraryID] private string openSFX;
+        [SerializeField, AudioLibraryID] private string closeSFX;
         [SerializeField, AutoGetScene] private RadialLayoutGroup radialLayout;
 
-        [Header("Element Animations")]
+        [Header("Radial Menu Elements")]
         [SerializeField] private float hoverScale = 1.2f;
         [SerializeField] private float hoverDuration = 0.15f;
         [SerializeField] private Ease hoverEase = Ease.OutBack;
         [SerializeField] private float selectPunchScale = 0.3f;
         [SerializeField] private float selectPunchDuration = 0.2f;
+        [SerializeField, AudioLibraryID] private string hoverSFX;
+        [SerializeField, AudioLibraryID] private string selectSFX;
 
         [Header("VFX")]
         [SerializeField] private EffectSequence fadeInSequence;
@@ -136,7 +141,10 @@ namespace ProjectWallE.GameLoop
                 Tween.Scale(_lastHoveredElement.transform, Vector3.one, hoverDuration, hoverEase, useUnscaledTime: true);
 
             if (element)
+            {
+                AudioLibrary.Play(hoverSFX);
                 Tween.Scale(element.transform, Vector3.one * hoverScale, hoverDuration, hoverEase, useUnscaledTime: true);
+            }
 
             _lastHoveredElement = element;
         }
@@ -144,6 +152,7 @@ namespace ProjectWallE.GameLoop
         private void OnElementSelected(RadialMenuElement element)
         {
             if (!element) return;
+            AudioLibrary.Play(selectSFX);
             Tween.PunchScale(element.transform, Vector3.one * selectPunchScale, selectPunchDuration, useUnscaledTime: true);
         }
 
@@ -156,6 +165,7 @@ namespace ProjectWallE.GameLoop
             {
                 radialLayout.StartAngle = 0f;
                 radialLayout.EndAngle = 0f;
+                AudioLibrary.Play(openSFX);
                 Sequence.Create(useUnscaledTime: true)
                     .Group(Tween.Custom(radialLayout, 0f, _savedStartAngle, angleAnimDuration, (lg, v) => lg.StartAngle = v, angleAnimEase))
                     .Group(Tween.Custom(radialLayout, 0f, _savedEndAngle, angleAnimDuration, (lg, v) => lg.EndAngle = v, angleAnimEase));
@@ -169,10 +179,12 @@ namespace ProjectWallE.GameLoop
         {
             _closeActiveMenu = null;
             _openMenuCount = Mathf.Max(0, _openMenuCount - 1);
-            if (_openMenuCount > 0) return;
-
-            VFXManager.Instance?.PlaySequence(fadeOutSequence);
-            SetTimeScale(1f, resumeDuration, resumeEase);
+            if (_openMenuCount <= 0)
+            {
+                AudioLibrary.Play(closeSFX);
+                VFXManager.Instance?.PlaySequence(fadeOutSequence);
+                SetTimeScale(1f, resumeDuration, resumeEase);
+            }
         }
 
         private int ActiveChildCount()

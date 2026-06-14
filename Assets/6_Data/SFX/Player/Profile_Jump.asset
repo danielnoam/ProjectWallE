@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ee7d95efa184de2b18dfff76533a189, type: 3}
+  m_Name: Profile_Jump
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.Systems.AudioLibrary.SOAudioProfile
+  clips:
+  - {fileID: 8300000, guid: d604cb626e9696b4a907cd362dfebb37, type: 3}
+  volume:
+    minValue: 1
+    maxValue: 1
+  pitch:
+    minValue: 1
+    maxValue: 1
+  stereoPan: 0
+  spatialBlend: 1
+  reverbZoneMix: 1
+  bypassEffects: 0
+  bypassListenerEffects: 0
+  bypassReverbZones: 1
+  loop: 0
+  set3DSettings: 1
+  dopplerLevel: 1
+  spread: 0
+  minDistance: 1
+  maxDistance: 500
+  rolloffMode: 0

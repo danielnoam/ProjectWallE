@@ -47,7 +47,7 @@ public class EnemyManager : MonoBehaviour
             Team = Team.Enemy,
         };
 
-        DeploymentManager.Instance?.LaunchFromSky(enemy, request);
+        DeploymentManager.Instance?.LaunchFromBaseCannon(enemy, request);
     }
     
     public void SpawnEnemyWave(int enemiesToSpawn, ChanceList<Enemy> enemySource = null, EnemySpawnPoint spawnPoint = null)

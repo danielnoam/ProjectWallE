@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
+using DNExtensions.Systems.AudioLibrary;
 using DNExtensions.Systems.Scriptables;
-using DNExtensions.Utilities.AutoGet;
 using ProjectWallE.GameLoop;
 using PrimeTween;
 using TMPEffects.Components;
@@ -30,6 +30,10 @@ namespace ProjectWallE.UI
         [SerializeField, Min(0f)] private float showDuration = 0.25f;
         [SerializeField, Min(0f)] private float hideDuration = 0.15f;
         [SerializeField] private Ease animationEase = Ease.InOutSine;
+        
+        [Header("SFX")]
+        [SerializeField, AudioLibraryID] private string writerSFX;
+        [SerializeField, AudioLibraryID] private string objectiveCompletedSFX;
 
         private RectTransform _objectivesRect;
         private RectTransform _tutorialRect;
@@ -58,8 +62,20 @@ namespace ProjectWallE.UI
                 if (_tutorialRect) _tutorialRect.sizeDelta = new Vector2(_tutorialRect.sizeDelta.x, 0f);
             }
             
-            if (objectivesWriter) objectivesWriter.OnFinishWriter.AddListener(_ => objectivesWriter.enabled = false);
-            if (tutorialWriter) tutorialWriter.OnFinishWriter.AddListener(_ => tutorialWriter.enabled = false);
+            if (objectivesWriter)
+            {
+                objectivesWriter.OnFinishWriter.AddListener(_ => objectivesWriter.enabled = false);
+                objectivesWriter.OnCharacterShown.AddListener((_, _) => AudioLibrary.Play(writerSFX));
+            }
+            
+            if (tutorialWriter)
+            {
+                tutorialWriter.OnFinishWriter.AddListener(_ => tutorialWriter.enabled = false);
+                tutorialWriter.OnCharacterShown.AddListener((_, _) => AudioLibrary.Play(writerSFX));
+            }
+            
+            tutorialText.text = string.Empty;
+            objectivesText.text = string.Empty;
         }
 
         private void OnEnable()
@@ -110,7 +126,11 @@ namespace ProjectWallE.UI
         {
             _activeObjectives = objectives;
             UpdateObjectivesDisplay();
-            if (objectivesWriter) objectivesWriter.enabled = true;
+            if (objectivesWriter)
+            {
+                objectivesWriter.enabled = true;
+                objectivesWriter.RestartWriter();
+            }
 
             BuildTutorialText();
             bool hasTutorial = _tutorialBuilder.Length > 0;
@@ -133,12 +153,17 @@ namespace ProjectWallE.UI
                     _tutorialTween = AnimateHeight(_tutorialRect, GetContentHeight(_tutorialRect), showDuration);
                 }
                 
-                if (tutorialWriter) tutorialWriter.enabled = true;
+                if (tutorialWriter)
+                {
+                    tutorialWriter.enabled = true;
+                    tutorialWriter.RestartWriter();
+                }
             }
         }
 
         private void OnObjectivesCompleted()
         {
+            AudioLibrary.Play(objectiveCompletedSFX);
             _activeObjectives = null;
             HidePanels();
         }

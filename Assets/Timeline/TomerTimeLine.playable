@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
-  m_Time: 7.583333333333333
+  m_Time: 11.56666666666666
   skipInEditor: 0
   spawnParams:
     enemyType: 1
@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd5511dff6f84ce8a7e93b16a19b6da9, type: 3}
   m_Name: Set Player Features Marker
   m_EditorClassIdentifier: Assembly-CSharp::SetPlayerFeaturesMarker
-  m_Time: 8.599999999999987
+  m_Time: 12.583333333333314
   skipInEditor: 0
   featuresToEnable: 2
   featuresToDisable: 0
@@ -64,7 +64,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
-  m_Time: 13.099999999999948
+  m_Time: 17.083333333333258
   skipInEditor: 0
   spawnParams:
     enemyType: 0
@@ -102,7 +102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
-  m_Time: 11.583333333333268
+  m_Time: 15.566666666666595
   skipInEditor: 0
   spawnParams:
     enemyType: 1
@@ -157,7 +157,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d09b01d4b9a242f59f452dd030b5551c, type: 3}
   m_Name: Toggle Enemy Spawn Point Marker
   m_EditorClassIdentifier: Assembly-CSharp::ToggleEnemySpawnPointMarker
-  m_Time: 14.65
+  m_Time: 18.63333333333331
   skipInEditor: 0
   enemySpawnPoint:
     exposedName: 504f165e-7b73-44fa-b265-32355d1866c1
@@ -175,7 +175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
-  m_Time: 9.566666666666649
+  m_Time: 13.549999999999976
   skipInEditor: 0
   spawnParams:
     enemyType: 1
@@ -225,6 +225,28 @@ MonoBehaviour:
   m_Clips: []
   m_Markers:
     m_Objects: []
+--- !u!114 &-1998375400032350353
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23ff59797f47f8244a7ad6aa56ed7839, type: 3}
+  m_Name: Set Ship Spline Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SetShipSplineMarker
+  m_Time: 6.733333333333333
+  skipInEditor: 0
+  spline:
+    exposedName: 45a183c3-0f5e-4c28-955b-b221db592ebf
+    defaultValue: {fileID: 0}
+  speed: 2
+  followMode: 1
+  transition: 1
+  entryPoint: 0
+  transitionDuration: 10
 --- !u!114 &-1907706761099275582
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -253,7 +275,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd5511dff6f84ce8a7e93b16a19b6da9, type: 3}
   m_Name: Set Player Features Marker
   m_EditorClassIdentifier: Assembly-CSharp::SetPlayerFeaturesMarker
-  m_Time: 14.2
+  m_Time: 18.18333333333331
   skipInEditor: 0
   featuresToEnable: 4
   featuresToDisable: 0
@@ -286,7 +308,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 844512bbcc774b44b3c5e64aee9d8fbb, type: 3}
   m_Name: Spawn Structure Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnStructureMarker
-  m_Time: 3.5166666666666666
+  m_Time: 7.5
   skipInEditor: 0
   podCameraMode: 1
   structureToSpawn: {fileID: 6487620541022002554, guid: 3b1b64788b055e0498a63ea738b3ba50, type: 3}
@@ -305,7 +327,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Objective Marker
   m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
-  m_Time: 7.083333333333333
+  m_Time: 11.06666666666666
   skipInEditor: 0
   objectives:
   - rid: 1993976625937514496
@@ -337,7 +359,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Start Objectives Marker
   m_EditorClassIdentifier: Assembly-CSharp::StartObjectivesMarker
-  m_Time: 14.050000000000002
+  m_Time: 18.033333333333317
   skipInEditor: 0
   objectives:
   - rid: 4199866806874931463
@@ -379,6 +401,28 @@ MonoBehaviour:
     m_ScenePreview: 1
   m_DurationMode: 1
   m_MarkerTrack: {fileID: 0}
+--- !u!114 &232357968192677345
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23ff59797f47f8244a7ad6aa56ed7839, type: 3}
+  m_Name: Set Ship Spline Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SetShipSplineMarker
+  m_Time: 1.5
+  skipInEditor: 0
+  spline:
+    exposedName: a795fca7-53f2-413b-8ccd-da06849895fc
+    defaultValue: {fileID: 0}
+  speed: 6
+  followMode: 2
+  transition: 1
+  entryPoint: 1
+  transitionDuration: 12
 --- !u!114 &598534368682470053
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -391,7 +435,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d09b01d4b9a242f59f452dd030b5551c, type: 3}
   m_Name: Toggle Enemy Spawn Point Marker
   m_EditorClassIdentifier: Assembly-CSharp::ToggleEnemySpawnPointMarker
-  m_Time: 14.8
+  m_Time: 18.78333333333331
   skipInEditor: 0
   enemySpawnPoint:
     exposedName: 46842fd1-78fc-47b7-8efc-9a249b74a139
@@ -409,7 +453,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Start Objectives Marker
   m_EditorClassIdentifier: Assembly-CSharp::StartObjectivesMarker
-  m_Time: 15.016666666666667
+  m_Time: 18.99999999999998
   skipInEditor: 0
   objectives:
   - rid: 4199866806874931464
@@ -463,7 +507,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Objective Marker
   m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
-  m_Time: 3
+  m_Time: 6.983333333333334
   skipInEditor: 0
   objectives:
   - rid: 1993976625937514505
@@ -495,7 +539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Objective Marker
   m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
-  m_Time: 8.099999999999994
+  m_Time: 12.083333333333321
   skipInEditor: 0
   objectives:
   - rid: 1993976625937514497
@@ -540,7 +584,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 844512bbcc774b44b3c5e64aee9d8fbb, type: 3}
   m_Name: Spawn Structure Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnStructureMarker
-  m_Time: 10.583333333333293
+  m_Time: 14.56666666666662
   skipInEditor: 0
   podCameraMode: 1
   structureToSpawn: {fileID: 6487620541022002554, guid: 3b1b64788b055e0498a63ea738b3ba50, type: 3}
@@ -559,7 +603,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd5511dff6f84ce8a7e93b16a19b6da9, type: 3}
   m_Name: Set Player Features Marker
   m_EditorClassIdentifier: Assembly-CSharp::SetPlayerFeaturesMarker
-  m_Time: 3.3833333333333333
+  m_Time: 7.366666666666667
   skipInEditor: 0
   featuresToEnable: 0
   featuresToDisable: 8
@@ -575,7 +619,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Objective Marker
   m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
-  m_Time: 1.5
+  m_Time: 5.483333333333334
   skipInEditor: 0
   objectives:
   - rid: 1993976599894032386
@@ -607,7 +651,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Start Objectives Marker
   m_EditorClassIdentifier: Assembly-CSharp::StartObjectivesMarker
-  m_Time: 12.566666666666613
+  m_Time: 16.549999999999926
   skipInEditor: 0
   objectives:
   - rid: 4199866606093860865
@@ -653,7 +697,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d09b01d4b9a242f59f452dd030b5551c, type: 3}
   m_Name: Toggle Enemy Spawn Point Marker
   m_EditorClassIdentifier: Assembly-CSharp::ToggleEnemySpawnPointMarker
-  m_Time: 14.4
+  m_Time: 18.38333333333331
   skipInEditor: 0
   enemySpawnPoint:
     exposedName: 33611ccc-713a-417b-9d6b-e2ad5af12292
@@ -671,7 +715,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Start Objectives Marker
   m_EditorClassIdentifier: Assembly-CSharp::StartObjectivesMarker
-  m_Time: 10.066666666666645
+  m_Time: 14.049999999999972
   skipInEditor: 0
   objectives:
   - rid: 4199866606093860868
@@ -758,6 +802,10 @@ MonoBehaviour:
     - {fileID: -6161496143796089948}
     - {fileID: 598534368682470053}
     - {fileID: -1360289467457274172}
+    - {fileID: 6066724410445298216}
+    - {fileID: 7283309273302434533}
+    - {fileID: 232357968192677345}
+    - {fileID: -1998375400032350353}
 --- !u!114 &5691303165561134707
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -770,7 +818,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Objective Marker
   m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
-  m_Time: 1.9833333333333334
+  m_Time: 5.966666666666667
   skipInEditor: 0
   objectives:
   - rid: 1993976599894032391
@@ -802,10 +850,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd5511dff6f84ce8a7e93b16a19b6da9, type: 3}
   m_Name: Set Player Features Marker
   m_EditorClassIdentifier: Assembly-CSharp::SetPlayerFeaturesMarker
-  m_Time: 7.016666666666667
+  m_Time: 10.999999999999993
   skipInEditor: 0
   featuresToEnable: 8
   featuresToDisable: 0
+--- !u!114 &6066724410445298216
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23ff59797f47f8244a7ad6aa56ed7839, type: 3}
+  m_Name: Set Ship Spline Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SetShipSplineMarker
+  m_Time: 0
+  skipInEditor: 0
+  spline:
+    exposedName: 40375969-ba2e-47f9-8bf0-f0f3c69fceb3
+    defaultValue: {fileID: 0}
+  speed: 3
+  followMode: 1
+  transition: 0
+  entryPoint: 0
+  transitionDuration: 3
 --- !u!114 &6827295725405647289
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -818,7 +888,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Objective Marker
   m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
-  m_Time: 1
+  m_Time: 4.983333333333333
   skipInEditor: 0
   objectives:
   - rid: 1993976599894032384
@@ -850,7 +920,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
-  m_Time: 13.533333333333333
+  m_Time: 17.516666666666644
   skipInEditor: 0
   spawnParams:
     enemyType: 0
@@ -866,6 +936,28 @@ MonoBehaviour:
           defaultValue: {fileID: 0}
         chance: 0
         isLocked: 0
+--- !u!114 &7283309273302434533
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23ff59797f47f8244a7ad6aa56ed7839, type: 3}
+  m_Name: Set Ship Spline Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SetShipSplineMarker
+  m_Time: 7.7
+  skipInEditor: 0
+  spline:
+    exposedName: 5a85a7eb-6cdf-4c67-8402-5c8bfe02fe60
+    defaultValue: {fileID: 0}
+  speed: 15
+  followMode: 0
+  transition: 1
+  entryPoint: 0
+  transitionDuration: 15
 --- !u!114 &7495273874607471889
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -878,7 +970,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Start Objectives Marker
   m_EditorClassIdentifier: Assembly-CSharp::StartObjectivesMarker
-  m_Time: 12.083333333333279
+  m_Time: 16.066666666666606
   skipInEditor: 0
   objectives:
   - rid: 4199866606093860869
@@ -923,7 +1015,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Start Objectives Marker
   m_EditorClassIdentifier: Assembly-CSharp::StartObjectivesMarker
-  m_Time: 11.083333333333279
+  m_Time: 15.066666666666606
   skipInEditor: 0
   objectives:
   - rid: 4199866606093860864
@@ -956,7 +1048,7 @@ MonoBehaviour:
   m_Name: Teleport Player To Spawn Point Marker
   m_EditorClassIdentifier: Assembly-CSharp::TeleportPlayerToSpawnPointMarker
   m_Time: 0
-  skipInEditor: 1
+  skipInEditor: 0
   usePod: 1
   playerSpawnPoint:
     exposedName: e47c2d01abf560247b6c973d56506e35
@@ -973,7 +1065,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Objective Marker
   m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
-  m_Time: 9.099999999999977
+  m_Time: 13.083333333333304
   skipInEditor: 0
   objectives:
   - rid: 1993976625937514506
@@ -1019,7 +1111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6a97ee5277e4dd2a166954fcac90a6d, type: 3}
   m_Name: Objective Marker
   m_EditorClassIdentifier: Assembly-CSharp::ObjectiveMarker
-  m_Time: 2.5166666666666666
+  m_Time: 6.5
   skipInEditor: 0
   objectives:
   - rid: 1993976600566169689
