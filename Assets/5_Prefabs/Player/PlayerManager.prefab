@@ -3607,6 +3607,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.EngineSfx
   carControllerSettings: {fileID: 11400000, guid: 80f3574546217be41a94410cf479a41d, type: 2}
+  robotControllerSettings: {fileID: 11400000, guid: 8cb9e39bf4d6079479b5bfc6b990bf03, type: 2}
   audioSources:
   - {fileID: 3224044577498714345}
   - {fileID: 6385161570837166454}
@@ -3619,17 +3620,31 @@ MonoBehaviour:
   - {fileID: 6320791366766305848}
   - {fileID: 7468717606103986993}
   player: {fileID: 2369243402749369746}
-  volume: 0.172
-  volumeSmoothSpeed: 10
-  minRPM: 1000
-  maxRPM: 5500
-  rpmStep: 500
-  rpmSmoothSpeed: 2
-  blendRange: 1100
-  minPitch: 0.75
-  maxPitch: 1.5
-  pitchSmoothSpeed: 12
-  maxSpeedMultiplier: 2
+  clipMinRPM: 1000
+  clipMaxRPM: 5500
+  clipRPMStep: 500
+  carEngineSfxSettings:
+    volume: 0.211
+    volumeSmoothSpeed: 10
+    minRPM: 1000
+    maxRPM: 5500
+    rpmSmoothSpeed: 2
+    blendRange: 1100
+    minPitch: 0.75
+    maxPitch: 1.5
+    pitchSmoothSpeed: 12
+    maxSpeedMultiplier: 2
+  robotEngineSfxSettings:
+    volume: 0.211
+    volumeSmoothSpeed: 10
+    minRPM: 2000
+    maxRPM: 3500
+    rpmSmoothSpeed: 12
+    blendRange: 1100
+    minPitch: 1.1
+    maxPitch: 2
+    pitchSmoothSpeed: 12
+    maxSpeedMultiplier: 1
 --- !u!1 &6916443636318400613
 GameObject:
   m_ObjectHideFlags: 0
