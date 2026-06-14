@@ -16,6 +16,7 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField] private ParticleEffectAction deathEffects;
         [SerializeField] private VisualEffectAction explodeEffect;
         [SerializeField, AudioLibraryID] private string changeStateSoundId;
+        [SerializeField, AudioLibraryID] private string jumpSoundId;
 
         [Header("Tire Dirt")]
         [SerializeField] private float tireEffectRobotSpeedThreshold = 5f;
@@ -27,6 +28,7 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField] private AudioSource airReleaseAudioSource;
         [SerializeField] private AudioSource changeStateAudioSource;
         [SerializeField] private AudioSource boostAudioSource;
+        [SerializeField] private AudioSource jumpAudioSource;
         [SerializeField, AutoGetParent, HideInInspector] private PlayerManager player;
 
         private Material[] _materials;
@@ -67,6 +69,7 @@ namespace ProjectWallE.GameLoop.Player
                 }
                 player.Shooter.OnAttack1 += OnAttack1;
                 player.Shooter.OnAttack2 += OnAttack2;
+                player.RobotController.OnJumped += OnJump;
             }
         }
 
@@ -83,6 +86,7 @@ namespace ProjectWallE.GameLoop.Player
                 }
                 player.Shooter.OnAttack1 -= OnAttack1;
                 player.Shooter.OnAttack2 -= OnAttack2;
+                player.RobotController.OnJumped -= OnJump;
             }
         }
 
@@ -134,6 +138,11 @@ namespace ProjectWallE.GameLoop.Player
             StopAllTireEffects();
             _activeTireEffects = type == ControllerType.Robot ? robotTireEffects : carTireEffects;
             _tireEffectsPlaying = new bool[_activeTireEffects.Length];
+        }
+        
+        private void OnJump()
+        {
+            AudioLibrary.PlayOnSource(jumpSoundId, jumpAudioSource);
         }
 
         private bool IsTireGrounded(int index)

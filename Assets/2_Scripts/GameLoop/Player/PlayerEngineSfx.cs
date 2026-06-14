@@ -156,8 +156,6 @@ namespace ProjectWallE
 
             float rpm = Mathf.Clamp(_currentRPM, settings.MinRPM, maxUsableRPM);
             ApplyWeightedEngineBlend(rpm, settings);
-            
-            Debug.Log($"ENGINE SETTINGS | min: {settings.MinRPM}, max: {settings.MaxRPM}, target: {targetRPM}, current: {_currentRPM}");
         }
 
         private void ApplyWeightedEngineBlend(float rpm, PlayerEngineSfxSettings settings)
