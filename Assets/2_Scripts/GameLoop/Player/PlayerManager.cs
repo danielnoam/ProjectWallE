@@ -70,6 +70,7 @@ namespace ProjectWallE
         private float _lastDamageTime;
         private int _currentSkipCost;
         private bool _podInFlight;
+        private bool _inCinematic;
         private PlayerFeature _enabledFeatures = PlayerFeature.All;
 
         public ControllerType ControllerType => _controllerTypeEnum;
@@ -154,7 +155,7 @@ namespace ProjectWallE
 
         private void Update()
         {
-            if (!IsAlive) return;
+            if (!IsAlive || _inCinematic) return;
 
             _currentController.ApplyUpdate();
             if (_input.SwitchPressed) SwitchControllerEnum();
@@ -165,19 +166,19 @@ namespace ProjectWallE
 
         private void FixedUpdate()
         {
-            if (!IsAlive) return;
+            if (!IsAlive || _inCinematic) return;
             _currentController?.ApplyFixedUpdate();
         }
 
         private void LateUpdate()
         {
-            if (!IsAlive) return;
+            if (!IsAlive || _inCinematic) return;
             _currentController?.ApplyLateUpdate();
         }
 
         private void LateFixedUpdate()
         {
-            if (!IsAlive) return;
+            if (!IsAlive || _inCinematic) return;
             _currentController?.ApplyLateFixedUpdate();
         }
 
@@ -393,6 +394,23 @@ namespace ProjectWallE
         {
             if (!spawnPoint) return;
             Teleport(spawnPoint.SpawnPosition, spawnPoint.SpawnRotation);
+        }
+
+        public void SetCinematicMode(bool cinematic)
+        {
+            if (_inCinematic == cinematic) return;
+            _inCinematic = cinematic;
+
+            if (cinematic)
+            {
+                ResetRbVelocity();
+                _rigidbody.isKinematic = true;
+            }
+            else
+            {
+                _rigidbody.isKinematic = false;
+                _currentController.CanMove = CanMove;
+            }
         }
 
         public void Push(Vector3 direction, float force)

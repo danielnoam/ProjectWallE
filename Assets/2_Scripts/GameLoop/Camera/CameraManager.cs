@@ -50,6 +50,7 @@ namespace ProjectWallE
         private PodCameraMode _activeCameraMode;
         
         private bool _cameraLocked;
+        private bool _cinematicMode;
         private float _yaw;
         private float _pitch;
 
@@ -134,6 +135,11 @@ namespace ProjectWallE
         {
             impulseSource?.GenerateImpulse(deathImpulseSettings);
             cameraTarget.eulerAngles = Vector3.zero;
+        }
+
+        public void SetCinematicMode(bool cinematic)
+        {
+            _cinematicMode = cinematic;
         }
 
         private void OnPlayerSpawned()
@@ -249,6 +255,8 @@ namespace ProjectWallE
 
         private void UpdateCameraMovement()
         {
+            if (_cinematicMode) return;
+
             cameraTarget.position = playerManager.transform.position;
 
             if (_cameraLocked || _activePod) return;

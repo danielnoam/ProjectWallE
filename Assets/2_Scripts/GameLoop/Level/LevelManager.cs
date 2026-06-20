@@ -94,6 +94,16 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
         _activePlayerSpawnPoint = playerSpawnPoint;
         Debug.Log($"Active spawn point updated");
     }
+
+    public void PauseTimeline()
+    {
+        if (timeline) timeline.Pause();
+    }
+
+    public void ResumeTimeline()
+    {
+        if (timeline) timeline.Resume();
+    }
     
     #region Level Control
 
