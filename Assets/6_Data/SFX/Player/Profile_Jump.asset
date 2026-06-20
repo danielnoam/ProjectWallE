@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Profile_Jump
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.Systems.AudioLibrary.SOAudioProfile
   clips:
-  - {fileID: 8300000, guid: d604cb626e9696b4a907cd362dfebb37, type: 3}
+  - {fileID: 8300000, guid: cb7aefa58486c3248913b1dc1c20fc98, type: 3}
   volume:
-    minValue: 1
-    maxValue: 1
+    minValue: 0.19858155
+    maxValue: 0.19858155
   pitch:
-    minValue: 1
-    maxValue: 1
+    minValue: 1.1276597
+    maxValue: 1.8936169
   stereoPan: 0
   spatialBlend: 1
   reverbZoneMix: 1
@@ -28,8 +28,8 @@ MonoBehaviour:
   bypassReverbZones: 1
   loop: 0
   set3DSettings: 1
-  dopplerLevel: 1
+  dopplerLevel: 0
   spread: 0
   minDistance: 1
   maxDistance: 500
-  rolloffMode: 0
+  rolloffMode: 1
