@@ -84,6 +84,7 @@ namespace ProjectWallE
         public bool CanSupport => _currentController.SupportEnabled && IsAlive && _enabledFeatures.HasFlag(PlayerFeature.AirSupport);
         public bool CanMove => IsAlive && _enabledFeatures.HasFlag(PlayerFeature.Movement);
         public Vector3 Velocity => _rigidbody.linearVelocity;
+        public Quaternion Rotation => _rigidbody.rotation;
         public bool IsAlive => _currentHealth > 0;
         public Team Team => Team.Player;
         public PlayerFeature EnabledFeatures => _enabledFeatures;

@@ -83,6 +83,7 @@ namespace ProjectWallE
             if (playerManager != null)
             {
                 playerManager.OnControllerChanged += OnControllerSwitch;
+                playerManager.OnSpawn += OnPlayerSpawned;
                 playerManager.OnDamaged += OnDamaged;
                 playerManager.OnDeath += OnDeath;
                 playerManager.StructureBuilder.ActionsMenuRequested += OnMenuActionRequested;
@@ -109,6 +110,7 @@ namespace ProjectWallE
             if (playerManager != null)
             {
                 playerManager.OnControllerChanged -= OnControllerSwitch;
+                playerManager.OnSpawn -= OnPlayerSpawned;
                 playerManager.OnDamaged -= OnDamaged;
                 playerManager.OnDeath -= OnDeath;
                 playerManager.StructureBuilder.ActionsMenuRequested -= OnMenuActionRequested;
@@ -132,6 +134,15 @@ namespace ProjectWallE
         {
             impulseSource?.GenerateImpulse(deathImpulseSettings);
             cameraTarget.eulerAngles = Vector3.zero;
+        }
+
+        private void OnPlayerSpawned()
+        {
+            if (_activePod) return;
+            
+            _yaw = playerManager.Rotation.eulerAngles.y;
+            _pitch = 0f;
+            cameraTarget.rotation = Quaternion.Euler(_pitch, _yaw, 0f);
         }
 
         private void OnPodLaunched(DeploymentRequest request, Pod pod)
@@ -176,7 +187,7 @@ namespace ProjectWallE
                 }
                 else
                 {
-                    _yaw = playerManager.transform.eulerAngles.y;
+                    _yaw = playerManager.Rotation.eulerAngles.y;
                     _pitch = 0f;
                 }
 
