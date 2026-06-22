@@ -1,4 +1,5 @@
 using System;
+using ProjectWallE.UI;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -11,6 +12,7 @@ namespace ProjectWallE
         public static event Action OnCinematicStarted;
         public static event Action OnCinematicEnded;
 
+        private CinematicController _activeController;
         private PlayableDirector _activeDirector;
         private bool _pausedLevelTimeline;
 
@@ -31,21 +33,23 @@ namespace ProjectWallE
             if (_activeDirector) _activeDirector.stopped -= OnDirectorStopped;
         }
 
-        public void Play(PlayableDirector director, bool pauseLevelTimeline = true)
+        public void Play(CinematicController controller)
         {
-            if (!director || _activeDirector) return;
+            if (!controller || !controller.Director || _activeDirector) return;
 
-            _activeDirector = director;
-            _pausedLevelTimeline = pauseLevelTimeline;
+            _activeController = controller;
+            _activeDirector = controller.Director;
+            _pausedLevelTimeline = controller.PauseLevelTimeline;
 
             PlayerManager.Instance?.SetCinematicMode(true);
             CameraManager.Instance?.SetCinematicMode(true);
-            if (pauseLevelTimeline) LevelManager.Instance?.PauseTimeline();
+            if (_pausedLevelTimeline) LevelManager.Instance?.PauseTimeline();
+            if (controller.HideUI) UIManager.Instance?.SetHudVisible(false);
 
             OnCinematicStarted?.Invoke();
 
-            director.stopped += OnDirectorStopped;
-            director.Play();
+            _activeDirector.stopped += OnDirectorStopped;
+            _activeDirector.Play();
         }
 
         public void Stop()
@@ -58,11 +62,14 @@ namespace ProjectWallE
             if (director != _activeDirector) return;
 
             _activeDirector.stopped -= OnDirectorStopped;
-            _activeDirector = null;
 
             if (_pausedLevelTimeline) LevelManager.Instance?.ResumeTimeline();
             PlayerManager.Instance?.SetCinematicMode(false);
             CameraManager.Instance?.SetCinematicMode(false);
+            if (_activeController.HideUI) UIManager.Instance?.SetHudVisible(true);
+
+            _activeController = null;
+            _activeDirector = null;
 
             OnCinematicEnded?.Invoke();
         }

@@ -7,14 +7,13 @@ using UnityEngine.Playables;
 public class PlayCinematicMarker : BaseLevelEventMarker
 {
     [Header("Cinematic")]
-    [SerializeField, ScenePicker] private ExposedReference<PlayableDirector> cinematic;
-    [SerializeField] private bool pauseLevelTimeline = true;
+    [SerializeField, ScenePicker] private ExposedReference<CinematicController> cinematic;
 
     protected override void OnExecute(IExposedPropertyTable resolver = null)
     {
-        var director = cinematic.Resolve(resolver);
-        if (!director) return;
+        var controller = cinematic.Resolve(resolver);
+        if (!controller) return;
 
-        CinematicManager.Instance?.Play(director, pauseLevelTimeline);
+        CinematicManager.Instance?.Play(controller);
     }
 }

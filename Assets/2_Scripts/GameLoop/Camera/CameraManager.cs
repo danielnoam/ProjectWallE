@@ -307,7 +307,7 @@ namespace ProjectWallE
         private void SwitchActiveCamera(CinemachineCamera cam)
         {
             bool nonePlayerCamera = cam == lookAtPodCamera || cam == podCamera;
-            
+
             lookAtPodCamera.Priority.Value = 0;
             podCamera.Priority.Value = 0;
             carCamera.Priority.Value = 0;

@@ -80,10 +80,10 @@ namespace ProjectWallE
         public PlayerShooter Shooter => shooter;
         public PlayerAimer Aimer => aimer;
         public PlayerSupportCaller SupportCaller => supportCaller;
-        public bool CanBuild => _currentController.BuildEnabled && IsAlive && _enabledFeatures.HasFlag(PlayerFeature.Build);
-        public bool CanShoot => _currentController.ShootEnabled && IsAlive && _enabledFeatures.HasFlag(PlayerFeature.Shoot);
-        public bool CanSupport => _currentController.SupportEnabled && IsAlive && _enabledFeatures.HasFlag(PlayerFeature.AirSupport);
-        public bool CanMove => IsAlive && _enabledFeatures.HasFlag(PlayerFeature.Movement);
+        public bool CanBuild => !_inCinematic && _currentController.BuildEnabled && IsAlive && _enabledFeatures.HasFlag(PlayerFeature.Build);
+        public bool CanShoot => !_inCinematic && _currentController.ShootEnabled && IsAlive && _enabledFeatures.HasFlag(PlayerFeature.Shoot);
+        public bool CanSupport => !_inCinematic && _currentController.SupportEnabled && IsAlive && _enabledFeatures.HasFlag(PlayerFeature.AirSupport);
+        public bool CanMove => !_inCinematic && IsAlive && _enabledFeatures.HasFlag(PlayerFeature.Movement);
         public Vector3 Velocity => _rigidbody.linearVelocity;
         public Quaternion Rotation => _rigidbody.rotation;
         public bool IsAlive => _currentHealth > 0;
@@ -361,7 +361,7 @@ namespace ProjectWallE
 
         public void TakeDamage(float damage, IDamageable attacker = null)
         {
-            if (damage <= 0 || _currentHealth <= 0) return;
+            if (damage <= 0 || _currentHealth <= 0 || _inCinematic) return;
 
             _currentHealth -= damage;
             _lastDamageTime = Time.time;
@@ -409,8 +409,10 @@ namespace ProjectWallE
             else
             {
                 _rigidbody.isKinematic = false;
-                _currentController.CanMove = CanMove;
             }
+
+            _currentController.CanMove = CanMove;
+            OnFeaturesChanged?.Invoke(_enabledFeatures);
         }
 
         public void Push(Vector3 direction, float force)

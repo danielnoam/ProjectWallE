@@ -199,14 +199,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af24752c21a8c974a9d95857e26f99db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.ShipMovement
-  startingSpline: {fileID: 0}
-  startingSpeed: 15
-  startingMode: 0
-  playOnAwake: 1
   alignToSpline: 1
-  rotationSpeed: 5
+  rotationSpeed: 4
   defaultTransitionDuration: 3
-  mergeStrength: 0.4
+  mergeStrength: 0.3
 --- !u!1 &6812004901972207903
 GameObject:
   m_ObjectHideFlags: 0

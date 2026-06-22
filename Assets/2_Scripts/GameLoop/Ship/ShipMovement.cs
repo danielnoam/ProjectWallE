@@ -12,12 +12,6 @@ namespace ProjectWallE.GameLoop
 
         public static ShipMovement Instance { get; private set; }
 
-        [Header("Settings")]
-        [SerializeField] private SplineContainer startingSpline;
-        [SerializeField, Min(0f)] private float startingSpeed = 15f;
-        [SerializeField] private FollowMode startingMode = FollowMode.Loop;
-        [SerializeField] private bool playOnAwake = true;
-
         [Header("Alignment")]
         [SerializeField] private bool alignToSpline = true;
         [Tooltip("How fast the ship rotates to face the spline tangent. 0 aligns instantly")]
@@ -36,6 +30,7 @@ namespace ProjectWallE.GameLoop
         private float _splineLength;
         private float _distance;
         private bool _moving;
+        private bool _timelineControlled;
 
         private bool _transitioning;
         private float _transitionTime;
@@ -53,15 +48,6 @@ namespace ProjectWallE.GameLoop
         private EntryPoint _pendingEntry;
 
 
-        private void OnValidate()
-        {
-            if (startingSpline)
-            {
-                transform.position = startingSpline.transform.position;
-                transform.rotation = startingSpline.transform.rotation;
-            }
-        }
-
         private void Awake()
         {
             if (Instance && Instance != this)
@@ -72,11 +58,6 @@ namespace ProjectWallE.GameLoop
             Instance = this;
         }
 
-        private void Start()
-        {
-            if (playOnAwake && startingSpline) BeginFollow(startingSpline, startingSpeed, startingMode, EntryPoint.ClosestPoint);
-        }
-
         private void OnDestroy()
         {
             if (Instance == this) Instance = null;
@@ -84,6 +65,7 @@ namespace ProjectWallE.GameLoop
 
         private void Update()
         {
+            if (_timelineControlled) return;
             if (_transitioning) UpdateTransition();
             else if (_moving) UpdateFollow();
         }
@@ -143,6 +125,35 @@ namespace ProjectWallE.GameLoop
         public void SetSpline(SplineContainer spline, float speed, FollowMode mode = FollowMode.Loop, EntryPoint entry = EntryPoint.ClosestPoint)
         {
             SetSpline(spline, speed, defaultTransitionDuration, mode, entry);
+        }
+
+        /// <summary>
+        /// Hands control to a Timeline clip. While controlled the pose is driven by EvaluateTimeline and the internal speed-based follow is suspended.
+        /// </summary>
+        public void BeginTimelineControl(SplineContainer spline)
+        {
+            if (!spline || !HasKnots(spline)) return;
+
+            _activeSpline = spline;
+            _closed = spline.Spline.Closed;
+            _splineLength = spline.CalculateLength();
+            _timelineControlled = true;
+            _transitioning = false;
+            _moving = false;
+        }
+
+        public void EvaluateTimeline(float normalizedTime)
+        {
+            if (!_timelineControlled || !_activeSpline) return;
+
+            EvaluatePose(_activeSpline, Mathf.Clamp01(normalizedTime), out Vector3 pos, out Quaternion rot);
+            transform.position = pos;
+            if (alignToSpline) transform.rotation = rot;
+        }
+
+        public void EndTimelineControl()
+        {
+            _timelineControlled = false;
         }
 
         private void BeginFollow(SplineContainer spline, float speed, FollowMode mode, EntryPoint entry)
