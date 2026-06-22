@@ -536,8 +536,11 @@ MonoBehaviour:
   maxEnemies: 100
   spawnRaycastMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 3080
   spawnRaycastHeight: 200
+  spawnInterval:
+    minValue: 0.2
+    maxValue: 1
   enemyTypes:
     internalItems:
     - item: {fileID: 622395889724703068, guid: 311465a237bc47a4a80317173bf23667, type: 3}

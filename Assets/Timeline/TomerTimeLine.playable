@@ -16,7 +16,7 @@ MonoBehaviour:
   skipInEditor: 0
   spawnParams:
     enemyType: 1
-    count: 5
+    count: 10
     enemies:
       internalItems:
       - item: {fileID: 622395889724703068, guid: 311465a237bc47a4a80317173bf23667, type: 3}
@@ -68,7 +68,7 @@ MonoBehaviour:
   skipInEditor: 0
   spawnParams:
     enemyType: 0
-    count: 10
+    count: 15
     enemies:
       internalItems: []
     enemyEntries: []
@@ -106,7 +106,7 @@ MonoBehaviour:
   skipInEditor: 0
   spawnParams:
     enemyType: 1
-    count: 10
+    count: 15
     enemies:
       internalItems:
       - item: {fileID: -4769723865369596212, guid: 942ec3fb68d51bb418bece848d6bfd88, type: 3}
@@ -157,7 +157,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d09b01d4b9a242f59f452dd030b5551c, type: 3}
   m_Name: Toggle Enemy Spawn Point Marker
   m_EditorClassIdentifier: Assembly-CSharp::ToggleEnemySpawnPointMarker
-  m_Time: 21.683333333333294
+  m_Time: 21.55
   skipInEditor: 0
   enemySpawnPoint:
     exposedName: 504f165e-7b73-44fa-b265-32355d1866c1
@@ -176,7 +176,7 @@ MonoBehaviour:
   m_Name: Play Cinematic Marker
   m_EditorClassIdentifier: Assembly-CSharp::PlayCinematicMarker
   m_Time: 0
-  skipInEditor: 0
+  skipInEditor: 1
   cinematic:
     exposedName: 649c4ee6-7b81-4932-bf1f-9cf8b551baf1
     defaultValue: {fileID: 0}
@@ -196,7 +196,7 @@ MonoBehaviour:
   skipInEditor: 0
   spawnParams:
     enemyType: 1
-    count: 5
+    count: 15
     enemies:
       internalItems:
       - item: {fileID: 622395889724703068, guid: 83a877ad3335ba24198f58c9720f05c5, type: 3}
@@ -280,6 +280,24 @@ MonoBehaviour:
   skipInEditor: 1
   featuresToEnable: 9
   featuresToDisable: 6
+--- !u!114 &-1633251076649146572
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d09b01d4b9a242f59f452dd030b5551c, type: 3}
+  m_Name: Toggle Enemy Spawn Point Marker
+  m_EditorClassIdentifier: Assembly-CSharp::ToggleEnemySpawnPointMarker
+  m_Time: 21.95
+  skipInEditor: 0
+  enemySpawnPoint:
+    exposedName: 45eccddf-39a1-438c-8d95-a43bc3ac4853
+    defaultValue: {fileID: 0}
+  spawnPointState: 1
 --- !u!114 &-1360289467457274172
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -452,7 +470,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d09b01d4b9a242f59f452dd030b5551c, type: 3}
   m_Name: Toggle Enemy Spawn Point Marker
   m_EditorClassIdentifier: Assembly-CSharp::ToggleEnemySpawnPointMarker
-  m_Time: 21.833333333333293
+  m_Time: 21.7
   skipInEditor: 0
   enemySpawnPoint:
     exposedName: 46842fd1-78fc-47b7-8efc-9a249b74a139
@@ -512,6 +530,24 @@ MonoBehaviour:
                   defaultValue: {fileID: 0}
                 chance: 50
                 isLocked: 0
+--- !u!114 &1300400482142198232
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d09b01d4b9a242f59f452dd030b5551c, type: 3}
+  m_Name: Toggle Enemy Spawn Point Marker
+  m_EditorClassIdentifier: Assembly-CSharp::ToggleEnemySpawnPointMarker
+  m_Time: 21.766666666666666
+  skipInEditor: 0
+  enemySpawnPoint:
+    exposedName: bb959153-fbcf-4bac-a788-e9e79277959f
+    defaultValue: {fileID: 0}
+  spawnPointState: 1
 --- !u!114 &1572475322290309063
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -576,7 +612,7 @@ MonoBehaviour:
           hideWhenUnchecked: 0
           value: 
         enemyPrefab: {fileID: 0}
-        killCount: 5
+        killCount: 10
         spawnEnemies: 0
         spawner:
           spawnInterval: 3
@@ -752,7 +788,7 @@ MonoBehaviour:
           hideWhenUnchecked: 0
           value: 
         enemyPrefab: {fileID: 0}
-        killCount: 5
+        killCount: 15
         spawnEnemies: 0
         spawner:
           spawnInterval: 3
@@ -822,6 +858,10 @@ MonoBehaviour:
     - {fileID: 232357968192677345}
     - {fileID: -1998375400032350353}
     - {fileID: -4439777815015289429}
+    - {fileID: 1300400482142198232}
+    - {fileID: 6920507047434961457}
+    - {fileID: 7140578972162876505}
+    - {fileID: -1633251076649146572}
 --- !u!114 &5691303165561134707
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -924,6 +964,42 @@ MonoBehaviour:
           hideWhenUnchecked: 0
           value: 
         radius: 20
+--- !u!114 &6920507047434961457
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d09b01d4b9a242f59f452dd030b5551c, type: 3}
+  m_Name: Toggle Enemy Spawn Point Marker
+  m_EditorClassIdentifier: Assembly-CSharp::ToggleEnemySpawnPointMarker
+  m_Time: 21.816666666666666
+  skipInEditor: 0
+  enemySpawnPoint:
+    exposedName: 0a407aeb-4aab-4ee1-84e6-99f2ad6a5f59
+    defaultValue: {fileID: 0}
+  spawnPointState: 1
+--- !u!114 &7140578972162876505
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d09b01d4b9a242f59f452dd030b5551c, type: 3}
+  m_Name: Toggle Enemy Spawn Point Marker
+  m_EditorClassIdentifier: Assembly-CSharp::ToggleEnemySpawnPointMarker
+  m_Time: 21.883333333333333
+  skipInEditor: 0
+  enemySpawnPoint:
+    exposedName: 66118c1e-20af-47a5-a465-ac8e9db3067a
+    defaultValue: {fileID: 0}
+  spawnPointState: 1
 --- !u!114 &7172977050778211017
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -940,7 +1016,7 @@ MonoBehaviour:
   skipInEditor: 0
   spawnParams:
     enemyType: 0
-    count: 6
+    count: 8
     enemies:
       internalItems: []
     enemyEntries: []
@@ -1006,7 +1082,7 @@ MonoBehaviour:
           hideWhenUnchecked: 0
           value: 
         enemyPrefab: {fileID: 0}
-        killCount: 10
+        killCount: 15
         spawnEnemies: 0
         spawner:
           spawnInterval: 3

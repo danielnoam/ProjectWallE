@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using DNExtensions.Utilities;
 using ProjectWallE.GameLoop;
@@ -6,17 +7,27 @@ using UnityEngine;
 public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager Instance { get; private set; }
-    
+
+    private struct EnemySpawn
+    {
+        public Enemy enemy;
+        public EnemySpawnPoint spawnPoint;
+    }
+
     [Header("Settings")]
     [SerializeField] private int maxEnemies = 100;
     [SerializeField] private LayerMask spawnRaycastMask;
     [SerializeField] private float spawnRaycastHeight = 200f;
+    [Tooltip("Random delay between releasing each queued enemy from a base")]
+    [SerializeField, MinMaxRange(0f, 5f)] private RangedFloat spawnInterval = new RangedFloat(0.2f, 0.6f);
     [SerializeField] private ChanceList<Enemy> enemyTypes = new ChanceList<Enemy>();
-    
+
     private Transform _enemyHolder;
     private readonly ChanceList<EnemySpawnPoint> _activeSpawnPoints = new ChanceList<EnemySpawnPoint>();
     private readonly List<Enemy> _activeEnemies = new List<Enemy>();
-    
+    private readonly Dictionary<EnemyBase, Queue<EnemySpawn>> _baseQueues = new Dictionary<EnemyBase, Queue<EnemySpawn>>();
+    private readonly Dictionary<EnemyBase, Coroutine> _baseRoutines = new Dictionary<EnemyBase, Coroutine>();
+
     public int ActiveEnemiesCount => _activeEnemies.Count;
     
     private void Awake()
@@ -35,6 +46,8 @@ public class EnemyManager : MonoBehaviour
 
     private void SpawnEnemy(Enemy enemy, EnemySpawnPoint spawnPoint)
     {
+        if (!enemy || !spawnPoint || _activeEnemies.Count >= maxEnemies) return;
+
         Vector3 spawnOffset = Random.insideUnitSphere * spawnPoint.SpawnPointRange;
         spawnOffset.y = 0f;
         Vector3 spawnPosition = spawnPoint.transform.position.Add(spawnOffset);
@@ -52,8 +65,6 @@ public class EnemyManager : MonoBehaviour
     
     public void SpawnEnemyWave(int enemiesToSpawn, ChanceList<Enemy> enemySource = null, EnemySpawnPoint spawnPoint = null)
     {
-        if (_activeEnemies.Count >= maxEnemies) return;
-
         if (!spawnPoint)
         {
             if (_activeSpawnPoints.Count == 0) return;
@@ -61,14 +72,46 @@ public class EnemyManager : MonoBehaviour
         }
 
         var source = enemySource ?? enemyTypes;
+        EnemyBase enemyBase = DeploymentManager.Instance?.GetNearestBase(spawnPoint.transform.position);
 
         for (int i = 0; i < enemiesToSpawn; i++)
         {
-            if (_activeEnemies.Count >= maxEnemies) return;
-            SpawnEnemy(source.GetRandomItem(), spawnPoint);
+            var spawn = new EnemySpawn { enemy = source.GetRandomItem(), spawnPoint = spawnPoint };
+
+            if (!enemyBase) SpawnEnemy(spawn.enemy, spawn.spawnPoint);
+            else EnqueueSpawn(enemyBase, spawn);
         }
     }
-    
+
+    private void EnqueueSpawn(EnemyBase enemyBase, EnemySpawn spawn)
+    {
+        if (!_baseQueues.TryGetValue(enemyBase, out var queue))
+        {
+            queue = new Queue<EnemySpawn>();
+            _baseQueues[enemyBase] = queue;
+        }
+
+        queue.Enqueue(spawn);
+
+        if (!_baseRoutines.ContainsKey(enemyBase))
+            _baseRoutines[enemyBase] = StartCoroutine(DrainBaseQueue(enemyBase));
+    }
+
+    private IEnumerator DrainBaseQueue(EnemyBase enemyBase)
+    {
+        var queue = _baseQueues[enemyBase];
+
+        while (enemyBase && queue.Count > 0)
+        {
+            var spawn = queue.Dequeue();
+            SpawnEnemy(spawn.enemy, spawn.spawnPoint);
+            yield return new WaitForSeconds(spawnInterval.RandomValue);
+        }
+
+        _baseQueues.Remove(enemyBase);
+        _baseRoutines.Remove(enemyBase);
+    }
+
 
     #endregion
     

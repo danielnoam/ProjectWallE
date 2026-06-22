@@ -151,7 +151,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 581df25d31c3471eb2dfb2996c0c6195, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GroundEnemy
-  maxHealth: 100
+  maxHealth: 80
+  resourceWorth: 25
   canBePushed: 1
   targetFindRange: 50
   targetRandomOffset: 20
@@ -171,14 +172,12 @@ MonoBehaviour:
     punchStrength: 1
     punchDuration: 0.15
     punchEase: 1
-    emissionColor: {fileID: 0}
     materialColor: {fileID: 11400000, guid: 6a0d274f87949b441b5db601f2545d11, type: 2}
     hitSoundId: NormalHit
   criticalDamageEffects:
     punchStrength: 1
     punchDuration: 0.15
     punchEase: 1
-    emissionColor: {fileID: 0}
     materialColor: {fileID: 11400000, guid: 3f65c9359762ee741b27f094dbe4ad68, type: 2}
     hitSoundId: CriticalHit
   deathEffect:

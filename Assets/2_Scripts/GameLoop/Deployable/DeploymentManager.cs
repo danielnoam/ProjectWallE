@@ -108,7 +108,7 @@ namespace ProjectWallE.GameLoop
                 list.Remove(cannon);
         }
 
-        private EnemyBaseCannon GetBaseCannon(Vector3 targetPosition)
+        public EnemyBase GetNearestBase(Vector3 position)
         {
             EnemyBase nearest = null;
             float closestDist = float.MaxValue;
@@ -117,7 +117,7 @@ namespace ProjectWallE.GameLoop
             {
                 if (!kvp.Key || kvp.Value.Count == 0) continue;
 
-                float dist = Vector3.Distance(targetPosition, kvp.Key.transform.position);
+                float dist = Vector3.Distance(position, kvp.Key.transform.position);
                 if (dist < closestDist)
                 {
                     closestDist = dist;
@@ -125,6 +125,12 @@ namespace ProjectWallE.GameLoop
                 }
             }
 
+            return nearest;
+        }
+
+        private EnemyBaseCannon GetBaseCannon(Vector3 targetPosition)
+        {
+            EnemyBase nearest = GetNearestBase(targetPosition);
             if (!nearest) return null;
 
             var cannons = _baseCannonMap[nearest];
