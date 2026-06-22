@@ -238,10 +238,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2166734510416340965}
     m_Modifications:
-    - target: {fileID: 612269086715562068, guid: c2e9509e3da8e2a47b0bbd384a44fadb, type: 3}
-      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[0].m_Value
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 5370542479087320977, guid: c2e9509e3da8e2a47b0bbd384a44fadb, type: 3}
       propertyPath: m_Name
       value: VisualEffect_ChimneySmoke
@@ -252,7 +248,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5507316856445390754, guid: c2e9509e3da8e2a47b0bbd384a44fadb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.914
+      value: 33.5
       objectReference: {fileID: 0}
     - target: {fileID: 5507316856445390754, guid: c2e9509e3da8e2a47b0bbd384a44fadb, type: 3}
       propertyPath: m_LocalPosition.z
@@ -304,10 +300,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3313180657728943769}
     m_Modifications:
-    - target: {fileID: 612269086715562068, guid: c2e9509e3da8e2a47b0bbd384a44fadb, type: 3}
-      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[0].m_Value
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 5370542479087320977, guid: c2e9509e3da8e2a47b0bbd384a44fadb, type: 3}
       propertyPath: m_Name
       value: VisualEffect_ChimneySmoke
@@ -318,7 +310,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5507316856445390754, guid: c2e9509e3da8e2a47b0bbd384a44fadb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.914
+      value: 26.499998
       objectReference: {fileID: 0}
     - target: {fileID: 5507316856445390754, guid: c2e9509e3da8e2a47b0bbd384a44fadb, type: 3}
       propertyPath: m_LocalPosition.z
@@ -410,10 +402,50 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8295633520210880402, guid: e692967482b46df44bb5eb909e9fb895, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5daa2d568ea93a64ba0d31816b4a5b93, type: 2}
+    - target: {fileID: -8288676249161464488, guid: e692967482b46df44bb5eb909e9fb895, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5daa2d568ea93a64ba0d31816b4a5b93, type: 2}
+    - target: {fileID: -7498717787979072515, guid: e692967482b46df44bb5eb909e9fb895, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5daa2d568ea93a64ba0d31816b4a5b93, type: 2}
+    - target: {fileID: -5401824825968607151, guid: e692967482b46df44bb5eb909e9fb895, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5daa2d568ea93a64ba0d31816b4a5b93, type: 2}
+    - target: {fileID: -4302084186304100286, guid: e692967482b46df44bb5eb909e9fb895, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5daa2d568ea93a64ba0d31816b4a5b93, type: 2}
+    - target: {fileID: -1979502306561158761, guid: e692967482b46df44bb5eb909e9fb895, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5daa2d568ea93a64ba0d31816b4a5b93, type: 2}
+    - target: {fileID: -1098371818415834977, guid: e692967482b46df44bb5eb909e9fb895, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 8f766c2ed6500a94ca5427956ad34d54, type: 2}
     - target: {fileID: 919132149155446097, guid: e692967482b46df44bb5eb909e9fb895, type: 3}
       propertyPath: m_Name
       value: EnemyBase
       objectReference: {fileID: 0}
+    - target: {fileID: 1476965103356938273, guid: e692967482b46df44bb5eb909e9fb895, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5daa2d568ea93a64ba0d31816b4a5b93, type: 2}
+    - target: {fileID: 1795535852861289199, guid: e692967482b46df44bb5eb909e9fb895, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5daa2d568ea93a64ba0d31816b4a5b93, type: 2}
+    - target: {fileID: 3375522064178176547, guid: e692967482b46df44bb5eb909e9fb895, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 5daa2d568ea93a64ba0d31816b4a5b93, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -480,10 +512,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5250734312233654085}
     m_Modifications:
-    - target: {fileID: 612269086715562068, guid: c2e9509e3da8e2a47b0bbd384a44fadb, type: 3}
-      propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[0].m_Value
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 5370542479087320977, guid: c2e9509e3da8e2a47b0bbd384a44fadb, type: 3}
       propertyPath: m_Name
       value: VisualEffect_ChimneySmoke
@@ -494,7 +522,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5507316856445390754, guid: c2e9509e3da8e2a47b0bbd384a44fadb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.914
+      value: 26.499998
       objectReference: {fileID: 0}
     - target: {fileID: 5507316856445390754, guid: c2e9509e3da8e2a47b0bbd384a44fadb, type: 3}
       propertyPath: m_LocalPosition.z
