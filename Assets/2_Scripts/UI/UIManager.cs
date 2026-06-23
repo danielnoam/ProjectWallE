@@ -24,12 +24,21 @@ namespace ProjectWallE.UI
             Instance = this;
         }
 
-        public void SetHudVisible(bool visible)
+        public void SetHudVisible(bool visible, bool animated = true)
         {
             if (!hudCanvasGroup) return;
+            if (Mathf.Approximately(hudCanvasGroup.alpha, visible ? 1f : 0f)) return;
 
-            _fadeTween.Stop();
-            _fadeTween = Tween.Alpha(hudCanvasGroup, visible ? 1f : 0f, fadeDuration);
+            if (_fadeTween.isAlive) _fadeTween.Stop();
+            
+            if (animated)
+            {
+                _fadeTween = Tween.Alpha(hudCanvasGroup, visible ? 1f : 0f, fadeDuration);
+            }
+            else
+            {
+                hudCanvasGroup.alpha = visible ? 1f : 0f;
+            }
             hudCanvasGroup.interactable = visible;
             hudCanvasGroup.blocksRaycasts = visible;
         }

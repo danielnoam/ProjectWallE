@@ -46,15 +46,16 @@ namespace ProjectWallE
         [Header("References")]
         [SerializeField] private GameObject gfx;
         [SerializeField] private Pod podPrefab;
-        [HideInInspector, SerializeField, AutoGetChildren] private CarController carController;
-        [HideInInspector, SerializeField, AutoGetChildren] private RobotController robotController;
-        [HideInInspector, SerializeField, AutoGetChildren] private PlayerStructureBuilder structureBuilder;
-        [HideInInspector, SerializeField, AutoGetChildren] private PlayerSupportCaller supportCaller;
-        [HideInInspector, SerializeField, AutoGetChildren] private PlayerShooter shooter;
-        [HideInInspector, SerializeField, AutoGetChildren] private PlayerAimer aimer;
+        [SerializeField, AutoGetChildren] private PlayerManagerInput input;
+        [SerializeField, AutoGetChildren] private Rigidbody rigidBody;
+        [SerializeField, AutoGetChildren] private CarController carController;
+        [SerializeField, AutoGetChildren] private RobotController robotController;
+        [SerializeField, AutoGetChildren] private PlayerStructureBuilder structureBuilder;
+        [SerializeField, AutoGetChildren] private PlayerSupportCaller supportCaller;
+        [SerializeField, AutoGetChildren] private PlayerShooter shooter;
+        [SerializeField, AutoGetChildren] private PlayerAimer aimer;
 
-        private PlayerManagerInput _input;
-        private Rigidbody _rigidbody;
+
         private Transform _cameraTransform;
 
         private ControllerType _controllerTypeEnum;
@@ -84,8 +85,8 @@ namespace ProjectWallE
         public bool CanShoot => !_inCinematic && _currentController.ShootEnabled && IsAlive && _enabledFeatures.HasFlag(PlayerFeature.Shoot);
         public bool CanSupport => !_inCinematic && _currentController.SupportEnabled && IsAlive && _enabledFeatures.HasFlag(PlayerFeature.AirSupport);
         public bool CanMove => !_inCinematic && IsAlive && _enabledFeatures.HasFlag(PlayerFeature.Movement);
-        public Vector3 Velocity => _rigidbody.linearVelocity;
-        public Quaternion Rotation => _rigidbody.rotation;
+        public Vector3 Velocity => rigidBody.linearVelocity;
+        public Quaternion Rotation => rigidBody.rotation;
         public bool IsAlive => _currentHealth > 0;
         public Team Team => Team.Player;
         public PlayerFeature EnabledFeatures => _enabledFeatures;
@@ -118,15 +119,13 @@ namespace ProjectWallE
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-
-            _input = GetComponent<PlayerManagerInput>();
-            _rigidbody = GetComponent<Rigidbody>();
+            
             if (Camera.main) _cameraTransform = Camera.main.transform;
 
             PlayerReferences playerReferences = new PlayerReferences()
             {
                 cameraTransform = _cameraTransform,
-                rigidBody = _rigidbody,
+                rigidBody = rigidBody,
                 groundLayer = groundLayer
             };
 
@@ -158,7 +157,7 @@ namespace ProjectWallE
             if (!IsAlive || _inCinematic) return;
 
             _currentController.ApplyUpdate();
-            if (_input.SwitchPressed) SwitchControllerEnum();
+            if (input.SwitchPressed) SwitchControllerEnum();
             UpdateSwitchCooldown();
             SwitchBehavior();
             RegenerateHealth();
@@ -218,7 +217,7 @@ namespace ProjectWallE
         private void Die(IDamageable attacker = null)
         {
             ResetRbVelocity();
-            _rigidbody.isKinematic = true;
+            rigidBody.isKinematic = true;
             _currentHealth = 0;
             OnHealthChanged?.Invoke(_currentHealth, maxHealth);
             OnDeath?.Invoke(attacker);
@@ -283,7 +282,7 @@ namespace ProjectWallE
 
         private void FinishRespawn()
         {
-            _rigidbody.isKinematic = false;
+            rigidBody.isKinematic = false;
             _podInFlight = false;
             gfx?.SetActive(true);
             _currentHealth = maxHealth;
@@ -325,7 +324,7 @@ namespace ProjectWallE
             _currentController.gameObject.SetActive(true);
             _currentController.OnEnter();
             _currentController.CanMove = CanMove;
-            _rigidbody.centerOfMass = _currentController.CenterOfMassOffset;
+            rigidBody.centerOfMass = _currentController.CenterOfMassOffset;
 
             OnControllerChanged?.Invoke(controllerType);
         }
@@ -337,17 +336,17 @@ namespace ProjectWallE
 
         private void ResetRbRotation()
         {
-            Vector3 rot = _rigidbody.rotation.eulerAngles;
+            Vector3 rot = rigidBody.rotation.eulerAngles;
             rot.y = _cameraTransform.rotation.eulerAngles.y;
-            _rigidbody.rotation = Quaternion.Euler(rot);
-            _rigidbody.angularVelocity = Vector3.zero;
+            rigidBody.rotation = Quaternion.Euler(rot);
+            rigidBody.angularVelocity = Vector3.zero;
         }
 
         private void ResetRbVelocity()
         {
-            if (_rigidbody.isKinematic) return;
-            _rigidbody.linearVelocity = Vector3.zero;
-            _rigidbody.angularVelocity = Vector3.zero;
+            if (rigidBody.isKinematic) return;
+            rigidBody.linearVelocity = Vector3.zero;
+            rigidBody.angularVelocity = Vector3.zero;
         }
 
         private IEnumerator RunLateFixedUpdate()
@@ -386,8 +385,8 @@ namespace ProjectWallE
         public void Teleport(Vector3 position, Quaternion rotation)
         {
             ResetRbVelocity();
-            _rigidbody.position = position;
-            _rigidbody.rotation = rotation;
+            rigidBody.position = position;
+            rigidBody.rotation = rotation;
         }
 
         public void Teleport(PlayerSpawnPoint spawnPoint)
@@ -404,11 +403,11 @@ namespace ProjectWallE
             if (cinematic)
             {
                 ResetRbVelocity();
-                _rigidbody.isKinematic = true;
+                rigidBody.isKinematic = true;
             }
             else
             {
-                _rigidbody.isKinematic = false;
+                rigidBody.isKinematic = false;
             }
 
             _currentController.CanMove = CanMove;
@@ -418,7 +417,7 @@ namespace ProjectWallE
         public void Push(Vector3 direction, float force)
         {
             if (!IsAlive) return;
-            _rigidbody.AddForce(direction * force, ForceMode.Impulse);
+            rigidBody.AddForce(direction * force, ForceMode.Impulse);
         }
 
         public void Deploy(DeploymentRequest deploymentRequest, BehaviorRequest behaviorRequest)
@@ -440,7 +439,7 @@ namespace ProjectWallE
             {
                 ResetRbVelocity();
                 _currentHealth = 0;
-                _rigidbody.isKinematic = true;
+                rigidBody.isKinematic = true;
                 gfx.SetActive(false);
             }
 
@@ -474,10 +473,10 @@ namespace ProjectWallE
 
         private void OnDrawGizmosSelected()
         {
-            if (_rigidbody)
+            if (rigidBody)
             {
                 Gizmos.color = Color.green;
-                Gizmos.DrawSphere(transform.position + _rigidbody.centerOfMass, .1f);
+                Gizmos.DrawSphere(transform.position + rigidBody.centerOfMass, .1f);
             }
             Gizmos.color = Color.red;
             Gizmos.DrawRay(transform.position, Vector3.up * robotHeightCheck);

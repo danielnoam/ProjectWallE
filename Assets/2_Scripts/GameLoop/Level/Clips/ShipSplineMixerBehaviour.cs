@@ -20,12 +20,14 @@ public class ShipSplineMixerBehaviour : PlayableBehaviour
             if (playable.GetInputWeight(i) <= 0f) continue;
 
             var input = (ScriptPlayable<ShipSplineBehaviour>)playable.GetInput(i);
-            SplineContainer clipSpline = input.GetBehaviour().Spline;
+            ShipSplineBehaviour behaviour = input.GetBehaviour();
+            SplineContainer clipSpline = behaviour.Spline;
             if (!clipSpline) continue;
 
             spline = clipSpline;
             double duration = input.GetDuration();
-            normalizedTime = duration > 0d ? (float)(input.GetTime() / duration) : 0f;
+            float clipTime = duration > 0d ? (float)(input.GetTime() / duration) : 0f;
+            normalizedTime = behaviour.SpeedCurve != null ? behaviour.SpeedCurve.Evaluate(clipTime) : clipTime;
             break;
         }
 

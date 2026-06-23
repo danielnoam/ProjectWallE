@@ -3838,7 +3838,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineFollow
   TrackerSettings:
     BindingMode: 4
-    PositionDamping: {x: 0.5, y: 0.5, z: 0.5}
+    PositionDamping: {x: 1, y: 1, z: 1}
     AngularDampingMode: 0
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
@@ -3870,7 +3870,7 @@ MonoBehaviour:
     FieldOfView: 60.000004
     OrthographicSize: 5
     NearClipPlane: 0.3
-    FarClipPlane: 1500
+    FarClipPlane: 2500
     Dutch: 0
     ModeOverride: 0
     PhysicalProperties:
@@ -5696,6 +5696,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7012946486696974975, guid: 9d2f81b4901f69942af7a4d8149c1d2e, type: 3}
   m_PrefabInstance: {fileID: 565280195}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &568615042 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7719884666282799495, guid: 7bb1c4e83c8827e4da3c038692a736dd, type: 3}
+  m_PrefabInstance: {fileID: 3766924241087931225}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &579354227 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7012946486696974975, guid: 9d2f81b4901f69942af7a4d8149c1d2e, type: 3}
@@ -6909,7 +6914,7 @@ MonoBehaviour:
   grassPrefabs:
   - enabled: 1
     name: Grass
-    seed: 77164
+    seed: 58219
     probability: 75.3
     collisionCheck: 1
     rejectUnderwater: 1
@@ -6920,7 +6925,7 @@ MonoBehaviour:
     - name: GrassLayer
       layerID: 0
       threshold: 0.762
-    instanceCount: 147674
+    instanceCount: 144551
     index: 0
     type: 0
     renderAsBillboard: 0
@@ -8844,85 +8849,65 @@ MonoBehaviour:
   - m_EditModeType: 1
     m_Knots:
     - Position:
-        x: -0.2000122
+        x: 36.799988
         y: 78
-        z: -130.70001
+        z: -377.7
       TangentIn:
-        x: 0
-        y: 0
-        z: -33.222664
+        x: -0
+        y: -0
+        z: -109.97537
       TangentOut:
         x: 0
         y: 0
-        z: 33.222664
+        z: 109.97537
       Rotation:
         value:
-          x: 0.06636627
-          y: -0.00030302367
-          z: 0.000020155023
-          w: 0.99779534
+          x: 0.036208943
+          y: -0.07940988
+          z: -0.007646704
+          w: 0.99615496
     - Position:
-        x: -89.400024
+        x: -137.80002
         y: 0
-        z: 304.09998
+        z: 705.3
       TangentIn:
-        x: 0
-        y: 0
-        z: -146.02678
+        x: -0
+        y: -0
+        z: -263.06763
       TangentOut:
         x: 0
         y: 0
-        z: 139.49455
+        z: 148.3978
       Rotation:
         value:
-          x: 0.04350547
-          y: -0.074486606
-          z: 0.0020246927
-          w: 0.99627054
-    - Position:
-        x: -129.30002
-        y: 0
-        z: 713.39996
-      TangentIn:
-        x: 0
-        y: 0
-        z: -32.930008
-      TangentOut:
-        x: 0
-        y: 0
-        z: 32.930008
-      Rotation:
-        value:
-          x: 0
-          y: -0.0003037005
-          z: -0
-          w: 1
+          x: 0.017816031
+          y: -0.032387987
+          z: 0.00057741994
+          w: 0.99931633
     - Position:
         x: -127.30002
         y: 0
-        z: 1037.5
+        z: 1055.1
       TangentIn:
-        x: 0
-        y: 0
-        z: -32.930008
+        x: -0
+        y: -0
+        z: -34.995754
       TangentOut:
         x: 0
         y: 0
-        z: 32.930008
+        z: 34.995754
       Rotation:
         value:
           x: 0
-          y: -0.0003037104
-          z: -0
-          w: 1
+          y: 0.01500351
+          z: 0
+          w: 0.99988747
     m_MetaData:
-    - Mode: 3
+    - Mode: 0
       Tension: 0.5
-    - Mode: 3
+    - Mode: 0
       Tension: 0.5
-    - Mode: 2
-      Tension: 0.5
-    - Mode: 2
+    - Mode: 0
       Tension: 0.5
     m_Closed: 0
     m_IntData:
@@ -9921,9 +9906,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5586992869872184875, guid: 584965915f79c3e4392be8288bbaf7c1, type: 2}
     - target: {fileID: 4965267845722546262, guid: 128903284a38bff4ea5054627f37660a, type: 3}
+      propertyPath: m_SceneBindings.Array.data[2].key
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4965267845722546262, guid: 128903284a38bff4ea5054627f37660a, type: 3}
       propertyPath: m_SceneBindings.Array.data[1].value
       value: 
       objectReference: {fileID: 874927186}
+    - target: {fileID: 4965267845722546262, guid: 128903284a38bff4ea5054627f37660a, type: 3}
+      propertyPath: m_SceneBindings.Array.data[2].value
+      value: 
+      objectReference: {fileID: 2116030781}
     - target: {fileID: 4965267845722546262, guid: 128903284a38bff4ea5054627f37660a, type: 3}
       propertyPath: m_ExposedReferences.m_References.Array.size
       value: 69
@@ -12355,8 +12348,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1134536171}
   serializedVersion: 2
-  m_LocalRotation: {x: -1.0044257e-31, y: 0.97680086, z: -0.21415001, w: -4.4910034e-31}
-  m_LocalPosition: {x: 248, y: 418, z: 492}
+  m_LocalRotation: {x: 3.471819e-10, y: 0.9737029, z: -0.22782162, w: 0.0000000025804032}
+  m_LocalPosition: {x: 248, y: 425.01, z: 490}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12382,14 +12375,14 @@ MonoBehaviour:
   m_StreamingVersion: 20241001
   m_LegacyPriority: 0
   Target:
-    TrackingTarget: {fileID: 3766924241087931226}
-    LookAtTarget: {fileID: 0}
-    CustomLookAtTarget: 0
+    TrackingTarget: {fileID: 568615042}
+    LookAtTarget: {fileID: 3766924241087931226}
+    CustomLookAtTarget: 1
   Lens:
     FieldOfView: 60.000004
     OrthographicSize: 5
     NearClipPlane: 0.3
-    FarClipPlane: 1500
+    FarClipPlane: 2500
     Dutch: 0
     ModeOverride: 0
     PhysicalProperties:
@@ -12419,11 +12412,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineFollow
   TrackerSettings:
     BindingMode: 4
-    PositionDamping: {x: 0.5, y: 0.5, z: 0.5}
+    PositionDamping: {x: 1, y: 1, z: 1}
     AngularDampingMode: 0
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
-  FollowOffset: {x: 0, y: 107, z: 232.3}
+  FollowOffset: {x: 0, y: 114.01, z: 0}
 --- !u!114 &1134536176
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12447,7 +12440,7 @@ MonoBehaviour:
       Offset: {x: 0, y: 0}
   CenterOnActivate: 0
   TargetOffset: {x: 0, y: 0, z: 0}
-  Damping: {x: 0.5, y: 0.5}
+  Damping: {x: 1, y: 1}
   Lookahead:
     Enabled: 0
     Time: 0
@@ -12966,6 +12959,10 @@ PrefabInstance:
     - target: {fileID: 3164962604371343186, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
       propertyPath: m_Name
       value: UIManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 3164962604371343186, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3609083586775896399, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
       propertyPath: m_AnchorMax.y
@@ -14770,6 +14767,39 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6209758667840909766, guid: 80e1d062e1fe4e94e9b8724bec8f7688, type: 3}
   m_PrefabInstance: {fileID: 1944462177}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1402291113 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4652565717212249930, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
+  m_PrefabInstance: {fileID: 1191233863}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11c544bb5b72491a9c13e89795657d97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.UI.SupportActionsMenu
+--- !u!114 &1402291116 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1362821622492407948, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
+  m_PrefabInstance: {fileID: 1191233863}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf667956165c4d90b3fd437f60b617e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StructureActionsMenu
+--- !u!114 &1402291117 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1106430957150463458, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
+  m_PrefabInstance: {fileID: 1191233863}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcae9f839c9ed0541bf7fdc489847d17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StructureRadialMenu
 --- !u!4 &1402990179 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6209758667840909766, guid: 80e1d062e1fe4e94e9b8724bec8f7688, type: 3}
@@ -17159,6 +17189,11 @@ Transform:
   - {fileID: 173296562}
   m_Father: {fileID: 602894424}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1664490910 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3173235118556291682, guid: 7bb1c4e83c8827e4da3c038692a736dd, type: 3}
+  m_PrefabInstance: {fileID: 3766924241087931225}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1676690630
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18685,8 +18720,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1872275727}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.21415003, y: 0.00000004269732, z: -0.000000009360796, w: 0.9768008}
-  m_LocalPosition: {x: 248, y: 418, z: 27.40001}
+  m_LocalRotation: {x: 0.2278216, y: -0.0000000014258443, z: -0.0000000010298665, w: 0.9737029}
+  m_LocalPosition: {x: 248, y: 425.01, z: 29.40001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -18715,7 +18750,7 @@ MonoBehaviour:
       Offset: {x: 0, y: 0}
   CenterOnActivate: 0
   TargetOffset: {x: 0, y: 0, z: 0}
-  Damping: {x: 0.5, y: 0.5}
+  Damping: {x: 1, y: 1}
   Lookahead:
     Enabled: 0
     Time: 0
@@ -18735,11 +18770,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineFollow
   TrackerSettings:
     BindingMode: 4
-    PositionDamping: {x: 0.5, y: 0.5, z: 0.5}
+    PositionDamping: {x: 1, y: 1, z: 1}
     AngularDampingMode: 0
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
-  FollowOffset: {x: 0, y: 107, z: -232.3}
+  FollowOffset: {x: 0, y: 114.01, z: 0}
 --- !u!114 &1872275731
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18760,14 +18795,14 @@ MonoBehaviour:
   m_StreamingVersion: 20241001
   m_LegacyPriority: 0
   Target:
-    TrackingTarget: {fileID: 3766924241087931226}
-    LookAtTarget: {fileID: 0}
-    CustomLookAtTarget: 0
+    TrackingTarget: {fileID: 1664490910}
+    LookAtTarget: {fileID: 3766924241087931226}
+    CustomLookAtTarget: 1
   Lens:
     FieldOfView: 60.000004
     OrthographicSize: 5
     NearClipPlane: 0.3
-    FarClipPlane: 1500
+    FarClipPlane: 2500
     Dutch: 0
     ModeOverride: 0
     PhysicalProperties:
@@ -19862,6 +19897,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2737165017878004224, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: buildMenu
+      value: 
+      objectReference: {fileID: 1402291117}
+    - target: {fileID: 2737165017878004224, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: actionsMenu
+      value: 
+      objectReference: {fileID: 1402291116}
     - target: {fileID: 3127096616381577694, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -19886,6 +19929,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6197151567419236282, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+      propertyPath: supportMenu
+      value: 
+      objectReference: {fileID: 1402291113}
     - target: {fileID: 6220187117299981281, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -19912,7 +19959,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2369243402749369746, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
   m_PrefabInstance: {fileID: 2039097341}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 2116030781}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3a6a9bcdc8d5a5844ae487dff7baf6e7, type: 3}
@@ -20706,6 +20753,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 466508561834688592, guid: e74571977a1e97a448d82592640f3d6e, type: 3}
   m_PrefabInstance: {fileID: 2109099148}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2116030781 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5821086676760150823, guid: 1150d4c40d97a1d4dba9b8c632288011, type: 3}
+  m_PrefabInstance: {fileID: 2039097341}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2120924428
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21179,25 +21231,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6240379488426594452}
     m_Modifications:
-    - target: {fileID: 3203674679226198352, guid: 7bb1c4e83c8827e4da3c038692a736dd, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4414182989475951900, guid: 7bb1c4e83c8827e4da3c038692a736dd, type: 3}
-      propertyPath: startingSpline
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 4557294940182872753, guid: 7bb1c4e83c8827e4da3c038692a736dd, type: 3}
       propertyPath: m_Name
       value: Prefab_SpaceShip
-      objectReference: {fileID: 0}
-    - target: {fileID: 4557294940182872753, guid: 7bb1c4e83c8827e4da3c038692a736dd, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4961485500302613635, guid: 7bb1c4e83c8827e4da3c038692a736dd, type: 3}
-      propertyPath: m_Enabled
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8771042627555734869, guid: 7bb1c4e83c8827e4da3c038692a736dd, type: 3}
       propertyPath: m_LocalPosition.x

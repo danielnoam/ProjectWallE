@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using DNExtensions.Utilities.AutoGet;
 using UnityEngine;
@@ -19,11 +20,13 @@ namespace ProjectWallE
         [SerializeField] private float clipRPMStep = 500f;
 
         [Header("Engine Settings")]
+        [SerializeField] private float startDelay = 1f;
         [SerializeField] private PlayerEngineSfxSettings carEngineSfxSettings;
         [SerializeField] private PlayerEngineSfxSettings robotEngineSfxSettings;
 
         private ControllerType _currentControllerType;
         private float _currentRPM;
+        private bool _isReady;
 
         private void OnValidate()
         {
@@ -52,6 +55,8 @@ namespace ProjectWallE
                 if (!source.isPlaying)
                     source.Play();
             }
+            
+            StartCoroutine(StartDelayRoutine());
         }
 
         private void OnEnable()
@@ -73,8 +78,7 @@ namespace ProjectWallE
 
         private void Engine()
         {
-            if (audioSources == null || audioSources.Count == 0 || player == null)
-                return;
+            if (audioSources == null || audioSources.Count == 0 || player == null || !_isReady) return;
 
             switch (_currentControllerType)
             {
@@ -122,6 +126,12 @@ namespace ProjectWallE
             float airborneInput = Mathf.Clamp01(player.RobotController.Input.Movement.magnitude);
 
             UpdateEngineBlend(robotEngineSfxSettings, grounded, speed, maxSpeed, airborneInput);
+        }
+        
+        private IEnumerator StartDelayRoutine()
+        {
+            yield return new WaitForSeconds(startDelay);
+            _isReady = true;
         }
 
         private void UpdateEngineBlend(

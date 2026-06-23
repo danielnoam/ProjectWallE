@@ -134,7 +134,7 @@ namespace ProjectWallE.GameLoop.Player
         private void OnControllerChanged(ControllerType type)
         {
             carBoostEffect?.Stop(boostAudioSource);
-            AudioLibrary.PlayOnSource(changeStateSoundId, changeStateAudioSource);
+            if (player.ControllerType != type) AudioLibrary.PlayOnSource(changeStateSoundId, changeStateAudioSource);
             StopAllTireEffects();
             _activeTireEffects = type == ControllerType.Robot ? robotTireEffects : carTireEffects;
             _tireEffectsPlaying = new bool[_activeTireEffects.Length];
