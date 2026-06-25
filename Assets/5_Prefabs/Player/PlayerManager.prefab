@@ -3191,6 +3191,8 @@ MonoBehaviour:
     m_Bits: 3400
   gfx: {fileID: 6733501558051180430}
   podPrefab: {fileID: 2007875823429963842, guid: 78558a671938f5940976525071751f5f, type: 3}
+  input: {fileID: 12555983524666578}
+  rigidBody: {fileID: 9192427627125825943}
   carController: {fileID: 2635220521126351491}
   robotController: {fileID: 1860573053989788979}
   structureBuilder: {fileID: 2737165017878004224}
@@ -3756,8 +3758,9 @@ MonoBehaviour:
   clipMinRPM: 1000
   clipMaxRPM: 5500
   clipRPMStep: 500
+  startDelay: 1
   carEngineSfxSettings:
-    volume: 0.07
+    volume: 0.05
     volumeSmoothSpeed: 10
     minRPM: 1000
     maxRPM: 5500
@@ -3768,7 +3771,7 @@ MonoBehaviour:
     pitchSmoothSpeed: 12
     maxSpeedMultiplier: 2
   robotEngineSfxSettings:
-    volume: 0.07
+    volume: 0.05
     volumeSmoothSpeed: 10
     minRPM: 2000
     maxRPM: 3500
@@ -5150,14 +5153,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 4622429249202919993}
     m_Modifications:
     - target: {fileID: 1883064543651762630, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
-      propertyPath: m_PropertySheet.m_Vector2f.m_Array.Array.data[0].m_Value.x
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1883064543651762630, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
-      propertyPath: m_PropertySheet.m_Vector2f.m_Array.Array.data[0].m_Value.y
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1883064543651762630, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
       propertyPath: m_PropertySheet.m_Vector2f.m_Array.Array.data[2].m_Value.x
       value: 0.4
       objectReference: {fileID: 0}
@@ -5323,6 +5318,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4622429249202919993}
     m_Modifications:
+    - target: {fileID: 1883064543651762630, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_PropertySheet.m_Vector2f.m_Array.Array.data[0].m_Value.x
+      value: 1.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 1883064543651762630, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
+      propertyPath: m_PropertySheet.m_Vector2f.m_Array.Array.data[0].m_Value.y
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2362062362309554246, guid: efcd71e5284033942944a3b37ff44a7a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.358

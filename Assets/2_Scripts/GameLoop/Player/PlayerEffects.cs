@@ -31,6 +31,7 @@ namespace ProjectWallE.GameLoop.Player
         [SerializeField] private AudioSource jumpAudioSource;
         [SerializeField, AutoGetParent, HideInInspector] private PlayerManager player;
 
+        private ControllerType _lastControllerType;
         private Material[] _materials;
         private bool[] _tireEffectsPlaying;
         private ParticleSystem[] _activeTireEffects;
@@ -53,6 +54,7 @@ namespace ProjectWallE.GameLoop.Player
                 }
             }
             _materials = mats.ToArray();
+            if (player) _lastControllerType = player.ControllerType;
         }
 
         private void OnEnable()
@@ -134,7 +136,8 @@ namespace ProjectWallE.GameLoop.Player
         private void OnControllerChanged(ControllerType type)
         {
             carBoostEffect?.Stop(boostAudioSource);
-            if (player.ControllerType != type) AudioLibrary.PlayOnSource(changeStateSoundId, changeStateAudioSource);
+            if (_lastControllerType != type) AudioLibrary.PlayOnSource(changeStateSoundId, changeStateAudioSource);
+            _lastControllerType = type;
             StopAllTireEffects();
             _activeTireEffects = type == ControllerType.Robot ? robotTireEffects : carTireEffects;
             _tireEffectsPlaying = new bool[_activeTireEffects.Length];

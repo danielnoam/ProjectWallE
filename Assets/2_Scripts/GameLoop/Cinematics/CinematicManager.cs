@@ -15,6 +15,7 @@ namespace ProjectWallE
         private CinematicController _activeController;
         private PlayableDirector _activeDirector;
         private bool _pausedLevelTimeline;
+        private bool _showUIAfter;
 
         public bool IsPlaying => _activeDirector;
 
@@ -33,18 +34,19 @@ namespace ProjectWallE
             if (_activeDirector) _activeDirector.stopped -= OnDirectorStopped;
         }
 
-        public void Play(CinematicController controller)
+        public void Play(CinematicController controller, bool pauseLevelTimeline = true, bool hideUI = true, bool showUIAfter = true)
         {
             if (!controller || !controller.Director || _activeDirector) return;
 
             _activeController = controller;
             _activeDirector = controller.Director;
-            _pausedLevelTimeline = controller.PauseLevelTimeline;
+            _pausedLevelTimeline = pauseLevelTimeline;
+            _showUIAfter = showUIAfter;
 
             PlayerManager.Instance?.SetCinematicMode(true);
             CameraManager.Instance?.SetCinematicMode(true);
             if (_pausedLevelTimeline) LevelManager.Instance?.PauseTimeline();
-            if (controller.HideUI) UIManager.Instance?.SetHudVisible(false);
+            if (hideUI) UIManager.Instance?.SetHudVisible(false);
 
             OnCinematicStarted?.Invoke();
 
@@ -66,7 +68,7 @@ namespace ProjectWallE
             if (_pausedLevelTimeline) LevelManager.Instance?.ResumeTimeline();
             PlayerManager.Instance?.SetCinematicMode(false);
             CameraManager.Instance?.SetCinematicMode(false);
-            if (_activeController.HideUI) UIManager.Instance?.SetHudVisible(true);
+            if (_showUIAfter) UIManager.Instance?.SetHudVisible(true);
 
             _activeController = null;
             _activeDirector = null;
