@@ -163,7 +163,7 @@ MonoBehaviour:
     exposedName: 504f165e-7b73-44fa-b265-32355d1866c1
     defaultValue: {fileID: 0}
   spawnPointState: 1
---- !u!114 &-5735134651454888018
+--- !u!114 &-6020714892273920384
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -172,12 +172,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b133581235511ad42b383144dc9e11df, type: 3}
-  m_Name: Toggle UI Marker
-  m_EditorClassIdentifier: Assembly-CSharp::ToggleUIMarker
-  m_Time: 6.25
+  m_Script: {fileID: 11500000, guid: 0719f2ee49b73944a87815d9fcd7aa4a, type: 3}
+  m_Name: Presentation Marker
+  m_EditorClassIdentifier: Assembly-CSharp::PresentationMarker
+  m_Time: 5.5
   skipInEditor: 0
-  uiVisible: 1
+  ui: 1
+  music: 1
+  musicTrackId: 
+  effectSequence: {fileID: 0}
 --- !u!114 &-4439777815015289429
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -198,6 +201,12 @@ MonoBehaviour:
   pauseLevelTimeline: 1
   hideUI: 1
   showUIAfter: 0
+  music: 2
+  musicTrackId: 
+  musicAfter: 0
+  musicAfterTrackId: 
+  effectSequenceBefore: {fileID: 0}
+  effectSequenceAfter: {fileID: 0}
 --- !u!114 &-3239118803876111203
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -880,7 +889,7 @@ MonoBehaviour:
     - {fileID: 6920507047434961457}
     - {fileID: 7140578972162876505}
     - {fileID: -1633251076649146572}
-    - {fileID: -5735134651454888018}
+    - {fileID: -6020714892273920384}
 --- !u!114 &5691303165561134707
 MonoBehaviour:
   m_ObjectHideFlags: 1

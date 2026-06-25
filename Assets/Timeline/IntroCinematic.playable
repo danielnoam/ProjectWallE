@@ -372,6 +372,7 @@ MonoBehaviour:
   m_Markers:
     m_Objects:
     - {fileID: -3423622092326851819}
+    - {fileID: 7285870555496070030}
 --- !u!114 &3299989216633632982
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -621,6 +622,24 @@ MonoBehaviour:
   skipInEditor: 0
   featuresToEnable: 0
   featuresToDisable: 0
+--- !u!114 &7285870555496070030
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0719f2ee49b73944a87815d9fcd7aa4a, type: 3}
+  m_Name: Presentation Marker
+  m_EditorClassIdentifier: Assembly-CSharp::PresentationMarker
+  m_Time: 0
+  skipInEditor: 0
+  ui: 0
+  music: 0
+  musicTrackId: 
+  effectSequence: {fileID: 11400000, guid: 2068b100edde37c4382a0b06d7283efd, type: 2}
 --- !u!114 &7862011037116891823
 MonoBehaviour:
   m_ObjectHideFlags: 1

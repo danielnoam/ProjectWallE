@@ -1,4 +1,5 @@
 using System;
+using DNExtensions.Systems.VFXManager;
 using ProjectWallE.UI;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -16,6 +17,9 @@ namespace ProjectWallE
         private PlayableDirector _activeDirector;
         private bool _pausedLevelTimeline;
         private bool _showUIAfter;
+        private MusicManager.MusicAction _musicAfter;
+        private string _musicAfterTrackId;
+        private EffectSequence _effectSequenceAfter;
 
         public bool IsPlaying => _activeDirector;
 
@@ -34,7 +38,9 @@ namespace ProjectWallE
             if (_activeDirector) _activeDirector.stopped -= OnDirectorStopped;
         }
 
-        public void Play(CinematicController controller, bool pauseLevelTimeline = true, bool hideUI = true, bool showUIAfter = true)
+        public void Play(CinematicController controller, bool pauseLevelTimeline = true, bool hideUI = true, bool showUIAfter = true,
+            MusicManager.MusicAction musicAfter = MusicManager.MusicAction.None, string musicAfterTrackId = null,
+            EffectSequence effectSequenceAfter = null)
         {
             if (!controller || !controller.Director || _activeDirector) return;
 
@@ -42,6 +48,9 @@ namespace ProjectWallE
             _activeDirector = controller.Director;
             _pausedLevelTimeline = pauseLevelTimeline;
             _showUIAfter = showUIAfter;
+            _musicAfter = musicAfter;
+            _musicAfterTrackId = musicAfterTrackId;
+            _effectSequenceAfter = effectSequenceAfter;
 
             PlayerManager.Instance?.SetCinematicMode(true);
             CameraManager.Instance?.SetCinematicMode(true);
@@ -69,6 +78,8 @@ namespace ProjectWallE
             PlayerManager.Instance?.SetCinematicMode(false);
             CameraManager.Instance?.SetCinematicMode(false);
             if (_showUIAfter) UIManager.Instance?.SetHudVisible(true);
+            MusicManager.Instance?.Execute(_musicAfter, _musicAfterTrackId);
+            if (_effectSequenceAfter) _effectSequenceAfter.PlaySequence();
 
             _activeController = null;
             _activeDirector = null;

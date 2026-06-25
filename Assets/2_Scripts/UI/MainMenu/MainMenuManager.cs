@@ -23,7 +23,6 @@ namespace ProjectWallE.UI
         [SerializeField] private Button quitButton;
         [SerializeField] private SceneField gameScene;
         [SerializeField] private EffectSequence fadeOutSequence;
-        [SerializeField] private EffectSequence fadeInSequence;
 
         [Header("Options")]
         [SerializeField] private Screen optionsScreen;
@@ -59,7 +58,7 @@ namespace ProjectWallE.UI
 
         private void Play()
         {
-            TransitionManager.TransitionToScene(gameScene, fadeOutSequence, fadeInSequence);
+            TransitionManager.TransitionToScene(gameScene, fadeOutSequence);
         }
         
         private void Quit()

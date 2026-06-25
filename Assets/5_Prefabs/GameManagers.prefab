@@ -244,6 +244,56 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelManager
   initializeDelay: 0.1
   timeline: {fileID: 4965267845722546262}
+--- !u!1 &3497318775421843429
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8181233142676698093}
+  - component: {fileID: 6269382667352037103}
+  m_Layer: 0
+  m_Name: MusicManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8181233142676698093
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3497318775421843429}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 657412859967765425}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6269382667352037103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3497318775421843429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 466f66aa0038eb84386574947906a484, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.MusicManager
+  fadeDuration: 1
+  crossfade: 1
+  gameplayTracks:
+  - 
+  - 
+  - 
 --- !u!1 &3503836410232390380
 GameObject:
   m_ObjectHideFlags: 0
@@ -277,6 +327,7 @@ Transform:
   - {fileID: 5608354696665497002}
   - {fileID: 3422018339412630424}
   - {fileID: 4081047278312226139}
+  - {fileID: 8181233142676698093}
   - {fileID: 8943066122226039738}
   - {fileID: 3553430490081365388}
   - {fileID: 359828501323001629}

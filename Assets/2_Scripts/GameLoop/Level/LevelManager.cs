@@ -92,7 +92,6 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
     public void SetPlayerSpawnPoint(PlayerSpawnPoint playerSpawnPoint)
     {
         _activePlayerSpawnPoint = playerSpawnPoint;
-        Debug.Log($"Active spawn point updated");
     }
 
     public void PauseTimeline()
