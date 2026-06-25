@@ -1,5 +1,4 @@
 using System;
-using DNExtensions.Systems.AudioTrack;
 using DNExtensions.Systems.VFXManager;
 using DNExtensions.Utilities;
 using ProjectWallE;
@@ -19,9 +18,9 @@ public class PlayCinematicMarker : BaseLevelEventMarker
 
     [Header("Music")]
     [SerializeField] private MusicManager.MusicAction music = MusicManager.MusicAction.None;
-    [SerializeField, ShowIf("music", MusicManager.MusicAction.PlaySpecific), AudioTrackID] private string musicTrackId;
+    [SerializeField, ShowIf("music", MusicManager.MusicAction.PlaySpecific)] private AudioClip musicClip;
     [SerializeField, Tooltip("Music action applied when the cinematic ends")] private MusicManager.MusicAction musicAfter = MusicManager.MusicAction.None;
-    [SerializeField, ShowIf("musicAfter", MusicManager.MusicAction.PlaySpecific), AudioTrackID] private string musicAfterTrackId;
+    [SerializeField, ShowIf("musicAfter", MusicManager.MusicAction.PlaySpecific)] private AudioClip musicAfterClip;
 
     [Header("Effects")]
     [SerializeField, Tooltip("Effect sequence played when the cinematic starts")] private EffectSequence effectSequenceBefore;
@@ -32,9 +31,9 @@ public class PlayCinematicMarker : BaseLevelEventMarker
         var controller = cinematic.Resolve(resolver);
         if (!controller) return;
 
-        MusicManager.Instance?.Execute(music, musicTrackId);
+        MusicManager.Instance?.Execute(music, musicClip);
         if (effectSequenceBefore) effectSequenceBefore.PlaySequence();
 
-        CinematicManager.Instance?.Play(controller, pauseLevelTimeline, hideUI, showUIAfter, musicAfter, musicAfterTrackId, effectSequenceAfter);
+        CinematicManager.Instance?.Play(controller, pauseLevelTimeline, hideUI, showUIAfter, musicAfter, musicAfterClip, effectSequenceAfter);
     }
 }

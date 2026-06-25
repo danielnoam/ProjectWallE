@@ -178,8 +178,26 @@ MonoBehaviour:
   m_Time: 5.5
   skipInEditor: 0
   ui: 1
-  music: 1
-  musicTrackId: 
+  music: 0
+  musicClip: {fileID: 0}
+  effectSequence: {fileID: 0}
+--- !u!114 &-5993400811668898650
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0719f2ee49b73944a87815d9fcd7aa4a, type: 3}
+  m_Name: Presentation Marker
+  m_EditorClassIdentifier: Assembly-CSharp::PresentationMarker
+  m_Time: 9.666666666666666
+  skipInEditor: 0
+  ui: 0
+  music: 3
+  musicClip: {fileID: 0}
   effectSequence: {fileID: 0}
 --- !u!114 &-4439777815015289429
 MonoBehaviour:
@@ -202,9 +220,9 @@ MonoBehaviour:
   hideUI: 1
   showUIAfter: 0
   music: 2
-  musicTrackId: 
+  musicClip: {fileID: 8300000, guid: d3870a2635a4e8041af57cf5d950fed1, type: 3}
   musicAfter: 0
-  musicAfterTrackId: 
+  musicAfterClip: {fileID: 0}
   effectSequenceBefore: {fileID: 0}
   effectSequenceAfter: {fileID: 0}
 --- !u!114 &-3239118803876111203
@@ -269,6 +287,24 @@ MonoBehaviour:
   m_Clips: []
   m_Markers:
     m_Objects: []
+--- !u!114 &-2268058187431284751
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0719f2ee49b73944a87815d9fcd7aa4a, type: 3}
+  m_Name: Presentation Marker
+  m_EditorClassIdentifier: Assembly-CSharp::PresentationMarker
+  m_Time: 10.65
+  skipInEditor: 0
+  ui: 0
+  music: 1
+  musicClip: {fileID: 0}
+  effectSequence: {fileID: 0}
 --- !u!114 &-1998375400032350353
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -622,12 +658,12 @@ MonoBehaviour:
   m_Time: 15.133333333333344
   skipInEditor: 0
   objectives:
-  - rid: 1993976625937514497
+  - rid: 3914034380878118995
   references:
     version: 2
     RefIds:
-    - rid: 1993976625937514497
-      type: {class: KillEnemiesObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+    - rid: 3914034380878118995
+      type: {class: KillAllEnemiesObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         objectiveMarker:
           exposedName: 
@@ -638,20 +674,7 @@ MonoBehaviour:
           isSet: 0
           hideWhenUnchecked: 0
           value: 
-        enemyPrefab: {fileID: 0}
-        killCount: 10
-        spawnEnemies: 0
-        spawner:
-          spawnInterval: 3
-          spawnParams:
-            enemyType: 0
-            count: 3
-            enemies:
-              internalItems: []
-            enemyEntries: []
-            spawnPosition: 0
-            spawnPoints:
-              internalItems: []
+        completionDelay: 2
 --- !u!114 &2869200150117115032
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -798,12 +821,12 @@ MonoBehaviour:
   m_Time: 17.099999999999994
   skipInEditor: 0
   objectives:
-  - rid: 4199866606093860868
+  - rid: 3914034380878118994
   references:
     version: 2
     RefIds:
-    - rid: 4199866606093860868
-      type: {class: KillEnemiesObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+    - rid: 3914034380878118994
+      type: {class: KillAllEnemiesObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         objectiveMarker:
           exposedName: 
@@ -814,20 +837,7 @@ MonoBehaviour:
           isSet: 0
           hideWhenUnchecked: 0
           value: 
-        enemyPrefab: {fileID: 0}
-        killCount: 15
-        spawnEnemies: 0
-        spawner:
-          spawnInterval: 3
-          spawnParams:
-            enemyType: 0
-            count: 3
-            enemies:
-              internalItems: []
-            enemyEntries: []
-            spawnPosition: 0
-            spawnPoints:
-              internalItems: []
+        completionDelay: 3
 --- !u!114 &5586992869872184875
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -890,6 +900,8 @@ MonoBehaviour:
     - {fileID: 7140578972162876505}
     - {fileID: -1633251076649146572}
     - {fileID: -6020714892273920384}
+    - {fileID: -2268058187431284751}
+    - {fileID: -5993400811668898650}
 --- !u!114 &5691303165561134707
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1093,12 +1105,12 @@ MonoBehaviour:
   m_Time: 19.11666666666659
   skipInEditor: 0
   objectives:
-  - rid: 4199866606093860869
+  - rid: 3914034380878118993
   references:
     version: 2
     RefIds:
-    - rid: 4199866606093860869
-      type: {class: KillEnemiesObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+    - rid: 3914034380878118993
+      type: {class: KillAllEnemiesObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
         objectiveMarker:
           exposedName: 
@@ -1109,20 +1121,7 @@ MonoBehaviour:
           isSet: 0
           hideWhenUnchecked: 0
           value: 
-        enemyPrefab: {fileID: 0}
-        killCount: 15
-        spawnEnemies: 0
-        spawner:
-          spawnInterval: 3
-          spawnParams:
-            enemyType: 0
-            count: 3
-            enemies:
-              internalItems: []
-            enemyEntries: []
-            spawnPosition: 0
-            spawnPoints:
-              internalItems: []
+        completionDelay: 3
 --- !u!114 &7703248174679813625
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -288,12 +288,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 466f66aa0038eb84386574947906a484, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.MusicManager
-  fadeDuration: 1
+  fadeDuration: 2
+  stopFadeDuration: 3
   crossfade: 1
+  volume: 0.35
+  mixerGroup: {fileID: -3848042322793387953, guid: 6d307fcdc9063864f92ead1a27b76789, type: 2}
   gameplayTracks:
-  - 
-  - 
-  - 
+  - {fileID: 8300000, guid: a216688394b870c46a63f7f62798d31b, type: 3}
+  - {fileID: 8300000, guid: 3685fb3f38911af47abdeb4bbecb76ef, type: 3}
 --- !u!1 &3503836410232390380
 GameObject:
   m_ObjectHideFlags: 0

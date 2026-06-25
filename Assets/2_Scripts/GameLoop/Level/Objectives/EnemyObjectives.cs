@@ -64,7 +64,7 @@ namespace ProjectWallE.GameLoop
         private bool _hasSeenEnemy;
 
         public override string Description => "Kill all enemies";
-        public override string ProgressText => IsCompleted ? "Complete" : $"{EnemyManager.Instance.ActiveEnemiesCount} remaining";
+        public override string ProgressText => IsCompleted ? "Complete" : $"{EnemyManager.Instance.ActiveEnemiesCount}";
 
         protected override string DefaultTutorialText => "";
 

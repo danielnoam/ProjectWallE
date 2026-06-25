@@ -18,7 +18,7 @@ namespace ProjectWallE
         private bool _pausedLevelTimeline;
         private bool _showUIAfter;
         private MusicManager.MusicAction _musicAfter;
-        private string _musicAfterTrackId;
+        private AudioClip _musicAfterClip;
         private EffectSequence _effectSequenceAfter;
 
         public bool IsPlaying => _activeDirector;
@@ -39,7 +39,7 @@ namespace ProjectWallE
         }
 
         public void Play(CinematicController controller, bool pauseLevelTimeline = true, bool hideUI = true, bool showUIAfter = true,
-            MusicManager.MusicAction musicAfter = MusicManager.MusicAction.None, string musicAfterTrackId = null,
+            MusicManager.MusicAction musicAfter = MusicManager.MusicAction.None, AudioClip musicAfterClip = null,
             EffectSequence effectSequenceAfter = null)
         {
             if (!controller || !controller.Director || _activeDirector) return;
@@ -49,7 +49,7 @@ namespace ProjectWallE
             _pausedLevelTimeline = pauseLevelTimeline;
             _showUIAfter = showUIAfter;
             _musicAfter = musicAfter;
-            _musicAfterTrackId = musicAfterTrackId;
+            _musicAfterClip = musicAfterClip;
             _effectSequenceAfter = effectSequenceAfter;
 
             PlayerManager.Instance?.SetCinematicMode(true);
@@ -78,7 +78,7 @@ namespace ProjectWallE
             PlayerManager.Instance?.SetCinematicMode(false);
             CameraManager.Instance?.SetCinematicMode(false);
             if (_showUIAfter) UIManager.Instance?.SetHudVisible(true);
-            MusicManager.Instance?.Execute(_musicAfter, _musicAfterTrackId);
+            MusicManager.Instance?.Execute(_musicAfter, _musicAfterClip);
             if (_effectSequenceAfter) _effectSequenceAfter.PlaySequence();
 
             _activeController = null;

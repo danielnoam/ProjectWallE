@@ -1,5 +1,4 @@
 using System;
-using DNExtensions.Systems.AudioTrack;
 using DNExtensions.Systems.VFXManager;
 using DNExtensions.Utilities;
 using ProjectWallE;
@@ -17,7 +16,7 @@ public class PresentationMarker : BaseLevelEventMarker
 
     [Header("Music")]
     [SerializeField] private MusicManager.MusicAction music = MusicManager.MusicAction.None;
-    [SerializeField, ShowIf("music", MusicManager.MusicAction.PlaySpecific), AudioTrackID] private string musicTrackId;
+    [SerializeField, ShowIf("music", MusicManager.MusicAction.PlaySpecific)] private AudioClip musicClip;
 
     [Header("Effects")]
     [SerializeField] private EffectSequence effectSequence;
@@ -25,7 +24,7 @@ public class PresentationMarker : BaseLevelEventMarker
     protected override void OnExecute(IExposedPropertyTable resolver = null)
     {
         if (ui != UIAction.None) UIManager.Instance?.SetHudVisible(ui == UIAction.Show);
-        MusicManager.Instance?.Execute(music, musicTrackId);
+        MusicManager.Instance?.Execute(music, musicClip);
         if (effectSequence) effectSequence.PlaySequence();
     }
 }
