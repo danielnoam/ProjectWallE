@@ -183,6 +183,60 @@ public class SetShipSplineMarkerEditor : MarkerEditor
     }
 }
 
+[CustomTimelineEditor(typeof(PlayCinematicMarker))]
+public class PlayCinematicMarkerEditor : MarkerEditor
+{
+    private static readonly Color CinematicColor = new Color(0.95f, 0.15f, 0.55f, 0.9f);
+
+    public override void DrawOverlay(IMarker marker, MarkerUIStates uiState, MarkerOverlayRegion region)
+    {
+        Rect markerRect = region.markerRegion;
+
+        Rect topBar = new Rect(markerRect.x - 2, markerRect.y, markerRect.width + 4, 3);
+        Rect bottomBar = new Rect(markerRect.x - 2, markerRect.yMax - 3, markerRect.width + 4, 3);
+
+        EditorGUI.DrawRect(topBar, CinematicColor);
+        EditorGUI.DrawRect(bottomBar, CinematicColor);
+    }
+
+    public override MarkerDrawOptions GetMarkerOptions(IMarker marker)
+    {
+        var cinematic = marker as PlayCinematicMarker;
+        string tooltip = "Play Cinematic";
+
+        if (cinematic != null && cinematic.PauseLevelTimeline)
+            tooltip += "\nPauses Timeline";
+
+        return new MarkerDrawOptions { tooltip = tooltip };
+    }
+}
+
+[CustomTimelineEditor(typeof(PresentationMarker))]
+public class PresentationMarkerEditor : MarkerEditor
+{
+    private static readonly Color PresentationColor = new Color(0.5f, 0.5f, 0.65f, 0.9f);
+
+    public override void DrawOverlay(IMarker marker, MarkerUIStates uiState, MarkerOverlayRegion region)
+    {
+        Rect markerRect = region.markerRegion;
+
+        Rect leftBar = new Rect(markerRect.x - 2, markerRect.y, 3, markerRect.height);
+        Rect rightBar = new Rect(markerRect.xMax - 1, markerRect.y, 3, markerRect.height);
+
+        EditorGUI.DrawRect(leftBar, PresentationColor);
+        EditorGUI.DrawRect(rightBar, PresentationColor);
+    }
+
+    public override MarkerDrawOptions GetMarkerOptions(IMarker marker)
+    {
+        var presentation = marker as PresentationMarker;
+        return new MarkerDrawOptions
+        {
+            tooltip = presentation != null ? $"Presentation\n{presentation.UI}" : "Presentation"
+        };
+    }
+}
+
 [CustomTimelineEditor(typeof(SetPlayerFeaturesMarker))]
 public class SetPlayerFeaturesMarkerEditor : MarkerEditor
 {

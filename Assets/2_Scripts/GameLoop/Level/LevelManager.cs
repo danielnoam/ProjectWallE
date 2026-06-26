@@ -180,25 +180,28 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
         }
     }
 
-    public void StartObjectives(List<BaseLevelObjective> objectives, IExposedPropertyTable resolver)
+    public List<BaseLevelObjective> StartObjectives(List<BaseLevelObjective> objectives, IExposedPropertyTable resolver, bool pauseTimeline = true)
     {
-        if (objectives == null || objectives.Count == 0) return;
+        if (objectives == null || objectives.Count == 0) return null;
 
-        timeline.Pause();
+        if (pauseTimeline) timeline.Pause();
 
         _activeObjectives ??= new List<BaseLevelObjective>();
 
+        var clones = new List<BaseLevelObjective>(objectives.Count);
         foreach (var objective in objectives)
         {
             if (objective == null) continue;
             var clone = objective.Clone();
             _activeObjectives.Add(clone);
+            clones.Add(clone);
             clone.Initialize(() => OnObjectiveCompleted(clone), resolver);
         }
 
-        if (_activeObjectives == null || _activeObjectives.Count == 0) return;
+        if (clones.Count == 0) return clones;
 
         OnObjectivesAdded?.Invoke(_activeObjectives);
+        return clones;
     }
     
     #endregion

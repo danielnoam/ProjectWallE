@@ -189,19 +189,16 @@ namespace ProjectWallE.GameLoop
     {
         [Header("Settings")]
         [SerializeField, Min(1f)] private float duration = 30f;
-        [SerializeField] private bool spawnEnemies;
-        [SerializeField, ShowIf("spawnEnemies")] private EnemySpawnerConfig spawner;
 
         private float _elapsed;
 
         public override string Description => $"Survive";
         public override string ProgressText => IsCompleted ? "Complete" : $"{_elapsed:F1}s / {duration:F1}s";
-        
+
 
         protected override void OnInitialize(IExposedPropertyTable resolver = null)
         {
             _elapsed = 0f;
-            if (spawnEnemies) spawner.Initialize(resolver);
         }
 
         public override void Tick(float deltaTime)
@@ -210,9 +207,7 @@ namespace ProjectWallE.GameLoop
             if (_elapsed >= duration)
             {
                 Complete();
-                return;
             }
-            if (spawnEnemies) spawner.Tick(deltaTime);
         }
     }
 

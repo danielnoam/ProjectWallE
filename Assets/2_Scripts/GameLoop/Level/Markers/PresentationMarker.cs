@@ -9,7 +9,7 @@ using UnityEngine.Playables;
 [Serializable]
 public class PresentationMarker : BaseLevelEventMarker
 {
-    private enum UIAction { None, Show, Hide }
+    public enum UIAction { None, Show, Hide }
 
     [Header("UI")]
     [SerializeField] private UIAction ui = UIAction.None;
@@ -20,6 +20,8 @@ public class PresentationMarker : BaseLevelEventMarker
 
     [Header("Effects")]
     [SerializeField] private EffectSequence effectSequence;
+
+    public UIAction UI => ui;
 
     protected override void OnExecute(IExposedPropertyTable resolver = null)
     {

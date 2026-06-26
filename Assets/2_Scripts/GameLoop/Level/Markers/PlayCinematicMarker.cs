@@ -26,6 +26,8 @@ public class PlayCinematicMarker : BaseLevelEventMarker
     [SerializeField, Tooltip("Effect sequence played when the cinematic starts")] private EffectSequence effectSequenceBefore;
     [SerializeField, Tooltip("Effect sequence played when the cinematic ends")] private EffectSequence effectSequenceAfter;
 
+    public bool PauseLevelTimeline => pauseLevelTimeline;
+
     protected override void OnExecute(IExposedPropertyTable resolver = null)
     {
         var controller = cinematic.Resolve(resolver);
