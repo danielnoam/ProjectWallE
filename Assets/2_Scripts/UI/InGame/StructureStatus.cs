@@ -38,7 +38,7 @@ namespace ProjectWallE.UI
             if (_structure) _structure.OnDamaged -= OnDamaged;
         }
         
-        private void OnDamaged(float damage)
+        private void OnDamaged(DamageInfo info)
         {
             if (!_structure) return;
             

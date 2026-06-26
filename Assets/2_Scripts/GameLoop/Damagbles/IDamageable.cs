@@ -9,7 +9,7 @@ public interface IDamageable
     bool IsAlive { get; }
     
     public event Action<IDamageable> OnDeath;
-    public event Action<float> OnDamaged;
+    public event Action<DamageInfo> OnDamaged;
     
     public void TakeDamage(float damage, IDamageable attacker = null);
 }

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8574883881445243624}
   - component: {fileID: 2448601663206975914}
   - component: {fileID: 5291571754290868489}
+  - component: {fileID: 459323837650899494}
   - component: {fileID: 8909220601765990049}
   - component: {fileID: 622395889724703068}
   m_Layer: 8
@@ -85,6 +86,19 @@ MonoBehaviour:
   pingStartAlpha: 1
   punchDuration: 0.15
   punchSizeMultiplier: 1.25
+--- !u!114 &459323837650899494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6471506668328617800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73816340e6e07ff41b0944e524d2510e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DamageNumberSource
+  positionOffset: {x: 0, y: 2.5, z: 0}
 --- !u!195 &8909220601765990049
 NavMeshAgent:
   m_ObjectHideFlags: 0

@@ -48,6 +48,18 @@ namespace ProjectWallE.GameLoop
             Vector3 topPoint = transform.position + Vector3.up * 2;
             Handles.DrawLine(transform.position, topPoint);
             Handles.DrawWireDisc(topPoint, Vector3.up, 0.5f);
+            
+            Handles.Label(
+                transform.position + Vector3.up * (2 + 0.5f),
+                "Enemy Spawn Point",
+                new GUIStyle()
+                {
+                    normal = new GUIStyleState() { textColor = Color.red },
+                    fontSize = 12,
+                    fontStyle = FontStyle.Bold,
+                    alignment = TextAnchor.MiddleCenter
+                }
+            );
         }
 
 #endif

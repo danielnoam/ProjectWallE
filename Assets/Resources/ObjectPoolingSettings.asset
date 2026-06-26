@@ -18,7 +18,10 @@ MonoBehaviour:
   hidePoolHolders: 0
   showDebugMessages: 0
   pools:
-  - poolName: Particle_PodDrop
+  - overridePoolName:
+      isSet: 0
+      hideWhenUnchecked: 0
+      value: New Pool
     maxPoolSize: 5
     prefab: {fileID: 5077321802440590743, guid: e6dd420ba061f104abb1af9566d0eb3d, type: 3}
     dontDestroyOnLoad: 0
@@ -33,7 +36,10 @@ MonoBehaviour:
     - sceneAsset: {fileID: 102900000, guid: 164ae12fe25119d498523c1abfe21722, type: 3}
       sceneName: MainLevel
       scenePath: Assets/1_Scenes/MainLevel.unity
-  - poolName: Particle_ProjectileHit
+  - overridePoolName:
+      isSet: 0
+      hideWhenUnchecked: 0
+      value: New Pool
     maxPoolSize: 15
     prefab: {fileID: 1033013279332183554, guid: 9d833e0335f9b0548b713e0ce34d2739, type: 3}
     dontDestroyOnLoad: 0
@@ -48,7 +54,10 @@ MonoBehaviour:
     - sceneAsset: {fileID: 102900000, guid: 164ae12fe25119d498523c1abfe21722, type: 3}
       sceneName: MainLevel
       scenePath: Assets/1_Scenes/MainLevel.unity
-  - poolName: Particle_ProjectileExplostion
+  - overridePoolName:
+      isSet: 0
+      hideWhenUnchecked: 0
+      value: New Pool
     maxPoolSize: 10
     prefab: {fileID: 1033013279332183554, guid: a62798f284250ba4bb103e5058045684, type: 3}
     dontDestroyOnLoad: 0
@@ -63,7 +72,10 @@ MonoBehaviour:
     - sceneAsset: {fileID: 102900000, guid: 164ae12fe25119d498523c1abfe21722, type: 3}
       sceneName: MainLevel
       scenePath: Assets/1_Scenes/MainLevel.unity
-  - poolName: Particle_GroundRobotExplostion
+  - overridePoolName:
+      isSet: 0
+      hideWhenUnchecked: 0
+      value: New Pool
     maxPoolSize: 5
     prefab: {fileID: 1033013279332183554, guid: bc3192087f66d1843972ffff977cece9, type: 3}
     dontDestroyOnLoad: 0
@@ -78,7 +90,10 @@ MonoBehaviour:
     - sceneAsset: {fileID: 102900000, guid: 164ae12fe25119d498523c1abfe21722, type: 3}
       sceneName: MainLevel
       scenePath: Assets/1_Scenes/MainLevel.unity
-  - poolName: Particle_DroneExplostion
+  - overridePoolName:
+      isSet: 0
+      hideWhenUnchecked: 0
+      value: New Pool
     maxPoolSize: 5
     prefab: {fileID: 1033013279332183554, guid: 36e35b6fbcf75e14590c8e707c29401d, type: 3}
     dontDestroyOnLoad: 0
@@ -93,7 +108,10 @@ MonoBehaviour:
     - sceneAsset: {fileID: 102900000, guid: 164ae12fe25119d498523c1abfe21722, type: 3}
       sceneName: MainLevel
       scenePath: Assets/1_Scenes/MainLevel.unity
-  - poolName: Decal_Blast
+  - overridePoolName:
+      isSet: 0
+      hideWhenUnchecked: 0
+      value: New Pool
     maxPoolSize: 5
     prefab: {fileID: 1574840043403846637, guid: e4762635f7768174ea6f494a962e3214, type: 3}
     dontDestroyOnLoad: 0
@@ -108,7 +126,10 @@ MonoBehaviour:
     - sceneAsset: {fileID: 102900000, guid: 164ae12fe25119d498523c1abfe21722, type: 3}
       sceneName: MainLevel
       scenePath: Assets/1_Scenes/MainLevel.unity
-  - poolName: VisualEffect_BigExplosion
+  - overridePoolName:
+      isSet: 0
+      hideWhenUnchecked: 0
+      value: New Pool
     maxPoolSize: 3
     prefab: {fileID: 7098977141073138752, guid: a1bc34ae7782e4b439c0c736b50e6c50, type: 3}
     dontDestroyOnLoad: 0
@@ -123,7 +144,10 @@ MonoBehaviour:
     - sceneAsset: {fileID: 102900000, guid: 164ae12fe25119d498523c1abfe21722, type: 3}
       sceneName: MainLevel
       scenePath: Assets/1_Scenes/MainLevel.unity
-  - poolName: VisualEffect_SmallExplosion
+  - overridePoolName:
+      isSet: 0
+      hideWhenUnchecked: 0
+      value: New Pool
     maxPoolSize: 10
     prefab: {fileID: 7098977141073138752, guid: c8931742fb422eb4d862e8bfe7ea43d5, type: 3}
     dontDestroyOnLoad: 0
@@ -138,7 +162,10 @@ MonoBehaviour:
     - sceneAsset: {fileID: 102900000, guid: 164ae12fe25119d498523c1abfe21722, type: 3}
       sceneName: MainLevel
       scenePath: Assets/1_Scenes/MainLevel.unity
-  - poolName: Enemy_Drone
+  - overridePoolName:
+      isSet: 0
+      hideWhenUnchecked: 0
+      value: New Pool
     maxPoolSize: 100
     prefab: {fileID: 6471506668328617800, guid: 942ec3fb68d51bb418bece848d6bfd88, type: 3}
     dontDestroyOnLoad: 0
@@ -150,7 +177,10 @@ MonoBehaviour:
     - sceneAsset: {fileID: 102900000, guid: 930919521036cc34b9023f5ac1d27770, type: 3}
       sceneName: DanielScene
       scenePath: Assets/1_Scenes/DanielScene.unity
-  - poolName: Enemy_Roller
+  - overridePoolName:
+      isSet: 0
+      hideWhenUnchecked: 0
+      value: New Pool
     maxPoolSize: 100
     prefab: {fileID: 6471506668328617800, guid: 83a877ad3335ba24198f58c9720f05c5, type: 3}
     dontDestroyOnLoad: 0
@@ -162,7 +192,10 @@ MonoBehaviour:
     - sceneAsset: {fileID: 102900000, guid: 930919521036cc34b9023f5ac1d27770, type: 3}
       sceneName: DanielScene
       scenePath: Assets/1_Scenes/DanielScene.unity
-  - poolName: Enemy_Rover
+  - overridePoolName:
+      isSet: 0
+      hideWhenUnchecked: 0
+      value: New Pool
     maxPoolSize: 100
     prefab: {fileID: 6471506668328617800, guid: 311465a237bc47a4a80317173bf23667, type: 3}
     dontDestroyOnLoad: 0
@@ -174,7 +207,10 @@ MonoBehaviour:
     - sceneAsset: {fileID: 102900000, guid: 930919521036cc34b9023f5ac1d27770, type: 3}
       sceneName: DanielScene
       scenePath: Assets/1_Scenes/DanielScene.unity
-  - poolName: Enemy_Tank
+  - overridePoolName:
+      isSet: 0
+      hideWhenUnchecked: 0
+      value: New Pool
     maxPoolSize: 100
     prefab: {fileID: 6471506668328617800, guid: 9e63c2e032022934290829d686f0c357, type: 3}
     dontDestroyOnLoad: 0
@@ -186,7 +222,10 @@ MonoBehaviour:
     - sceneAsset: {fileID: 102900000, guid: 930919521036cc34b9023f5ac1d27770, type: 3}
       sceneName: DanielScene
       scenePath: Assets/1_Scenes/DanielScene.unity
-  - poolName: Projectile_Big
+  - overridePoolName:
+      isSet: 0
+      hideWhenUnchecked: 0
+      value: New Pool
     maxPoolSize: 50
     prefab: {fileID: 7389837232072127272, guid: 5bd177565f170f8498a68ad83c8892d2, type: 3}
     dontDestroyOnLoad: 0
@@ -201,7 +240,10 @@ MonoBehaviour:
     - sceneAsset: {fileID: 102900000, guid: 930919521036cc34b9023f5ac1d27770, type: 3}
       sceneName: DanielScene
       scenePath: Assets/1_Scenes/DanielScene.unity
-  - poolName: Projectile_Player
+  - overridePoolName:
+      isSet: 0
+      hideWhenUnchecked: 0
+      value: New Pool
     maxPoolSize: 50
     prefab: {fileID: 7389837232072127272, guid: 3c09a670e7ef45449a66861350c5473d, type: 3}
     dontDestroyOnLoad: 0
@@ -216,7 +258,10 @@ MonoBehaviour:
     - sceneAsset: {fileID: 102900000, guid: 930919521036cc34b9023f5ac1d27770, type: 3}
       sceneName: DanielScene
       scenePath: Assets/1_Scenes/DanielScene.unity
-  - poolName: Projectile_Enemy
+  - overridePoolName:
+      isSet: 0
+      hideWhenUnchecked: 0
+      value: New Pool
     maxPoolSize: 50
     prefab: {fileID: 7389837232072127272, guid: 63924ffbc4055854e89c01d29a67c183, type: 3}
     dontDestroyOnLoad: 0
@@ -231,7 +276,10 @@ MonoBehaviour:
     - sceneAsset: {fileID: 102900000, guid: 930919521036cc34b9023f5ac1d27770, type: 3}
       sceneName: DanielScene
       scenePath: Assets/1_Scenes/DanielScene.unity
-  - poolName: Projectile_GunTurret
+  - overridePoolName:
+      isSet: 0
+      hideWhenUnchecked: 0
+      value: New Pool
     maxPoolSize: 50
     prefab: {fileID: 7389837232072127272, guid: a1752dc8415671e44971b23bf4feb726, type: 3}
     dontDestroyOnLoad: 0
@@ -239,6 +287,24 @@ MonoBehaviour:
     recycleActiveObjects: 1
     preWarmPool: 1
     preWarmPoolSize: 15
+    scenesToPreWarm:
+    - sceneAsset: {fileID: 102900000, guid: 164ae12fe25119d498523c1abfe21722, type: 3}
+      sceneName: MainLevel
+      scenePath: Assets/1_Scenes/MainLevel.unity
+    - sceneAsset: {fileID: 102900000, guid: 930919521036cc34b9023f5ac1d27770, type: 3}
+      sceneName: DanielScene
+      scenePath: Assets/1_Scenes/DanielScene.unity
+  - overridePoolName:
+      isSet: 0
+      hideWhenUnchecked: 0
+      value: New Pool
+    maxPoolSize: 20
+    prefab: {fileID: 8622362201098710580, guid: d1d3bc6e498432248b8113b06db5f6aa, type: 3}
+    dontDestroyOnLoad: 0
+    usePoolHolder: 1
+    recycleActiveObjects: 1
+    preWarmPool: 1
+    preWarmPoolSize: 20
     scenesToPreWarm:
     - sceneAsset: {fileID: 102900000, guid: 164ae12fe25119d498523c1abfe21722, type: 3}
       sceneName: MainLevel

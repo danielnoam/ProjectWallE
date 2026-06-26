@@ -214,9 +214,9 @@ namespace ProjectWallE
             _activePod.OnDeploy -= OnPodFinished;
         }
         
-        private void OnDamaged(float damage)
+        private void OnDamaged(DamageInfo info)
         {
-            if (damage <= 0) return;
+            if (info.Amount <= 0) return;
             impulseSource?.GenerateImpulse(damageImpulseSettings);
         }
         

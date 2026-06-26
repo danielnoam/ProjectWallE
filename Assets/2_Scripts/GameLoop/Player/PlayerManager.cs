@@ -95,7 +95,7 @@ namespace ProjectWallE
         public event Action<IDamageable> OnDeath;
         public event Action OnSpawn;
         public event Action OnRespawnPodCalled;
-        public event Action<float> OnDamaged;
+        public event Action<DamageInfo> OnDamaged;
         public event Action<ControllerType> OnControllerChanged;
         public event Action<float, float> OnHealthChanged;
         public event Action OnControllerSwitchFailed;
@@ -365,7 +365,7 @@ namespace ProjectWallE
             _currentHealth -= damage;
             _lastDamageTime = Time.time;
 
-            OnDamaged?.Invoke(damage);
+            OnDamaged?.Invoke(new DamageInfo(damage, transform.position));
 
             if (_currentHealth <= 0) Die(attacker);
 

@@ -73,7 +73,7 @@ namespace ProjectWallE.GameLoop
         public Pod PodPrefab => podPrefab;
 
         public event Action<IDamageable> OnDeath;
-        public event Action<float> OnDamaged;
+        public event Action<DamageInfo> OnDamaged;
 
         private void OnValidate() => AutoGetSystem.Process(this);
 
@@ -206,10 +206,10 @@ namespace ProjectWallE.GameLoop
             return retaliationStrategy?.ShouldRetarget(CurrentTarget, attacker) ?? false;
         }
 
-        private void ApplyDamage(float damage, IDamageable attacker)
+        private void ApplyDamage(float damage, IDamageable attacker, bool isCritical = false, Vector3? hitPosition = null)
         {
             _currentHealth -= damage;
-            OnDamaged?.Invoke(damage);
+            OnDamaged?.Invoke(new DamageInfo(damage, hitPosition ?? transform.position, isCritical, attacker));
             OnEnemyDamaged?.Invoke(attacker);
 
             if (attacker != null && attacker != CurrentTarget && ShouldRetaliate(attacker))
@@ -232,7 +232,7 @@ namespace ProjectWallE.GameLoop
             float multiplier = isCritical ? 2f : 1f;
 
             damageEffects?.Play(transform.position, relay.Materials);
-            ApplyDamage(damage * multiplier, attacker);
+            ApplyDamage(damage * multiplier, attacker, isCritical, relay.transform.position);
         }
 
         public void TakeDamage(float damage, IDamageable attacker = null)

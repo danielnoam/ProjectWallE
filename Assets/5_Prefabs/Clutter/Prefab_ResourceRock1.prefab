@@ -177,6 +177,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 573442b838fdcba4080f80f33b114fd4, type: 3}
       insertIndex: -1
       addedObject: {fileID: 728664008368868911}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 573442b838fdcba4080f80f33b114fd4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -86734271106502095}
   m_SourcePrefab: {fileID: 100100000, guid: 573442b838fdcba4080f80f33b114fd4, type: 3}
 --- !u!23 &5072832496208480937 stripped
 MeshRenderer:
@@ -233,7 +236,6 @@ MonoBehaviour:
     punchStrength: 1
     punchDuration: 0.15
     punchEase: 1
-    emissionColor: {fileID: 0}
     materialColor: {fileID: 11400000, guid: 0d33900380d8b0e49b8a599c7a45fd73, type: 2}
     hitSoundId: ProjectileCollision
   destroyEffect:
@@ -242,3 +244,16 @@ MonoBehaviour:
     triggerParticle: {fileID: 0}
     soundId: ProjectileCollision
   rend: {fileID: 5072832496208480937}
+--- !u!114 &-86734271106502095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6730258244586908540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73816340e6e07ff41b0944e524d2510e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DamageNumberSource
+  positionOffset: {x: 0, y: 2, z: 0}

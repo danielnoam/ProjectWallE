@@ -16,7 +16,7 @@ public class EnemyDamageRelay : MonoBehaviour, IDamageable
     // disabled warning for this event because its never used but is part of the interface
     #pragma warning disable 0067
     public event Action<IDamageable> OnDeath;
-    public event Action<float> OnDamaged;
+    public event Action<DamageInfo> OnDamaged;
     #pragma warning restore 0067
 
     private void Awake()

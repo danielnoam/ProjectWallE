@@ -83,7 +83,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployableWithPod
     public Team Team => Team.Player;
     
     public event Action<IDamageable> OnDeath;
-    public event Action<float> OnDamaged;
+    public event Action<DamageInfo> OnDamaged;
 
     protected virtual void OnBuild() {}
     protected virtual void OnFix() {}
@@ -204,7 +204,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployableWithPod
         radarTarget?.PunchBlip(Color.orangeRed);
         damageEffects?.Play(transform.position, _materials);
         CurrentHealth -= damage;
-        OnDamaged?.Invoke(damage);
+        OnDamaged?.Invoke(new DamageInfo(damage, transform.position));
         
         if (CurrentHealth <= 0)
         {

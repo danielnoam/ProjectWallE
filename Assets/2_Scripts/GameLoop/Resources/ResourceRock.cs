@@ -22,7 +22,7 @@ public class ResourceRock : MonoBehaviour, IDamageable
     public Team Team => Team.Neutral;
     
     public event Action<IDamageable> OnDeath;
-    public event Action<float> OnDamaged;
+    public event Action<DamageInfo> OnDamaged;
     
     
     private void Awake()
@@ -45,7 +45,7 @@ public class ResourceRock : MonoBehaviour, IDamageable
 
         _currentHealth -= damage;
         damageEffects?.Play(transform.position, _material);
-        OnDamaged?.Invoke(damage);
+        OnDamaged?.Invoke(new DamageInfo(damage, transform.position));
 
         if (_currentHealth <= 0)
             DestroySelf();

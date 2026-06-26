@@ -106,9 +106,9 @@ namespace ProjectWallE.GameLoop.Player
             StopAllTireEffects();
         }
 
-        private void OnDamaged(float damage)
+        private void OnDamaged(DamageInfo info)
         {
-            if (damage <= 0) return;
+            if (info.Amount <= 0) return;
             damageEffects?.Play(transform.position, _materials);
         }
 

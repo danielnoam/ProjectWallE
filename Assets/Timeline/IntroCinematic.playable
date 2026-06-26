@@ -363,6 +363,7 @@ MonoBehaviour:
     m_Objects:
     - {fileID: 7285870555496070030}
     - {fileID: -1809721622289267498}
+    - {fileID: 5454327079196661484}
 --- !u!114 &3299989216633632982
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -417,6 +418,24 @@ MonoBehaviour:
   structureSpawnPoint:
     exposedName: e32132410ce5c3e4bba6552b73d91d5d
     defaultValue: {fileID: 0}
+--- !u!114 &5454327079196661484
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4c4598ba7b6c864bbc021a79a1f48d2, type: 3}
+  m_Name: Show Cinematic Caption Marker
+  m_EditorClassIdentifier: Assembly-CSharp::ShowCinematicCaptionMarker
+  m_Time: 1.3333333333333333
+  skipInEditor: 0
+  text: Test text about an importent mission on a far away planet
+  duration: 4
+  fadeIn: 0.3
+  fadeOut: 0.3
 --- !u!114 &6138156276450442711
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -12,7 +12,12 @@ namespace ProjectWallE.UI
         [SerializeField] private CanvasGroup hudCanvasGroup;
         [SerializeField] private float fadeDuration = 0.35f;
 
-        private Tween _fadeTween;
+        [Header("World Space")]
+        [SerializeField] private CanvasGroup worldSpaceCanvasGroup;
+        [SerializeField] private float worldSpaceFadeDuration = 0.35f;
+
+        private Tween _hudFadeTween;
+        private Tween _worldSpaceFadeTween;
 
         private void Awake()
         {
@@ -26,21 +31,27 @@ namespace ProjectWallE.UI
 
         public void SetHudVisible(bool visible, bool animated = true)
         {
-            if (!hudCanvasGroup) return;
-            if (Mathf.Approximately(hudCanvasGroup.alpha, visible ? 1f : 0f)) return;
+            SetCanvasGroupVisible(hudCanvasGroup, ref _hudFadeTween, visible, fadeDuration, animated);
+            SetCanvasGroupVisible(worldSpaceCanvasGroup, ref _worldSpaceFadeTween, visible, worldSpaceFadeDuration, animated);
+        }
 
-            if (_fadeTween.isAlive) _fadeTween.Stop();
-            
+        private static void SetCanvasGroupVisible(CanvasGroup canvasGroup, ref Tween fadeTween, bool visible, float duration, bool animated)
+        {
+            if (!canvasGroup) return;
+            if (Mathf.Approximately(canvasGroup.alpha, visible ? 1f : 0f)) return;
+
+            if (fadeTween.isAlive) fadeTween.Stop();
+
             if (animated)
             {
-                _fadeTween = Tween.Alpha(hudCanvasGroup, visible ? 1f : 0f, fadeDuration);
+                fadeTween = Tween.Alpha(canvasGroup, visible ? 1f : 0f, duration);
             }
             else
             {
-                hudCanvasGroup.alpha = visible ? 1f : 0f;
+                canvasGroup.alpha = visible ? 1f : 0f;
             }
-            hudCanvasGroup.interactable = visible;
-            hudCanvasGroup.blocksRaycasts = visible;
+            canvasGroup.interactable = visible;
+            canvasGroup.blocksRaycasts = visible;
         }
     }
 }
