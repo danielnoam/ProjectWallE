@@ -56,14 +56,14 @@ namespace ProjectWallE.GameLoop
         private bool _hasSeenEnemy;
 
         public override string Description => "Kill all enemies";
-        public override string ProgressText => IsCompleted ? "Complete" : $"{EnemyManager.Instance.ActiveEnemiesCount}";
+        public override string ProgressText => IsCompleted ? "Complete" : $"{EnemyManager.Instance.ActiveEnemiesCount + EnemyManager.Instance.PendingEnemySpawns}";
 
         protected override string DefaultTutorialText => "";
 
         protected override void OnInitialize(IExposedPropertyTable resolver = null)
         {
             _graceTimer = 0f;
-            _hasSeenEnemy = EnemyManager.Instance.ActiveEnemiesCount > 0;
+            _hasSeenEnemy = EnemyManager.Instance.HasActiveOrPendingEnemies;
             Enemy.OnEnemyKilled += OnEnemyKilled;
         }
 
@@ -76,7 +76,7 @@ namespace ProjectWallE.GameLoop
         {
             if (!_hasSeenEnemy) return;
 
-            if (EnemyManager.Instance.ActiveEnemiesCount == 0)
+            if (!EnemyManager.Instance.HasActiveOrPendingEnemies)
             {
                 _graceTimer += deltaTime;
                 if (_graceTimer >= completionDelay) Complete();

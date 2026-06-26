@@ -173,8 +173,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GroundEnemy
   maxHealth: 350
+  resourceWorth: 25
   canBePushed: 0
-  targetFindRange: 50
+  targetFindRange: 100
   targetRandomOffset: 20
   retargetDestinationThreshold: 25
   targetingStrategies:
@@ -192,14 +193,12 @@ MonoBehaviour:
     punchStrength: 1
     punchDuration: 0.15
     punchEase: 1
-    emissionColor: {fileID: 0}
     materialColor: {fileID: 11400000, guid: 6a0d274f87949b441b5db601f2545d11, type: 2}
     hitSoundId: NormalHit
   criticalDamageEffects:
     punchStrength: 1
     punchDuration: 0.15
     punchEase: 1
-    emissionColor: {fileID: 0}
     materialColor: {fileID: 11400000, guid: 3f65c9359762ee741b27f094dbe4ad68, type: 2}
     hitSoundId: CriticalHit
   deathEffect:
@@ -212,6 +211,7 @@ MonoBehaviour:
   visibilityRenderer: {fileID: 5361789681800789020}
   podPrefab: {fileID: 2007875823429963842, guid: 7b162c145a4df174a80c46a045ab6be6, type: 3}
   rigidBody: {fileID: 2448601663206975914}
+  radarTarget: {fileID: 5291571754290868489}
   navMeshAgent: {fileID: 8909220601765990049}
   references:
     version: 2

@@ -154,10 +154,11 @@ MonoBehaviour:
   maxHealth: 80
   resourceWorth: 25
   canBePushed: 1
-  targetFindRange: 50
+  targetFindRange: 100
   targetRandomOffset: 20
   retargetDestinationThreshold: 25
   targetingStrategies:
+  - rid: 3914034398919655539
   - rid: 6000861380839735769
   - rid: 6000861155382526051
   - rid: 6000861155382526060
@@ -191,10 +192,16 @@ MonoBehaviour:
   visibilityRenderer: {fileID: 1255327730837385236}
   podPrefab: {fileID: 2007875823429963842, guid: 7b162c145a4df174a80c46a045ab6be6, type: 3}
   rigidBody: {fileID: 2448601663206975914}
+  radarTarget: {fileID: 8362893084184174779}
   navMeshAgent: {fileID: 8909220601765990049}
   references:
     version: 2
     RefIds:
+    - rid: 3914034398919655539
+      type: {class: PlayerTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
+      data:
+        inRange: 1
+        weight: 100
     - rid: 6000861155382526051
       type: {class: NearestBaseTarget, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
@@ -218,7 +225,7 @@ MonoBehaviour:
     - rid: 6000861270941368420
       type: {class: ProjectileAttack, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
-        attackRange: 35
+        attackRange: 55
         attackCooldown: 0.5
         firePoint: {fileID: 1150219598074133490}
         soProjectileData: {fileID: 11400000, guid: 8ffdf2f42528d434f91c7d9b565e08fd, type: 2}

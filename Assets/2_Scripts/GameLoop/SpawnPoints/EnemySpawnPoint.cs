@@ -11,14 +11,6 @@ namespace ProjectWallE.GameLoop
 
         public float SpawnPointRange => spawnPointRange;
 
-        private void OnValidate()
-        {
-            if (Application.isPlaying || gameObject.scene.name == null) return;
-
-            gameObject.name = $"EnemySpawnPoint({(isActive ? "Active" : "Not Active")})";
-        }
-
-
         protected override void OnLevelStarted()
         {
             if (isActive)
@@ -50,25 +42,12 @@ namespace ProjectWallE.GameLoop
 
         private void OnDrawGizmos()
         {
-            Handles.color = isActive ? Color.red : Color.gray;
+            Handles.color = !Application.isPlaying || isActive ? Color.red : Color.gray;
             Handles.DrawWireDisc(transform.position, Vector3.up, spawnPointRange);
 
             Vector3 topPoint = transform.position + Vector3.up * 2;
             Handles.DrawLine(transform.position, topPoint);
             Handles.DrawWireDisc(topPoint, Vector3.up, 0.5f);
-
-            var enemyString = $"Enemy Spawn Point: {(isActive ? "Active" : "Not Active")}";
-            Handles.Label(
-                transform.position + Vector3.up * 10,
-                enemyString,
-                new GUIStyle()
-                {
-                    normal = new GUIStyleState() { textColor = Color.red },
-                    fontSize = 14,
-                    fontStyle = FontStyle.Bold,
-                    alignment = TextAnchor.MiddleCenter
-                }
-            );
         }
 
 #endif

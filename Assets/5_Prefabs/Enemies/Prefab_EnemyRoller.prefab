@@ -122,7 +122,7 @@ MonoBehaviour:
   maxHealth: 175
   resourceWorth: 25
   canBePushed: 1
-  targetFindRange: 50
+  targetFindRange: 100
   targetRandomOffset: 20
   retargetDestinationThreshold: 1
   targetingStrategies:
@@ -156,6 +156,7 @@ MonoBehaviour:
   visibilityRenderer: {fileID: 206706519288862166}
   podPrefab: {fileID: 2007875823429963842, guid: 7b162c145a4df174a80c46a045ab6be6, type: 3}
   rigidBody: {fileID: 2448601663206975914}
+  radarTarget: {fileID: 8362893084184174779}
   navMeshAgent: {fileID: 8909220601765990049}
   references:
     version: 2

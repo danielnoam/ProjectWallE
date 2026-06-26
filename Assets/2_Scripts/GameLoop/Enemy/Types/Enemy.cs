@@ -56,6 +56,7 @@ namespace ProjectWallE.GameLoop
         
         
         [SerializeField, AutoGetSelf, HideInInspector] protected Rigidbody rigidBody;
+        [SerializeField, AutoGetSelf, HideInInspector] private RadarTarget radarTarget;
         private readonly List<EnemyDamageRelay> _relays = new();
         private float _currentHealth;
 
@@ -158,6 +159,7 @@ namespace ProjectWallE.GameLoop
             attackStrategy?.Reset();
             CheckForTarget();
             EnemyManager.Instance?.RegisterEnemy(this);
+            radarTarget?.PingBlip();
         }
 
         protected virtual void OnFixedUpdate() { }

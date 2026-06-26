@@ -98,8 +98,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.FlyingAgent
   rotationSpeed: 5
-  moveSpeed: 17
-  acceleration: 10
+  moveSpeed: 25
+  acceleration: 12
   deceleration: 15
   flightHeight: 14
   heightAdjustSpeed: 10
@@ -130,7 +130,7 @@ MonoBehaviour:
   maxHealth: 200
   resourceWorth: 25
   canBePushed: 1
-  targetFindRange: 75
+  targetFindRange: 100
   targetRandomOffset: 20
   retargetDestinationThreshold: 25
   targetingStrategies:
@@ -165,6 +165,7 @@ MonoBehaviour:
   visibilityRenderer: {fileID: 5462120949173186914}
   podPrefab: {fileID: 2007875823429963842, guid: 7b162c145a4df174a80c46a045ab6be6, type: 3}
   rigidBody: {fileID: 2448601663206975914}
+  radarTarget: {fileID: 5663768101188873445}
   stopDistance: 30
   flyingAgent: {fileID: 7364616695804156870}
   references:
@@ -195,7 +196,7 @@ MonoBehaviour:
     - rid: 6000861270941368424
       type: {class: ProjectileAttack, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
-        attackRange: 35
+        attackRange: 55
         attackCooldown: 1
         firePoint: {fileID: 7429042783596894845}
         soProjectileData: {fileID: 11400000, guid: 5aa17da338669a14eba6994821f7b4a8, type: 2}

@@ -28,8 +28,12 @@ public class EnemyManager : MonoBehaviour
     private readonly Dictionary<EnemyBase, Queue<EnemySpawn>> _baseQueues = new Dictionary<EnemyBase, Queue<EnemySpawn>>();
     private readonly Dictionary<EnemyBase, Coroutine> _baseRoutines = new Dictionary<EnemyBase, Coroutine>();
 
+    private int _pendingEnemySpawns;
+
     public int ActiveEnemiesCount => _activeEnemies.Count;
-    
+    public int PendingEnemySpawns => _pendingEnemySpawns;
+    public bool HasActiveOrPendingEnemies => ActiveEnemiesCount > 0 || PendingEnemySpawns > 0;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -46,7 +50,11 @@ public class EnemyManager : MonoBehaviour
 
     private void SpawnEnemy(Enemy enemy, EnemySpawnPoint spawnPoint)
     {
-        if (!enemy || !spawnPoint || _activeEnemies.Count >= maxEnemies) return;
+        if (!enemy || !spawnPoint || _activeEnemies.Count >= maxEnemies)
+        {
+            _pendingEnemySpawns--;
+            return;
+        }
 
         Vector3 spawnOffset = Random.insideUnitSphere * spawnPoint.SpawnPointRange;
         spawnOffset.y = 0f;
@@ -77,6 +85,7 @@ public class EnemyManager : MonoBehaviour
         for (int i = 0; i < enemiesToSpawn; i++)
         {
             var spawn = new EnemySpawn { enemy = source.GetRandomItem(), spawnPoint = spawnPoint };
+            _pendingEnemySpawns++;
 
             if (!enemyBase) SpawnEnemy(spawn.enemy, spawn.spawnPoint);
             else EnqueueSpawn(enemyBase, spawn);
@@ -108,6 +117,7 @@ public class EnemyManager : MonoBehaviour
             yield return new WaitForSeconds(spawnInterval.RandomValue);
         }
 
+        _pendingEnemySpawns -= queue.Count;
         _baseQueues.Remove(enemyBase);
         _baseRoutines.Remove(enemyBase);
     }
@@ -120,8 +130,9 @@ public class EnemyManager : MonoBehaviour
     public void RegisterEnemy(Enemy enemy)
     {
         if (_activeEnemies.Contains(enemy)) return;
-        
+
         _activeEnemies.Add(enemy);
+        _pendingEnemySpawns = Mathf.Max(0, _pendingEnemySpawns - 1);
     }
 
     public void UnregisterEnemy(Enemy enemy)
