@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpawnStructureMarker
   m_Time: 2.1666666666666665
   skipInEditor: 0
-  podCameraMode: 1
+  podCameraMode: 0
   structureToSpawn: {fileID: 6487620541022002554, guid: 3b1b64788b055e0498a63ea738b3ba50, type: 3}
   structureSpawnPoint:
     exposedName: 6e1a360f9d2df3d44899b7c5b5e7af0a
@@ -230,18 +230,6 @@ MonoBehaviour:
           value: 
         enemyPrefab: {fileID: 0}
         killCount: 10
-        spawnEnemies: 1
-        spawner:
-          spawnInterval: 3
-          spawnParams:
-            enemyType: 0
-            count: 3
-            enemies:
-              internalItems: []
-            enemyEntries: []
-            spawnPosition: 0
-            spawnPoints:
-              internalItems: []
     - rid: 126016503823728723
       type: {class: FireObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
@@ -287,22 +275,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9616d1e4bad49f1bc525bc4810b87e1, type: 3}
   m_Name: SpawnEnemyEvent
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyEvent
-  spawner:
-    spawnInterval: 3
-    spawnParams:
-      enemyType: 0
-      count: 3
-      enemies:
-        internalItems: []
-      enemyEntries: []
-      spawnPosition: 1
-      spawnPoints:
-        internalItems:
-        - item:
-            exposedName: 85192a7e-3625-498b-9f0b-aceeb20594a9
-            defaultValue: {fileID: 0}
-          chance: 100
-          isLocked: 0
+  skipInEditor: 0
+  spawnInterval: 3
+  enemyType: 0
+  count: 3
+  enemies:
+    internalItems: []
+  enemyEntries: []
+  spawnPosition: 0
+  spawnPoints:
+    internalItems: []
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -414,6 +396,9 @@ MonoBehaviour:
   playerSpawnPoint:
     exposedName: 40c59887def773b47b1bd622891c9cbd
     defaultValue: {fileID: 0}
+  setActive: 1
+  teleport: 0
+  usePod: 0
 --- !u!114 &7249389198868357089
 MonoBehaviour:
   m_ObjectHideFlags: 1

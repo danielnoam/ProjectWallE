@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using DNExtensions.Systems.AudioLibrary;
 using DNExtensions.Utilities.AutoGet;
+using PrimeTween;
 using UnityEngine;
 
 namespace ProjectWallE.GameLoop.Player
@@ -10,13 +11,16 @@ namespace ProjectWallE.GameLoop.Player
         [Header("Effects")]
         [SerializeField] private VisualEffectAction shoot1Effect;
         [SerializeField] private VisualEffectAction shoot2Effect;
-        [SerializeField] private VisualEffectAction carBoostEffect;
         [SerializeField] private VisualEffectAction wheelsAirReleaseEffect;
         [SerializeField] private DamageEffects damageEffects;
         [SerializeField] private ParticleEffectAction deathEffects;
         [SerializeField] private VisualEffectAction explodeEffect;
         [SerializeField, AudioLibraryID] private string changeStateSoundId;
         [SerializeField, AudioLibraryID] private string jumpSoundId;
+
+        [Header("Boost")]
+        [SerializeField, Min(0f)] private float boostFadeOutDuration = 0.2f;
+        [SerializeField] private VisualEffectAction carBoostEffect;
 
         [Header("Tire Dirt")]
         [SerializeField] private float tireEffectRobotSpeedThreshold = 5f;
@@ -35,6 +39,7 @@ namespace ProjectWallE.GameLoop.Player
         private Material[] _materials;
         private bool[] _tireEffectsPlaying;
         private ParticleSystem[] _activeTireEffects;
+        private Tween _boostFadeTween;
 
         private void OnValidate()
         {
@@ -102,6 +107,7 @@ namespace ProjectWallE.GameLoop.Player
         {
             explodeEffect?.Play(transform.position);
             deathEffects?.Play(transform.position);
+            if (_boostFadeTween.isAlive) _boostFadeTween.Stop();
             carBoostEffect?.Stop(boostAudioSource);
             StopAllTireEffects();
         }
@@ -115,12 +121,18 @@ namespace ProjectWallE.GameLoop.Player
         private void OnBoostStart()
         {
             if (player.ControllerType == ControllerType.Robot) return;
+            if (_boostFadeTween.isAlive) _boostFadeTween.Stop();
             carBoostEffect?.Play(transform.position, boostAudioSource);
         }
 
         private void OnBoostEnd()
         {
-            carBoostEffect?.Stop(boostAudioSource);
+            carBoostEffect?.Stop();
+
+            if (!boostAudioSource) return;
+            if (_boostFadeTween.isAlive) _boostFadeTween.Stop();
+            _boostFadeTween = Tween.AudioVolume(boostAudioSource, 0f, boostFadeOutDuration)
+                .OnComplete(boostAudioSource, source => source.Stop());
         }
 
         private void OnAttack1()
@@ -135,6 +147,7 @@ namespace ProjectWallE.GameLoop.Player
 
         private void OnControllerChanged(ControllerType type)
         {
+            if (_boostFadeTween.isAlive) _boostFadeTween.Stop();
             carBoostEffect?.Stop(boostAudioSource);
             if (_lastControllerType != type) AudioLibrary.PlayOnSource(changeStateSoundId, changeStateAudioSource);
             _lastControllerType = type;

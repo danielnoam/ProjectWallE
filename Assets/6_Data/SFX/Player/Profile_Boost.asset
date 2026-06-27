@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Profile_Boost
   m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.Systems.AudioLibrary.SOAudioProfile
   clips:
-  - {fileID: 8300000, guid: 1d0a95e6f962d49448c4afb87fa19659, type: 3}
+  - {fileID: 8300000, guid: 61e8b3e9c0028a848892e820225715f9, type: 3}
   volume:
+    minValue: 0.6
+    maxValue: 0.6
+  pitch:
     minValue: 1
     maxValue: 1
-  pitch:
-    minValue: 0.5
-    maxValue: 0.5
   stereoPan: 0
   spatialBlend: 0.5
   reverbZoneMix: 1
