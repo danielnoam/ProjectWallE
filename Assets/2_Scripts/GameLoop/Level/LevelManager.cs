@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DNExtensions.Utilities.AutoGet;
+using DNExtensions.Utilities.Button;
 using PrimeTween;
 using ProjectWallE.GameLoop;
 using UnityEngine;
@@ -124,7 +125,8 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
         OnLevelStarted?.Invoke();
     }
     
-    private void CompleteLevel()
+
+    public void CompleteLevel()
     {
         if (!_levelActive) return;
 
@@ -135,7 +137,7 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
         OnLevelCompleted?.Invoke();
     }
 
-    private void FailLevel()
+    public void FailLevel()
     {
         if (!_levelActive) return;
 

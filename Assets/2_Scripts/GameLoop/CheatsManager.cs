@@ -9,7 +9,8 @@ namespace ProjectWallE.GameLoop
         private static CheatsManager _instance;
         
         [Header("Settings")]
-        [SerializeField] private Key restartSceneKey = Key.F5;
+        [SerializeField] private Key restartSceneKey = Key.F6;
+        [SerializeField] private Key completeLevelKey = Key.F5;
         [SerializeField] private Key completeObjectivesKey = Key.F4;
         [SerializeField] private Key addResourcesKey = Key.F3;
         [SerializeField] private Key healPlayerKey = Key.F2;
@@ -32,6 +33,12 @@ namespace ProjectWallE.GameLoop
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
                 Debug.Log("Scene reloaded");
+            }
+
+            if (Keyboard.current[completeLevelKey].wasPressedThisFrame)
+            {
+                LevelManager.Instance?.CompleteLevel();
+                Debug.Log("Level complete");
             }
 
             if (Keyboard.current[completeObjectivesKey].wasPressedThisFrame)

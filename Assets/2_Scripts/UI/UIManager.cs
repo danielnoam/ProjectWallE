@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace ProjectWallE.UI
 {
-    [AddComponentMenu("DNExtensions/UI/UI Manager")]
     public class UIManager : MonoBehaviour
     {
         public static UIManager Instance { get; private set; }

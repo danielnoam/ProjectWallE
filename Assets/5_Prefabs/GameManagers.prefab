@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 359828501323001629}
-  - component: {fileID: 4341548461521595104}
   - component: {fileID: 6344033575503368877}
   m_Layer: 0
   m_Name: CheatManager
@@ -33,27 +32,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 657412859967765425}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4341548461521595104
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 773590974501955978}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ce7efc4b7614c3881ad59b7c665725e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.Utilities.Note
-  text:
-    note: 'F1 - Complete Objectives
-
-      F5 - Restart Scene
-
-'
-    isEditable: 1
-  showInSceneView: 0
-  textColor: {r: 1, g: 1, b: 0.5, a: 1}
 --- !u!114 &6344033575503368877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,7 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7835f264edc4b4b91fa3be8da632fea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.LevelCheats
-  restartSceneKey: 98
+  restartSceneKey: 99
+  completeLevelKey: 98
   completeObjectivesKey: 97
   addResourcesKey: 96
   healPlayerKey: 95
