@@ -497,7 +497,6 @@ GameObject:
   m_Component:
   - component: {fileID: 59735964}
   - component: {fileID: 59735963}
-  - component: {fileID: 59735962}
   m_Layer: 0
   m_Name: Terrain_(-1800.00, 0.00, 0.00)
   m_TagString: Untagged
@@ -505,26 +504,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &59735962
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 59735961}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: 48ef66dba6bca864dba13421e4034aa7, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &59735963
 Terrain:
   m_ObjectHideFlags: 0
@@ -2230,7 +2209,6 @@ GameObject:
   m_Component:
   - component: {fileID: 248416134}
   - component: {fileID: 248416133}
-  - component: {fileID: 248416132}
   m_Layer: 0
   m_Name: Terrain_(-1800.00, 0.00, 1800.00)
   m_TagString: Untagged
@@ -2238,26 +2216,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &248416132
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 248416131}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: 842c0e74c15605c47aecf20f32041b3a, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &248416133
 Terrain:
   m_ObjectHideFlags: 0
@@ -2840,7 +2798,6 @@ GameObject:
   m_Component:
   - component: {fileID: 315888468}
   - component: {fileID: 315888467}
-  - component: {fileID: 315888466}
   m_Layer: 0
   m_Name: Terrain_(-600.00, 0.00, 1800.00)
   m_TagString: Untagged
@@ -2848,26 +2805,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &315888466
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 315888465}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: 21226a025d5677140a95270178877bfd, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &315888467
 Terrain:
   m_ObjectHideFlags: 0
@@ -3188,7 +3125,6 @@ GameObject:
   m_Component:
   - component: {fileID: 351278244}
   - component: {fileID: 351278243}
-  - component: {fileID: 351278242}
   m_Layer: 0
   m_Name: Terrain_(600.00, 0.00, -1200.00)
   m_TagString: Untagged
@@ -3196,26 +3132,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &351278242
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 351278241}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: 23802dcff7be49f448b31e98c0fd5085, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &351278243
 Terrain:
   m_ObjectHideFlags: 0
@@ -3480,7 +3396,7 @@ Transform:
   m_GameObject: {fileID: 407879975}
   serializedVersion: 2
   m_LocalRotation: {x: 0.03711641, y: 0.706132, z: -0.03711641, w: 0.70613205}
-  m_LocalPosition: {x: 111.600006, y: 325.4, z: 259.7}
+  m_LocalPosition: {x: 399.6, y: 609.4, z: -1424}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3561,7 +3477,7 @@ MonoBehaviour:
     FieldOfView: 60.000004
     OrthographicSize: 5
     NearClipPlane: 0.3
-    FarClipPlane: 2500
+    FarClipPlane: 3500
     Dutch: 0
     ModeOverride: 0
     PhysicalProperties:
@@ -4062,7 +3978,6 @@ GameObject:
   m_Component:
   - component: {fileID: 424161759}
   - component: {fileID: 424161758}
-  - component: {fileID: 424161757}
   m_Layer: 0
   m_Name: Terrain_(1200.00, 0.00, 1800.00)
   m_TagString: Untagged
@@ -4070,26 +3985,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &424161757
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 424161756}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: be5621cc41528cf43abf3dfea4d6c042, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &424161758
 Terrain:
   m_ObjectHideFlags: 0
@@ -4160,7 +4055,6 @@ GameObject:
   m_Component:
   - component: {fileID: 435105927}
   - component: {fileID: 435105926}
-  - component: {fileID: 435105925}
   m_Layer: 0
   m_Name: Terrain_(-1800.00, 0.00, 600.00)
   m_TagString: Untagged
@@ -4168,26 +4062,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &435105925
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 435105924}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: 542d255ba15141e4ba2a9e49edca38ff, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &435105926
 Terrain:
   m_ObjectHideFlags: 0
@@ -6750,7 +6624,6 @@ GameObject:
   m_Component:
   - component: {fileID: 618972327}
   - component: {fileID: 618972326}
-  - component: {fileID: 618972325}
   m_Layer: 0
   m_Name: Terrain_(-1800.00, 0.00, -1200.00)
   m_TagString: Untagged
@@ -6758,26 +6631,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &618972325
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 618972324}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: 4354d27cf3bb55c498e0d336cb14e5d7, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &618972326
 Terrain:
   m_ObjectHideFlags: 0
@@ -7089,7 +6942,6 @@ GameObject:
   m_Component:
   - component: {fileID: 632374560}
   - component: {fileID: 632374559}
-  - component: {fileID: 632374558}
   m_Layer: 0
   m_Name: Terrain_(-1200.00, 0.00, -600.00)
   m_TagString: Untagged
@@ -7097,26 +6949,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &632374558
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 632374557}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: 89b2bcfee827d87409b7ae317982747d, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &632374559
 Terrain:
   m_ObjectHideFlags: 0
@@ -8282,7 +8114,6 @@ GameObject:
   m_Component:
   - component: {fileID: 731115583}
   - component: {fileID: 731115582}
-  - component: {fileID: 731115581}
   m_Layer: 0
   m_Name: Terrain_(-1800.00, 0.00, 1200.00)
   m_TagString: Untagged
@@ -8290,26 +8121,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &731115581
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 731115580}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: 7689248a40916d843afae6130053d2f7, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &731115582
 Terrain:
   m_ObjectHideFlags: 0
@@ -8613,7 +8424,6 @@ GameObject:
   m_Component:
   - component: {fileID: 766148043}
   - component: {fileID: 766148042}
-  - component: {fileID: 766148041}
   m_Layer: 0
   m_Name: Terrain_(-600.00, 0.00, -1200.00)
   m_TagString: Untagged
@@ -8621,26 +8431,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &766148041
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 766148040}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: ed60f12377785c843968041dce6ba08f, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &766148042
 Terrain:
   m_ObjectHideFlags: 0
@@ -8757,23 +8547,41 @@ MonoBehaviour:
   - m_EditModeType: 1
     m_Knots:
     - Position:
-        x: 36.799988
-        y: 78
-        z: -377.7
+        x: 159.79999
+        y: 284
+        z: -670.7
       TangentIn:
         x: -0
         y: -0
-        z: -109.97537
+        z: -66.03219
       TangentOut:
         x: 0
         y: 0
-        z: 109.97537
+        z: 66.03219
       Rotation:
         value:
-          x: 0.036208943
-          y: -0.07940988
-          z: -0.007646704
-          w: 0.99615496
+          x: 0.15220657
+          y: -0.13957244
+          z: 0.0017504364
+          w: 0.9784425
+    - Position:
+        x: -20.200012
+        y: 87
+        z: -66.70001
+      TangentIn:
+        x: -0
+        y: -0
+        z: -228.08835
+      TangentOut:
+        x: 0
+        y: 0
+        z: 248.80772
+      Rotation:
+        value:
+          x: 0.10413361
+          y: -0.10752332
+          z: 0.00013614012
+          w: 0.98873395
     - Position:
         x: -137.80002
         y: 0
@@ -8781,17 +8589,17 @@ MonoBehaviour:
       TangentIn:
         x: -0
         y: -0
-        z: -263.06763
+        z: -208.48488
       TangentOut:
         x: 0
         y: 0
-        z: 148.3978
+        z: 139.13731
       Rotation:
         value:
-          x: 0.017816031
-          y: -0.032387987
-          z: 0.00057741994
-          w: 0.99931633
+          x: 0.027833614
+          y: -0.030135836
+          z: 0.000905336
+          w: 0.9991577
     - Position:
         x: -127.30002
         y: 0
@@ -8811,6 +8619,8 @@ MonoBehaviour:
           z: 0
           w: 0.99988747
     m_MetaData:
+    - Mode: 0
+      Tension: 0.5
     - Mode: 0
       Tension: 0.5
     - Mode: 0
@@ -9060,7 +8870,6 @@ GameObject:
   m_Component:
   - component: {fileID: 802205411}
   - component: {fileID: 802205410}
-  - component: {fileID: 802205409}
   m_Layer: 0
   m_Name: Terrain_(1800.00, 0.00, -1200.00)
   m_TagString: Untagged
@@ -9068,26 +8877,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &802205409
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 802205408}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: 21568504e4dd4ec4c995bccbbc82dc69, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &802205410
 Terrain:
   m_ObjectHideFlags: 0
@@ -9153,7 +8942,6 @@ GameObject:
   m_Component:
   - component: {fileID: 802256083}
   - component: {fileID: 802256082}
-  - component: {fileID: 802256081}
   m_Layer: 0
   m_Name: Terrain_(1200.00, 0.00, -600.00)
   m_TagString: Untagged
@@ -9161,26 +8949,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &802256081
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 802256080}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: b89e6026617fccf44a3ab83a46073ae9, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &802256082
 Terrain:
   m_ObjectHideFlags: 0
@@ -9246,7 +9014,6 @@ GameObject:
   m_Component:
   - component: {fileID: 807119070}
   - component: {fileID: 807119069}
-  - component: {fileID: 807119068}
   m_Layer: 0
   m_Name: Terrain_(-600.00, 0.00, 1200.00)
   m_TagString: Untagged
@@ -9254,26 +9021,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &807119068
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 807119067}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: 7f41181802b66da47ab933b8218e19ce, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &807119069
 Terrain:
   m_ObjectHideFlags: 0
@@ -11927,7 +11674,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1079000438}
   - component: {fileID: 1079000437}
-  - component: {fileID: 1079000436}
   m_Layer: 0
   m_Name: Terrain_(1800.00, 0.00, 0.00)
   m_TagString: Untagged
@@ -11935,26 +11681,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &1079000436
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1079000435}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: 88f3188eed4b1094babc5c7afae8cea9, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &1079000437
 Terrain:
   m_ObjectHideFlags: 0
@@ -12130,7 +11856,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1108541500}
   - component: {fileID: 1108541499}
-  - component: {fileID: 1108541498}
   m_Layer: 0
   m_Name: Terrain_(1800.00, 0.00, 600.00)
   m_TagString: Untagged
@@ -12138,26 +11863,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &1108541498
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1108541497}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: f2a00993ef043d54faee39c8023ae0b0, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &1108541499
 Terrain:
   m_ObjectHideFlags: 0
@@ -12225,10 +11930,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: CameraManager
       objectReference: {fileID: 0}
-    - target: {fileID: 579845851143152959, guid: d1b2e6bed7ee5c54c9f84065f72599fa, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5894009229741046547, guid: d1b2e6bed7ee5c54c9f84065f72599fa, type: 3}
       propertyPath: m_LocalPosition.x
       value: 384.86
@@ -12267,10 +11968,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5894009229741046547, guid: d1b2e6bed7ee5c54c9f84065f72599fa, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7246144306868107611, guid: d1b2e6bed7ee5c54c9f84065f72599fa, type: 3}
-      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -12428,7 +12125,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1132525575}
   - component: {fileID: 1132525574}
-  - component: {fileID: 1132525573}
   m_Layer: 0
   m_Name: Terrain_(600.00, 0.00, 1800.00)
   m_TagString: Untagged
@@ -12436,26 +12132,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &1132525573
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1132525572}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: 9aa365e35e07f264b9a866e98bb04fd4, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &1132525574
 Terrain:
   m_ObjectHideFlags: 0
@@ -12540,8 +12216,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1134536171}
   serializedVersion: 2
-  m_LocalRotation: {x: -1.7337828e-10, y: 0.9999832, z: -0.0058042943, w: -0.000000006189935}
-  m_LocalPosition: {x: 248, y: 314.6, z: 569.80005}
+  m_LocalRotation: {x: -0.020982733, y: 0.9790167, z: 0.14387763, w: 0.14277722}
+  m_LocalPosition: {x: 451.46857, y: 506.085, z: -1140.3499}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12574,7 +12250,7 @@ MonoBehaviour:
     FieldOfView: 60.000004
     OrthographicSize: 5
     NearClipPlane: 0.3
-    FarClipPlane: 2500
+    FarClipPlane: 3500
     Dutch: 0
     ModeOverride: 0
     PhysicalProperties:
@@ -12945,6 +12621,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 2039097349}
+    - target: {fileID: 1362821622492407948, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 2039097349}
     - target: {fileID: 1567932946024683729, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -12987,7 +12667,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1910169794833016284, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -123.21
+      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 2008169107905993076, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
       propertyPath: m_SizeDelta.x
@@ -13011,7 +12691,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2075216436384417166, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 315
+      value: 212.5
       objectReference: {fileID: 0}
     - target: {fileID: 2075216436384417166, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -13081,6 +12761,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -98.21
       objectReference: {fileID: 0}
+    - target: {fileID: 2419117494597143055, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 2039097349}
     - target: {fileID: 2535925265165959792, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -13175,7 +12859,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3687828784084221649, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -70
+      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 3778902089432878953, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
       propertyPath: m_AnchorMax.y
@@ -13225,6 +12909,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4652565717212249930, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 2039097349}
     - target: {fileID: 4842653787671892996, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -13245,6 +12933,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5225562518049126349, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 2039097349}
     - target: {fileID: 5385515491509059388, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -13261,6 +12953,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5495804618886152122, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 2039097349}
+    - target: {fileID: 5495804618886152122, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
+      propertyPath: resourceManager
+      value: 
+      objectReference: {fileID: 1881222265}
     - target: {fileID: 5674856455222702687, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
@@ -13285,6 +12985,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6005403859938918330, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 2039097349}
     - target: {fileID: 6160539961707781930, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -13503,12 +13207,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8311295584720613864, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 85
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8311295584720613864, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -30
       objectReference: {fileID: 0}
+    - target: {fileID: 8957395745777449265, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 2039097349}
     - target: {fileID: 9147928791191868914, guid: 9332e966e030d52439c3afafc548dfae, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -13847,7 +13555,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1254757897}
   - component: {fileID: 1254757896}
-  - component: {fileID: 1254757895}
   m_Layer: 0
   m_Name: Terrain_(-1200.00, 0.00, 1800.00)
   m_TagString: Untagged
@@ -13855,26 +13562,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &1254757895
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1254757894}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: 49242c1aba546874fbe1e3a86dd96bf2, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &1254757896
 Terrain:
   m_ObjectHideFlags: 0
@@ -14235,7 +13922,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1294016507}
   - component: {fileID: 1294016506}
-  - component: {fileID: 1294016505}
   m_Layer: 0
   m_Name: Terrain_(-1200.00, 0.00, -1200.00)
   m_TagString: Untagged
@@ -14243,26 +13929,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &1294016505
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1294016504}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: 44fb102ab3cb7054580437ff1841003c, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &1294016506
 Terrain:
   m_ObjectHideFlags: 0
@@ -14542,7 +14208,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1317197772}
   - component: {fileID: 1317197771}
-  - component: {fileID: 1317197770}
   m_Layer: 0
   m_Name: Terrain_(-1200.00, 0.00, 1200.00)
   m_TagString: Untagged
@@ -14550,26 +14215,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &1317197770
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1317197769}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: 0f74e813510afb748ad8d1d84bf4e8b0, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &1317197771
 Terrain:
   m_ObjectHideFlags: 0
@@ -14911,7 +14556,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1337983158}
   - component: {fileID: 1337983157}
-  - component: {fileID: 1337983156}
   m_Layer: 0
   m_Name: Terrain_(-1200.00, 0.00, 0.00)
   m_TagString: Untagged
@@ -14919,26 +14563,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &1337983156
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1337983155}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: 2c3a8ccd51cb0684b9e3ec698b653ed2, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &1337983157
 Terrain:
   m_ObjectHideFlags: 0
@@ -15078,7 +14702,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1357336468}
   - component: {fileID: 1357336467}
-  - component: {fileID: 1357336466}
   m_Layer: 0
   m_Name: Terrain_(0.00, 0.00, 1200.00)
   m_TagString: Untagged
@@ -15086,26 +14709,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &1357336466
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1357336465}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: c732b6befa73ea84eb318d46d0932994, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &1357336467
 Terrain:
   m_ObjectHideFlags: 0
@@ -15237,7 +14840,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1374361371}
   - component: {fileID: 1374361370}
-  - component: {fileID: 1374361369}
   m_Layer: 0
   m_Name: Terrain_(1200.00, 0.00, -1200.00)
   m_TagString: Untagged
@@ -15245,26 +14847,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &1374361369
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1374361368}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: 0ebeed941c9575c41a433c0130511d6d, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &1374361370
 Terrain:
   m_ObjectHideFlags: 0
@@ -15654,7 +15236,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1428274262}
   - component: {fileID: 1428274261}
-  - component: {fileID: 1428274260}
   m_Layer: 0
   m_Name: Terrain_(0.00, 0.00, -1200.00)
   m_TagString: Untagged
@@ -15662,26 +15243,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &1428274260
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1428274259}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: 00265b6caf06889409896dfe2c90f2c4, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &1428274261
 Terrain:
   m_ObjectHideFlags: 0
@@ -16297,7 +15858,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1488073759}
   - component: {fileID: 1488073758}
-  - component: {fileID: 1488073757}
   m_Layer: 0
   m_Name: Terrain_(1800.00, 0.00, 1800.00)
   m_TagString: Untagged
@@ -16305,26 +15865,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &1488073757
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1488073756}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: 341e5266fa66e9c409bec6bd5c5df434, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &1488073758
 Terrain:
   m_ObjectHideFlags: 0
@@ -17037,7 +16577,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1536151275}
   - component: {fileID: 1536151274}
-  - component: {fileID: 1536151273}
   m_Layer: 0
   m_Name: Terrain_(0.00, 0.00, 1800.00)
   m_TagString: Untagged
@@ -17045,26 +16584,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &1536151273
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1536151272}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: 532f879a25cddaa4ab0a293d5d836d5d, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &1536151274
 Terrain:
   m_ObjectHideFlags: 0
@@ -18694,7 +18213,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1661714716}
   - component: {fileID: 1661714715}
-  - component: {fileID: 1661714714}
   m_Layer: 0
   m_Name: Terrain_(1200.00, 0.00, 600.00)
   m_TagString: Untagged
@@ -18702,26 +18220,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &1661714714
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1661714713}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: 75a55eac7ad450342aab35cbae289de4, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &1661714715
 Terrain:
   m_ObjectHideFlags: 0
@@ -19123,7 +18621,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1753157009}
   - component: {fileID: 1753157008}
-  - component: {fileID: 1753157007}
   m_Layer: 0
   m_Name: Terrain_(-1200.00, 0.00, 600.00)
   m_TagString: Untagged
@@ -19131,26 +18628,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &1753157007
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1753157006}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: 07ed67bdbd8c00c4892f2d2ee2e14786, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &1753157008
 Terrain:
   m_ObjectHideFlags: 0
@@ -19338,7 +18815,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1755185464}
   - component: {fileID: 1755185463}
-  - component: {fileID: 1755185462}
   m_Layer: 0
   m_Name: Terrain_(1800.00, 0.00, 1200.00)
   m_TagString: Untagged
@@ -19346,26 +18822,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &1755185462
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1755185461}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: 8f0da802e4e0dc242bedbd75795a8e90, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &1755185463
 Terrain:
   m_ObjectHideFlags: 0
@@ -19833,7 +19289,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1792104890}
   - component: {fileID: 1792104889}
-  - component: {fileID: 1792104888}
   m_Layer: 0
   m_Name: Terrain_(1200.00, 0.00, 1200.00)
   m_TagString: Untagged
@@ -19841,26 +19296,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &1792104888
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1792104887}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: c46353a7cab973e4ea36b789f61abfb6, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &1792104889
 Terrain:
   m_ObjectHideFlags: 0
@@ -20139,7 +19574,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1834567725}
   - component: {fileID: 1834567724}
-  - component: {fileID: 1834567723}
   m_Layer: 0
   m_Name: Terrain_(600.00, 0.00, 1200.00)
   m_TagString: Untagged
@@ -20147,26 +19581,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &1834567723
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1834567722}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: b1c82e1a7caadde4c81c1341f2d839bc, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &1834567724
 Terrain:
   m_ObjectHideFlags: 0
@@ -20612,8 +20026,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1872275727}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2278216, y: -0.0000000014258443, z: -0.0000000010298665, w: 0.9737029}
-  m_LocalPosition: {x: 248, y: 425.01, z: 29.40001}
+  m_LocalRotation: {x: 0.3362875, y: -0.13572162, z: 0.049043275, w: 0.93063694}
+  m_LocalPosition: {x: 598.77844, y: 777.7175, z: -1634.6567}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -20694,7 +20108,7 @@ MonoBehaviour:
     FieldOfView: 60.000004
     OrthographicSize: 5
     NearClipPlane: 0.3
-    FarClipPlane: 2500
+    FarClipPlane: 3500
     Dutch: 0
     ModeOverride: 0
     PhysicalProperties:
@@ -20824,6 +20238,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37558772e25b49d1822f4065b4657e11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.ObjectiveGameMarker
+--- !u!114 &1881222265 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1031951764298718808, guid: 128903284a38bff4ea5054627f37660a, type: 3}
+  m_PrefabInstance: {fileID: 874927185}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d23fdd1387f41e29d5efdb9b5cb32ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceManager
 --- !u!1001 &1882236685
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21184,7 +20609,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1916294305}
   - component: {fileID: 1916294304}
-  - component: {fileID: 1916294303}
   m_Layer: 0
   m_Name: Terrain_(1800.00, 0.00, -600.00)
   m_TagString: Untagged
@@ -21192,26 +20616,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &1916294303
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1916294302}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: 6d6ff6bfbafb58f4eb15d5681a2d7c85, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &1916294304
 Terrain:
   m_ObjectHideFlags: 0
@@ -22050,7 +21454,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2009761376}
   - component: {fileID: 2009761375}
-  - component: {fileID: 2009761374}
   m_Layer: 0
   m_Name: Terrain_(1200.00, 0.00, 0.00)
   m_TagString: Untagged
@@ -22058,26 +21461,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &2009761374
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2009761373}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: b58c7eaba097eb94ab8ee98c467fea48, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &2009761375
 Terrain:
   m_ObjectHideFlags: 0
@@ -22279,7 +21662,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2030502647}
   - component: {fileID: 2030502646}
-  - component: {fileID: 2030502645}
   m_Layer: 0
   m_Name: Terrain_(-1800.00, 0.00, -600.00)
   m_TagString: Untagged
@@ -22287,26 +21669,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!154 &2030502645
-TerrainCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2030502644}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_TerrainData: {fileID: 15600000, guid: ccc4b010f5a2fcc4a923c1dbdf339841, type: 2}
-  m_EnableTreeColliders: 1
 --- !u!218 &2030502646
 Terrain:
   m_ObjectHideFlags: 0
@@ -23928,17 +23290,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6240379488426594452}
     m_Modifications:
-    - target: {fileID: 1745039215335258742, guid: 7bb1c4e83c8827e4da3c038692a736dd, type: 3}
-      propertyPath: m_Resource
-      value: 
-      objectReference: {fileID: 8300000, guid: 509886a18b7aacc4ea9e711698659fea, type: 3}
     - target: {fileID: 4557294940182872753, guid: 7bb1c4e83c8827e4da3c038692a736dd, type: 3}
       propertyPath: m_Name
       value: Prefab_SpaceShip
-      objectReference: {fileID: 0}
-    - target: {fileID: 7719884666282799495, guid: 7bb1c4e83c8827e4da3c038692a736dd, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 310.1
       objectReference: {fileID: 0}
     - target: {fileID: 8771042627555734869, guid: 7bb1c4e83c8827e4da3c038692a736dd, type: 3}
       propertyPath: m_LocalPosition.x

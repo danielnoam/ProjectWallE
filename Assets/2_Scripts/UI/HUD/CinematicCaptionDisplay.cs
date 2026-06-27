@@ -1,4 +1,5 @@
 using DNExtensions.Systems.AudioLibrary;
+using DNExtensions.Systems.Scriptables;
 using PrimeTween;
 using TMPEffects.Components;
 using TMPro;
@@ -14,6 +15,7 @@ namespace ProjectWallE.UI
         [SerializeField] private CanvasGroup canvasGroup;
         [SerializeField] private TextMeshProUGUI captionText;
         [SerializeField] private TMPWriter captionWriter;
+        [SerializeField] private SOFontStyle captionFontStyle;
 
         [Header("SFX")]
         [SerializeField, AudioLibraryID] private string writerSFX;
@@ -50,7 +52,7 @@ namespace ProjectWallE.UI
 
             if (_sequence.isAlive) _sequence.Stop();
 
-            captionText.text = text;
+            captionText.text = captionFontStyle ? captionFontStyle.ApplyStyle(text, '*') : text;
 
             if (captionWriter)
             {

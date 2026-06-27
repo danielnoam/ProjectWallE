@@ -199,7 +199,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0fbc1d0ac57400e9b78634571bedffa, type: 3}
   m_Name: Set Active Player Spawn Point Marker
   m_EditorClassIdentifier: Assembly-CSharp::SetActivePlayerSpawnPointMarker
-  m_Time: 10.483333333333333
+  m_Time: 10.416666666666659
   skipInEditor: 0
   playerSpawnPoint:
     exposedName: 566c4c07-3b45-40d2-a5c7-4f61b1631bd9
@@ -232,7 +232,7 @@ MonoBehaviour:
     m_Start: 0
     m_ClipIn: 0
     m_Asset: {fileID: 7106674001678213680}
-    m_Duration: 9.516666666666667
+    m_Duration: 10.016666666666667
     m_TimeScale: 1
     m_ParentTrack: {fileID: -1258813841677471336}
     m_EaseInDuration: 0
@@ -430,10 +430,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4c4598ba7b6c864bbc021a79a1f48d2, type: 3}
   m_Name: Show Cinematic Caption Marker
   m_EditorClassIdentifier: Assembly-CSharp::ShowCinematicCaptionMarker
-  m_Time: 1.3333333333333333
+  m_Time: 1.5
   skipInEditor: 0
-  text: "ZONE 7 \u2014 SECTOR ALPHA<br>\nMISSION: EXTRACT RESOURCES<br>"
-  duration: 6
+  text: "ZONE 7 \u2014 *SECTOR ALPHA*<br>\nMISSION: *EXTRACT RESOURCES*"
+  duration: 7
   fadeIn: 0.3
   fadeOut: 0.3
 --- !u!114 &6138156276450442711
@@ -478,10 +478,10 @@ MonoBehaviour:
   m_Children: []
   m_Clips:
   - m_Version: 1
-    m_Start: 2.95
+    m_Start: 3.5
     m_ClipIn: 0
     m_Asset: {fileID: -878275208787955492}
-    m_Duration: 4.1
+    m_Duration: 3.4833333333333334
     m_TimeScale: 1
     m_ParentTrack: {fileID: 6242178602503349667}
     m_EaseInDuration: 0
@@ -514,7 +514,7 @@ MonoBehaviour:
     m_Start: 0
     m_ClipIn: 0
     m_Asset: {fileID: -8443284094971906955}
-    m_Duration: 2.95
+    m_Duration: 3.5
     m_TimeScale: 1
     m_ParentTrack: {fileID: 6242178602503349667}
     m_EaseInDuration: 0
@@ -544,7 +544,7 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: Back Ship Camera
   - m_Version: 1
-    m_Start: 7.05
+    m_Start: 6.983333333333333
     m_ClipIn: 0
     m_Asset: {fileID: 3299989216633632982}
     m_Duration: 4.666666666666667
