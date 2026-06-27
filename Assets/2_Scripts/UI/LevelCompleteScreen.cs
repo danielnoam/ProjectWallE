@@ -3,6 +3,7 @@ using DNExtensions.Utilities;
 using DNExtensions.Utilities.CustomFields;
 using PrimeTween;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace ProjectWallE.UI
@@ -35,6 +36,10 @@ namespace ProjectWallE.UI
             canvasGroup.alpha = 0f;
             canvasGroup.blocksRaycasts = false;
             canvasGroup.interactable = false;
+            keepPlayingButton.EnableOnPointerEnterSelection();
+            keepPlayingButton.EnableOnPointerExitDeselection();
+            quitButton.EnableOnPointerEnterSelection();
+            quitButton.EnableOnPointerExitDeselection();
         }
 
         private void OnEnable()
@@ -56,6 +61,10 @@ namespace ProjectWallE.UI
             canvasGroup.blocksRaycasts = true;
             canvasGroup.interactable = true;
 
+            if (PlayerManager.Instance) PlayerManager.Instance.SetCinematicMode(true);
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+
             if (Mathf.Approximately(canvasGroup.alpha, 1f)) return;
 
             _fadeTween.Stop();
@@ -67,6 +76,11 @@ namespace ProjectWallE.UI
         {
             canvasGroup.blocksRaycasts = false;
             canvasGroup.interactable = false;
+
+            if (PlayerManager.Instance) PlayerManager.Instance.SetCinematicMode(false);
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            if (EventSystem.current) EventSystem.current.SetSelectedGameObject(null);
 
             if (Mathf.Approximately(canvasGroup.alpha, 0f)) return;
 

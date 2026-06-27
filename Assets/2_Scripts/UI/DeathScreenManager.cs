@@ -5,6 +5,7 @@ using DNExtensions.Utilities.AutoGet;
 using PrimeTween;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace ProjectWallE.UI
@@ -41,6 +42,8 @@ namespace ProjectWallE.UI
             canvasGroup.alpha = 0f;
             canvasGroup.blocksRaycasts = false;
             canvasGroup.interactable = false;
+            skipButton.EnableOnPointerEnterSelection();
+            skipButton.EnableOnPointerExitDeselection();
         }
 
         private void Start()
@@ -75,6 +78,9 @@ namespace ProjectWallE.UI
             canvasGroup.blocksRaycasts = true;
             canvasGroup.interactable = true;
 
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+
             if (!Mathf.Approximately(canvasGroup.alpha, 1f))
             {
                 _fadeTween.Stop();
@@ -93,6 +99,10 @@ namespace ProjectWallE.UI
         {
             canvasGroup.blocksRaycasts = false;
             canvasGroup.interactable = false;
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            if (EventSystem.current) EventSystem.current.SetSelectedGameObject(null);
 
             if (!Mathf.Approximately(canvasGroup.alpha, 0f))
             {
