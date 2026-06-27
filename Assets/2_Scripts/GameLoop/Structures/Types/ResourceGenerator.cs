@@ -37,8 +37,9 @@ public abstract class ResourceGenerator : Structure
         StartGenerating();
     }
     
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
         StateInfo = $"Health: {CurrentHealth:N0}/{MaxHealth}\nIn Boost Zone: {_boostZone != null}";
     }
     

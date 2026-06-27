@@ -7,8 +7,9 @@ public class Ramp : Structure
     [SerializeReference, DrawSerializeReference] private StructureLevelData[] levels = Array.Empty<StructureLevelData>();
     public override StructureLevelData[] Levels => levels;
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
         StateInfo = $"Health: {CurrentHealth:N0}/{MaxHealth}";
     }
 

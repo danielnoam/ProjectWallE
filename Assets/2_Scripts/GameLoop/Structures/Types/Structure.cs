@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using DNExtensions.Systems.Scriptables;
+using DNExtensions.Utilities;
 using DNExtensions.Utilities.AutoGet;
 using DNExtensions.Utilities.Button;
 using DNExtensions.Utilities.CustomFields;
@@ -53,6 +54,9 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployableWithPod
     
     [Header("Structure")]
     [SerializeField] private bool canDemolish;
+    [SerializeField] private bool canRegenHealth;
+    [SerializeField, ShowIf(nameof(canRegenHealth))] private float timeBeforeHealthRegen = 1.5f;
+    [SerializeField, ShowIf(nameof(canRegenHealth))] private float healthRegenRate = 5f;
     [SerializeField] protected Vector3 topPoint = Vector3.up;
     [SerializeField] protected Vector3 bottomPoint = Vector3.down;
     [SerializeField] private StructureUIData structureUIData;
@@ -65,6 +69,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployableWithPod
     [SerializeField, AutoGetSelf, HideInInspector] private RadarTarget radarTarget;
     
     private Material[] _materials;
+    private float _lastDamageTime;
     private int UpgradeCost => CanUpgrade() ? Levels[CurrentUpgradeLevel].cost : 0;
     private float FixCost => (MaxHealth - CurrentHealth) * CurrentLevelData.fixCostPerHealthPoint;
     private StructureLevelData CurrentLevelData => Levels[CurrentUpgradeLevel - 1];
@@ -126,6 +131,21 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployableWithPod
     protected virtual void OnDestroy()
     {
         StructureManager.Instance?.UnregisterStructure(this);
+    }
+
+    protected virtual void Update()
+    {
+        RegenerateHealth();
+    }
+
+    private void RegenerateHealth()
+    {
+        if (!canRegenHealth || CurrentHealth >= MaxHealth || Time.time < _lastDamageTime + timeBeforeHealthRegen || !IsAlive) return;
+
+        CurrentHealth += healthRegenRate * Time.deltaTime;
+        CurrentHealth = Mathf.Min(CurrentHealth, MaxHealth);
+
+        OnDamaged?.Invoke(new DamageInfo(0, transform.position));
     }
     
     private void Build()
@@ -203,6 +223,7 @@ public abstract class Structure : MonoBehaviour, IDamageable, IDeployableWithPod
 
         radarTarget?.PunchBlip(Color.orangeRed);
         damageEffects?.Play(transform.position, _materials);
+        _lastDamageTime = Time.time;
         CurrentHealth -= damage;
         OnDamaged?.Invoke(new DamageInfo(damage, transform.position));
         

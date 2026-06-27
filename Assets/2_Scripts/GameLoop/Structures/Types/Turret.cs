@@ -56,8 +56,10 @@ public abstract class Turret : Structure
         if (_currentTarget != null) _currentTarget.OnDeath -= OnTargetDeath;
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+
         if (_currentState == TurretState.Attacking)
         {
             if (_currentTarget is MonoBehaviour target && target)

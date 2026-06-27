@@ -46,6 +46,25 @@ MonoBehaviour:
   skipInEditor: 0
   featuresToEnable: 2
   featuresToDisable: 0
+--- !u!114 &-8520222977865884192
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 844512bbcc774b44b3c5e64aee9d8fbb, type: 3}
+  m_Name: Spawn Structure Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnStructureMarker
+  m_Time: 11.983333333333333
+  skipInEditor: 0
+  podCameraMode: 0
+  structureToSpawn: {fileID: 9177759699372231121, guid: 290c791e53f525645b9870cd63da954e, type: 3}
+  structureSpawnPoint:
+    exposedName: a492f17a-e822-4faa-b886-15145c33c73c
+    defaultValue: {fileID: 0}
 --- !u!114 &-8470427896658424546
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -742,7 +761,7 @@ MonoBehaviour:
     m_PreExtrapolationMode: 0
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
-    m_DisplayName: 'Start Objectives: Survive, Call a support action'
+    m_DisplayName: 'Start Objectives: Survive, Call a air support'
   m_Markers:
     m_Objects: []
 --- !u!114 &-2596039320394516090
@@ -865,6 +884,25 @@ MonoBehaviour:
         defaultValue: {fileID: 0}
       chance: 100
       isLocked: 0
+--- !u!114 &-1713959961341034659
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 844512bbcc774b44b3c5e64aee9d8fbb, type: 3}
+  m_Name: Spawn Structure Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnStructureMarker
+  m_Time: 67.05
+  skipInEditor: 0
+  podCameraMode: 0
+  structureToSpawn: {fileID: 9177759699372231121, guid: 290c791e53f525645b9870cd63da954e, type: 3}
+  structureSpawnPoint:
+    exposedName: 2e457a18-58f3-4842-9793-3bc9f85ce649
+    defaultValue: {fileID: 0}
 --- !u!114 &-1360289467457274172
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1555,6 +1593,8 @@ MonoBehaviour:
     - {fileID: -8073004881602852655}
     - {fileID: -1151740949387142617}
     - {fileID: -4651446852953380397}
+    - {fileID: -8520222977865884192}
+    - {fileID: -1713959961341034659}
 --- !u!114 &5671882440688688825
 MonoBehaviour:
   m_ObjectHideFlags: 1

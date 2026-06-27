@@ -12,8 +12,7 @@ internal static class SpawnEnemyInspectorGUI
         var enemyEntries = serializedObject.FindProperty("enemyEntries");
         var spawnPosition = serializedObject.FindProperty("spawnPosition");
         var spawnPoints = serializedObject.FindProperty("spawnPoints");
-
-        EditorGUILayout.LabelField("Enemy", EditorStyles.boldLabel);
+        
         EditorGUILayout.PropertyField(enemyType);
 
         switch ((EnemySourceType)enemyType.enumValueIndex)
@@ -31,7 +30,6 @@ internal static class SpawnEnemyInspectorGUI
         }
 
         EditorGUILayout.Space();
-        EditorGUILayout.LabelField("Position", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(spawnPosition);
 
         if ((SpawnPositionType)spawnPosition.enumValueIndex == SpawnPositionType.Specific)
