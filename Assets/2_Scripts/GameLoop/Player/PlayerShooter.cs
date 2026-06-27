@@ -138,7 +138,8 @@ namespace ProjectWallE.GameLoop.Player
             _basicCooldown = basicFireRate;
             Vector3 position = firePoint ? firePoint.position : transform.position;
             Vector3 direction = playerManager.Aimer.GetDirectionFrom(position);
-            basicProjectileData?.Spawn(position, direction, default, playerManager);
+            float damageMultiplier = playerManager && playerManager.Upgrades ? playerManager.Upgrades.DamageMultiplier : 1f;
+            basicProjectileData?.Spawn(position, direction, default, playerManager, damageMultiplier);
             OnAttack1?.Invoke();
             OnBasicCooldownUpdated?.Invoke(_basicCooldown, basicFireRate);
         }
@@ -150,7 +151,8 @@ namespace ProjectWallE.GameLoop.Player
             _specialCooldown = aoeFireRate;
             Vector3 position = firePoint ? firePoint.position : transform.position;
             Vector3 direction = playerManager.Aimer.GetDirectionFrom(position);
-            specialProjectileData?.Spawn(position, direction, default, playerManager);
+            float damageMultiplier = playerManager && playerManager.Upgrades ? playerManager.Upgrades.DamageMultiplier : 1f;
+            specialProjectileData?.Spawn(position, direction, default, playerManager, damageMultiplier);
             OnAttack2?.Invoke();
             OnSpecialCooldownUpdated?.Invoke(_specialCooldown, aoeFireRate);
         }

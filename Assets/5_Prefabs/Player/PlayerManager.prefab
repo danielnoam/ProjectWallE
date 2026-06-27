@@ -603,10 +603,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.CarBoost
   boostAccel: 10
   boostSpeedFactor: 2
+  baseFuelCapacity: 100
   fuelConsumption: 25
   rechargeCooldown: 2
   rechargeRate: 20
   minFuelToStartBoost: 20
+  upgrades: {fileID: 7862030107700247955}
 --- !u!114 &1068083695947454335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3096,6 +3098,7 @@ GameObject:
   - component: {fileID: 9192427627125825943}
   - component: {fileID: 12555983524666578}
   - component: {fileID: 2369243402749369746}
+  - component: {fileID: 7862030107700247955}
   - component: {fileID: 8689997031806120504}
   - component: {fileID: 2737165017878004224}
   - component: {fileID: 8087270994143856722}
@@ -3199,6 +3202,22 @@ MonoBehaviour:
   supportCaller: {fileID: 6197151567419236282}
   shooter: {fileID: 8087270994143856722}
   aimer: {fileID: 8689997031806120504}
+  upgrades: {fileID: 7862030107700247955}
+--- !u!114 &7862030107700247955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5821086676760150823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a57b27c791a2d04eadbd120ee751173, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.Player.PlayerUpgrades
+  damageMultiplier: 1
+  maxHealthMultiplier: 1
+  boostMultiplier: 1
 --- !u!114 &8689997031806120504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3662,13 +3681,6 @@ MonoBehaviour:
     - {fileID: 6508442177166462385}
     - {fileID: 3686714904999105487}
     soundId: Shoot2
-  carBoostEffect:
-    effectType: 0
-    visualEffect: {fileID: 0}
-    visualEffects:
-    - {fileID: 5454407353768600682}
-    - {fileID: 3246170288374732677}
-    soundId: Boost
   wheelsAirReleaseEffect:
     effectType: 0
     visualEffect: {fileID: 0}
@@ -3696,6 +3708,14 @@ MonoBehaviour:
     soundId: 
   changeStateSoundId: ChangeState
   jumpSoundId: Jump
+  boostFadeOutDuration: 0.2
+  carBoostEffect:
+    effectType: 0
+    visualEffect: {fileID: 0}
+    visualEffects:
+    - {fileID: 5454407353768600682}
+    - {fileID: 3246170288374732677}
+    soundId: Boost
   tireEffectRobotSpeedThreshold: 5
   robotTireEffects:
   - {fileID: 6436861685030297602}

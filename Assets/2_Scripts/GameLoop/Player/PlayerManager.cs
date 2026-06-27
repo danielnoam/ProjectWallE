@@ -54,6 +54,7 @@ namespace ProjectWallE
         [SerializeField, AutoGetChildren] private PlayerSupportCaller supportCaller;
         [SerializeField, AutoGetChildren] private PlayerShooter shooter;
         [SerializeField, AutoGetChildren] private PlayerAimer aimer;
+        [SerializeField, AutoGetChildren] private PlayerUpgrades upgrades;
 
 
         private Transform _cameraTransform;
@@ -80,7 +81,9 @@ namespace ProjectWallE
         public PlayerStructureBuilder StructureBuilder => structureBuilder;
         public PlayerShooter Shooter => shooter;
         public PlayerAimer Aimer => aimer;
+        public PlayerUpgrades Upgrades => upgrades;
         public PlayerSupportCaller SupportCaller => supportCaller;
+        public float EffectiveMaxHealth => maxHealth * (upgrades ? upgrades.MaxHealthMultiplier : 1f);
         public bool CanBuild => !_inCinematic && _currentController.BuildEnabled && IsAlive && _enabledFeatures.HasFlag(PlayerFeature.Build);
         public bool CanShoot => !_inCinematic && _currentController.ShootEnabled && IsAlive && _enabledFeatures.HasFlag(PlayerFeature.Shoot);
         public bool CanSupport => !_inCinematic && _currentController.SupportEnabled && IsAlive && _enabledFeatures.HasFlag(PlayerFeature.AirSupport);
@@ -131,7 +134,7 @@ namespace ProjectWallE
 
             carController.Initialize(playerReferences);
             robotController.Initialize(playerReferences);
-            _currentHealth = maxHealth;
+            _currentHealth = EffectiveMaxHealth;
         }
 
         private void Start()
@@ -144,12 +147,21 @@ namespace ProjectWallE
         {
             _lateFixedUpdateCoroutine = StartCoroutine(RunLateFixedUpdate());
             DeathScreenManager.SkipButtonClicked += OnSkipRespawnRequested;
+            if (upgrades) upgrades.OnMaxHealthMultiplierChanged += OnMaxHealthUpgraded;
         }
 
         private void OnDisable()
         {
             StopCoroutine(_lateFixedUpdateCoroutine);
             DeathScreenManager.SkipButtonClicked -= OnSkipRespawnRequested;
+            if (upgrades) upgrades.OnMaxHealthMultiplierChanged -= OnMaxHealthUpgraded;
+        }
+
+        private void OnMaxHealthUpgraded(float amount)
+        {
+            _currentHealth += maxHealth * amount;
+            _currentHealth = Mathf.Min(_currentHealth, EffectiveMaxHealth);
+            OnHealthChanged?.Invoke(_currentHealth, EffectiveMaxHealth);
         }
 
         private void Update()
@@ -219,7 +231,7 @@ namespace ProjectWallE
             ResetRbVelocity();
             rigidBody.isKinematic = true;
             _currentHealth = 0;
-            OnHealthChanged?.Invoke(_currentHealth, maxHealth);
+            OnHealthChanged?.Invoke(_currentHealth, EffectiveMaxHealth);
             OnDeath?.Invoke(attacker);
             gfx.SetActive(false);
             _respawnCoroutine = StartCoroutine(RespawnRoutine());
@@ -260,12 +272,12 @@ namespace ProjectWallE
 
         private void RegenerateHealth()
         {
-            if (_currentHealth >= maxHealth || Time.time < _lastDamageTime + timeBeforeHealthRegen || !IsAlive) return;
+            if (_currentHealth >= EffectiveMaxHealth || Time.time < _lastDamageTime + timeBeforeHealthRegen || !IsAlive) return;
 
             _currentHealth += healthRegenRate * Time.deltaTime;
-            _currentHealth = Mathf.Min(_currentHealth, maxHealth);
+            _currentHealth = Mathf.Min(_currentHealth, EffectiveMaxHealth);
 
-            OnHealthChanged?.Invoke(_currentHealth, maxHealth);
+            OnHealthChanged?.Invoke(_currentHealth, EffectiveMaxHealth);
         }
 
         private void Respawn(PlayerSpawnPoint spawnPoint)
@@ -285,9 +297,9 @@ namespace ProjectWallE
             rigidBody.isKinematic = false;
             _podInFlight = false;
             gfx?.SetActive(true);
-            _currentHealth = maxHealth;
+            _currentHealth = EffectiveMaxHealth;
             _currentController.CanMove = CanMove;
-            OnHealthChanged?.Invoke(_currentHealth, maxHealth);
+            OnHealthChanged?.Invoke(_currentHealth, EffectiveMaxHealth);
             OnSpawn?.Invoke();
             _respawnCoroutine = null;
         }
@@ -369,17 +381,17 @@ namespace ProjectWallE
 
             if (_currentHealth <= 0) Die(attacker);
 
-            OnHealthChanged?.Invoke(_currentHealth, maxHealth);
+            OnHealthChanged?.Invoke(_currentHealth, EffectiveMaxHealth);
         }
 
         public void Heal(float healAmount)
         {
-            if (healAmount <= 0 || _currentHealth <= 0 || _currentHealth >= maxHealth) return;
+            if (healAmount <= 0 || _currentHealth <= 0 || _currentHealth >= EffectiveMaxHealth) return;
 
             _currentHealth += healAmount;
-            if (_currentHealth > maxHealth) _currentHealth = maxHealth;
+            if (_currentHealth > EffectiveMaxHealth) _currentHealth = EffectiveMaxHealth;
 
-            OnHealthChanged?.Invoke(_currentHealth, maxHealth);
+            OnHealthChanged?.Invoke(_currentHealth, EffectiveMaxHealth);
         }
 
         public void Teleport(Vector3 position, Quaternion rotation)

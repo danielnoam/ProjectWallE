@@ -43,11 +43,11 @@ public class SOProjectileData : ScriptableObject
     [PrefabSelector("Assets")] public PoolableParticleSystem hitParticle;
     [SerializeField, AudioLibraryID] public string collisionSFX;
 
-    public Projectile Spawn(Vector3 position, Vector3 direction, Vector3 targetPosition = default, IDamageable owner = null)
+    public Projectile Spawn(Vector3 position, Vector3 direction, Vector3 targetPosition = default, IDamageable owner = null, float damageMultiplier = 1f)
     {
         var projectile = ObjectPooler.GetObjectFromPool(prefab, position, Quaternion.LookRotation(direction));
-        projectile?.Initialize(this, direction, targetPosition, owner);
-        
+        projectile?.Initialize(this, direction, targetPosition, owner, damageMultiplier);
+
         return projectile;
     }
 }

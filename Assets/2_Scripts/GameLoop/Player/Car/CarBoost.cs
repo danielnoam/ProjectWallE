@@ -1,4 +1,6 @@
 using System;
+using DNExtensions.Utilities.AutoGet;
+using ProjectWallE.GameLoop.Player;
 using UnityEngine;
 
 namespace ProjectWallE
@@ -10,33 +12,43 @@ namespace ProjectWallE
         [SerializeField] private float boostSpeedFactor = 1.25f;
 
         [Header("Fuel Settings")]
+        [SerializeField] private float baseFuelCapacity = 100f;
         [SerializeField] private float fuelConsumption = 20f;
         [SerializeField] private float rechargeCooldown = 1.5f;
         [SerializeField] private float rechargeRate = 25f;
         [SerializeField] private float minFuelToStartBoost = 10f;
 
-        private const float FuelCapacity = 100f;
-        
-        private float _currentFuel = FuelCapacity;
-        
+        [SerializeField, AutoGetParent, HideInInspector] private PlayerUpgrades upgrades;
+
+        private float _currentFuel;
+
         private float _lastBoostTime;
         private float _disableTime;
         private bool _isBoosting;
 
         private CarInput _carInput;
-        
+
         public event Action OnBoostStart;
-        public event Action OnBoostEnd; 
+        public event Action OnBoostEnd;
         public event Action<float, float> OnFuelChange;
+
+        private float EffectiveFuelCapacity => baseFuelCapacity * (upgrades ? upgrades.MaxFuelMultiplier : 1f);
+
+        private void OnValidate()
+        {
+            AutoGetSystem.Process(this);
+        }
 
         private void Awake()
         {
             _carInput = GetComponent<CarInput>();
-            _currentFuel = Mathf.Clamp(_currentFuel, 0f, FuelCapacity);
+            _currentFuel = EffectiveFuelCapacity;
         }
 
         private void OnDisable()
         {
+            if (upgrades) upgrades.OnBoostMultiplierChanged -= OnBoostUpgraded;
+
             bool wasBoosting = _isBoosting;
             _disableTime = Time.time;
             _isBoosting = false;
@@ -47,6 +59,8 @@ namespace ProjectWallE
 
         private void OnEnable()
         {
+            if (upgrades) upgrades.OnBoostMultiplierChanged += OnBoostUpgraded;
+
             float enableTime = Time.time;
 
             float rechargeStartTime = _lastBoostTime + rechargeCooldown;
@@ -125,7 +139,7 @@ namespace ProjectWallE
 
         private void RechargeFuel()
         {
-            if (_currentFuel >= FuelCapacity)
+            if (_currentFuel >= EffectiveFuelCapacity)
                 return;
 
             AddFuel(rechargeRate * Time.deltaTime);
@@ -133,8 +147,15 @@ namespace ProjectWallE
 
         private void AddFuel(float addedFuel)
         {
-            _currentFuel = Mathf.Clamp(_currentFuel + addedFuel, 0, FuelCapacity);
-            OnFuelChange?.Invoke(_currentFuel, FuelCapacity);
+            _currentFuel = Mathf.Clamp(_currentFuel + addedFuel, 0, EffectiveFuelCapacity);
+            OnFuelChange?.Invoke(_currentFuel, EffectiveFuelCapacity);
+        }
+
+        private void OnBoostUpgraded(float amount)
+        {
+            _currentFuel += baseFuelCapacity * amount;
+            _currentFuel = Mathf.Clamp(_currentFuel, 0f, EffectiveFuelCapacity);
+            OnFuelChange?.Invoke(_currentFuel, EffectiveFuelCapacity);
         }
     }
 }

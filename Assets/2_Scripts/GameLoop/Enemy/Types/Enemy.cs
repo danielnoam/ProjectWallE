@@ -35,6 +35,9 @@ namespace ProjectWallE.GameLoop
         [SerializeField, Min(0)] private int resourceWorth = 25;
         [SerializeField] private bool canBePushed = true;
 
+        [Header("Drops")]
+        [SerializeField] private ChanceList<UpgradePickup> dropTable = new();
+
         [Header("Targeting")]
         [SerializeField] private float targetFindRange = 75f;
         [SerializeField] protected float targetRandomOffset = 20f;
@@ -187,10 +190,17 @@ namespace ProjectWallE.GameLoop
         private void Die()
         {
             ResourceManager.Instance?.AddResources(resourceWorth);
+            TryDropUpgrade();
             deathEffect?.Play(transform.position);
             OnDeath?.Invoke(this);
             OnEnemyKilled?.Invoke(this);
             Destroy(gameObject);
+        }
+
+        private void TryDropUpgrade()
+        {
+            UpgradePickup prefab = dropTable.GetRandomItem();
+            if (prefab) Instantiate(prefab, transform.position, Quaternion.identity);
         }
 
         private void SetTarget(IDamageable target)

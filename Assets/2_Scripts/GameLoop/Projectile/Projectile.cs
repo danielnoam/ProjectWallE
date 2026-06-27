@@ -17,6 +17,7 @@ public class Projectile : MonoBehaviour, IPoolable
     private IDamageable _owner;
     private SOProjectileData _data;
     private float _maxLifetime;
+    private float _damageMultiplier = 1f;
     
     private bool _isInitialized;
     private bool _hitSomething;
@@ -107,7 +108,7 @@ public class Projectile : MonoBehaviour, IPoolable
         if (damageable != null && _ownerTeam.CanDamage(damageable.Team))
         {
             hitDamageable = true;
-            damageable.TakeDamage(_data.damage, _owner);
+            damageable.TakeDamage(_data.damage * _damageMultiplier, _owner);
         }
 
         var pushable = other.collider.GetComponentInParent<IPushable>();
@@ -141,7 +142,7 @@ public class Projectile : MonoBehaviour, IPoolable
             float damage = _data.damageRange.Lerp(1 - normalizedDistance);
             float push = _data.pushRange.Lerp(1 - normalizedDistance);
 
-            target.TakeDamage(damage, _owner);
+            target.TakeDamage(damage * _damageMultiplier, _owner);
 
             var aoePush = damagedObject.GetComponentInParent<IPushable>();
             if (aoePush != null)
@@ -186,17 +187,19 @@ public class Projectile : MonoBehaviour, IPoolable
         _owner = null;
         _ownerTeam = default;
         _maxLifetime = 0;
+        _damageMultiplier = 1f;
         _startPosition = Vector3.zero;
         _targetPosition = Vector3.zero;
         _direction = Vector3.zero;
     }
 
-    public void Initialize(SOProjectileData data, Vector3 direction, Vector3 targetPosition, IDamageable owner)
+    public void Initialize(SOProjectileData data, Vector3 direction, Vector3 targetPosition, IDamageable owner, float damageMultiplier = 1f)
     {
         _data = data;
         _owner = owner;
         _ownerTeam = owner?.Team ?? Team.Neutral;
         _maxLifetime = data.maxLifetime;
+        _damageMultiplier = damageMultiplier;
         _startPosition = transform.position;
         _targetPosition = targetPosition;
         _direction = direction;
