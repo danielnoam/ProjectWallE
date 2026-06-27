@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf67c245bd285d34ab6d76d645b8a16d, type: 3}
+  m_Name: New UpgradeLootTable
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.SOUpgradeLootTable
+  upgrades:
+    internalItems:
+    - item: {fileID: 1464099988707084057, guid: 8f8c5e9fab71f4841865b91223c980ae, type: 3}
+      chance: 10
+      isLocked: 0
+    - item: {fileID: 8069854735338995824, guid: 21e6456fa21479148a7b3ee3b5720bbb, type: 3}
+      chance: 10
+      isLocked: 0
+    - item: {fileID: 8387032649172848105, guid: bc021508a997bac42bb6b125581c7085, type: 3}
+      chance: 10
+      isLocked: 0
+    - item: {fileID: 0}
+      chance: 70
+      isLocked: 0

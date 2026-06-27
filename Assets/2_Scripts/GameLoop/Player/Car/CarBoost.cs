@@ -43,12 +43,16 @@ namespace ProjectWallE
         {
             _carInput = GetComponent<CarInput>();
             _currentFuel = EffectiveFuelCapacity;
+            if (upgrades) upgrades.OnMaxFuelMultiplierChanged += OnMaxFuelUpgraded;
+        }
+
+        private void OnDestroy()
+        {
+            if (upgrades) upgrades.OnMaxFuelMultiplierChanged -= OnMaxFuelUpgraded;
         }
 
         private void OnDisable()
         {
-            if (upgrades) upgrades.OnBoostMultiplierChanged -= OnBoostUpgraded;
-
             bool wasBoosting = _isBoosting;
             _disableTime = Time.time;
             _isBoosting = false;
@@ -59,8 +63,6 @@ namespace ProjectWallE
 
         private void OnEnable()
         {
-            if (upgrades) upgrades.OnBoostMultiplierChanged += OnBoostUpgraded;
-
             float enableTime = Time.time;
 
             float rechargeStartTime = _lastBoostTime + rechargeCooldown;
@@ -151,7 +153,7 @@ namespace ProjectWallE
             OnFuelChange?.Invoke(_currentFuel, EffectiveFuelCapacity);
         }
 
-        private void OnBoostUpgraded(float amount)
+        private void OnMaxFuelUpgraded(float amount)
         {
             _currentFuel += baseFuelCapacity * amount;
             _currentFuel = Mathf.Clamp(_currentFuel, 0f, EffectiveFuelCapacity);

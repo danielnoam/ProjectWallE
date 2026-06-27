@@ -23,7 +23,7 @@ namespace ProjectWallE.GameLoop.Player
         public float MaxFuelMultiplier => maxFuelMultiplier;
 
         public event Action<float> OnMaxHealthMultiplierChanged;
-        public event Action<float> OnBoostMultiplierChanged;
+        public event Action<float> OnMaxFuelMultiplierChanged;
 
         
         
@@ -49,7 +49,7 @@ namespace ProjectWallE.GameLoop.Player
                     break;
                 case UpgradeType.MaxFuel:
                     maxFuelMultiplier += amount;
-                    OnBoostMultiplierChanged?.Invoke(amount);
+                    OnMaxFuelMultiplierChanged?.Invoke(amount);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);

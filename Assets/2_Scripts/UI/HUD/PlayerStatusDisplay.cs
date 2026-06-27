@@ -49,6 +49,11 @@ namespace ProjectWallE.UI
             player.CarController.OnBrakeStarted += OnBrakeStarted;
             player.CarController.CarBoost.OnFuelChange += UpdateFuelBar;
             player.CarController.CarBoost.OnBoostStart += OnBoostStart;
+            if (player.Upgrades)
+            {
+                player.Upgrades.OnMaxHealthMultiplierChanged += OnHealthUpgraded;
+                player.Upgrades.OnMaxFuelMultiplierChanged += OnFuelUpgraded;
+            }
             player.RobotController.OnJumped += OnJumped;
             player.Shooter.OnBasicCooldownUpdated += OnBasicCooldownUpdated;
             player.Shooter.OnSpecialCooldownUpdated += OnSpecialCooldownUpdated;
@@ -74,6 +79,11 @@ namespace ProjectWallE.UI
             player.CarController.OnBrakeStarted -= OnBrakeStarted;
             player.CarController.CarBoost.OnFuelChange -= UpdateFuelBar;
             player.CarController.CarBoost.OnBoostStart -= OnBoostStart;
+            if (player.Upgrades)
+            {
+                player.Upgrades.OnMaxHealthMultiplierChanged -= OnHealthUpgraded;
+                player.Upgrades.OnMaxFuelMultiplierChanged -= OnFuelUpgraded;
+            }
             player.RobotController.OnJumped -= OnJumped;
             player.Shooter.OnBasicCooldownUpdated -= OnBasicCooldownUpdated;
             player.Shooter.OnSpecialCooldownUpdated -= OnSpecialCooldownUpdated;
@@ -166,6 +176,16 @@ namespace ProjectWallE.UI
         private void OnSpecialCooldownUpdated(float currentCooldown, float maxCooldown)
         {
             if (specialAttackIcon && specialAttackIcon.isActiveAndEnabled) specialAttackIcon.UpdateCooldown(currentCooldown, maxCooldown);
+        }
+
+        private void OnHealthUpgraded(float amount)
+        {
+            if (healthBar) healthBar.Punch();
+        }
+
+        private void OnFuelUpgraded(float amount)
+        {
+            if (fuelBar) fuelBar.Punch();
         }
 
         private void UpdateFuelBar(float currentFuel, float maxFuel)

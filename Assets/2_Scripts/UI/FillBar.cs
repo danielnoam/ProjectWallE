@@ -17,6 +17,10 @@ namespace ProjectWallE.UI
         [SerializeField] private Color drainColor = new Color(1f, 0.3f, 0.3f, 0.8f);
         [SerializeField] private Color fillColor = new Color(0.3f, 1f, 0.3f, 0.8f);
 
+        [Header("Punch")]
+        [SerializeField] private float punchStrength = 0.2f;
+        [SerializeField, Min(0f)] private float punchDuration = 0.3f;
+
         [Header("References")]
         [SerializeField] private CanvasGroup canvasGroup;
         [SerializeField] private Image barFill;
@@ -25,10 +29,19 @@ namespace ProjectWallE.UI
         [SerializeField] private OptionalField<string> prefix = new OptionalField<string>("", false);
 
         private Sequence _sequence;
+        private Tween _punchTween;
 
         private void OnDestroy()
         {
             if (_sequence.isAlive) _sequence.Stop();
+            if (_punchTween.isAlive) _punchTween.Stop();
+        }
+
+        public void Punch()
+        {
+            transform.localScale = Vector3.one;
+            if (_punchTween.isAlive) _punchTween.Stop();
+            if (punchDuration > 0) _punchTween = Tween.PunchScale(transform, Vector3.one * punchStrength, duration: punchDuration);
         }
 
         public void SetValue(float current, float max)

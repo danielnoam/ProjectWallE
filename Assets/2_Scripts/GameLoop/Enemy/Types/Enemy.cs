@@ -36,7 +36,7 @@ namespace ProjectWallE.GameLoop
         [SerializeField] private bool canBePushed = true;
 
         [Header("Drops")]
-        [SerializeField] private ChanceList<UpgradePickup> dropTable = new();
+        [SerializeField, SOSelector] private SOUpgradeLootTable lootTable;
 
         [Header("Targeting")]
         [SerializeField] private float targetFindRange = 75f;
@@ -199,7 +199,8 @@ namespace ProjectWallE.GameLoop
 
         private void TryDropUpgrade()
         {
-            UpgradePickup prefab = dropTable.GetRandomItem();
+            if (!lootTable) return;
+            UpgradePickup prefab = lootTable.GetRandomDrop();
             if (prefab) Instantiate(prefab, transform.position, Quaternion.identity);
         }
 
