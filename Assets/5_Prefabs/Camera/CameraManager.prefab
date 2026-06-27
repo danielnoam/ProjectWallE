@@ -272,6 +272,7 @@ MonoBehaviour:
   impulseSource: {fileID: 5091377115681546788}
   rotationShake: {fileID: 633543289020702690}
   carNoise: {fileID: 6975282753908903395}
+  podNoise: {fileID: 4442092809061578531}
   cameraTarget: {fileID: 1143171619415265352}
   playerManager: {fileID: 0}
   input: {fileID: 8247674475958822448}
@@ -475,7 +476,7 @@ MonoBehaviour:
     Enabled: 1
     DistanceLimit: 0
     MinimumOcclusionTime: 0
-    CameraRadius: 0.4
+    CameraRadius: 1
     UseFollowTarget:
       Enabled: 0
       YOffset: 0

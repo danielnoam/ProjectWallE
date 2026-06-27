@@ -39,6 +39,7 @@ namespace ProjectWallE
         [SerializeField] private CinemachineImpulseSource impulseSource;
         [SerializeField] private CinemachineRotationShake rotationShake;
         [SerializeField] private CinemachineBasicMultiChannelPerlin carNoise;
+        [SerializeField] private CinemachineBasicMultiChannelPerlin podNoise;
         [SerializeField] private Transform cameraTarget;
         [SerializeField, AutoGetScene] private PlayerManager playerManager;
         [SerializeField, AutoGetSelf] private PlayerManagerInput input;
@@ -53,6 +54,7 @@ namespace ProjectWallE
         private bool _cinematicMode;
         private float _yaw;
         private float _pitch;
+        private float _podNoiseAmplitude;
 
         private void OnValidate()
         {
@@ -75,6 +77,8 @@ namespace ProjectWallE
             if (_pitch > 180f) _pitch -= 360f;
             
             _podLookTarget = new GameObject("PodLookTarget").transform;
+
+            if (podNoise) _podNoiseAmplitude = podNoise.AmplitudeGain;
         }
 
         private void OnEnable()
@@ -171,7 +175,9 @@ namespace ProjectWallE
                 case PodCameraMode.Follow:
                     podCamera.Follow = _podLookTarget;
                     podCamera.LookAt = _podLookTarget;
+                    if (podNoise) podNoise.AmplitudeGain = _podNoiseAmplitude;
                     SwitchActiveCamera(podCamera);
+                    _activePod.OnLand += OnPodLanded;
                     _activePod.OnDeploy += OnPodFinished;
                     break;
             }
@@ -207,10 +213,16 @@ namespace ProjectWallE
             SwitchActiveCamera(playerManager.ControllerType == ControllerType.Robot ? robotCamera : carCamera);
         }
 
+        private void OnPodLanded()
+        {
+            if (podNoise) podNoise.AmplitudeGain = 0f;
+        }
+
         private void UnsubscribeFromPod()
         {
             if (!_activePod) return;
             _activePod.OnLand -= OnPodFinished;
+            _activePod.OnLand -= OnPodLanded;
             _activePod.OnDeploy -= OnPodFinished;
         }
         
