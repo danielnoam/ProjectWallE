@@ -194,7 +194,8 @@ namespace ProjectWallE.UI
         private void UpdateObjectivesDisplay()
         {
             if (objectivesWriter && objectivesWriter.enabled) return;
-            
+            if (_activeObjectives == null) return;
+
             _objectiveBuilder.Clear();
 
             foreach (var objective in _activeObjectives)

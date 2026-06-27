@@ -246,7 +246,7 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
             clone.Initialize(() => OnObjectiveCompleted(clone), resolver);
         }
 
-        if (clones.Count == 0) return clones;
+        if (clones.Count == 0 || _activeObjectives == null) return clones;
 
         OnObjectivesAdded?.Invoke(_activeObjectives);
         return clones;
