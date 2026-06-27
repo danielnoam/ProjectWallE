@@ -18,8 +18,12 @@ namespace ProjectWallE.UI
         [SerializeField] private float colorDuration = 0.4f;
 
         private int _displayedCount;
+        private bool _hasGoal;
+        private int _goal;
         private Tween _countTween;
         private Sequence _colorSequence;
+
+        private string FormatCount(int count) => _hasGoal ? $"{count:N0}/{_goal:N0}" : $"{count:N0}";
 
         private void OnDestroy()
         {
@@ -47,8 +51,22 @@ namespace ProjectWallE.UI
             _countTween = Tween.Custom(from, count, countDuration, value =>
             {
                 _displayedCount = (int)value;
-                if (countText) countText.text = $"{_displayedCount:N0}";
+                if (countText) countText.text = FormatCount(_displayedCount);
             }, useUnscaledTime: true);
+        }
+
+        public void SetGoal(int goal)
+        {
+            _hasGoal = true;
+            _goal = goal;
+            if (countText) countText.text = FormatCount(_displayedCount);
+        }
+
+        public void ClearGoal()
+        {
+            if (!_hasGoal) return;
+            _hasGoal = false;
+            if (countText) countText.text = FormatCount(_displayedCount);
         }
 
         public void SetCountImmediate(int count)
@@ -58,7 +76,7 @@ namespace ProjectWallE.UI
             _displayedCount = count;
             if (countText)
             {
-                countText.text = count.ToString();
+                countText.text = FormatCount(count);
                 countText.color = Color.white;
             }
         }

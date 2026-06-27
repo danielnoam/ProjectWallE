@@ -10,6 +10,11 @@ namespace ProjectWallE.UI
     {
         [Header("Resources")]
         [SerializeField] private CountIcon resourcesIcon;
+        [SerializeField] private RectTransform resourcesHolder;
+        [SerializeField, Min(0f)] private float resourcesNormalWidth = 200f;
+        [SerializeField, Min(0f)] private float resourcesGoalWidth = 300f;
+        [SerializeField, Min(0f)] private float resourcesWidthDuration = 0.25f;
+        [SerializeField] private Ease resourcesWidthEase = Ease.InOutSine;
 
         [Header("Structures")]
         [SerializeField] private RectTransform structuresHolder;
@@ -26,6 +31,7 @@ namespace ProjectWallE.UI
 
         private Tween _structuresTween;
         private float _structuresContentHeight;
+        private Tween _resourcesWidthTween;
 
         private void OnValidate()
         {
@@ -35,6 +41,9 @@ namespace ProjectWallE.UI
         private void Awake()
         {
             ResetIcons();
+
+            if (resourcesHolder)
+                resourcesHolder.sizeDelta = new Vector2(resourcesNormalWidth, resourcesHolder.sizeDelta.y);
 
             if (structuresHolder)
             {
@@ -53,6 +62,8 @@ namespace ProjectWallE.UI
             ResourceManager.OnResourcesChanged += UpdateResourcesDisplay;
             StructureManager.OnStructureCountChanged += UpdateStructuresText;
             LevelManager.OnLevelInitializing += ResetIcons;
+            LevelManager.OnResourceGoalSet += ShowResourceGoal;
+            LevelManager.OnResourceGoalCleared += HideResourceGoal;
 
             if (player)
             {
@@ -69,6 +80,8 @@ namespace ProjectWallE.UI
             ResourceManager.OnResourcesChanged -= UpdateResourcesDisplay;
             StructureManager.OnStructureCountChanged -= UpdateStructuresText;
             LevelManager.OnLevelInitializing -= ResetIcons;
+            LevelManager.OnResourceGoalSet -= ShowResourceGoal;
+            LevelManager.OnResourceGoalCleared -= HideResourceGoal;
 
             if (player)
             {
@@ -83,6 +96,42 @@ namespace ProjectWallE.UI
         private void OnDestroy()
         {
             if (_structuresTween.isAlive) _structuresTween.Stop();
+            if (_resourcesWidthTween.isAlive) _resourcesWidthTween.Stop();
+        }
+
+        private void ShowResourceGoal(int target)
+        {
+            resourcesIcon?.SetGoal(target);
+            AnimateResourcesWidth(resourcesGoalWidth);
+        }
+
+        private void HideResourceGoal()
+        {
+            resourcesIcon?.ClearGoal();
+            AnimateResourcesWidth(resourcesNormalWidth);
+        }
+
+        private void AnimateResourcesWidth(float target)
+        {
+            if (!resourcesHolder) return;
+            if (_resourcesWidthTween.isAlive) _resourcesWidthTween.Stop();
+
+            float start = resourcesHolder.sizeDelta.x;
+            if (Mathf.Approximately(start, target))
+            {
+                resourcesHolder.sizeDelta = new Vector2(target, resourcesHolder.sizeDelta.y);
+                return;
+            }
+
+            if (resourcesWidthDuration > 0)
+            {
+                _resourcesWidthTween = Tween.Custom(start, target, resourcesWidthDuration,
+                    v => resourcesHolder.sizeDelta = new Vector2(v, resourcesHolder.sizeDelta.y),
+                    ease: resourcesWidthEase, useUnscaledTime: true);
+                return;
+            }
+
+            resourcesHolder.sizeDelta = new Vector2(target, resourcesHolder.sizeDelta.y);
         }
 
         private void OnActionsMenuRequested(Structure structure) => ShowStructuresHolder();
@@ -138,6 +187,7 @@ namespace ProjectWallE.UI
 
         private void ResetIcons()
         {
+            HideResourceGoal();
             resourcesIcon?.SetCountImmediate(0);
             basesIcon?.SetCountImmediate(0);
             turretsIcon?.SetCountImmediate(0);

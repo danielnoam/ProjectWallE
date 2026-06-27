@@ -19,6 +19,8 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
     public static event Action<float> OnLeveTimeLineUpdated;
     public static event Action<List<BaseLevelObjective>> OnObjectivesAdded;
     public static event Action OnObjectivesCompleted;
+    public static event Action<int> OnResourceGoalSet;
+    public static event Action OnResourceGoalCleared;
 
     [Header("Settings")]
     [Tooltip("Time before the time line starts")]
@@ -29,6 +31,8 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
     private bool _levelActive;
     private List<BaseLevelObjective> _activeObjectives;
     private int _completedCount;
+    private bool _hasResourceGoal;
+    private int _resourceGoal;
     
     
     private float TimeRemaining => _levelActive ? (float)(timeline.duration - timeline.time) : 0f;
@@ -70,6 +74,8 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
         {
             timeline.stopped -= OnTimelineStopped;
         }
+
+        ClearResourceGoal();
     }
 
     private void Start()
@@ -124,6 +130,7 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
 
         _levelActive = false;
         DisposeObjectives();
+        ClearResourceGoal();
         timeline.Stop();
         OnLevelCompleted?.Invoke();
     }
@@ -134,10 +141,49 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
 
         _levelActive = false;
         DisposeObjectives();
+        ClearResourceGoal();
         timeline.Stop();
         OnLevelFailed?.Invoke();
     }
-    
+
+
+    #endregion
+
+    #region Resource Goal
+
+    public void SetResourceGoal(int targetAmount)
+    {
+        if (!_levelActive || targetAmount <= 0) return;
+
+        if (_hasResourceGoal) ResourceManager.OnResourcesChanged -= OnResourcesChangedForGoal;
+
+        _hasResourceGoal = true;
+        _resourceGoal = targetAmount;
+        OnResourceGoalSet?.Invoke(_resourceGoal);
+
+        int current = ResourceManager.Instance ? ResourceManager.Instance.CurrentResources : 0;
+        if (current >= _resourceGoal)
+        {
+            CompleteLevel();
+            return;
+        }
+
+        ResourceManager.OnResourcesChanged += OnResourcesChangedForGoal;
+    }
+
+    private void ClearResourceGoal()
+    {
+        if (!_hasResourceGoal) return;
+
+        _hasResourceGoal = false;
+        ResourceManager.OnResourcesChanged -= OnResourcesChangedForGoal;
+        OnResourceGoalCleared?.Invoke();
+    }
+
+    private void OnResourcesChangedForGoal(int currentAmount)
+    {
+        if (currentAmount >= _resourceGoal) CompleteLevel();
+    }
 
     #endregion
 

@@ -127,6 +127,24 @@ MonoBehaviour:
         defaultValue: {fileID: 0}
       chance: 100
       isLocked: 0
+--- !u!114 &-7567234277011003092
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4c4598ba7b6c864bbc021a79a1f48d2, type: 3}
+  m_Name: Show Cinematic Caption Marker
+  m_EditorClassIdentifier: Assembly-CSharp::ShowCinematicCaptionMarker
+  m_Time: 113.98333333333333
+  skipInEditor: 0
+  text: Reach target resouce goal to complete level
+  duration: 5
+  fadeIn: 0.3
+  fadeOut: 0.3
 --- !u!114 &-6682765416599569745
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -218,7 +236,7 @@ MonoBehaviour:
   m_Name: Play Cinematic Marker
   m_EditorClassIdentifier: Assembly-CSharp::PlayCinematicMarker
   m_Time: 0
-  skipInEditor: 1
+  skipInEditor: 0
   cinematic:
     exposedName: 649c4ee6-7b81-4932-bf1f-9cf8b551baf1
     defaultValue: {fileID: 0}
@@ -930,6 +948,21 @@ MonoBehaviour:
           hideWhenUnchecked: 0
           value: 
         radius: 30
+--- !u!114 &-548100480015656521
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7350074d32b839346a560a56fe262da3, type: 3}
+  m_Name: Set Resource Goal Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SetResourceGoalMarker
+  m_Time: 114.98333333333333
+  skipInEditor: 0
+  targetAmount: 5000
 --- !u!114 &-254545262056842600
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1400,6 +1433,8 @@ MonoBehaviour:
     - {fileID: 5584825355151664577}
     - {fileID: -1163812701424556929}
     - {fileID: 5050833318195294186}
+    - {fileID: -548100480015656521}
+    - {fileID: -7567234277011003092}
 --- !u!114 &5671882440688688825
 MonoBehaviour:
   m_ObjectHideFlags: 1
