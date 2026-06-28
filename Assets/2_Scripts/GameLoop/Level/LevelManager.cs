@@ -34,6 +34,7 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
     private int _completedCount;
     private bool _hasResourceGoal;
     private int _resourceGoal;
+    private PlayableDirector _resourceGoalTimeline;
     
     
     private float TimeRemaining => _levelActive ? (float)(timeline.duration - timeline.time) : 0f;
@@ -153,7 +154,7 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
 
     #region Resource Goal
 
-    public void SetResourceGoal(int targetAmount)
+    public void SetResourceGoal(int targetAmount, PlayableDirector loopTimeline = null)
     {
         if (!_levelActive || targetAmount <= 0) return;
 
@@ -171,6 +172,7 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
         }
 
         timeline.Pause();
+        StartResourceGoalTimeline(loopTimeline);
         ResourceManager.OnResourcesChanged += OnResourcesChangedForGoal;
     }
 
@@ -179,8 +181,27 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
         if (!_hasResourceGoal) return;
 
         _hasResourceGoal = false;
+        StopResourceGoalTimeline();
         ResourceManager.OnResourcesChanged -= OnResourcesChangedForGoal;
         OnResourceGoalCleared?.Invoke();
+    }
+
+    private void StartResourceGoalTimeline(PlayableDirector loopTimeline)
+    {
+        if (!loopTimeline) return;
+
+        _resourceGoalTimeline = loopTimeline;
+        _resourceGoalTimeline.extrapolationMode = DirectorWrapMode.Loop;
+        _resourceGoalTimeline.time = 0;
+        _resourceGoalTimeline.Play();
+    }
+
+    private void StopResourceGoalTimeline()
+    {
+        if (!_resourceGoalTimeline) return;
+
+        _resourceGoalTimeline.Stop();
+        _resourceGoalTimeline = null;
     }
 
     private void OnResourcesChangedForGoal(int currentAmount)

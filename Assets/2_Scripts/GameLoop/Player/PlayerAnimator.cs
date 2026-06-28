@@ -98,7 +98,7 @@ namespace ProjectWallE.GameLoop.Player
 
         private void UpdateArmIK()
         {
-            if (!player || rig.weight <= 0.01f) return;
+            if (!player) return;
 
             Vector3 aimPoint = player.Aimer.AimPoint;
             Vector3 toAim = (aimPoint - shoulder.position).normalized;
@@ -112,7 +112,7 @@ namespace ProjectWallE.GameLoop.Player
 
         private void UpdateHeadIK()
         {
-            if (!player || rig.weight <= 0.01f) return;
+            if (!player) return;
 
             _headIkTarget.position = player.Aimer.AimPoint;
         }

@@ -11,13 +11,15 @@ Material:
   m_Shader: {fileID: -6465566751694194690, guid: 1862a6367050f2b4a84d84a7b9be1a5d, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _ALPHATEST_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
-  stringTagMap: {}
+  stringTagMap:
+    RenderType: TransparentCutout
   disabledShaderPasses:
   - MOTIONVECTORS
   m_LockedProperties: 
@@ -26,6 +28,10 @@ Material:
     m_TexEnvs:
     - _Base_Texture:
         m_Texture: {fileID: 10305, guid: 0000000000000000f000000000000000, type: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Cover_Tex:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Emission_Texture:
@@ -44,6 +50,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 9e6fac66bca70491d95b4f6bd77af0ae, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Noise_Tex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -59,8 +69,16 @@ Material:
     m_Ints: []
     m_Floats:
     - _ALPHA_EFFECT: 0
+    - _AlphaClip: 1
+    - _AlphaToMask: 1
     - _Ambient_Strength: 0.4
     - _BLEND_MODE: 0
+    - _Blend: 0
+    - _CastShadows: 1
+    - _Cover_Edge_Width: 1
+    - _Cover_Normal_Bias: 1
+    - _Cover_Threshold: 0.5
+    - _Cull: 2
     - _CutoffHeight: 1
     - _DIRECTION: 1
     - _DITHER_FROM: 0
@@ -68,6 +86,8 @@ Material:
     - _Dither_Fade_Distance: 0
     - _Dither_Flip: 0
     - _Dither_Size: 2
+    - _DstBlend: 0
+    - _DstBlendAlpha: 0
     - _EdgeWidth: 0.05
     - _Emission: 0
     - _Emission_Strength: 0
@@ -91,10 +111,20 @@ Material:
     - _Shades: 0.11
     - _Smoothness: 1
     - _Smudge_Strength: 0.002
+    - _SrcBlend: 1
+    - _SrcBlendAlpha: 1
+    - _Surface: 0
     - _Tiling: 1
+    - _USE_COVER: 0
+    - _ZTest: 4
+    - _ZWrite: 1
+    - _ZWriteControl: 0
     m_Colors:
     - _Base_Color: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Cover_Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Cover_Direction: {r: 0, g: 1, b: 0, a: 0}
+    - _Cover_Tiling: {r: 1, g: 1, b: 0, a: 0}
     - _Diffuse_Color: {r: 0.3962264, g: 0.3962264, b: 0.3962264, a: 1}
     - _Dither_World_Position: {r: 0, g: 0, b: 0, a: 0}
     - _EdgeColor: {r: 4, g: 4, b: 4, a: 1}
@@ -104,7 +134,10 @@ Material:
     - _Hatching_Tiling: {r: 50, g: 50, b: 0, a: 0}
     - _Innerline_Color: {r: 1, g: 1, b: 1, a: 1}
     - _Noise_Scroll_Speed: {r: 0, g: 0, b: 0, a: 0}
+    - _Noise_Tiling: {r: 1, g: 1, b: 0, a: 0}
+    - _Offset: {r: 0, g: 0, b: 0, a: 0}
     - _Specular_Color: {r: 0.30817598, g: 0.30817598, b: 0.30817598, a: 1}
+    - _Tiling: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &3729133454598192734

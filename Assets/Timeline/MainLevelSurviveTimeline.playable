@@ -1,0 +1,455 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8110904533396331235
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
+  m_Name: Spawn Enemy Wave Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
+  m_Time: 12.016666666666667
+  skipInEditor: 0
+  enemyType: 0
+  count: 3
+  enemies:
+    internalItems: []
+  enemyEntries: []
+  spawnPosition: 1
+  spawnPoints:
+    internalItems:
+    - item:
+        exposedName: fd278de0-d2b0-46ad-b624-7c5bf3a619a0
+        defaultValue: {fileID: 0}
+      chance: 100
+      isLocked: 0
+--- !u!114 &-8073004881602852655
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
+  m_Name: Spawn Enemy Wave Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
+  m_Time: 40.34999999999998
+  skipInEditor: 0
+  enemyType: 0
+  count: 7
+  enemies:
+    internalItems: []
+  enemyEntries: []
+  spawnPosition: 0
+  spawnPoints:
+    internalItems: []
+--- !u!114 &-7803992468192868248
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
+  m_Name: Spawn Enemy Wave Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
+  m_Time: 3.3666666666666667
+  skipInEditor: 0
+  enemyType: 0
+  count: 3
+  enemies:
+    internalItems: []
+  enemyEntries: []
+  spawnPosition: 1
+  spawnPoints:
+    internalItems:
+    - item:
+        exposedName: 5ce2bc84-d99c-4dfd-8838-7cb9dde97890
+        defaultValue: {fileID: 0}
+      chance: 100
+      isLocked: 0
+--- !u!114 &-6682765416599569745
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d09b01d4b9a242f59f452dd030b5551c, type: 3}
+  m_Name: Toggle Enemy Spawn Point Marker
+  m_EditorClassIdentifier: Assembly-CSharp::ToggleEnemySpawnPointMarker
+  m_Time: 8.2
+  skipInEditor: 0
+  spawnPoints: []
+--- !u!114 &-4651446852953380397
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
+  m_Name: Spawn Enemy Wave Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
+  m_Time: 44.599999999999994
+  skipInEditor: 0
+  enemyType: 0
+  count: 1
+  enemies:
+    internalItems: []
+  enemyEntries: []
+  spawnPosition: 0
+  spawnPoints:
+    internalItems: []
+--- !u!114 &-3913863030380253719
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
+  m_Name: Spawn Enemy Wave Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
+  m_Time: 7.066666666666666
+  skipInEditor: 0
+  enemyType: 0
+  count: 3
+  enemies:
+    internalItems: []
+  enemyEntries: []
+  spawnPosition: 1
+  spawnPoints:
+    internalItems:
+    - item:
+        exposedName: 26ba3b23-e481-480c-a63f-ea9562e2c877
+        defaultValue: {fileID: 0}
+      chance: 100
+      isLocked: 0
+--- !u!114 &-2831747386146784124
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55379675b0944e639e1ef8954a96c2a4, type: 3}
+  m_Name: Level Event Track
+  m_EditorClassIdentifier: Assembly-CSharp::LevelEventTrack
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 0
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 11400000}
+  m_Children: []
+  m_Clips: []
+  m_Markers:
+    m_Objects: []
+--- !u!114 &-1163812701424556929
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
+  m_Name: Spawn Enemy Wave Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
+  m_Time: 28.15000000000001
+  skipInEditor: 0
+  enemyType: 0
+  count: 4
+  enemies:
+    internalItems: []
+  enemyEntries: []
+  spawnPosition: 0
+  spawnPoints:
+    internalItems: []
+--- !u!114 &-1151740949387142617
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
+  m_Name: Spawn Enemy Wave Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
+  m_Time: 49.23333333333332
+  skipInEditor: 0
+  enemyType: 0
+  count: 3
+  enemies:
+    internalItems: []
+  enemyEntries: []
+  spawnPosition: 0
+  spawnPoints:
+    internalItems: []
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfda56da833e2384a9677cd3c976a436, type: 3}
+  m_Name: MainLevelSurviveTimeline
+  m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.TimelineAsset
+  m_Version: 0
+  m_Tracks:
+  - {fileID: -2831747386146784124}
+  - {fileID: 5586992869872184875}
+  m_FixedDuration: 60.03333333333333
+  m_EditorSettings:
+    m_Framerate: 60
+    m_ScenePreview: 1
+  m_DurationMode: 1
+  m_MarkerTrack: {fileID: 3448081076168082159}
+--- !u!114 &520731923415232371
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
+  m_Name: Spawn Enemy Wave Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
+  m_Time: 34.449999999999974
+  skipInEditor: 0
+  enemyType: 0
+  count: 5
+  enemies:
+    internalItems: []
+  enemyEntries: []
+  spawnPosition: 0
+  spawnPoints:
+    internalItems: []
+--- !u!114 &3448081076168082159
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a16748d9461eae46a725db9776d5390, type: 3}
+  m_Name: Markers
+  m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.MarkerTrack
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 0
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 11400000}
+  m_Children: []
+  m_Clips: []
+  m_Markers:
+    m_Objects: []
+--- !u!114 &5050833318195294186
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
+  m_Name: Spawn Enemy Wave Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
+  m_Time: 20.98333333333331
+  skipInEditor: 0
+  enemyType: 0
+  count: 2
+  enemies:
+    internalItems: []
+  enemyEntries: []
+  spawnPosition: 1
+  spawnPoints:
+    internalItems:
+    - item:
+        exposedName: cda44982-0bf3-4d7a-aed1-dfe0b7bca9be
+        defaultValue: {fileID: 0}
+      chance: 100
+      isLocked: 0
+--- !u!114 &5584825355151664577
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
+  m_Name: Spawn Enemy Wave Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
+  m_Time: 24.949999999999978
+  skipInEditor: 0
+  enemyType: 0
+  count: 4
+  enemies:
+    internalItems: []
+  enemyEntries: []
+  spawnPosition: 0
+  spawnPoints:
+    internalItems: []
+--- !u!114 &5586992869872184875
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34df62f90e684524fad13c21a7389ee9, type: 3}
+  m_Name: Level Event Marker Track
+  m_EditorClassIdentifier: Assembly-CSharp::LevelEventMarkerTrack
+  m_Version: 3
+  m_AnimClip: {fileID: 0}
+  m_Locked: 0
+  m_Muted: 0
+  m_CustomPlayableFullTypename: 
+  m_Curves: {fileID: 0}
+  m_Parent: {fileID: 11400000}
+  m_Children: []
+  m_Clips: []
+  m_Markers:
+    m_Objects:
+    - {fileID: -7803992468192868248}
+    - {fileID: 7172977050778211017}
+    - {fileID: -8110904533396331235}
+    - {fileID: 6434995654963013332}
+    - {fileID: 5584825355151664577}
+    - {fileID: -1163812701424556929}
+    - {fileID: 5050833318195294186}
+    - {fileID: -3913863030380253719}
+    - {fileID: 520731923415232371}
+    - {fileID: -8073004881602852655}
+    - {fileID: -1151740949387142617}
+    - {fileID: -4651446852953380397}
+--- !u!114 &6066724410445298216
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23ff59797f47f8244a7ad6aa56ed7839, type: 3}
+  m_Name: Set Ship Spline Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SetShipSplineMarker
+  m_Time: 1
+  skipInEditor: 0
+  spline:
+    exposedName: 40375969-ba2e-47f9-8bf0-f0f3c69fceb3
+    defaultValue: {fileID: 0}
+  speed: 3
+  followMode: 1
+  transition: 0
+  entryPoint: 0
+  transitionDuration: 3
+--- !u!114 &6434995654963013332
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
+  m_Name: Spawn Enemy Wave Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
+  m_Time: 18.5
+  skipInEditor: 0
+  enemyType: 0
+  count: 5
+  enemies:
+    internalItems: []
+  enemyEntries: []
+  spawnPosition: 1
+  spawnPoints:
+    internalItems:
+    - item:
+        exposedName: d1b27856-3bfb-4cfb-aea2-675c7c5516f3
+        defaultValue: {fileID: 0}
+      chance: 100
+      isLocked: 0
+--- !u!114 &7172977050778211017
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
+  m_Name: Spawn Enemy Wave Marker
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
+  m_Time: 15.149999999999995
+  skipInEditor: 0
+  enemyType: 0
+  count: 3
+  enemies:
+    internalItems: []
+  enemyEntries: []
+  spawnPosition: 1
+  spawnPoints:
+    internalItems:
+    - item:
+        exposedName: b5a3f529-57bb-4107-9e28-1e3924a6ab66
+        defaultValue: {fileID: 0}
+      chance: 100
+      isLocked: 0
+--- !u!114 &8276866819151220175
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e8753dfb9ae4440a6ff57fddb193624, type: 3}
+  m_Name: Teleport Player To Spawn Point Marker
+  m_EditorClassIdentifier: Assembly-CSharp::TeleportPlayerToSpawnPointMarker
+  m_Time: 0.7666666666666667
+  <parent>k__BackingField: {fileID: 0}
+  skipInEditor: 0
+  usePod: 1
+  playerSpawnPoint:
+    exposedName: e47c2d01abf560247b6c973d56506e35
+    defaultValue: {fileID: 0}
