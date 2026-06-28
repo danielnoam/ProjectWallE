@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.InputSystem;
 
 namespace ProjectWallE
 {
@@ -12,6 +13,7 @@ namespace ProjectWallE
         public static MusicManager Instance { get; private set; }
 
         [Header("Settings")]
+        [SerializeField] private Key muteKey = Key.M;
         [SerializeField, Min(0f)] private float fadeDuration = 1f;
         [SerializeField, Min(0f)] private float stopFadeDuration = 1f;
         [SerializeField] private bool crossfade = true;
@@ -27,6 +29,7 @@ namespace ProjectWallE
         private AudioSource _activeSource;
         private AudioClip _currentClip;
         private bool _gameplayActive;
+        private bool _muted;
         private Coroutine _gameplayRoutine;
         private Coroutine _crossfadeRoutine;
 
@@ -42,6 +45,19 @@ namespace ProjectWallE
             _sourceA = CreateSource("MusicSourceA");
             _sourceB = CreateSource("MusicSourceB");
             _activeSource = _sourceA;
+        }
+
+        private void Update()
+        {
+            if (Keyboard.current != null && Keyboard.current[muteKey].wasPressedThisFrame)
+                ToggleMute();
+        }
+
+        public void ToggleMute()
+        {
+            _muted = !_muted;
+            _sourceA.mute = _muted;
+            _sourceB.mute = _muted;
         }
 
         public void Execute(MusicAction action, AudioClip clip = null)
