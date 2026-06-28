@@ -51,6 +51,7 @@ namespace ProjectWallE.UI
             player.CarController.CarBoost.OnBoostStart += OnBoostStart;
             if (player.Upgrades)
             {
+                player.Upgrades.OnDamageMultiplierChanged += OnDamageUpgraded;
                 player.Upgrades.OnMaxHealthMultiplierChanged += OnHealthUpgraded;
                 player.Upgrades.OnMaxFuelMultiplierChanged += OnFuelUpgraded;
             }
@@ -81,6 +82,7 @@ namespace ProjectWallE.UI
             player.CarController.CarBoost.OnBoostStart -= OnBoostStart;
             if (player.Upgrades)
             {
+                player.Upgrades.OnDamageMultiplierChanged -= OnDamageUpgraded;
                 player.Upgrades.OnMaxHealthMultiplierChanged -= OnHealthUpgraded;
                 player.Upgrades.OnMaxFuelMultiplierChanged -= OnFuelUpgraded;
             }
@@ -176,6 +178,12 @@ namespace ProjectWallE.UI
         private void OnSpecialCooldownUpdated(float currentCooldown, float maxCooldown)
         {
             if (specialAttackIcon && specialAttackIcon.isActiveAndEnabled) specialAttackIcon.UpdateCooldown(currentCooldown, maxCooldown);
+        }
+
+        private void OnDamageUpgraded(float amount)
+        {
+            if (basicAttackIcon && basicAttackIcon.isActiveAndEnabled) basicAttackIcon.PunchIcon(flashColor: true);
+            if (specialAttackIcon && specialAttackIcon.isActiveAndEnabled) specialAttackIcon.PunchIcon(flashColor: true);
         }
 
         private void OnHealthUpgraded(float amount)

@@ -22,6 +22,7 @@ namespace ProjectWallE.GameLoop.Player
         public float MaxHealthMultiplier => maxHealthMultiplier;
         public float MaxFuelMultiplier => maxFuelMultiplier;
 
+        public event Action<float> OnDamageMultiplierChanged;
         public event Action<float> OnMaxHealthMultiplierChanged;
         public event Action<float> OnMaxFuelMultiplierChanged;
 
@@ -42,6 +43,7 @@ namespace ProjectWallE.GameLoop.Player
             {
                 case UpgradeType.Damage:
                     damageMultiplier += amount;
+                    OnDamageMultiplierChanged?.Invoke(amount);
                     break;
                 case UpgradeType.MaxHealth:
                     maxHealthMultiplier += amount;

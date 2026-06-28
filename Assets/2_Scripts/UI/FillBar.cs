@@ -20,6 +20,7 @@ namespace ProjectWallE.UI
         [Header("Punch")]
         [SerializeField] private float punchStrength = 0.2f;
         [SerializeField, Min(0f)] private float punchDuration = 0.3f;
+        [SerializeField] private Color punchColor = Color.white;
 
         [Header("References")]
         [SerializeField] private CanvasGroup canvasGroup;
@@ -30,11 +31,24 @@ namespace ProjectWallE.UI
 
         private Sequence _sequence;
         private Tween _punchTween;
+        private Tween _colorPunchTween;
+        private Color _baseFillColor;
+        private bool _hasBaseFillColor;
+
+        private void Awake()
+        {
+            if (barFill)
+            {
+                _baseFillColor = barFill.color;
+                _hasBaseFillColor = true;
+            }
+        }
 
         private void OnDestroy()
         {
             if (_sequence.isAlive) _sequence.Stop();
             if (_punchTween.isAlive) _punchTween.Stop();
+            if (_colorPunchTween.isAlive) _colorPunchTween.Stop();
         }
 
         public void Punch()
@@ -42,6 +56,13 @@ namespace ProjectWallE.UI
             transform.localScale = Vector3.one;
             if (_punchTween.isAlive) _punchTween.Stop();
             if (punchDuration > 0) _punchTween = Tween.PunchScale(transform, Vector3.one * punchStrength, duration: punchDuration);
+
+            if (barFill && _hasBaseFillColor && punchDuration > 0)
+            {
+                if (_colorPunchTween.isAlive) _colorPunchTween.Stop();
+                barFill.color = punchColor;
+                _colorPunchTween = Tween.Color(barFill, _baseFillColor, duration: punchDuration);
+            }
         }
 
         public void SetValue(float current, float max)

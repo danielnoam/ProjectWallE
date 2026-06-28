@@ -28,7 +28,7 @@ public class DamageNumberPopup : MonoBehaviour, IPoolable
 
     public void Show(DamageInfo info)
     {
-        text.text = Mathf.RoundToInt(info.Amount).ToString();
+        text.text = string.IsNullOrEmpty(info.Text) ? Mathf.RoundToInt(info.Amount).ToString() : info.Text;
         text.color = info.IsCritical ? criticalColor : normalColor;
 
         Vector2 randomOffset = Random.insideUnitCircle * spreadRadius;

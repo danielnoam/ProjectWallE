@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4931242510652650281}
   - component: {fileID: 2931204560569321738}
   - component: {fileID: 13718433895940707}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: BottomConnector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 5535426868589994070}
   - component: {fileID: 4385201003492212355}
   - component: {fileID: 1688279406839103595}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -191,7 +191,7 @@ GameObject:
   - component: {fileID: 7185762191666758208}
   - component: {fileID: 7158024653897983855}
   - component: {fileID: 8215260737395996390}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Part2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -281,7 +281,7 @@ GameObject:
   - component: {fileID: 3087730491156430951}
   - component: {fileID: 1416122422419218436}
   - component: {fileID: 3317123987778941682}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Joint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -391,6 +391,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1602544656421649142}
+  - {fileID: 5717601415559502136}
   m_Father: {fileID: 3231726576048710521}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1386549131756669054
@@ -404,7 +405,7 @@ GameObject:
   - component: {fileID: 1603497286758085259}
   - component: {fileID: 2186499798202453414}
   - component: {fileID: 8389503343880371575}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: BodyConnector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -492,7 +493,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8876278780216695308}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: WheelFRParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -526,7 +527,7 @@ GameObject:
   - component: {fileID: 4515877820010563888}
   - component: {fileID: 8090498861931122212}
   - component: {fileID: 1136854395815008211}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Part1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -616,7 +617,7 @@ GameObject:
   - component: {fileID: 7133565861227679129}
   - component: {fileID: 4786468764487966871}
   - component: {fileID: 353653878570369356}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: BoosterRFace
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -704,7 +705,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1602544656421649142}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: RobotMesh (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -739,7 +740,7 @@ GameObject:
   - component: {fileID: 1974300672852333942}
   - component: {fileID: 1268296961619383953}
   - component: {fileID: 2928384996103440298}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Tube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -829,7 +830,7 @@ GameObject:
   - component: {fileID: 4899541214637485664}
   - component: {fileID: 4814677076314767771}
   - component: {fileID: 1339001487878464153}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -921,7 +922,7 @@ GameObject:
   - component: {fileID: 7736069544712783061}
   - component: {fileID: 6826956660448033414}
   - component: {fileID: 2543769955260248680}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1016,7 +1017,7 @@ GameObject:
   - component: {fileID: 8371739909771401600}
   - component: {fileID: 3611485519772965696}
   - component: {fileID: 5892135306845542747}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Prefab_UpgradePickupBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1082,11 +1083,15 @@ MonoBehaviour:
   amount: 0.05
   upForce: 5
   horizontalForce: 2
+  gfx: {fileID: 964507150500571281}
+  rotationSpeed: 90
+  bobHeight: 0.25
+  bobSpeed: 2
   pickupEffect:
     effectType: 1
-    particle: {fileID: 0}
+    particle: {fileID: 8195002406593029198, guid: 64b57bfea360b5945b70dc0dd8cfff75, type: 3}
     triggerParticle: {fileID: 0}
-    soundId: 
+    soundId: MineTrigger
   rigidBody: {fileID: 1172750202858203559}
 --- !u!135 &3611485519772965696
 SphereCollider:
@@ -1098,10 +1103,10 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 3656
+    m_Bits: 3144
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 768
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -1119,7 +1124,7 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1139,7 +1144,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3148191676928779277}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: 'ReversibleMount '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1173,7 +1178,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 564536641249149882}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: WheelBRParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1207,7 +1212,7 @@ GameObject:
   - component: {fileID: 6011577703103639113}
   - component: {fileID: 3961829012287724208}
   - component: {fileID: 8671195965210861339}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: UpperArm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1296,7 +1301,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4442325956869288938}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: WheelFLParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1330,7 +1335,7 @@ GameObject:
   - component: {fileID: 8110450188591370298}
   - component: {fileID: 8918203599434316702}
   - component: {fileID: 3302326947345091434}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: WheelsVerticalTub
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1420,7 +1425,7 @@ GameObject:
   - component: {fileID: 6167050917624389932}
   - component: {fileID: 1525664875229864667}
   - component: {fileID: 624642746963085610}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: WheelFL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1510,7 +1515,7 @@ GameObject:
   - component: {fileID: 3263833355161201106}
   - component: {fileID: 6181796419334907357}
   - component: {fileID: 5678064630365300368}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Eye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1598,7 +1603,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5521176719556696669}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SwivelTop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1633,7 +1638,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3210146962796056752}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: WheelsPivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1670,7 +1675,7 @@ GameObject:
   - component: {fileID: 1685454076424076599}
   - component: {fileID: 3835769751723358237}
   - component: {fileID: 7853148300203638432}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Antenna
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1760,7 +1765,7 @@ GameObject:
   - component: {fileID: 4333178290973102028}
   - component: {fileID: 535937787731362543}
   - component: {fileID: 6495053137393977682}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: InnerFaces.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1839,6 +1844,133 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &4910385353646129046
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5717601415559502136}
+  - component: {fileID: 5796943582190523374}
+  - component: {fileID: 8083272733039190685}
+  m_Layer: 0
+  m_Name: Point Light
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5717601415559502136
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4910385353646129046}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 964507150500571281}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!108 &5796943582190523374
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4910385353646129046}
+  m_Enabled: 1
+  serializedVersion: 13
+  m_Type: 2
+  m_Color: {r: 1, g: 0.6650865, b: 0, a: 1}
+  m_Intensity: 4.2
+  m_Range: 10
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize2D: {x: 0.5, y: 0.5}
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ForceVisible: 0
+  m_ShapeRadius: 0.025
+  m_ShadowAngle: 0
+  m_LightUnit: 1
+  m_LuxAtDistance: 1
+  m_EnableSpotReflector: 1
+--- !u!114 &8083272733039190685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4910385353646129046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1 &5099472528563520039
 GameObject:
   m_ObjectHideFlags: 0
@@ -1848,7 +1980,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4567902850710946022}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: WheelBLParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1882,7 +2014,7 @@ GameObject:
   - component: {fileID: 3096674202841011874}
   - component: {fileID: 609393842291319982}
   - component: {fileID: 5000443389130549686}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: WheelFR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1972,7 +2104,7 @@ GameObject:
   - component: {fileID: 3362839773337577650}
   - component: {fileID: 2552670058497138113}
   - component: {fileID: 8907887357769369587}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: ArmConnector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2061,7 +2193,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5790553345568707670}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: WheelsSuspension
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2097,7 +2229,7 @@ GameObject:
   - component: {fileID: 4567604640330308922}
   - component: {fileID: 6014599467490036528}
   - component: {fileID: 7562660778628089749}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: InnerFaces
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2187,7 +2319,7 @@ GameObject:
   - component: {fileID: 7381952607997066634}
   - component: {fileID: 5248492808405393481}
   - component: {fileID: 977690552510940419}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: BoosterL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2276,7 +2408,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6789207734514419794}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SwivelBottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2314,7 +2446,7 @@ GameObject:
   - component: {fileID: 456394321538865129}
   - component: {fileID: 3042211299226155051}
   - component: {fileID: 7862064040223807924}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: HeadTube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2404,7 +2536,7 @@ GameObject:
   - component: {fileID: 2379099392273568857}
   - component: {fileID: 1190520670029097086}
   - component: {fileID: 7617752890724217827}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: BoosterR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2495,7 +2627,7 @@ GameObject:
   - component: {fileID: 6788076873500146309}
   - component: {fileID: 3298289254429045073}
   - component: {fileID: 5616745450872220937}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: MainBody
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2585,7 +2717,7 @@ GameObject:
   - component: {fileID: 4745636605528535221}
   - component: {fileID: 930910456206145406}
   - component: {fileID: 8644295897416596345}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: WheelsHorizontalTub
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2676,7 +2808,7 @@ GameObject:
   - component: {fileID: 5968398481289044655}
   - component: {fileID: 2167127084948537041}
   - component: {fileID: 2504165751272663922}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: WheelsHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2767,7 +2899,7 @@ GameObject:
   - component: {fileID: 1964911335815714116}
   - component: {fileID: 3494585602984254843}
   - component: {fileID: 3018038860402977603}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: WheelBR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2855,7 +2987,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 390262129713328116}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: SwivelWheels
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2890,7 +3022,7 @@ GameObject:
   - component: {fileID: 8395690428728185831}
   - component: {fileID: 8934919907154826298}
   - component: {fileID: 3247788499455898829}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: BoosterLFace
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2980,7 +3112,7 @@ GameObject:
   - component: {fileID: 1373989771316334851}
   - component: {fileID: 6690537568502034315}
   - component: {fileID: 1818011563207588498}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: WheelBL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3070,7 +3202,7 @@ GameObject:
   - component: {fileID: 4027337044402375164}
   - component: {fileID: 6724211861262888968}
   - component: {fileID: 3947426119692739111}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Shoulder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3161,7 +3293,7 @@ GameObject:
   - component: {fileID: 3343368082126034056}
   - component: {fileID: 2666762062130604412}
   - component: {fileID: 628527805984093657}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: InnerFaces.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}

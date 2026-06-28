@@ -8,21 +8,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1339001487878464153, guid: 7a62fecbf64024445bf592dc3fcea180, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cb1611a78dd79bc45a42f66b582628cf, type: 2}
     - target: {fileID: 2985111588141153626, guid: 7a62fecbf64024445bf592dc3fcea180, type: 3}
       propertyPath: m_Name
       value: Prefab_UpgradePickupMaxHealth
       objectReference: {fileID: 0}
     - target: {fileID: 3231726576048710521, guid: 7a62fecbf64024445bf592dc3fcea180, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -553.77
       objectReference: {fileID: 0}
     - target: {fileID: 3231726576048710521, guid: 7a62fecbf64024445bf592dc3fcea180, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 21.53
       objectReference: {fileID: 0}
     - target: {fileID: 3231726576048710521, guid: 7a62fecbf64024445bf592dc3fcea180, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 308.06
       objectReference: {fileID: 0}
     - target: {fileID: 3231726576048710521, guid: 7a62fecbf64024445bf592dc3fcea180, type: 3}
       propertyPath: m_LocalRotation.w
@@ -56,6 +60,14 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -0.81
       objectReference: {fileID: 0}
+    - target: {fileID: 5678064630365300368, guid: 7a62fecbf64024445bf592dc3fcea180, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: bc8a713fdbdcad841ad4f98adc4fc825, type: 2}
+    - target: {fileID: 7853148300203638432, guid: 7a62fecbf64024445bf592dc3fcea180, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: bc8a713fdbdcad841ad4f98adc4fc825, type: 2}
     - target: {fileID: 8371739909771401600, guid: 7a62fecbf64024445bf592dc3fcea180, type: 3}
       propertyPath: upgradeType
       value: 1

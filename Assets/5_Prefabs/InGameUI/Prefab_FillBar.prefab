@@ -70,13 +70,16 @@ MonoBehaviour:
   trailChangeDuration: 0.5
   drainColor: {r: 1, g: 0.3, b: 0.3, a: 0.8}
   fillColor: {r: 0.3, g: 1, b: 0.3, a: 0.8}
+  punchStrength: 0.2
+  punchDuration: 0.3
+  punchColor: {r: 1, g: 1, b: 1, a: 1}
   canvasGroup: {fileID: 6749123367764203992}
   barFill: {fileID: 7906446335051591277}
   trailFill: {fileID: 3694062780340141332}
   valueText: {fileID: 8411485120915525593}
   prefix:
     isSet: 0
-    hideValueIfSet: 0
+    hideWhenUnchecked: 0
     value: 
 --- !u!1 &4510117843406211015
 GameObject:
@@ -320,7 +323,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 100
+  m_fontSize: 22.85
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

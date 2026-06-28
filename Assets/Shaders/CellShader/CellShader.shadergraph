@@ -4271,6 +4271,7 @@
     "isMainTexture": false,
     "useTilingAndOffset": false,
     "useTexelSize": true,
+    "isHDR": false,
     "m_Modifiable": true,
     "m_DefaultType": 0
 }
@@ -4805,7 +4806,7 @@
     "m_Title": "Diffuse",
     "m_Position": {
         "x": -5899.33349609375,
-        "y": -618.6669921875
+        "y": -618.66650390625
     }
 }
 
@@ -5629,6 +5630,7 @@
     "isMainTexture": false,
     "useTilingAndOffset": false,
     "useTexelSize": true,
+    "isHDR": false,
     "m_Modifiable": true,
     "m_DefaultType": 0
 }
@@ -6426,7 +6428,7 @@
     "m_ObjectId": "621927db0916433b9304f50c9b1df20e",
     "m_Title": "Fresnel",
     "m_Position": {
-        "x": -4998.66650390625,
+        "x": -4998.6669921875,
         "y": 436.0
     }
 }
@@ -8520,7 +8522,7 @@
     "m_ActiveSubTarget": {
         "m_Id": "78b3119af0cd49d1a41a8b18b6bee791"
     },
-    "m_AllowMaterialOverride": false,
+    "m_AllowMaterialOverride": true,
     "m_SurfaceType": 0,
     "m_ZTestMode": 4,
     "m_ZWriteControl": 0,
@@ -8785,8 +8787,8 @@
     "m_ObjectId": "99f3552966ed463ca0c38303d25af224",
     "m_Title": "Specular",
     "m_Position": {
-        "x": -6650.666015625,
-        "y": -1723.333740234375
+        "x": -6650.6669921875,
+        "y": -1723.333251953125
     }
 }
 
@@ -11817,6 +11819,7 @@
     "isMainTexture": false,
     "useTilingAndOffset": false,
     "useTexelSize": true,
+    "isHDR": false,
     "m_Modifiable": true,
     "m_DefaultType": 0
 }
@@ -12471,7 +12474,7 @@
 }
 
 {
-    "m_SGVersion": 1,
+    "m_SGVersion": 2,
     "m_Type": "UnityEditor.ShaderGraph.ShaderKeyword",
     "m_ObjectId": "e86dccf88693490f89f8a0cb707b8c8b",
     "m_Guid": {
@@ -12495,7 +12498,8 @@
     "m_KeywordStages": 63,
     "m_Entries": [],
     "m_Value": 0,
-    "m_IsEditable": true
+    "m_IsEditable": true,
+    "m_IsShaderBuildSettingsCompatible": false
 }
 
 {

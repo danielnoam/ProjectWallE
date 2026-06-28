@@ -170,6 +170,7 @@ public class LevelManager : MonoBehaviour, INotificationReceiver
             return;
         }
 
+        timeline.Pause();
         ResourceManager.OnResourcesChanged += OnResourcesChangedForGoal;
     }
 
