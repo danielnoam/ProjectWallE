@@ -26,7 +26,11 @@ public class DebugOverlay : MonoBehaviour
 
     private void Update()
     {
-        if (Keyboard.current[toggleKey].wasPressedThisFrame) _visible = !_visible;
+        if (Keyboard.current[toggleKey].wasPressedThisFrame)
+        {
+            _visible = !_visible;
+            if (_visible) Debug.Log("Debug overlay enabled");
+        }
     }
 
     private void HandleLog(string message, string stackTrace, LogType type)
