@@ -73,6 +73,7 @@ namespace ProjectWallE.GameLoop
                 Team = Team.Player,
                 Node = node
             };
+            node.Reserve();
             DeploymentManager.Instance?.LaunchFromShip(structure, request);
         }
 

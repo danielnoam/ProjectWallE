@@ -9,6 +9,7 @@ namespace ProjectWallE.GameLoop
         private static CheatsManager _instance;
         
         [Header("Settings")]
+        [SerializeField] private Key enableAllFeaturesKey = Key.F11;
         [SerializeField] private Key restartSceneKey = Key.F6;
         [SerializeField] private Key completeLevelKey = Key.F5;
         [SerializeField] private Key completeObjectivesKey = Key.F4;
@@ -29,6 +30,12 @@ namespace ProjectWallE.GameLoop
 
         private void Update()
         {
+            if (Keyboard.current[enableAllFeaturesKey].wasPressedThisFrame)
+            {
+                PlayerManager.Instance?.EnableFeatures(PlayerFeature.All);
+                Debug.Log("Enabled all player features");
+            }
+
             if (Keyboard.current[restartSceneKey].wasPressedThisFrame)
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);

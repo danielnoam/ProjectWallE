@@ -14,13 +14,20 @@ namespace ProjectWallE.GameLoop
         [SerializeField] private Transform visuals;
 
         private Structure _occupant;
+        private bool _reserved;
 
-        public bool IsOccupied => _occupant;
+        public bool IsOccupied => _occupant || _reserved;
         public Structure[] AllowedStructures => allowedStructures;
         public Vector3 SnapPoint => transform.position + transform.TransformVector(snapOffset);
 
+        public void Reserve()
+        {
+            _reserved = true;
+        }
+
         public void Occupy(Structure structure)
         {
+            _reserved = false;
             _occupant = structure;
             _occupant.OnDeath += OnOccupantDeath;
             Structure.OnStructureDemolished += OnOccupantDemolished;
@@ -46,6 +53,7 @@ namespace ProjectWallE.GameLoop
                 Structure.OnStructureDemolished -= OnOccupantDemolished;
             }
             _occupant = null;
+            _reserved = false;
         }
 
         private void OnDestroy()
