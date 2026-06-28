@@ -99,6 +99,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DamageNumberSource
   positionOffset: {x: 0, y: 2.5, z: 0}
+  showOnDeath: 0
+  useCustomText: 0
+  customText: Dead
+  deathNumber: 0
+  deathIsCritical: 0
 --- !u!195 &8909220601765990049
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -109,7 +114,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 3.96
-  m_Speed: 7
+  m_Speed: 9
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -133,11 +138,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 581df25d31c3471eb2dfb2996c0c6195, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GroundEnemy
-  maxHealth: 300
+  maxHealth: 500
   resourceWorth: 25
   canBePushed: 0
   lootTable: {fileID: 11400000, guid: ae2af23a52af60e4783f0e3f4d6213f7, type: 2}
-  targetFindRange: 100
+  targetFindRange: 125
   targetRandomOffset: 20
   retargetDestinationThreshold: 25
   targetingStrategies:
@@ -201,7 +206,7 @@ MonoBehaviour:
     - rid: 6000861270941368427
       type: {class: ProjectileAttack, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:
-        attackRange: 100
+        attackRange: 135
         attackCooldown: 1
         firePoint: {fileID: 8925620038691902775}
         soProjectileData: {fileID: 11400000, guid: c32a03d395cada347bd4ebe76d2ed779, type: 2}

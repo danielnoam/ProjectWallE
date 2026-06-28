@@ -77,6 +77,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DamageNumberSource
   positionOffset: {x: 0, y: 1, z: 0}
+  showOnDeath: 0
+  useCustomText: 0
+  customText: Dead
+  deathNumber: 0
+  deathIsCritical: 0
 --- !u!114 &5663768101188873445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,11 +128,11 @@ MonoBehaviour:
     m_Bits: 3080
   hoverAmplitude: 0.2
   hoverFrequency: 1
-  avoidanceRadius: 4
+  avoidanceRadius: 5
   avoidanceForce: 25
   separationMask:
     serializedVersion: 2
-    m_Bits: 1344
+    m_Bits: 3400
   rigidBody: {fileID: 2448601663206975914}
 --- !u!114 &-4769723865369596212
 MonoBehaviour:
