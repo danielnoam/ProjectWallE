@@ -1,5 +1,6 @@
-using System;
 using DNExtensions.Utilities.AutoGet;
+using DNExtensions.Utilities.CinemachineExtensions;
+using Unity.Cinemachine;
 using UnityEngine;
 
 namespace ProjectWallE.GameLoop
@@ -7,9 +8,11 @@ namespace ProjectWallE.GameLoop
     public class EnemyBaseCannon : MonoBehaviour
     {
         [Header("Settings")]
-        [SerializeField, AutoGetParent] private EnemyBase ownerBase;
-        [SerializeField] private Transform effectPosition;
         [SerializeField] private VisualEffectAction cannonEffect;
+        [SerializeField] private ImpulseSettings impulseSettings;
+        [SerializeField, AutoGetParent] private EnemyBase ownerBase;
+        [SerializeField, AutoGetSelf] private CinemachineImpulseSource impulseSource;
+        [SerializeField] private Transform effectPosition;
 
         private void OnValidate()
         {
@@ -28,6 +31,7 @@ namespace ProjectWallE.GameLoop
 
         public void PlayEffects()
         {
+            impulseSource?.GenerateImpulse(impulseSettings);
             cannonEffect?.Play(effectPosition ? effectPosition.position : transform.position);
         }
     }

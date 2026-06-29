@@ -299,7 +299,7 @@ MonoBehaviour:
   m_Name: Play Cinematic Marker
   m_EditorClassIdentifier: Assembly-CSharp::PlayCinematicMarker
   m_Time: 0
-  skipInEditor: 1
+  skipInEditor: 0
   cinematic:
     exposedName: 649c4ee6-7b81-4932-bf1f-9cf8b551baf1
     defaultValue: {fileID: 0}
@@ -694,10 +694,10 @@ MonoBehaviour:
     m_PreExtrapolationTime: 0
     m_DisplayName: 'Start Objectives: Kill all enemies'
   - m_Version: 1
-    m_Start: 92.21666666666665
+    m_Start: 100.06666666666666
     m_ClipIn: 0
     m_Asset: {fileID: -1095185307595584193}
-    m_Duration: 37.85000000000001
+    m_Duration: 30
     m_TimeScale: 1
     m_ParentTrack: {fileID: -2831747386146784124}
     m_EaseInDuration: 0
@@ -761,7 +761,7 @@ MonoBehaviour:
     m_PreExtrapolationMode: 0
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
-    m_DisplayName: 'Start Objectives: Survive, Call a air support'
+    m_DisplayName: 'Start Objectives: Call a air support'
   m_Markers:
     m_Objects: []
 --- !u!114 &-2596039320394516090
@@ -915,7 +915,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd5511dff6f84ce8a7e93b16a19b6da9, type: 3}
   m_Name: Set Player Features Marker
   m_EditorClassIdentifier: Assembly-CSharp::SetPlayerFeaturesMarker
-  m_Time: 89.75
+  m_Time: 100.06666666666666
   skipInEditor: 0
   featuresToEnable: 4
   featuresToDisable: 0
@@ -997,24 +997,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StartObjectivesEvent
   skipInEditor: 0
   objectives:
-  - rid: 3914034398919655505
   - rid: 3914034406647398481
   references:
     version: 2
     RefIds:
-    - rid: 3914034398919655505
-      type: {class: SurviveObjective, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
-      data:
-        objectiveMarker:
-          exposedName: 
-          defaultValue: {fileID: 0}
-        showInGame: 1
-        showOnRadar: 1
-        tutorialTextOverride:
-          isSet: 0
-          hideWhenUnchecked: 0
-          value: 
-        duration: 60
     - rid: 3914034406647398481
       type: {class: CallSupportAction, ns: ProjectWallE.GameLoop, asm: Assembly-CSharp}
       data:

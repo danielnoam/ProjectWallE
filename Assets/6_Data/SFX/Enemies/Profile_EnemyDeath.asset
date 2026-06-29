@@ -17,8 +17,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: e6152504508b3f3459473052219f69de, type: 3}
   - {fileID: 8300000, guid: 7aab1f1259090ac4b90093789e1976d7, type: 3}
   volume:
-    minValue: 1
-    maxValue: 1
+    minValue: 0.6
+    maxValue: 0.6
   pitch:
     minValue: 0.9
     maxValue: 1.2
@@ -32,6 +32,6 @@ MonoBehaviour:
   set3DSettings: 1
   dopplerLevel: 0
   spread: 0
-  minDistance: 1
+  minDistance: 0
   maxDistance: 500
-  rolloffMode: 0
+  rolloffMode: 1

@@ -41,6 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7334859113615012406}
   - component: {fileID: 9019241996062447243}
+  - component: {fileID: 7912193307452450627}
   m_Layer: 0
   m_Name: ShipPosition (2)
   m_TagString: Untagged
@@ -75,12 +76,76 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9289ec53daa843448d31b15d3faa52e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.ShipPosition
-  effectPosition: {fileID: 0}
+  impulseSettings:
+    impulseChannel: 1
+    impulseType: 1
+    impulseShape: 4
+    duration: 0.3
+    intensity: 2
+    velocity: {x: 1, y: 1, z: 1}
+    dissipationDistance: 300
+    dissipationRate: 0.25
+    propagationSpeed: 343
   cannonEffect:
     effectType: 1
     visualEffect: {fileID: -646395566823460614, guid: a1bc34ae7782e4b439c0c736b50e6c50, type: 3}
     visualEffects: []
     soundId: ShipPodCannon
+  effectPosition: {fileID: 0}
+  impulseSource: {fileID: 7912193307452450627}
+--- !u!114 &7912193307452450627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2614941374390427271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseSource
+  ImpulseDefinition:
+    ImpulseChannel: 1
+    ImpulseShape: 2
+    CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    ImpulseDuration: 0.2
+    ImpulseType: 0
+    DissipationRate: 0.25
+    RawSignal: {fileID: 0}
+    AmplitudeGain: 1
+    FrequencyGain: 1
+    RepeatMode: 0
+    Randomize: 1
+    TimeEnvelope:
+      AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      AttackTime: 0
+      SustainTime: 0.2
+      DecayTime: 0.7
+      ScaleWithImpact: 1
+      HoldForever: 0
+    ImpactRadius: 100
+    DirectionMode: 0
+    DissipationMode: 2
+    DissipationDistance: 100
+    PropagationSpeed: 343
+  DefaultVelocity: {x: 0, y: -1, z: 0}
 --- !u!1 &2656837526850643747
 GameObject:
   m_ObjectHideFlags: 0
@@ -91,6 +156,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8259767510037123476}
   - component: {fileID: 1748391241201107334}
+  - component: {fileID: 7134096354152610308}
   m_Layer: 0
   m_Name: ShipPosition (1)
   m_TagString: Untagged
@@ -125,12 +191,76 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9289ec53daa843448d31b15d3faa52e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.ShipPosition
-  effectPosition: {fileID: 0}
+  impulseSettings:
+    impulseChannel: 1
+    impulseType: 1
+    impulseShape: 4
+    duration: 0.3
+    intensity: 2
+    velocity: {x: 1, y: 1, z: 1}
+    dissipationDistance: 300
+    dissipationRate: 0.25
+    propagationSpeed: 343
   cannonEffect:
     effectType: 1
     visualEffect: {fileID: -646395566823460614, guid: c8931742fb422eb4d862e8bfe7ea43d5, type: 3}
     visualEffects: []
     soundId: ShipPodCannon
+  effectPosition: {fileID: 0}
+  impulseSource: {fileID: 7134096354152610308}
+--- !u!114 &7134096354152610308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2656837526850643747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseSource
+  ImpulseDefinition:
+    ImpulseChannel: 1
+    ImpulseShape: 2
+    CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    ImpulseDuration: 0.2
+    ImpulseType: 0
+    DissipationRate: 0.25
+    RawSignal: {fileID: 0}
+    AmplitudeGain: 1
+    FrequencyGain: 1
+    RepeatMode: 0
+    Randomize: 1
+    TimeEnvelope:
+      AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      AttackTime: 0
+      SustainTime: 0.2
+      DecayTime: 0.7
+      ScaleWithImpact: 1
+      HoldForever: 0
+    ImpactRadius: 100
+    DirectionMode: 0
+    DissipationMode: 2
+    DissipationDistance: 100
+    PropagationSpeed: 343
+  DefaultVelocity: {x: 0, y: -1, z: 0}
 --- !u!1 &3760377545317768138
 GameObject:
   m_ObjectHideFlags: 0
@@ -141,6 +271,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8325902431686586655}
   - component: {fileID: 4234449653498888256}
+  - component: {fileID: 1009903349198800452}
   m_Layer: 0
   m_Name: ShipPosition
   m_TagString: Untagged
@@ -175,12 +306,76 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9289ec53daa843448d31b15d3faa52e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.ShipPosition
-  effectPosition: {fileID: 0}
+  impulseSettings:
+    impulseChannel: 1
+    impulseType: 1
+    impulseShape: 4
+    duration: 0.3
+    intensity: 2
+    velocity: {x: 1, y: 1, z: 1}
+    dissipationDistance: 300
+    dissipationRate: 0.25
+    propagationSpeed: 343
   cannonEffect:
     effectType: 1
     visualEffect: {fileID: -646395566823460614, guid: a1bc34ae7782e4b439c0c736b50e6c50, type: 3}
     visualEffects: []
     soundId: ShipPodCannon
+  effectPosition: {fileID: 0}
+  impulseSource: {fileID: 1009903349198800452}
+--- !u!114 &1009903349198800452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3760377545317768138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseSource
+  ImpulseDefinition:
+    ImpulseChannel: 1
+    ImpulseShape: 2
+    CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    ImpulseDuration: 0.2
+    ImpulseType: 0
+    DissipationRate: 0.25
+    RawSignal: {fileID: 0}
+    AmplitudeGain: 1
+    FrequencyGain: 1
+    RepeatMode: 0
+    Randomize: 1
+    TimeEnvelope:
+      AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      AttackTime: 0
+      SustainTime: 0.2
+      DecayTime: 0.7
+      ScaleWithImpact: 1
+      HoldForever: 0
+    ImpactRadius: 100
+    DirectionMode: 0
+    DissipationMode: 2
+    DissipationDistance: 100
+    PropagationSpeed: 343
+  DefaultVelocity: {x: 0, y: -1, z: 0}
 --- !u!1 &4557294940182872753
 GameObject:
   m_ObjectHideFlags: 0
@@ -344,6 +539,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8081010706673252219}
   - component: {fileID: 2535131285360902163}
+  - component: {fileID: 3450129813296205359}
   m_Layer: 0
   m_Name: ShipPosition (2)
   m_TagString: Untagged
@@ -378,12 +574,76 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9289ec53daa843448d31b15d3faa52e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.ShipPosition
-  effectPosition: {fileID: 0}
+  impulseSettings:
+    impulseChannel: 1
+    impulseType: 1
+    impulseShape: 4
+    duration: 0.3
+    intensity: 2
+    velocity: {x: 1, y: 1, z: 1}
+    dissipationDistance: 300
+    dissipationRate: 0.25
+    propagationSpeed: 343
   cannonEffect:
     effectType: 1
     visualEffect: {fileID: -646395566823460614, guid: a1bc34ae7782e4b439c0c736b50e6c50, type: 3}
     visualEffects: []
     soundId: ShipPodCannon
+  effectPosition: {fileID: 0}
+  impulseSource: {fileID: 3450129813296205359}
+--- !u!114 &3450129813296205359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6812004901972207903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseSource
+  ImpulseDefinition:
+    ImpulseChannel: 1
+    ImpulseShape: 2
+    CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    ImpulseDuration: 0.2
+    ImpulseType: 0
+    DissipationRate: 0.25
+    RawSignal: {fileID: 0}
+    AmplitudeGain: 1
+    FrequencyGain: 1
+    RepeatMode: 0
+    Randomize: 1
+    TimeEnvelope:
+      AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      AttackTime: 0
+      SustainTime: 0.2
+      DecayTime: 0.7
+      ScaleWithImpact: 1
+      HoldForever: 0
+    ImpactRadius: 100
+    DirectionMode: 0
+    DissipationMode: 2
+    DissipationDistance: 100
+    PropagationSpeed: 343
+  DefaultVelocity: {x: 0, y: -1, z: 0}
 --- !u!1 &7434971860442945723
 GameObject:
   m_ObjectHideFlags: 0
