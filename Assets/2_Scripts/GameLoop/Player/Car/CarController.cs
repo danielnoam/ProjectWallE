@@ -566,7 +566,7 @@ namespace _2_Scripts
                 Vector3 nextPos = pos + vel * dt;
                 Vector3 step = nextPos - pos;
 
-                if (Physics.Raycast(pos, step.normalized, out RaycastHit hit, step.magnitude + 0.1f, _groundLayer))
+                if (Physics.Raycast(pos, step.normalized, out RaycastHit hit, step.magnitude + 0.1f, _groundLayer, QueryTriggerInteraction.Ignore))
                 {
                     _cachedLandingNormal = hit.normal;
                     return _cachedLandingNormal;
@@ -595,10 +595,10 @@ namespace _2_Scripts
                 Vector3 origin = tire.tireTransform.position;
                 Vector3 direction = -tire.tireTransform.up;
 
-                tire.isGroundedExact = Physics.Raycast(origin, direction, out RaycastHit exactHit, exactDistance, _groundLayer);
+                tire.isGroundedExact = Physics.Raycast(origin, direction, out RaycastHit exactHit, exactDistance, _groundLayer, QueryTriggerInteraction.Ignore);
                 tire.exactGroundHit = exactHit;
 
-                tire.isGroundedExtended = Physics.Raycast(origin, direction, out RaycastHit extendedHit, extendedDistance, _groundLayer);
+                tire.isGroundedExtended = Physics.Raycast(origin, direction, out RaycastHit extendedHit, extendedDistance, _groundLayer, QueryTriggerInteraction.Ignore);
                 tire.extendedGroundHit = extendedHit;
 
                 if (!tire.isGroundedExtended)

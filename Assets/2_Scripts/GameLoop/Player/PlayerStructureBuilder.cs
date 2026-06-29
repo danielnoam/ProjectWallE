@@ -34,6 +34,7 @@ namespace ProjectWallE.GameLoop.Player
         private bool _lastMenuWasBuildMenu;
         private Structure _targetedStructure;
         private Structure _lastMenuStructure;
+        private StructureNode _lastBuildNode;
 
         public event Action<Structure[], bool> BuildMenuRequested;
         public event Action<Structure> ActionsMenuRequested;
@@ -149,6 +150,7 @@ namespace ProjectWallE.GameLoop.Player
             _lastCanBuild = false;
             _lastMenuStructure = null;
             _lastMenuWasBuildMenu = false;
+            _lastBuildNode = null;
             MenuCloseRequested?.Invoke();
         }
 
@@ -252,13 +254,14 @@ namespace ProjectWallE.GameLoop.Player
             }
             else
             {
-                if (!_lastMenuWasBuildMenu || _lastCanBuild != _canBuild)
+                if (!_lastMenuWasBuildMenu || _lastCanBuild != _canBuild || _lastBuildNode != _targetedNode)
                 {
                     if (!_lastMenuWasBuildMenu && _lastMenuStructure) MenuCloseRequested?.Invoke();
                     BuildMenuRequested?.Invoke(_targetedNode ? _targetedNode.AllowedStructures : structuresArray, _canBuild);
                     _lastMenuStructure = null;
                     _lastMenuWasBuildMenu = true;
                     _lastCanBuild = _canBuild;
+                    _lastBuildNode = _targetedNode;
                 }
             }
         }
@@ -267,6 +270,8 @@ namespace ProjectWallE.GameLoop.Player
         private void TryBuildStructure(RadialMenuElement _, Structure structure)
         {
             if (!_canBuild) return;
+
+            if (_targetedNode && Array.IndexOf(_targetedNode.AllowedStructures, structure) < 0) return;
 
             if (ResourceManager.Instance && !ResourceManager.Instance.TrySpendResources(structure.BuildCost)) return;
 

@@ -166,7 +166,7 @@ namespace ProjectWallE.UI
 
         public void OpenMenu()
         {
-            OnMenuOpened?.Invoke();
+            if (!_isOpen) OnMenuOpened?.Invoke();
             canvasGroup.alpha = 1f;
             canvasGroup.blocksRaycasts = true;
             canvasGroup.interactable = true;

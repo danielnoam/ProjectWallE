@@ -8,6 +8,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour, IPoolable
 {
+    [SerializeField] private bool reyCastCollision;
     [SerializeField] private SOLayerMask environmentLayerMask;
     [SerializeField] private SOLayerMask damageableLayers;
     [SerializeField, AutoGetSelf] private Rigidbody rigidBody;
@@ -22,6 +23,7 @@ public class Projectile : MonoBehaviour, IPoolable
     private bool _isInitialized;
     private bool _hitSomething;
     private float _lifetimeTimer;
+    private Vector3 _lastPosition;
     private Vector3 _direction;
     private Vector3 _startPosition;
     private Vector3 _targetPosition;
@@ -54,6 +56,20 @@ public class Projectile : MonoBehaviour, IPoolable
                 MoveArc();
                 break;
         }
+
+        if (reyCastCollision && !_hitSomething)
+        {
+            Vector3 currentPosition = rigidBody.position;
+            Vector3 sweepDelta = currentPosition - _lastPosition;
+            float sweepDistance = sweepDelta.magnitude;
+
+            if (sweepDistance > 0f && Physics.Raycast(_lastPosition, sweepDelta.normalized, out RaycastHit hit, sweepDistance, CombinedMask, QueryTriggerInteraction.Ignore))
+            {
+                HandleHit(hit.point, hit.normal, hit.collider.gameObject, hit.collider);
+            }
+        }
+        
+        _lastPosition = rigidBody.position;
     }
 
     private void OnCollisionEnter(Collision other)
@@ -63,68 +79,67 @@ public class Projectile : MonoBehaviour, IPoolable
         int layer = 1 << other.gameObject.layer;
         if ((layer & CombinedMask) == 0) return;
 
+        Vector3 contactPoint = other.contacts[0].point;
+        Vector3 contactNormal = other.contacts[0].normal;
+        HandleHit(contactPoint, contactNormal, other.gameObject, other.collider);
+    }
+
+    private void HandleHit(Vector3 hitPoint, Vector3 hitNormal, GameObject hitObject, Collider hitCollider)
+    {
         _hitSomething = true;
         bool hitDamageable = false;
 
-        if ((layer & damageableLayers.Value) != 0)
+        int layer = 1 << hitObject.layer;
+        bool hitDamageableLayer = (layer & damageableLayers.Value) != 0;
+
+        if (_data.damageType == ProjectileDamageType.AreaOfEffect)
         {
-            hitDamageable = ProcessDamage(other);
+            hitDamageable = ProcessAoeDamage(hitPoint);
+        }
+        else if (hitDamageableLayer)
+        {
+            hitDamageable = ProcessSingleDamage(hitPoint, hitCollider);
         }
 
         if (_data.hitParticle)
         {
-            Vector3 hitNormal = other.contacts[0].normal;
-            var particle = ObjectPooler.GetObjectFromPool(_data.hitParticle, transform.position,
-                Quaternion.LookRotation(hitNormal));
+            var particle = ObjectPooler.GetObjectFromPool(_data.hitParticle, hitPoint, Quaternion.LookRotation(hitNormal));
             particle?.Play();
         }
 
         if (!hitDamageable)
         {
-            AudioLibrary.PlayAtPosition(_data.collisionSFX, transform.position);
+            AudioLibrary.PlayAtPosition(_data.collisionSFX, hitPoint);
         }
 
         ObjectPooler.ReturnObjectToPool(this);
     }
 
-    private bool ProcessDamage(Collision other)
-    {
-        switch (_data.damageType)
-        {
-            case ProjectileDamageType.Single:
-                return ProcessSingleDamage(other);
-            case ProjectileDamageType.AreaOfEffect:
-                return ProcessAoeDamage();
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
-    }
-
-    private bool ProcessSingleDamage(Collision other)
+    private bool ProcessSingleDamage(Vector3 hitPoint, Collider hitCollider)
     {
         bool hitDamageable = false;
         
-        var damageable = other.collider.GetComponentInParent<IDamageable>();
+        var damageable = hitCollider.GetComponentInParent<IDamageable>();
         if (damageable != null && _ownerTeam.CanDamage(damageable.Team))
         {
             hitDamageable = true;
             damageable.TakeDamage(_data.damage * _damageMultiplier, _owner);
         }
 
-        var pushable = other.collider.GetComponentInParent<IPushable>();
+        var pushable = hitCollider.GetComponentInParent<IPushable>();
         if (pushable != null)
         {
-            Vector3 pushDirection = (other.transform.position - transform.position).normalized;
+            Vector3 pushDirection = (hitPoint - transform.position).normalized;
             pushable.Push(pushDirection, _data.pushStrength);
         }
 
         return hitDamageable;
     }
 
-    private bool ProcessAoeDamage()
+    private bool ProcessAoeDamage(Vector3 hitPoint)
     {
         bool hitDamageable = false;
-        Collider[] damagedObjects = Physics.OverlapSphere(transform.position, _data.aoeRadius, damageableLayers.Value);
+        Collider[] damagedObjects = Physics.OverlapSphere(hitPoint, _data.aoeRadius, damageableLayers.Value);
         _alreadyHit.Clear();
 
         foreach (var damagedObject in damagedObjects)
@@ -137,7 +152,7 @@ public class Projectile : MonoBehaviour, IPoolable
 
             hitDamageable = true;
 
-            float distance = Vector3.Distance(transform.position, damagedObject.transform.position);
+            float distance = Vector3.Distance(hitPoint, damagedObject.transform.position);
             float normalizedDistance = distance / _data.aoeRadius;
             float damage = _data.damageRange.Lerp(1 - normalizedDistance);
             float push = _data.pushRange.Lerp(1 - normalizedDistance);
@@ -147,7 +162,7 @@ public class Projectile : MonoBehaviour, IPoolable
             var aoePush = damagedObject.GetComponentInParent<IPushable>();
             if (aoePush != null)
             {
-                Vector3 pushDirection = (damagedObject.transform.position - transform.position).normalized;
+                Vector3 pushDirection = (damagedObject.transform.position - hitPoint).normalized;
                 aoePush.Push(pushDirection, push);
             }
         }
@@ -203,6 +218,7 @@ public class Projectile : MonoBehaviour, IPoolable
         _startPosition = transform.position;
         _targetPosition = targetPosition;
         _direction = direction;
+        _lastPosition = transform.position;
 
         if (_data.movementType == ProjectileMovementType.Arc) InitializeArc();
 
