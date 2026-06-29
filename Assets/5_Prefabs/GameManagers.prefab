@@ -327,6 +327,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6032486967884731250}
   - component: {fileID: 7541298562425807743}
+  - component: {fileID: 3852572728275681916}
   m_Layer: 0
   m_Name: DebugOverlay
   m_TagString: Untagged
@@ -432,6 +433,24 @@ MonoBehaviour:
     m_FixedHeight: 0
     m_StretchWidth: 1
     m_StretchHeight: 0
+  fpsCounter: {fileID: 3852572728275681916}
+--- !u!114 &3852572728275681916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3600974288833459738}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 349c769e8bba44f4987decf61551cb4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp-firstpass::DNExtensions.Utilities.FPSCounter
+  updateInterval: 0.5
+  targetFPS: 60
+  fontSize: 13
+  prefix: 
+  anchor: 2
 --- !u!1 &4202138747022006343
 GameObject:
   m_ObjectHideFlags: 0

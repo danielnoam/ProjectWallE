@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using DNExtensions.Utilities;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,6 +13,7 @@ public class DebugOverlay : MonoBehaviour
     [SerializeField] private int maxLines = 20;
     [SerializeField] private Key toggleKey = Key.F1;
     [SerializeField] private GUIStyle labelStyle;
+    [SerializeField] private FPSCounter fpsCounter;
 
     private readonly Queue<string> _lines = new();
     private readonly StringBuilder _sb = new();
@@ -29,6 +31,7 @@ public class DebugOverlay : MonoBehaviour
         if (Keyboard.current[toggleKey].wasPressedThisFrame)
         {
             _visible = !_visible;
+            fpsCounter.enabled = _visible;
             if (_visible) Debug.Log("Debug overlay enabled");
         }
     }

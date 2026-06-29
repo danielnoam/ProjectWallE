@@ -17,6 +17,7 @@ namespace ProjectWallE.GameLoop
         [SerializeField] private float flightHeight = 14f;
         [SerializeField] private float heightAdjustSpeed = 10f;
         [SerializeField] private float heightCheckDistance = 30f;
+        [SerializeField] private float lookAheadDistance = 12f;
         [SerializeField] private LayerMask groundMask;
 
         [Header("Hover")]
@@ -99,9 +100,32 @@ namespace ProjectWallE.GameLoop
                 return;
             }
 
-            float desiredY = hit.point.y + flightHeight;
+            float groundY = hit.point.y;
+
+            Vector3 horizontalDir = Destination - transform.position;
+            horizontalDir.y = 0;
+            if (horizontalDir.sqrMagnitude > 0.01f && TrySampleGroundAhead(horizontalDir.normalized, out float aheadY))
+            {
+                groundY = Mathf.Max(groundY, aheadY);
+            }
+
+            float desiredY = groundY + flightHeight;
             float correction = (desiredY - transform.position.y) * heightAdjustSpeed;
             velocity.y = Mathf.MoveTowards(velocity.y, correction, heightAdjustSpeed * Time.fixedDeltaTime);
+        }
+
+        private bool TrySampleGroundAhead(Vector3 direction, out float groundY)
+        {
+            Vector3 aheadPos = transform.position + direction * lookAheadDistance;
+            Vector3 origin = new Vector3(aheadPos.x, transform.position.y + heightCheckDistance, aheadPos.z);
+            if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, heightCheckDistance * 2f, groundMask))
+            {
+                groundY = hit.point.y;
+                return true;
+            }
+
+            groundY = 0f;
+            return false;
         }
 
         private void ApplySeparation()
@@ -172,6 +196,17 @@ namespace ProjectWallE.GameLoop
             {
                 Gizmos.color = Color.magenta;
                 Gizmos.DrawWireSphere(new Vector3(Destination.x, transform.position.y, Destination.z), 1f);
+
+                Vector3 dir = Destination - transform.position;
+                dir.y = 0;
+                if (dir.sqrMagnitude > 0.01f)
+                {
+                    Vector3 aheadPos = transform.position + dir.normalized * lookAheadDistance;
+                    Vector3 origin = new Vector3(aheadPos.x, transform.position.y + heightCheckDistance, aheadPos.z);
+                    Gizmos.color = Color.yellow;
+                    if (Physics.Raycast(origin, Vector3.down, out RaycastHit aheadHit, heightCheckDistance * 2f, groundMask))
+                        Gizmos.DrawLine(origin, aheadHit.point);
+                }
             }
         }
 #endif
