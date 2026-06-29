@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
-  m_Time: 12.016666666666667
+  m_Time: 20.083333333333332
   skipInEditor: 0
   enemyType: 0
   count: 3
@@ -39,16 +39,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
-  m_Time: 40.34999999999998
+  m_Time: 58.49999999999999
   skipInEditor: 0
   enemyType: 0
   count: 7
   enemies:
     internalItems: []
   enemyEntries: []
-  spawnPosition: 0
+  spawnPosition: 1
   spawnPoints:
-    internalItems: []
+    internalItems:
+    - item:
+        exposedName: 592709c3-0929-4653-822c-a7a8d16dd85d
+        defaultValue: {fileID: 0}
+      chance: 100
+      isLocked: 0
 --- !u!114 &-7803992468192868248
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -61,7 +66,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
-  m_Time: 3.3666666666666667
+  m_Time: 3.0833333333333335
   skipInEditor: 0
   enemyType: 0
   count: 3
@@ -103,16 +108,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
-  m_Time: 44.599999999999994
+  m_Time: 65.06666666666666
   skipInEditor: 0
   enemyType: 0
   count: 1
   enemies:
     internalItems: []
   enemyEntries: []
-  spawnPosition: 0
+  spawnPosition: 1
   spawnPoints:
-    internalItems: []
+    internalItems:
+    - item:
+        exposedName: 0b6aac35-12cf-489d-a28d-1f3f9458c45f
+        defaultValue: {fileID: 0}
+      chance: 100
+      isLocked: 0
 --- !u!114 &-3913863030380253719
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -125,10 +135,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
-  m_Time: 7.066666666666666
+  m_Time: 6.783333333333333
   skipInEditor: 0
   enemyType: 0
-  count: 3
+  count: 4
   enemies:
     internalItems: []
   enemyEntries: []
@@ -175,16 +185,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
-  m_Time: 28.15000000000001
+  m_Time: 46.30000000000002
   skipInEditor: 0
   enemyType: 0
-  count: 4
+  count: 2
   enemies:
     internalItems: []
   enemyEntries: []
-  spawnPosition: 0
+  spawnPosition: 1
   spawnPoints:
-    internalItems: []
+    internalItems:
+    - item:
+        exposedName: 10f8a266-b32f-448d-983f-a3cb1f968081
+        defaultValue: {fileID: 0}
+      chance: 100
+      isLocked: 0
 --- !u!114 &-1151740949387142617
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -197,7 +212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
-  m_Time: 49.23333333333332
+  m_Time: 69.91666666666667
   skipInEditor: 0
   enemyType: 0
   count: 3
@@ -223,7 +238,7 @@ MonoBehaviour:
   m_Tracks:
   - {fileID: -2831747386146784124}
   - {fileID: 5586992869872184875}
-  m_FixedDuration: 60.03333333333333
+  m_FixedDuration: 75
   m_EditorSettings:
     m_Framerate: 60
     m_ScenePreview: 1
@@ -241,16 +256,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
-  m_Time: 34.449999999999974
+  m_Time: 52.59999999999999
   skipInEditor: 0
   enemyType: 0
   count: 5
   enemies:
     internalItems: []
   enemyEntries: []
-  spawnPosition: 0
+  spawnPosition: 1
   spawnPoints:
-    internalItems: []
+    internalItems:
+    - item:
+        exposedName: 30ff55da-4743-4b8f-9938-79309538756d
+        defaultValue: {fileID: 0}
+      chance: 100
+      isLocked: 0
 --- !u!114 &3448081076168082159
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -286,7 +306,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
-  m_Time: 20.98333333333331
+  m_Time: 34.19999999999998
   skipInEditor: 0
   enemyType: 0
   count: 2
@@ -313,16 +333,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
-  m_Time: 24.949999999999978
+  m_Time: 43.1
   skipInEditor: 0
   enemyType: 0
   count: 4
   enemies:
     internalItems: []
   enemyEntries: []
-  spawnPosition: 0
+  spawnPosition: 1
   spawnPoints:
-    internalItems: []
+    internalItems:
+    - item:
+        exposedName: 02bafb9e-f690-4fbf-b890-575ffad0ef93
+        defaultValue: {fileID: 0}
+      chance: 100
+      isLocked: 0
 --- !u!114 &5586992869872184875
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -392,7 +417,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
-  m_Time: 18.5
+  m_Time: 31.716666666666665
   skipInEditor: 0
   enemyType: 0
   count: 5
@@ -419,7 +444,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52678571b14f4fc1bfcf4e42277e5192, type: 3}
   m_Name: Spawn Enemy Wave Marker
   m_EditorClassIdentifier: Assembly-CSharp::SpawnEnemyWaveMarker
-  m_Time: 15.149999999999995
+  m_Time: 24.016666666666662
   skipInEditor: 0
   enemyType: 0
   count: 3

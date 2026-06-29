@@ -795,6 +795,24 @@ MonoBehaviour:
           hideWhenUnchecked: 0
           value: 
         completionDelay: 2
+--- !u!114 &-2401638803035956726
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c99b0d299420c2b4bb260b579e95efa1, type: 3}
+  m_Name: Look At Target Marker
+  m_EditorClassIdentifier: Assembly-CSharp::LookAtTargetMarker
+  m_Time: 15.066666666666666
+  skipInEditor: 0
+  target:
+    exposedName: 75d71baa-ae7a-4a9a-b5c1-577efaa118c7
+    defaultValue: {fileID: 0}
+  duration: 2
 --- !u!114 &-2268058187431284751
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1584,6 +1602,7 @@ MonoBehaviour:
     - {fileID: -4651446852953380397}
     - {fileID: -8520222977865884192}
     - {fileID: -1713959961341034659}
+    - {fileID: -2401638803035956726}
 --- !u!114 &5671882440688688825
 MonoBehaviour:
   m_ObjectHideFlags: 1

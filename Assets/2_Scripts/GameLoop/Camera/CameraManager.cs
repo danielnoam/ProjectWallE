@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using DNExtensions.Utilities;
 using DNExtensions.Utilities.AutoGet;
 using DNExtensions.Utilities.CinemachineExtensions;
@@ -49,8 +50,10 @@ namespace ProjectWallE
         private CameraAutoAlign _cameraAutoAlign;
         private Pod _activePod;
         private PodCameraMode _activeCameraMode;
-        
+        private Coroutine _timedLookRoutine;
+
         private bool _cameraLocked;
+        private bool _timedLook;
         private bool _cinematicMode;
         private float _yaw;
         private float _pitch;
@@ -213,6 +216,36 @@ namespace ProjectWallE
             SwitchActiveCamera(playerManager.ControllerType == ControllerType.Robot ? robotCamera : carCamera);
         }
 
+        public void LookAtTargetForDuration(Transform target, float duration)
+        {
+            if (!target || _activePod) return;
+
+            if (_timedLookRoutine != null) StopCoroutine(_timedLookRoutine);
+            _timedLookRoutine = StartCoroutine(LookAtTargetRoutine(target, duration));
+        }
+
+        private IEnumerator LookAtTargetRoutine(Transform target, float duration)
+        {
+            _timedLook = true;
+            lookAtPodCamera.LookAt = target;
+            SwitchActiveCamera(lookAtPodCamera);
+
+            yield return new WaitForSeconds(duration);
+
+            Vector3 dir = (target.position - playerManager.transform.position).normalized;
+            if (dir.sqrMagnitude > 0.0001f)
+            {
+                _yaw = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg;
+                _pitch = -Mathf.Asin(dir.y) * Mathf.Rad2Deg;
+                _pitch = Mathf.Clamp(_pitch, -cameraVerticalClamp, cameraVerticalClamp);
+            }
+
+            lookAtPodCamera.LookAt = null;
+            _timedLook = false;
+            _timedLookRoutine = null;
+            SwitchActiveCamera(playerManager.ControllerType == ControllerType.Robot ? robotCamera : carCamera);
+        }
+
         private void OnPodLanded()
         {
             if (podNoise) podNoise.AmplitudeGain = 0f;
@@ -271,7 +304,7 @@ namespace ProjectWallE
 
             cameraTarget.position = playerManager.transform.position;
 
-            if (_cameraLocked || _activePod) return;
+            if (_cameraLocked || _activePod || _timedLook) return;
 
             Vector2 lookDelta = GetScaledLookDelta();
 
