@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7835f264edc4b4b91fa3be8da632fea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.GameLoop.LevelCheats
+  enableAllFeaturesKey: 104
   restartSceneKey: 99
   completeLevelKey: 98
   completeObjectivesKey: 97
@@ -267,10 +268,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 466f66aa0038eb84386574947906a484, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectWallE.MusicManager
+  muteKey: 27
   fadeDuration: 2
   stopFadeDuration: 5
   crossfade: 1
-  volume: 0.35
+  volume: 0.2
   mixerGroup: {fileID: -3848042322793387953, guid: 6d307fcdc9063864f92ead1a27b76789, type: 2}
   gameplayTracks:
   - {fileID: 8300000, guid: a216688394b870c46a63f7f62798d31b, type: 3}

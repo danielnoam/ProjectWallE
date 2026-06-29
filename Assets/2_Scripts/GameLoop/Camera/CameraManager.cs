@@ -6,6 +6,7 @@ using DNExtensions.Utilities.CinemachineExtensions;
 using ProjectWallE.GameLoop;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace ProjectWallE
 {
@@ -137,7 +138,24 @@ namespace ProjectWallE
             UpdateCameraMovement();
             UpdateCarEffects();
         }
-        
+
+        private void Update()
+        {
+            if (Keyboard.current.minusKey.wasPressedThisFrame)
+            {
+                mouseLookSensitivity -= 0.01f;
+                Mathf.Clamp(mouseLookSensitivity, 0.01f, 1f);
+                Debug.Log(mouseLookSensitivity);
+            }
+
+            if (Keyboard.current.equalsKey.wasPressedThisFrame)
+            {
+                mouseLookSensitivity += 0.01f;
+                Mathf.Clamp(mouseLookSensitivity, 0.01f, 1f);
+                Debug.Log(mouseLookSensitivity);
+            }
+        }
+
         private void OnDeath(IDamageable attacker)
         {
             impulseSource?.GenerateImpulse(deathImpulseSettings);
